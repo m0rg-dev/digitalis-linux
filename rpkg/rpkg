@@ -1,0 +1,308 @@
+#!/bin/bash
+
+PKGDIR="/var/db/rpkg"
+if [ -z "$MAKEOPTS" ]; then
+    export MAKEOPTS=-j1
+fi
+
+declare -A selected
+
+file_to_atom() {
+    local file=$1
+
+    dirname=$(dirname $(dirname $file))
+    file=${file#$dirname}
+    file=${file#/}
+    file=${file%.sh}
+    file=${file%.tar.xz}
+    echo $file
+}
+
+atom_to_build() {
+    local atom=$1
+
+    echo $PKGDIR/built/$atom.tar.xz
+}
+
+atom_to_package() {
+    local atom=$1
+
+    echo $PKGDIR/packages/$atom.sh
+}
+
+name_part() {
+    local atom=$1
+
+    atom=${atom%@*}
+    atom=${atom%^*}
+    echo $atom
+}
+
+version_part() {
+    local specifier=$1
+    local single_version=$(expr "$specifier" : '.*@\(.*\)')
+    local ge_version=$(expr "$specifier" : '.*^\(.*\)')
+    if [ -n "$single_version" ]; then
+        echo '@'$single_version
+    else
+        echo '^'$ge_version
+    fi
+}
+
+versions_compatible() {
+    local v1=$1
+    local v2=$2
+
+    if [ -z "$v1" ]; then
+        return true
+    elif [[ "$v1" = @* ]]; then
+        [ "$v1" = "$v2" ]
+        return $?
+    elif [[ "$v1" = ^* ]]; then
+        local ge_version=$(expr "$v1" : '.*^\(.*\)')
+        local single_version=$(expr "$v2" : '.*@\(.*\)')
+        [[ ! ( $single_version < $ge_version ) ]]
+        return $?
+    else
+        echo -e "\e[31mBad version string '$v1'"
+        exit 1
+    fi
+}
+
+find_installation_candidate() {
+    local specifier=$1  
+
+    local pkgver=$(version_part $specifier)
+    local pkgname=$(name_part $specifier)
+
+    declare -A names
+    local sel
+
+    if [ -d $PKGDIR/installed ]; then
+        INSTALLED=$(find $PKGDIR/installed | grep $pkgname)
+        for cand in $INSTALLED; do
+            local atom=$(file_to_atom $cand)
+            local name=$(name_part $atom)
+            local version=$(version_part $atom)
+
+            if versions_compatible $pkgver $version && [ $name = $pkgname ]; then
+                echo "installed"
+            fi
+        done
+    fi
+
+    CANDIDATES=$(find $PKGDIR/packages | grep $pkgname)
+    for cand in $CANDIDATES; do
+        local atom=$(file_to_atom $cand)
+        local name=$(name_part $atom)
+        local version=$(version_part $atom)
+
+        if versions_compatible $pkgver $version \
+            && [ -z "${names[$name]}" -o "${names[$name]}" '<' "$version" ]; then
+            names[$name]=$version
+            sel=$name
+        fi
+
+    done
+
+    if [ ${#names[@]} -eq 0 ]; then
+        echo -e "\e[31mNo package found for $specifier\e[0m" >&2
+        exit 1
+    elif [ ${#names[@]} -gt 1 ]; then
+        echo -e "\e[31mMultiple packages found for $specifier: \e[0m" >&2
+        for k in "${!names[@]}"; do
+            echo "    => $k"
+        done
+        exit 1
+    fi
+
+    sel="${sel}${names[$sel]}"
+
+    unset names
+    declare -A names
+
+    BUILT=$(find $PKGDIR/built | grep $sel)
+    for cand in $BUILT; do
+        local atom=$(file_to_atom $cand)
+        local name=$(name_part $atom)
+        local version=$(version_part $atom)
+
+        if versions_compatible $pkgver $version \
+            && [ -z "${names[$name]}" -o "${names[$name]}" '<' "$version" ]; then
+            names[$name]=$version
+        fi
+    done
+
+    if [ ${#names[@]} -gt 0 ]; then
+        sel=$(name_part $sel)
+        echo $(atom_to_build ${sel}${names[$sel]})
+    else
+        echo $(atom_to_package $sel)
+    fi
+}
+
+select_depends() {
+    local package=$1
+
+    if [ -n "${selected[$(name_part $package)]}" ]; then
+        return 0
+    fi
+
+    cand=$(find_installation_candidate $package)
+    atom=$(file_to_atom $cand)
+
+    selected[$(name_part $atom)]=$cand
+
+    declare depends
+
+    if [[ $cand = *.sh ]]; then
+        # Building from source, so we need bdeps as well
+        depends=$(bash -c "source $cand; echo \$BDEPEND")
+    fi
+
+    local rdepend=$(bash -c "source $(atom_to_package $atom); echo \$RDEPEND")
+    depends="$depends $rdepend" 
+
+    for depend in $depends; do select_depends $depend; done
+}
+
+debug_selected() {
+    for k in "${!selected[@]}"; do
+        echo "$k" '=>' ${selected[$k]}
+    done
+}
+
+build_one_selected() {
+    local pkg=$1
+
+    local pkgsrc=${selected[$pkg]}
+    echo "pkgsrc=$pkgsrc" >&2
+    local atom=$(file_to_atom $pkgsrc)
+    if [ "$(bash -c "source '$pkgsrc'; type -t pkg_build")" = 'function' ]; then
+        echo "[-------- Building from source: $pkg --------]"
+        local dist_src=$(bash -c "source $pkgsrc; echo \$SRC")
+        if [ -n "$dist_src" ]; then
+            if [ ! -e "$PKGDIR/distfiles/$dist_src" ]; then
+                echo "\e[31mCan't find $dist_src for $pkg!\e[0m"
+                exit 1
+            fi
+        fi
+
+        rm -rf "/tmp/build-$pkg"
+        mkdir -p "/tmp/build-$pkg"
+        if [ -n "$dist_src" ]; then
+            cp "$PKGDIR/distfiles/$dist_src" "/tmp/build-$pkg"
+        fi
+
+        if bash -c "source '$pkgsrc'; cd '/tmp/build-$pkg'; set -ex; pkg_build"; then
+            mkdir -p $(dirname $(atom_to_build $atom))
+            bash -c "cd '/tmp/build-$pkg'; tar cpJf '$(atom_to_build $atom)' ."
+            echo "[-------- Installing: $pkg --------]"
+            bash -c "cd /; tar xpJf $(atom_to_build $atom)"
+        else
+            echo -e "\e[31mSomething went wrong while building $pkg. Stopping."
+            exit 1
+        fi
+    fi
+
+    echo "Marking $atom as installed"
+
+    mkdir -p $(dirname "$PKGDIR/installed/$atom")
+    touch "$PKGDIR/installed/$atom"
+}
+
+build_recursive() {
+    local pkg=$1
+    local pkgsrc=${selected[$pkg]}
+
+    local depends=$(bash -c "source $pkgsrc; echo \$BDEPEND \$RDEPEND")
+    for depend in $depends; do
+        if [[ ${selected[$(name_part $depend)]} = *.sh ]]; then
+            build_recursive $(name_part $depend)
+        fi
+    done
+
+    build_one_selected $pkg
+}
+
+build() {
+    local package=$1
+
+    select_depends $package
+
+    local to_install=""
+    local to_build=""
+
+    for k in "${!selected[@]}"; do
+        if [ ${selected[$k]} = "installed" ]; then
+            echo -e "$k \e[32mis already installed\e[0m"
+        elif [[ ${selected[$k]} = *.tar.xz ]]; then
+            echo -e "$k \e[33mis available locally\e[0m"
+            to_install="$to_install $k"
+        elif [[ ${selected[$k]} = *.sh ]]; then
+            echo -e "$k \e[31mmust be built from source\e[0m"
+            to_build="$to_build $k"
+        else
+            echo -e "$k \e[35mis $selected[$k] (shouldn't happen)\e[0m"
+        fi
+    done
+
+    for pkg in $to_install; do
+        echo "[-------- Installing: $pkg --------]"
+        bash -c "cd /; tar xpJf ${selected[$pkg]}"
+    done
+
+    local cand=$(find_installation_candidate $package)
+    local atom=$(file_to_atom $cand)
+    local pkgname=$(name_part $atom)
+
+    if [[ ${selected[$pkgname]} = *.sh ]]; then
+        build_recursive $pkgname
+    fi
+}
+
+PARAMS=""
+
+while (( "$#" )); do
+    case "$1" in
+        --pkgdir=*)
+            arg=$1
+            PKGDIR=$(realpath $(expr "$arg" : '.*=\(.*\)'))
+            shift
+            ;;
+        -*|--*=)
+            echo "unknown argument: $1"
+            exit 1
+            ;;
+        *)
+            PARAMS="$PARAMS $1"
+            shift
+            ;;
+    esac
+done
+
+eval set -- "$PARAMS"
+
+case "$1" in
+    build)
+        build $2
+        ;;
+    build-without-depends)
+        package=$2
+        cand=$(find_installation_candidate $package)
+        atom=$(file_to_atom $cand)
+        if [[ $cand = *.sh ]]; then
+            selected[$(name_part $atom)]=$cand
+            echo "Building: $atom $cand"
+
+            build_one_selected $(name_part $atom)
+        elif [[ $cand = *.tar.xz ]]; then
+            echo "[-------- Installing: $atom --------]"
+            bash -c "cd /; tar xpJf $cand"
+        fi
+        ;;
+    *)
+        echo "unknown subcommand $1"
+        exit 1
+        ;;
+esac

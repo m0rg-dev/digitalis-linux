@@ -20,7 +20,7 @@ pkg_build() {
                   -Dcc=gcc                      \
                   -Dccflags=-DMB_LEN_MAX=16
 
-    make
+    make $MAKEOPTS
     make DESTDIR=.. install
     cd ..
     rm -r perl-$VERSION

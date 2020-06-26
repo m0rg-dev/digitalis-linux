@@ -1,6 +1,6 @@
 VERSION=2.34
 
-export BDEPEND="core/diffutils>=3.7 core/perl>=5.32.0"
+export BDEPEND="core/diffutils^3.7 core/perl^5.32.0 core/texinfo^6.7"
 export SRC="binutils-$VERSION.tar.xz"
 
 pkg_build() {

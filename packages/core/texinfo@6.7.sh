@@ -12,7 +12,7 @@ pkg_build() {
     cd build
 
     ../texinfo-$VERSION/configure --prefix=/usr
-    make
+    make $MAKEOPTS
     make DESTDIR=$(realpath ../) install
     cd ..
     rm -r build texinfo-$VERSION

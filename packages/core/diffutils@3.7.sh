@@ -12,7 +12,7 @@ pkg_build() {
     ../diffutils-$VERSION/configure \
         --prefix=/usr
 
-    make
+    make $MAKEOPTS
     make DESTDIR=$(realpath ../) install
 
     cd ..
