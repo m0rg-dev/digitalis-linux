@@ -1,10 +1,11 @@
 VERSION=3.7
 
 export SRC="diffutils-$VERSION.tar.xz"
+export SRC_URL=http://ftp.gnu.org/gnu/diffutils/$SRC
 
 pkg_build() {
-    tar xfJ diffutils-$VERSION.tar.xz
-    rm diffutils-$VERSION.tar.xz
+    tar xfJ $SRC
+    rm $SRC
 
     mkdir -p build
     cd build

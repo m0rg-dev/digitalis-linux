@@ -1,11 +1,12 @@
 VERSION=4.0.2
 
-export BDEPEND="stage2/gmp^6.2.0"
+export BDEPEND="core/gmp^6.2.0"
 export SRC=mpfr-$VERSION.tar.xz
+export SRC_URL="http://www.mpfr.org/mpfr-$VERSION/$src"
 
 pkg_build() {
-    tar xfJ mpfr-$VERSION.tar.xz
-    rm mpfr-$VERSION.tar.xz
+    tar xfJ $SRC
+    rm $SRC
 
     mkdir build
     cd build
@@ -14,4 +15,7 @@ pkg_build() {
 
     make $MAKEOPTS
     make DESTDIR=$(realpath ..) install
+
+    cd ..
+    rm -r build mpfr-$VERSION
 }

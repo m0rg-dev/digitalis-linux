@@ -1,12 +1,13 @@
 VERSION=5.32.0
 
 export SRC="perl-$VERSION.tar.gz"
+export SRC_URL="https://www.cpan.org/src/5.0/$SRC"
 
 pkg_build() {
     echo "127.0.0.1 localhost $(hostname)" > /etc/hosts
 
-    tar xfz perl-$VERSION.tar.gz
-    rm perl-$VERSION.tar.gz
+    tar xfz $SRC
+    rm $SRC
 
     cd perl-$VERSION
 

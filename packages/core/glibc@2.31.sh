@@ -13,12 +13,12 @@ pkg_build() {
     ../configure --prefix=/usr --disable-werror --enable-kernel=3.2 --with-headers=/usr/include libc_cv_slibdir=/lib
     make $MAKEOPTS
     make DESTDIR=$(realpath ../..) install
-    
+
     cp -v ../nscd/nscd.conf ../../etc/nscd.conf
     cd ../..
     rm -r glibc-*
 
-    mkdir -pv var/cache/nscd
+    mkdir -pv var/cache/nscd lib64
     ln -sfv ../lib/ld-linux-x86-64.so.2 lib64
     ln -sfv ../lib/ld-linux-x86-64.so.2 lib64/ld-lsb-x86-64.so.3
 

@@ -2,7 +2,7 @@
 
 PKGDIR="/var/db/rpkg"
 if [ -z "$MAKEOPTS" ]; then
-    export MAKEOPTS=-j1
+    export MAKEOPTS=-j56
 fi
 
 declare -A selected
@@ -196,7 +196,7 @@ build_one_selected() {
 
         if bash -c "source '$pkgsrc'; cd '/tmp/build-$pkg'; set -ex; pkg_build"; then
             mkdir -p $(dirname $(atom_to_build $atom))
-            bash -c "cd '/tmp/build-$pkg'; tar cpJf '$(atom_to_build $atom)' ."
+            bash -c "cd '/tmp/build-$pkg'; tar cp . | xz -T 0 > '$(atom_to_build $atom)'"
             echo "[-------- Installing: $pkg --------]"
             bash -c "cd /; tar xpJf $(atom_to_build $atom)"
         else
@@ -299,6 +299,10 @@ case "$1" in
         elif [[ $cand = *.tar.xz ]]; then
             echo "[-------- Installing: $atom --------]"
             bash -c "cd /; tar xpJf $cand"
+            echo "Marking $atom as installed"
+
+            mkdir -p $(dirname "$PKGDIR/installed/$atom")
+            touch "$PKGDIR/installed/$atom"
         fi
         ;;
     *)

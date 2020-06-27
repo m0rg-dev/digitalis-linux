@@ -17,9 +17,10 @@ pkg_build() {
         --enable-plugins           \
         --enable-shared            \
         --disable-werror           \
-        --enable-64-bit-bfd
+        --enable-64-bit-bfd        \
+        --with-system-zlib
 
-    make
+    make $MAKEOPTS
     make DESTDIR=$(realpath ..) install
     cd ..
     rm -r build binutils-$VERSION
