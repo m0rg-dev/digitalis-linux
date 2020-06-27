@@ -1,0 +1,1 @@
+export RDEPEND="core/autoconf"

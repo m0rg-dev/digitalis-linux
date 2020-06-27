@@ -1,6 +1,10 @@
 download() {
     local url=$1
     local file=$(basename $1)
+    if [ -n "$2" ]; then
+        file="$2"
+    fi
+
     if [ -e distfiles/$file ]; then
         echo "$file: already downloaded"
     else
@@ -32,3 +36,8 @@ download https://sourceforge.net/projects/procps-ng/files/Production/procps-ng-3
 download https://www.kernel.org/pub/linux/utils/util-linux/v2.35/util-linux-2.35.1.tar.xz
 download https://ftp.gnu.org/gnu/which/which-2.21.tar.gz
 download http://sethwklein.net/iana-etc-2.30.tar.bz2
+download http://www.iana.org/time-zones/repository/releases/tzdata2020a.tar.gz
+download https://github.com/OpenRC/openrc/archive/0.42.1.tar.gz openrc-0.42.1.tar.gz
+download http://ftp.gnu.org/gnu/bash/bash-5.0.tar.gz
+download https://github.com/zsh-users/zsh/archive/zsh-5.8.tar.gz
+download http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.xz

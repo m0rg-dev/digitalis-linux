@@ -46,6 +46,11 @@ buildah run "$ctr" -- ./rpkg build-without-depends core/procps-ng
 buildah run "$ctr" -- ./rpkg build-without-depends core/util-linux
 buildah run "$ctr" -- ./rpkg build-without-depends core/which
 buildah run "$ctr" -- ./rpkg build-without-depends core/iana-etc
+buildah run "$ctr" -- ./rpkg build-without-depends core/tzdata
+buildah run "$ctr" -- ./rpkg build-without-depends core/openrc
+buildah run "$ctr" -- ./rpkg build-without-depends core/bash
+buildah run "$ctr" -- ./rpkg build-without-depends core/autoconf
+buildah run "$ctr" -- ./rpkg build-without-depends core/zsh
 
 buildah unshare sh -c 'cp -urpv $(buildah mount '$ctr')/var/db/rpkg/built/* built/'
 buildah umount "$ctr"

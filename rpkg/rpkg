@@ -183,7 +183,7 @@ build_one_selected() {
         local dist_src=$(bash -c "source $pkgsrc; echo \$SRC")
         if [ -n "$dist_src" ]; then
             if [ ! -e "$PKGDIR/distfiles/$dist_src" ]; then
-                echo "\e[31mCan't find $dist_src for $pkg!\e[0m"
+                echo -e "\e[31mCan't find $dist_src for $pkg!\e[0m"
                 exit 1
             fi
         fi
