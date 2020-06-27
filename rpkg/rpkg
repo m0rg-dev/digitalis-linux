@@ -172,15 +172,59 @@ debug_selected() {
     done
 }
 
+do_ldconfig() {
+    echo "running ldconfig"
+    ldconfig -X
+    # TODO figure out why ldconfig doesn't figure this crap out on its own
+    if [[ ! -e /lib64/ld-linux-x86-64.so.2 ]]; then
+        ln -s $(readlink /lib/ld-linux-x86-64.so.2) /lib64/ld-linux-x86-64.so.2
+    fi
+    unset NEED_LDCONFIG
+}
+
+install_from_build() {
+    atom=$1
+    build=$(atom_to_build $atom)
+
+    tarfile=${atom//\//_}.tar
+    if [ -d /tmp ]; then
+        if [ -e /usr/bin/pv ]; then
+            pv -peb -N "$atom" <"$build" | xz -dc - >"/tmp/$tarfile"
+        else
+            echo "[-------- Installing: $atom --------]"
+            xz -dc "$build" >"/tmp/$tarfile"
+        fi
+        bash -c "cd /; tar xpf /tmp/$tarfile"
+        if tar tvf "/tmp/$tarfile" | fgrep -q -e lib/ -e usr/lib/; then
+            NEED_LDCONFIG=1
+        fi
+        rm "/tmp/$tarfile"
+    else
+        bash -c "cd /; tar xpfJ $build"
+    fi
+}
+
+do_package_checks() {
+    if [[ -z $(bash -c "source /var/lib/rpkg/mod/base.sh; source '$pkgsrc'; echo \$SRC_URL") ]]; then
+        echo -e "\e[33m$(file_to_atom $pkgsrc) does not define a SRC_URL - this will cause problems later\e[0m"
+    fi
+}
+
 build_one_selected() {
     local pkg=$1
 
     local pkgsrc=${selected[$pkg]}
     echo "pkgsrc=$pkgsrc" >&2
     local atom=$(file_to_atom $pkgsrc)
-    if [ "$(bash -c "source '$pkgsrc'; type -t pkg_build")" = 'function' ]; then
+    #bash -exc "source /var/lib/rpkg/mod/base.sh; source '$pkgsrc'; type -t pkg_build" || exit 1
+    do_package_checks $pkgsrc
+
+    if [ "$(bash -c "source /var/lib/rpkg/mod/base.sh; source '$pkgsrc'; type -t pkg_build")" = 'function' ]; then
         echo "[-------- Building from source: $pkg --------]"
-        local dist_src=$(bash -c "source $pkgsrc; echo \$SRC")
+        if [ -n "$NEED_LDCONFIG" ]; then
+            do_ldconfig
+        fi
+        local dist_src=$(bash -c "source /var/lib/rpkg/mod/base.sh; source $pkgsrc; echo \$SRC")
         if [ -n "$dist_src" ]; then
             if [ ! -e "$PKGDIR/distfiles/$dist_src" ]; then
                 echo -e "\e[31mCan't find $dist_src for $pkg!\e[0m"
@@ -194,18 +238,18 @@ build_one_selected() {
             cp "$PKGDIR/distfiles/$dist_src" "/tmp/build-$pkg"
         fi
 
-        if bash -c "source '$pkgsrc'; cd '/tmp/build-$pkg'; set -ex; pkg_build"; then
+        if bash -c "cd '/tmp/build-$pkg'; source /var/lib/rpkg/mod/base.sh; source '$pkgsrc'; set -e; pkg_build"; then
             mkdir -p $(dirname $(atom_to_build $atom))
+            echo "Compressing package for $atom"
             bash -c "cd '/tmp/build-$pkg'; tar cp . | xz -T 0 > '$(atom_to_build $atom)'"
-            echo "[-------- Installing: $pkg --------]"
-            bash -c "cd /; tar xpJf $(atom_to_build $atom)"
+            install_from_build $atom
         else
             echo -e "\e[31mSomething went wrong while building $pkg. Stopping."
             exit 1
         fi
     fi
 
-    echo "Marking $atom as installed"
+    #echo "Marking $atom as installed"
 
     mkdir -p $(dirname "$PKGDIR/installed/$atom")
     touch "$PKGDIR/installed/$atom"
@@ -215,7 +259,7 @@ build_recursive() {
     local pkg=$1
     local pkgsrc=${selected[$pkg]}
 
-    local depends=$(bash -c "source $pkgsrc; echo \$BDEPEND \$RDEPEND")
+    local depends=$(bash -c "source /var/lib/rpkg/mod/base.sh; source $pkgsrc; echo \$BDEPEND \$RDEPEND")
     for depend in $depends; do
         if [[ ${selected[$(name_part $depend)]} = *.sh ]]; then
             build_recursive $(name_part $depend)
@@ -248,8 +292,7 @@ build() {
     done
 
     for pkg in $to_install; do
-        echo "[-------- Installing: $pkg --------]"
-        bash -c "cd /; tar xpJf ${selected[$pkg]}"
+        install_from_build $(file_to_atom ${selected[$pkg]})
     done
 
     local cand=$(find_installation_candidate $package)
@@ -258,6 +301,9 @@ build() {
 
     if [[ ${selected[$pkgname]} = *.sh ]]; then
         build_recursive $pkgname
+    fi
+    if [ -n "$NEED_LDCONFIG" ]; then
+        do_ldconfig
     fi
 }
 
@@ -297,12 +343,14 @@ case "$1" in
 
             build_one_selected $(name_part $atom)
         elif [[ $cand = *.tar.xz ]]; then
-            echo "[-------- Installing: $atom --------]"
-            bash -c "cd /; tar xpJf $cand"
-            echo "Marking $atom as installed"
+            install_from_build $atom
+            #echo "Marking $atom as installed"
 
             mkdir -p $(dirname "$PKGDIR/installed/$atom")
             touch "$PKGDIR/installed/$atom"
+        fi
+        if [ -n "$NEED_LDCONFIG" ]; then
+            do_ldconfig
         fi
         ;;
     *)

@@ -1,7 +1,7 @@
 # This file adapted from https://github.com/void-linux/void-packages/blob/master/srcpkgs/tzdata/template,
 # available under the public domain
 
-VERSION=2020a
+export VERSION=2020a
 
 export SRC=tzdata$VERSION.tar.gz
 export SRC_URL=http://www.iana.org/time-zones/repository/releases/tzdata$VERSION.tar.gz

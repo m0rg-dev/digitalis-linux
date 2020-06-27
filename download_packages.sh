@@ -41,3 +41,6 @@ download https://github.com/OpenRC/openrc/archive/0.42.1.tar.gz openrc-0.42.1.ta
 download http://ftp.gnu.org/gnu/bash/bash-5.0.tar.gz
 download https://github.com/zsh-users/zsh/archive/zsh-5.8.tar.gz
 download http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.xz
+download http://www.ivarch.com/programs/sources/pv-1.6.6.tar.gz
+download http://ftp.gnu.org/gnu/automake/automake-1.16.1.tar.xz
+

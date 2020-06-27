@@ -1,6 +1,6 @@
-export VERSION=5.0
+export VERSION=3.4
 
-PACKAGE=bash
+PACKAGE=grep
 UPSTREAM="http://ftp.gnu.org/gnu/"
 CONFIG_OPTS="--prefix=/usr --bindir=/bin"
 

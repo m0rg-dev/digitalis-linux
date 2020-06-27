@@ -1,4 +1,4 @@
-VERSION=6.2
+export VERSION=6.2
 
 export SRC=ncurses-$VERSION.tar.gz
 export SRC_URL="http://ftp.gnu.org/gnu/ncurses/$SRC"
@@ -38,4 +38,5 @@ pkg_build() {
     ln -sfv libncurses.so      usr/lib/libcurses.so
 
     rm -r ncurses-$VERSION
+    ldconfig -N -r .
 }
