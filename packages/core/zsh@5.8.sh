@@ -1,5 +1,7 @@
 export VERSION=5.8
 
+# TODO bdepend/rdepend should include git
+
 export SRC=zsh-$VERSION.tar.gz
 export SRC_URL=https://github.com/zsh-users/zsh/archive/$VERSION
 

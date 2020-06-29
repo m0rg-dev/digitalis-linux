@@ -1,7 +1,7 @@
-RDEPEND="util/autoconf util/automake core/bc util/binutils core/bison"
-RDEPEND="$RDEPEND core/ed core/flex lang/gcc core/gettext core/groff"
-RDEPEND="$RDEPEND core/libtool core/m4 core/make core/patch core/pkg-config"
-RDEPEND="$RDEPEND util/texinfo core/zip util/xz kernel/linux-headers"
-RDEPEND="$RDEPEND lang/perl core/python"
+RDEPEND="util/autoconf util/automake util/bc util/binutils util/bison"
+RDEPEND="$RDEPEND util/flex lang/gcc libs/gettext util/groff"
+RDEPEND="$RDEPEND util/libtool util/m4 util/make util/patch util/pkg-config"
+RDEPEND="$RDEPEND util/texinfo util/xz kernel/linux-headers"
+RDEPEND="$RDEPEND lang/perl lang/python"
 
 export RDEPEND

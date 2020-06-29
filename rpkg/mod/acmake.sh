@@ -53,20 +53,23 @@ pkg_build() {
     [ -n "$POSTMAKESCRIPT" ] && bash -exc "$POSTMAKESCRIPT"
 
     if [ -n "$INSTALLSCRIPT" ]; then
-        echo "Running custom install script" >&2
+        echo "Running custom install script in $(pwd)" >&2
         bash -exc "$INSTALLSCRIPT"
     else
-        echo "Running make install" >&2
+        echo "Running make install in $(pwd)" >&2
         make DESTDIR=$(realpath ..) install $MAKEINSTALLOPTS
     fi
 
     cd ..
     [ -n "$POSTINSTALLSCRIPT" ] && bash -exc "$POSTINSTALLSCRIPT"
     echo "Cleaning up" >&2
-    rm -rf $UNPACK_DIR build
+    rm -rf $UNPACK_DIR build || rm -rf $UNPACK_DIR build
 
     if [[ -d lib || -d usr/lib ]]; then
-        echo "Running ldconfig" >&2
+        echo "Running ldconfig (package)" >&2
         ldconfig -N -r .
+        # under no circumstances should *any* package be writing this!
+        # this may be better to enforce in rpkg itself
+        rm -f etc/ld.so.cache
     fi
 }

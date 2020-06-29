@@ -23,9 +23,9 @@ pkg_build() {
 
     cd ..
     rm -r shadow-$VERSION
-}
 
-pkg_postinstall() {
-    pwconv
-    grpconv
+    sed -i 's/#FORCE_SHADOW/FORCE_SHADOW/' etc/login.defs
+
+    usr/sbin/pwconv -R $(realpath .)
+    usr/sbin/grpconv -R $(realpath .)
 }

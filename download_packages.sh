@@ -43,4 +43,32 @@ download https://github.com/zsh-users/zsh/archive/zsh-5.8.tar.gz
 download http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.xz
 download http://www.ivarch.com/programs/sources/pv-1.6.6.tar.gz
 download http://ftp.gnu.org/gnu/automake/automake-1.16.1.tar.xz
-
+download https://github.com/gavinhoward/bc/archive/2.5.3/bc-2.5.3.tar.gz
+download http://ftp.gnu.org/gnu/bison/bison-3.6.tar.xz
+download http://ftp.gnu.org/gnu/nano/nano-4.9.tar.xz
+download http://ftp.gnu.org/gnu/m4/m4-1.4.18.tar.xz
+download http://ftp.gnu.org/gnu/gettext/gettext-0.20.tar.xz
+download http://ftp.gnu.org/gnu/groff/groff-1.22.4.tar.gz
+download https://github.com/westes/flex/releases/download/v2.6.4/flex-2.6.4.tar.gz
+download http://ftp.gnu.org/gnu/libtool/libtool-2.4.tar.xz
+download http://ftp.gnu.org/gnu/make/make-4.3.tar.gz
+download http://ftp.gnu.org/gnu/patch/patch-2.7.6.tar.xz
+download https://pkg-config.freedesktop.org/releases/pkg-config-0.29.2.tar.gz
+download https://www.python.org/ftp/python/3.8.3/Python-3.8.3.tar.xz
+download http://ftp.gnu.org/gnu/gzip/gzip-1.10.tar.xz
+download https://dev.gentoo.org/~blueness/eudev/eudev-3.2.9.tar.gz
+download http://ftp.gnu.org/gnu/grub/grub-2.04.tar.xz
+download http://ftp.gnu.org/gnu/gperf/gperf-3.1.tar.gz
+download https://sourceware.org/ftp/elfutils/0.180/elfutils-0.180.tar.bz2
+download https://www.openssl.org/source/openssl-1.1.1d.tar.gz
+download https://www.kernel.org/pub/linux/utils/kernel/kmod/kmod-26.tar.xz
+download http://ftp.gnu.org/gnu/inetutils/inetutils-1.9.4.tar.xz
+download https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-8.3p1.tar.gz
+download http://ftp.gnu.org/gnu/cpio/cpio-2.13.tar.gz
+download https://git.archlinux.org/svntogit/packages.git/plain/trunk/config?h=packages/linux linux-config
+download https://www.kernel.org/pub/linux/utils/net/iproute2/iproute2-5.5.0.tar.xz
+download https://mirrors.edge.kernel.org/pub/linux/network/wireless/iwd-1.8.tar.xz
+download https://roy.marples.name/downloads/dhcpcd/dhcpcd-9.1.2.tar.xz
+download http://ftp.gnu.org/gnu/readline/readline-8.0.tar.gz
+download https://dbus.freedesktop.org/releases/dbus/dbus-1.12.18.tar.gz
+download https://prdownloads.sourceforge.net/expat/expat-2.2.9.tar.xz

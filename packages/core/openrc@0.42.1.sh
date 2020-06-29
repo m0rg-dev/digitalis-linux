@@ -20,5 +20,8 @@ pkg_build() {
     make $MAKE_ARGS DESTDIR=$(realpath ..) install
 
     cd ..
+    mkdir run proc dev sys
     rm -r openrc-$VERSION
+
+    sed -i 's/#!bash/#!\/bin\/sh/' libexec/rc/sh/*.sh
 }

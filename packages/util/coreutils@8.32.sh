@@ -1,5 +1,7 @@
 export VERSION=8.32
 
+export RDEPEND="libs/gmp"
+
 PACKAGE=coreutils
 USE_BUILD_DIR=1
 CONFIG_OPTS="--prefix=/usr --enable-no-install-program=kill,uptime"

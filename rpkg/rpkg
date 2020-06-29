@@ -5,6 +5,11 @@ if [ -z "$MAKEOPTS" ]; then
     export MAKEOPTS=-j56
 fi
 
+# TODO need to split to proper host-install-dir and target-install-dir or whatever
+# but then I need to actually make bdeps function properly
+declare ADDITIONAL_INSTALL_DIR
+declare ASSUME_EMPTY_TREE
+
 declare -A selected
 
 file_to_atom() {
@@ -36,6 +41,13 @@ name_part() {
     atom=${atom%@*}
     atom=${atom%^*}
     echo $atom
+}
+
+is_atom() {
+    local atom=$1 
+
+    local d=$(expr $atom : '.*/.*@.*')
+    return $?
 }
 
 version_part() {
@@ -79,19 +91,21 @@ find_installation_candidate() {
     local sel
 
     if [ -d $PKGDIR/installed ]; then
-        INSTALLED=$(find $PKGDIR/installed | grep $pkgname)
+        INSTALLED=$(find $PKGDIR/installed | grep "$pkgname@")
         for cand in $INSTALLED; do
             local atom=$(file_to_atom $cand)
             local name=$(name_part $atom)
             local version=$(version_part $atom)
 
-            if versions_compatible $pkgver $version && [ $name = $pkgname ]; then
+            if versions_compatible $pkgver $version \
+                && [ -z "$ASSUME_EMPTY_TREE" ] \
+                && [ $name = $pkgname ]; then
                 echo "installed"
             fi
         done
     fi
 
-    CANDIDATES=$(find $PKGDIR/packages | grep $pkgname)
+    CANDIDATES=$(find $PKGDIR/packages | grep "$pkgname@")
     for cand in $CANDIDATES; do
         local atom=$(file_to_atom $cand)
         local name=$(name_part $atom)
@@ -111,7 +125,7 @@ find_installation_candidate() {
     elif [ ${#names[@]} -gt 1 ]; then
         echo -e "\e[31mMultiple packages found for $specifier: \e[0m" >&2
         for k in "${!names[@]}"; do
-            echo "    => $k"
+            echo "    => $k" >&2
         done
         exit 1
     fi
@@ -157,10 +171,10 @@ select_depends() {
 
     if [[ $cand = *.sh ]]; then
         # Building from source, so we need bdeps as well
-        depends=$(bash -c "source $cand; echo \$BDEPEND")
+        depends=$(bash -c "source /var/lib/rpkg/mod/base.sh; source $cand; echo \$BDEPEND")
     fi
 
-    local rdepend=$(bash -c "source $(atom_to_package $atom); echo \$RDEPEND")
+    local rdepend=$(bash -c "source /var/lib/rpkg/mod/base.sh; source $(atom_to_package $atom); echo \$RDEPEND")
     depends="$depends $rdepend" 
 
     for depend in $depends; do select_depends $depend; done
@@ -173,13 +187,28 @@ debug_selected() {
 }
 
 do_ldconfig() {
-    echo "running ldconfig"
+    echo "Running ldconfig (system)"
     ldconfig -X
+    if [ -n "$ADDITIONAL_INSTALL_DIR" ]; then
+        ldconfig -X -r "$ADDITIONAL_INSTALL_DIR"
+    fi
+
     # TODO figure out why ldconfig doesn't figure this crap out on its own
     if [[ ! -e /lib64/ld-linux-x86-64.so.2 ]]; then
         ln -s $(readlink /lib/ld-linux-x86-64.so.2) /lib64/ld-linux-x86-64.so.2
     fi
     unset NEED_LDCONFIG
+}
+
+mark_installed() {
+    atom=$1
+
+    mkdir -p $(dirname "$PKGDIR/installed/$atom")
+    touch "$PKGDIR/installed/$atom"
+    if [ -n "$ADDITIONAL_INSTALL_DIR" ]; then
+    mkdir -p $(dirname "$ADDITIONAL_INSTALL_DIR/var/db/rpkg/installed/$atom")
+        touch "$ADDITIONAL_INSTALL_DIR/var/db/rpkg/installed/$atom"
+    fi
 }
 
 install_from_build() {
@@ -198,13 +227,24 @@ install_from_build() {
         if tar tvf "/tmp/$tarfile" | fgrep -q -e lib/ -e usr/lib/; then
             NEED_LDCONFIG=1
         fi
+        if [ -n "$ADDITIONAL_INSTALL_DIR" ]; then
+            bash -c "cd $ADDITIONAL_INSTALL_DIR; tar xpf /tmp/$tarfile"
+        fi
         rm "/tmp/$tarfile"
     else
+        echo "[-------- Installing: $atom --------]"
         bash -c "cd /; tar xpfJ $build"
+        if [ -n "$ADDITIONAL_INSTALL_DIR" ]; then
+            bash -c "cd $ADDITIONAL_INSTALL_DIR; tar xpfJ $build"
+        fi
     fi
+
+    mark_installed $atom
 }
 
 do_package_checks() {
+    pkgsrc=$1
+
     if [[ -z $(bash -c "source /var/lib/rpkg/mod/base.sh; source '$pkgsrc'; echo \$SRC_URL") ]]; then
         echo -e "\e[33m$(file_to_atom $pkgsrc) does not define a SRC_URL - this will cause problems later\e[0m"
     fi
@@ -226,16 +266,20 @@ build_one_selected() {
         fi
         local dist_src=$(bash -c "source /var/lib/rpkg/mod/base.sh; source $pkgsrc; echo \$SRC")
         if [ -n "$dist_src" ]; then
-            if [ ! -e "$PKGDIR/distfiles/$dist_src" ]; then
-                echo -e "\e[31mCan't find $dist_src for $pkg!\e[0m"
-                exit 1
-            fi
+            for f in $dist_src; do
+                if [ ! -e "$PKGDIR/distfiles/$f" ]; then
+                    echo -e "\e[31mCan't find $df for $pkg!\e[0m"
+                    exit 1
+                fi
+            done
         fi
 
         rm -rf "/tmp/build-$pkg"
         mkdir -p "/tmp/build-$pkg"
         if [ -n "$dist_src" ]; then
-            cp "$PKGDIR/distfiles/$dist_src" "/tmp/build-$pkg"
+            for f in $dist_src; do
+                cp "$PKGDIR/distfiles/$f" "/tmp/build-$pkg"
+            done
         fi
 
         if bash -c "cd '/tmp/build-$pkg'; source /var/lib/rpkg/mod/base.sh; source '$pkgsrc'; set -e; pkg_build"; then
@@ -247,26 +291,37 @@ build_one_selected() {
             echo -e "\e[31mSomething went wrong while building $pkg. Stopping."
             exit 1
         fi
+    else 
+        mark_installed $atom
     fi
-
-    #echo "Marking $atom as installed"
-
-    mkdir -p $(dirname "$PKGDIR/installed/$atom")
-    touch "$PKGDIR/installed/$atom"
 }
 
 build_recursive() {
-    local pkg=$1
+    local atom=$1
+    local pkg=$(name_part $atom)
     local pkgsrc=${selected[$pkg]}
 
-    local depends=$(bash -c "source /var/lib/rpkg/mod/base.sh; source $pkgsrc; echo \$BDEPEND \$RDEPEND")
-    for depend in $depends; do
-        if [[ ${selected[$(name_part $depend)]} = *.sh ]]; then
-            build_recursive $(name_part $depend)
-        fi
-    done
+    echo "BUILD_RECURSIVE $atom"
 
-    build_one_selected $pkg
+    local d=$(expr $atom : '.*/.*@.*')
+    [ $d -ne 0 ] || {
+        echo -e "\e[31mbuild_recursive was passed $atom, which does not specify a single package\e[0m"
+        echo -e "\e[31mthis is a bug in rpkg or in a package depending on $atom\e[0m"
+        exit 1
+    }   
+
+    if [ ! -e "$PKGDIR/installed/$atom" ]; then
+        local depends=$(bash -c "source /var/lib/rpkg/mod/base.sh; source $pkgsrc; echo \$BDEPEND \$RDEPEND")
+        for depend in $depends; do
+            if [[ ${selected[$(name_part $depend)]} = *.sh ]]; then
+                echo "building $depend for $atom"
+                build_recursive $(file_to_atom ${selected[$(name_part $depend)]})
+            fi
+        done
+        build_one_selected $pkg
+    else
+	    echo "$atom is already installed"
+    fi
 }
 
 build() {
@@ -278,7 +333,7 @@ build() {
     local to_build=""
 
     for k in "${!selected[@]}"; do
-        if [ ${selected[$k]} = "installed" ]; then
+        if [[ ${selected[$k]} = "installed" ]]; then
             echo -e "$k \e[32mis already installed\e[0m"
         elif [[ ${selected[$k]} = *.tar.xz ]]; then
             echo -e "$k \e[33mis available locally\e[0m"
@@ -299,9 +354,12 @@ build() {
     local atom=$(file_to_atom $cand)
     local pkgname=$(name_part $atom)
 
-    if [[ ${selected[$pkgname]} = *.sh ]]; then
-        build_recursive $pkgname
-    fi
+    for k in "${!selected[@]}"; do
+        if [[ ${selected[$k]} = *.sh ]]; then
+            build_recursive $(file_to_atom ${selected[$k]})
+        fi
+    done
+
     if [ -n "$NEED_LDCONFIG" ]; then
         do_ldconfig
     fi
@@ -314,6 +372,12 @@ while (( "$#" )); do
         --pkgdir=*)
             arg=$1
             PKGDIR=$(realpath $(expr "$arg" : '.*=\(.*\)'))
+            shift
+            ;;
+        --additional-install-dir=*)
+            arg=$1
+            ADDITIONAL_INSTALL_DIR=$(realpath $(expr "$arg" : '.*=\(.*\)'))
+            ASSUME_EMPTY_TREE=1
             shift
             ;;
         -*|--*=)
@@ -344,10 +408,6 @@ case "$1" in
             build_one_selected $(name_part $atom)
         elif [[ $cand = *.tar.xz ]]; then
             install_from_build $atom
-            #echo "Marking $atom as installed"
-
-            mkdir -p $(dirname "$PKGDIR/installed/$atom")
-            touch "$PKGDIR/installed/$atom"
         fi
         if [ -n "$NEED_LDCONFIG" ]; then
             do_ldconfig
