@@ -1,6 +1,7 @@
 export VERSION=8.32
 
-export RDEPEND="libs/gmp"
+export BDEPEND="libs/libattr"
+export RDEPEND="libs/gmp libs/libattr"
 
 PACKAGE=coreutils
 USE_BUILD_DIR=1

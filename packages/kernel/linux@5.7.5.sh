@@ -1,7 +1,7 @@
 export VERSION=5.7.5
 
-export BDEPEND="libs/libelf libs/openssl util/kmod util/cpio"
-export RDEPEND="util/kmod"
+export BDEPEND="libs/libelf libs/openssl util/kmod util/cpio util/dracut"
+export RDEPEND="util/kmod util/dracut"
 
 export SRC="linux-$VERSION.tar.xz linux-config"
 export SRC_URL="https://cdn.kernel.org/pub/linux/kernel/v5.x/$SRC"
@@ -14,7 +14,7 @@ pkg_build() {
     cd linux-$VERSION
 
     make mrproper
-    cp ../linux-config .
+    cp ../linux-config .config
     make olddefconfig
     make $MAKEOPTS
     make INSTALL_MOD_PATH=$(realpath ..) modules_install
@@ -35,6 +35,8 @@ install uhci_hcd /sbin/modprobe ehci_hcd ; /sbin/modprobe -i uhci_hcd ; true
 
 # End /etc/modprobe.d/usb.conf
 EOF
+
+    #dracut boot/initrd-$VERSION.img --kver $VERSION
 
     set +x
 }

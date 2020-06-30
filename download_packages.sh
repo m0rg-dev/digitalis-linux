@@ -65,10 +65,18 @@ download https://www.kernel.org/pub/linux/utils/kernel/kmod/kmod-26.tar.xz
 download http://ftp.gnu.org/gnu/inetutils/inetutils-1.9.4.tar.xz
 download https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-8.3p1.tar.gz
 download http://ftp.gnu.org/gnu/cpio/cpio-2.13.tar.gz
-download https://git.archlinux.org/svntogit/packages.git/plain/trunk/config?h=packages/linux linux-config
 download https://www.kernel.org/pub/linux/utils/net/iproute2/iproute2-5.5.0.tar.xz
 download https://mirrors.edge.kernel.org/pub/linux/network/wireless/iwd-1.8.tar.xz
 download https://roy.marples.name/downloads/dhcpcd/dhcpcd-9.1.2.tar.xz
 download http://ftp.gnu.org/gnu/readline/readline-8.0.tar.gz
 download https://dbus.freedesktop.org/releases/dbus/dbus-1.12.18.tar.gz
 download https://prdownloads.sourceforge.net/expat/expat-2.2.9.tar.xz
+download https://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/v1.45.5/e2fsprogs-1.45.5.tar.gz
+download http://ftp.gnu.org/gnu/gdb/gdb-9.2.tar.xz
+download https://mirrors.edge.kernel.org/pub/linux/utils/boot/dracut/dracut-050.tar.xz
+download http://download.savannah.gnu.org/releases/attr/attr-2.4.48.tar.gz
+download http://anduin.linuxfromscratch.org/LFS/udev-lfs-20171102.tar.xz
+download https://mirrors.edge.kernel.org/pub/linux/kernel/firmware/linux-firmware-20200619.tar.xz
+
+#download https://raw.githubusercontent.com/robbat2/genkernel/v3.5.3.3/defaults/kernel-generic-config linux-config
+cp linux-config distfiles/

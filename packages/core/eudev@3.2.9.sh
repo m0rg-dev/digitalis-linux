@@ -1,6 +1,6 @@
 export VERSION=3.2.9
 
-export BDEPEND="util/gperf"
+export BDEPEND="util/gperf util/kmod core/lfs-udev-rules"
 
 export SRC=eudev-$VERSION.tar.gz
 export SRC_URL=https://dev.gentoo.org/~blueness/eudev/$SRC

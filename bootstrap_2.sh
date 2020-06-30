@@ -53,6 +53,10 @@ buildah run "$ctr" -- sh -ec "
 ./rpkg build-without-depends core/iana-etc
 ./rpkg build-without-depends core/tzdata
 ./rpkg build-without-depends core/openrc
+./rpkg build-without-depends util/pkg-config
+./rpkg build-without-depends libs/expat
+./rpkg build-without-depends core/dbus
+./rpkg build-without-depends libs/readline
 ./rpkg build-without-depends core/bash
 ./rpkg build-without-depends util/autoconf
 ./rpkg build-without-depends core/zsh
@@ -68,7 +72,6 @@ buildah run "$ctr" -- sh -ec "
 ./rpkg build-without-depends util/groff
 ./rpkg build-without-depends util/make
 ./rpkg build-without-depends util/patch
-./rpkg build-without-depends util/pkg-config
 ./rpkg build-without-depends lang/python
 "
 
