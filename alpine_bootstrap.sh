@@ -8,7 +8,7 @@ ulimit -n 65536
 ctr=$(buildah from alpine)
 
 buildah run "$ctr" -- mkdir /new_root
-buildah run "$ctr" -- apk add alpine-sdk gawk bison python3 flex rsync perl texinfo
+buildah run "$ctr" -- apk add alpine-sdk gawk bison python3 flex rsync perl texinfo linux-headers
 
 buildah add "$ctr" distfiles/ bootstrap-buildscripts/ /
 
@@ -31,6 +31,8 @@ buildah run "$ctr" -- sh -ex build_m4.sh
 buildah run "$ctr" -- sh -ex build_bison.sh
 buildah run "$ctr" -- sh -ex build_python.sh
 buildah run "$ctr" -- sh -ex build_xz.sh
+buildah run "$ctr" -- sh -ex build_node.sh
+buildah run "$ctr" -- sh -ex build_pv.sh
 
 rm -rf new_root
 buildah unshare sh -c 'cp -rp $(buildah mount '$ctr')/new_root new_root'

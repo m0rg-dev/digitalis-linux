@@ -1,0 +1,8 @@
+version: "2.04"
+bdepend:
+  - util/flex
+filename: grub
+upstream: https://ftp.gnu.org/gnu/grub/
+additional_configure_options: --sbindir=/sbin --sysconfdir=/etc --disable-efiemu --disable-werror
+queue_hooks:
+  ldconfig: false

@@ -1,0 +1,6 @@
+version: "4.9"
+rdepend:
+  - util/file
+  - util/bzip2
+filename: nano
+upstream: http://ftp.gnu.org/gnu/nano/

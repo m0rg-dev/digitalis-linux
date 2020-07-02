@@ -1,0 +1,6 @@
+version: "3.8.3"
+filename: Python
+additional_configure_options: --with-ensurepip=yes
+upstream: https://www.python.org/ftp/python/%{version}/
+queue_hooks:
+  ldconfig: true

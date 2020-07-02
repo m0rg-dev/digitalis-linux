@@ -1,0 +1,3 @@
+version: 1.9.4
+filename: inetutils
+upstream: https://ftp.gnu.org/gnu/inetutils/

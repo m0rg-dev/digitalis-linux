@@ -1,0 +1,9 @@
+version: 6.7
+bdepend:
+  - lang/perl
+rdepend:
+  - lang/perl
+filename: texinfo
+upstream: http://ftp.gnu.org/gnu/texinfo/
+queue_hooks:
+  ldconfig: true

@@ -1,0 +1,11 @@
+version: "1.12.18"
+bdepend:
+  - libs/expat
+rdepend:
+  - libs/expat
+filename: dbus
+comp: tar.gz
+upstream: https://dbus.freedesktop.org/releases/dbus/
+post_unpack_script: mkdir -p var/run/dbus
+queue_hooks:
+  ldconfig: true

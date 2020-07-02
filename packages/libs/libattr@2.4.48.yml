@@ -1,0 +1,6 @@
+version: "2.4.48"
+filename: attr
+upstream: https://download.savannah.gnu.org/releases/attr/
+comp: tar.gz
+queue_hooks:
+  ldconfig: true

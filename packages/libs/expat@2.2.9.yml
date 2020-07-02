@@ -1,0 +1,5 @@
+version: "2.2.9"
+filename: expat
+upstream: https://prdownloads.sourceforge.net/expat/
+queue_hooks:
+    ldconfig: true

@@ -1,0 +1,44 @@
+version: "5.7.5"
+bdepend:
+  - libs/libelf
+  - libs/openssl
+  - util/kmod
+  - util/cpio
+  - util/dracut
+rdepend:
+  - util/kmod
+  - util/dracut
+  - util/util-linux
+filename: linux
+upstream: https://cdn.kernel.org/pub/linux/kernel/v5.x/
+additional_sources: [linux-config]
+# additional_source_urls: []
+configure: |
+  make mrproper
+  cp ../linux-config .config
+  make olddefconfig
+install: |
+  make INSTALL_MOD_PATH=$(realpath ..) modules_install
+  mkdir -p ../boot
+  cp -iv arch/$(uname -m)/boot/bzImage ../boot/vmlinuz-%{version}
+  cp -iv .config ../boot/config-%{version}
+  install -d ../usr/share/doc/linux-%{version}
+  cp -r Documentation/* ../usr/share/doc/linux-%{version}
+post_install_script: |
+  install -v -m755 -d etc/modprobe.d
+  cat > etc/modprobe.d/usb.conf << "EOF"
+  # Begin /etc/modprobe.d/usb.conf
+
+  install ohci_hcd /sbin/modprobe ehci_hcd ; /sbin/modprobe -i ohci_hcd ; true
+  install uhci_hcd /sbin/modprobe ehci_hcd ; /sbin/modprobe -i uhci_hcd ; true
+
+  # End /etc/modprobe.d/usb.conf
+  EOF
+# dracut _really does not like_ running outside /. but if you're running this
+# script outside of /, you probably don't need an initramfs just yet
+post_unpack_script: |
+  if [[ "$(pwd)" = '/' ]]; then
+    dracut boot/initramfs-%{version}.img --kver %{version}
+  fi
+queue_hooks:
+    ldconfig: true

@@ -1,0 +1,13 @@
+version: "1.1.1d"
+bdepend:
+  - libs/zlib
+rdepend:
+  - libs/zlib
+filename: openssl
+comp: tar.gz
+upstream: https://www.openssl.org/source/
+configure: ./config
+additional_configure_opts: --openssldir=/etc/ssd --libdir=lib shared zlib-dynamic
+install: |
+  sed -i '/INSTALL_LIBS/s/libcrypto.a libssl.a//' Makefile
+  make DESTDIR=$(realpath ..) MANSUFFIX=ssl install

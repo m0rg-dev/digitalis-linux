@@ -1,0 +1,16 @@
+version: 2.34
+bdepend:
+  - util/diffutils
+  - lang/perl
+  - util/texinfo
+  - libs/zlib
+rdepend:
+  - libs/zlib
+filename: binutils
+upstream: http://ftp.gnu.org/gnu/binutils/
+additional_configure_options: >
+  --enable-gold --enable-ld=default --enable-plugins --disable-werror
+  --enable-64-bit-bfd --with-system-zlib
+queue_hooks:
+  ldconfig: true
+  

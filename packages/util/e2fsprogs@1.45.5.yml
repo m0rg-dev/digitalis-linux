@@ -1,0 +1,12 @@
+version: "1.45.5"
+bdepend:
+  - util/util-linux
+rdepend:
+  - util/util-linux
+filename: e2fsprogs
+comp: tar.gz
+upstream: https://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/v%{version}
+use_build_directory: true
+additional_configure_options: --bindir=/bin --enable-elf-shlibs --disable-libblkid --disable-libuuid --disable-uuidd --disable-fsck
+queue_hooks:
+  ldconfig: true

@@ -1,0 +1,6 @@
+version: 1.4.18
+filename: m4
+upstream: https://ftp.gnu.org/gnu/m4/
+pre_configure_script: |
+  sed -i 's/IO_ftrylockfile/IO_EOF_SEEN/' lib/*.c
+  echo '#define _IO_IN_BACKUP 0x100' >> lib/stdio-impl.h

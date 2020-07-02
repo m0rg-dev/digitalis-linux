@@ -77,6 +77,7 @@ download https://mirrors.edge.kernel.org/pub/linux/utils/boot/dracut/dracut-050.
 download http://download.savannah.gnu.org/releases/attr/attr-2.4.48.tar.gz
 download http://anduin.linuxfromscratch.org/LFS/udev-lfs-20171102.tar.xz
 download https://mirrors.edge.kernel.org/pub/linux/kernel/firmware/linux-firmware-20200619.tar.xz
+download https://nodejs.org/download/release/v14.4.0/node-v14.4.0.tar.xz
 
 #download https://raw.githubusercontent.com/robbat2/genkernel/v3.5.3.3/defaults/kernel-generic-config linux-config
 cp linux-config distfiles/

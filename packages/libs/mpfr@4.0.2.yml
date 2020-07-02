@@ -1,0 +1,9 @@
+version: 4.0.2
+bdepend:
+  - libs/gmp>=6.2.0
+filename: mpfr
+upstream: http://www.mpfr.org/mpfr-%{version}/
+additional_configure_options: --disable-static --enable-thread-safe
+use_build_dir: true
+queue_hooks:
+  ldconfig: true

@@ -1,0 +1,21 @@
+version: "26"
+bdepend:
+  - util/xz
+  - libs/zlib
+  - util/pkg-config
+rdepend:
+  - util/xz
+  - libs/zlib
+filename: kmod
+upstream: https://www.kernel.org/pub/linux/utils/kernel/kmod/
+additional_configure_options: >
+  --bindir=/bin --sysconfdir=/etc --with-rootlibdir=/lib --with-xz --with-zlib
+post_install_script: |
+  mkdir -p sbin
+  for target in depmod insmod lsmod modinfo modprobe rmmod; do
+    ln -sfv ../bin/kmod sbin/$target
+  done
+
+  ln -svf kmod bin/lsmod
+queue_hooks:
+  ldconfig: true

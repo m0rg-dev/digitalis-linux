@@ -1,0 +1,9 @@
+version: "4.7.0"
+filename: findutils
+use_build_dir: true
+additional_configure_options: --localstatedir=/var/lib/locate
+upstream: https://ftp.gnu.org/gnu/findutils/
+postinstallscript: |
+    mkdir -p bin
+    mv -v usr/bin/find bin
+    sed -i 's|find:=\${BINDIR}|find:=/bin|' usr/bin/updatedb

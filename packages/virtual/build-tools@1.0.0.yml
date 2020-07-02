@@ -1,0 +1,21 @@
+version: 1.0.0
+rdepend:
+    - kernel/linux-headers
+    - lang/gcc
+    - lang/perl
+    - lang/python
+    - libs/gettext
+    - util/autoconf
+    - util/automake
+    - util/bc
+    - util/binutils
+    - util/bison
+    - util/flex
+    - util/groff
+    - util/libtool
+    - util/m4
+    - util/make
+    - util/patch
+    - util/pkg-config
+    - util/texinfo
+    - util/xz

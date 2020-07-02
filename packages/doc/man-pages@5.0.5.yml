@@ -1,0 +1,5 @@
+version: "5.05"
+filename: man-pages
+upstream: https://www.kernel.org/pub/linux/docs/man-pages/
+configure: ~
+make: ~

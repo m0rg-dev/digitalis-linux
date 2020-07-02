@@ -5,20 +5,30 @@ set -x
 
 ulimit -n 65536
 
-ctr=$(buildah from digitalis-stage3)
+# sh build_in_container.sh alpine-bootstrap stage2/ install linux-headers
 
-buildah add "$ctr" rpkg/rpkg /
-buildah run "$ctr" --  mkdir -p /var/db/rpkg/{built,installed,distfiles,packages}
-buildah add "$ctr" packages/ /var/db/rpkg/packages
-buildah add "$ctr" distfiles/ /var/db/rpkg/distfiles
-buildah run "$ctr" -- sh -c "rm -r /var/db/rpkg/built/*"
-buildah run "$ctr" -- sh -c "rm -r /var/db/rpkg/installed/*"
-buildah add "$ctr" stage3/ /var/db/rpkg/built
+source=$1
+shift
+target=$1
+shift
 
+ctr=$(buildah from $source)
 
-buildah run "$ctr" -- ./rpkg $@
+buildah run "$ctr" --  mkdir -p /var/lib/rpkg/{built,installed,distfiles,packages} /tmp
+buildah run "$ctr" --  mkdir -p /usr/share/rpkg
+buildah add "$ctr" packages/ /var/lib/rpkg/packages
+buildah add "$ctr" distfiles/ /var/lib/rpkg/distfiles
+buildah run "$ctr" -- sh -c "rm -rf /var/lib/rpkg/built/*"
+buildah run "$ctr" -- sh -c "rm -rf /var/lib/rpkg/installed/*"
+if [ -e $target ]; then
+    buildah add "$ctr" $target/ /var/lib/rpkg/built
+fi
+buildah add "$ctr" rpkg/ /usr/share/rpkg
 
-buildah unshare sh -c 'cp -urpv $(buildah mount '$ctr')/var/db/rpkg/built/* stage3/'
+buildah run "$ctr" -- node /usr/share/rpkg/rpkg.js $@
+
+mkdir -p $target/
+buildah unshare sh -c 'cp -urpv $(buildah mount '$ctr')/var/lib/rpkg/built/* '$target/ || true
 buildah umount "$ctr"
 buildah rm "$ctr"
 

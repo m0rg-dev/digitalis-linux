@@ -1,0 +1,16 @@
+version: 0.42.1
+filename: openrc
+comp: tar.gz
+upstream: https://github.com/OpenRC/openrc/archive/
+configure: ~
+additional_make_options: >
+  LIBNAME=/lib
+  MKBASHCOMP=yes
+  MKZSHCOMP=yes
+  SH=/bin/sh
+  OS=Linux
+  MKSYSVINIT=yes
+make: BRANDING="Digitalis Linux" make %{make_options}
+post_unpack_script: mkdir -p run proc dev sys
+queue_hooks:
+  ldconfig: true

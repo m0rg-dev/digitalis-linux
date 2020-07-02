@@ -1,0 +1,4 @@
+version: "2.21"
+filename: which
+comp: tar.gz
+upstream: https://ftp.gnu.org/gnu/which

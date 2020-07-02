@@ -1,0 +1,5 @@
+version: 3.6
+filename: bison
+upstream: http://ftp.gnu.org/gnu/bison/
+queue_hooks:
+  ldconfig: true

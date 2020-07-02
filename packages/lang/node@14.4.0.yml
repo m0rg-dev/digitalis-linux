@@ -1,0 +1,11 @@
+version: "14.4.0"
+bdepend:
+  - lang/gcc
+  - util/make
+  - lang/python
+filename: node
+src: "%{filename}-v%{version}.%{comp}"
+unpack_dir: "%{filename}-v%{version}"
+upstream: https://nodejs.org/download/release/v%{version}/
+queue_hooks:
+  ldconfig: false

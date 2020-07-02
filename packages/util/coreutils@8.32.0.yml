@@ -1,0 +1,10 @@
+version: 8.32
+bdepend:
+  - libs/libattr
+rdepend:
+  - libs/gmp
+  - libs/libattr
+filename: coreutils
+use_build_dir: true
+additional_configure_options: --enable-no-install-program=kill,uptime
+configure: "FORCE_UNSAFE_CONFIGURE=1 ../%{unpack_dir}/configure %{configure_options}"

@@ -1,0 +1,8 @@
+version: "0.20"
+filename: gettext
+upstream: https://ftp.gnu.org/gnu/gettext/
+additional_configure_options: --disable-static
+make_options: -j1
+queue_hooks:
+  ldconfig: true
+  

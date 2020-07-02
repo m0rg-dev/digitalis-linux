@@ -1,0 +1,5 @@
+version: "5.1.0"
+filename: gawk
+upstream: https://ftp.gnu.org/gnu/gawk/
+queue_hooks:
+  ldconfig: true

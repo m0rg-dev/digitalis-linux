@@ -1,0 +1,12 @@
+version: "5.8"
+bdepend:
+  - util/autoconf
+filename: zsh
+unpack_dir: zsh-zsh-%{version}
+comp: tar.gz
+upstream: https://github.com/zsh-users/zsh/archive/%{version}/
+pre_configure_script: ./Util/preconfig
+additional_configure_arguments: --bindir=/bin
+install: make DESTDIR=$(realpath ..) install.bin install.modules
+queue_hooks:
+  ldconfig: true

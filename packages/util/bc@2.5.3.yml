@@ -1,0 +1,7 @@
+version: 2.5.3
+bdepend:
+  - libs/glibc
+filename: bc
+comp: tar.gz
+configure: "CC=gcc PREFIX=/usr ./configure.sh -O3"
+upstream: https://github.com/gavinhoward/bc/archive/%{version}

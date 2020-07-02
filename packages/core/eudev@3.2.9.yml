@@ -1,0 +1,16 @@
+version: "3.2.9"
+bdepend:
+  - util/gperf
+  - util/kmod
+  - core/lfs-udev-rules
+filename: eudev
+comp: tar.gz
+upstream: https://dev.gentoo/org/~blueness/eudev/
+pre_configure_script: mkdir -pv ../{lib,etc}/udev/rules.d
+additional_configure_options: >
+  --bindir=/sbin --sbindir=/sbin --libdir=/usr/lib
+  --sysconfdir=/etc --with-rootprefix= --with-rootlibdir=/lib
+  --enable-manpages --disable-static
+post_install_script: sbin/udevadm hwdb -r . --update
+queue_hooks:
+  ldconfig: true

@@ -1,0 +1,22 @@
+version: "2.35.1"
+filename: util-linux
+upstream: https://www.kernel.org/pub/linux/utils/util-linux/v2.35/
+pre_configure_script: |
+  mkdir -p ../var/lib/hwclock
+  cat /etc/group
+  cat /etc/passwd
+additional_configure_options: >
+  ADJTIME_PATH=/var/lib/hwclock/adjtime   \
+            --disable-chfn-chsh  \
+            --disable-login      \
+            --disable-nologin    \
+            --disable-su         \
+            --disable-setpriv    \
+            --disable-runuser    \
+            --disable-pylibmount \
+            --disable-static     \
+            --without-python     \
+            --without-systemd    \
+            --without-systemdsystemunitdir
+queue_hooks:
+  ldconfig: true

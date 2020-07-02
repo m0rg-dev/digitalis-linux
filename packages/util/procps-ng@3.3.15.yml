@@ -1,0 +1,10 @@
+version: "3.3.15"
+bdepend:
+  - libs/ncurses
+rdepend:
+  - libs/ncurses
+filename: procps-ng
+additional_configure_options: --exec-prefix= --libdir=/usr/lib --disable-static --disable-kill
+upstream: https://sourceforge.net/projects/procps-ng/files/Production/
+queue_hooks:
+  ldconfig: true

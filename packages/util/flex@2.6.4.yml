@@ -1,0 +1,11 @@
+version: 2.6.4
+bdepend:
+  - util/libtool
+  - libs/gettext
+filename: flex
+comp: tar.gz
+upstream: https://github.com/westes/flex/releases/download/v%{version}/%{src}
+pre_configure_script: ./autogen.sh
+queue_hooks:
+  ldconfig: true
+  

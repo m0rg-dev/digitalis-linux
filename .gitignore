@@ -1,6 +1,6 @@
 distfiles/
 new_root/
-built/*
 Makefile
 stage3/
-stage3.tar
+stage2/
+stage*.tar

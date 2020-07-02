@@ -1,0 +1,5 @@
+version: "4.8"
+filename: sed
+upstream: https://ftp.gnu.org/gnu/sed/
+additional_configure_options: --bindir=/bin
+post_install_script: mkdir -p usr/bin; ln -s ../../bin/sed usr/bin/sed

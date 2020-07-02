@@ -1,0 +1,10 @@
+version: 1.1.0
+bdepend:
+  - libs/gmp>=6.2.0
+  - libs/mpfr>=4.0.2
+filename: mpc
+comp: tar.gz
+upstream: https://ftp.gnu.org/gnu/mpc/
+additional_configure_options: --disable-static
+queue_hooks:
+  ldconfig: true

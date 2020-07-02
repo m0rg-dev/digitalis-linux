@@ -1,0 +1,13 @@
+version: 1.8
+bdepend:
+  - libs/readline
+  - core/dbus
+  - util/autoconf
+rdepend:
+  - libs/readline
+  - core/dbus
+filename: iwd
+upstream: https://mirrors.edge.kernel.org/pub/linux/network/wireless/
+pre_configure_script: autoreconf -fi
+additional_configure_options: --disable-systemd-service --sysconfdir=/etc/iwd --localstatedir=/var
+additional_make_options: LIBS=-lncursesw

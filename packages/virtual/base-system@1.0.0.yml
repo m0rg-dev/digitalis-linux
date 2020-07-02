@@ -1,0 +1,38 @@
+version: 1.0.0
+rdepend:
+    - core/bash
+    - core/eudev
+    - core/fs-tree
+    - core/grub
+    - core/iana-etc
+    - core/lfs-udev-rules
+    - core/openrc
+    - core/shadow
+    - core/tzdata
+    - core/udev-init-scripts
+    - core/zsh
+    - doc/man-pages
+    - editor/nano
+    - lang/gawk
+    - lang/node
+    - lang/sed
+    - libs/glibc
+    - util/coreutils
+    - util/dhcpcd
+    - util/diffutils
+    - util/e2fsprogs
+    - util/file
+    - util/findutils
+    - util/grep
+    - util/gzip
+    - util/inetutils
+    - util/iproute2
+    - util/iwd
+    - util/openssh
+    - util/procps-ng
+    - util/pv
+    # TODO util/rpkg goes here once I start packaging it
+    - util/tar
+    - util/util-linux
+    - util/which
+    - util/xz

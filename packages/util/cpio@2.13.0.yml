@@ -1,0 +1,4 @@
+version: "2.13"
+filename: cpio
+comp: tar.gz
+upstream: https://ftp.gnu.org/gnu/cpio/
