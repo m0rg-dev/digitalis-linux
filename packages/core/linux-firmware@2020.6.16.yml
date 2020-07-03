@@ -2,3 +2,5 @@ version: "20200619"
 filename: linux-firmware
 configure: ~
 upstream: https://mirrors.edge.kernel.org/pub/linux/kernel/firmware/
+queue_hooks:
+  ldconfig: false

@@ -9,6 +9,7 @@ import equal from 'deep-equal';
 import child_process from 'child_process';
 import readline from 'readline';
 import { fileURLToPath } from 'url';
+import https from 'https';
 
 var rpkg_config = {
     host_prefix: '/var/lib/rpkg/',
@@ -254,7 +255,7 @@ const version_installed_or_pending = function (pkg, steps, where, pending) {
     return null;
 }
 
-const plan_build_recursive = function (transaction, steps, pkg, where, pending) {
+const plan_build_recursive = async function (transaction, steps, pkg, where, pending) {
     if (!pending) pending = {};
     console.log(`PBR: ${pkg} => ${where}`);
 
@@ -283,7 +284,25 @@ const plan_build_recursive = function (transaction, steps, pkg, where, pending) 
     console.log(`[${where} ${pkg}] => selected version ${version}`);
 
     // TODO check for remote packages here when feasible
-    var have_built_package = fs.existsSync(path.join(get_host_directory('built'), atom_to_path(atom)) + ".tar.xz");
+    var have_built_package = atom.category == 'virtual';
+    if (!have_built_package) {
+        have_built_package = fs.existsSync(path.join(get_host_directory('built'), atom_to_path(atom)) + ".tar.xz");
+    }
+
+    if (!have_built_package && rpkg_config.repository) {
+        console.log(`checking repo for ${pkg}`);
+        const https_p = new Promise((res, rej) => {
+            https.request(rpkg_config.repository + "/built/" + atom_to_path(atom) + ".tar.xz", {
+                method: 'HEAD'
+            }, (https_res) => {
+                console.log(`${pkg}: ${https_res.statusCode}`);
+                if (https_res.statusCode == 200) res();
+                else rej();
+            }).end();
+        });
+        https_p.then(() => have_built_package = true);
+        await https_p;
+    }
 
     for (const step of steps) {
         if (step.type == 'build' && step.package == pkg) {
@@ -299,7 +318,7 @@ const plan_build_recursive = function (transaction, steps, pkg, where, pending) 
             for (const bdepend of pkgdesc.bdepend) {
                 const parsed = /^([a-z-]+\/[a-z0-9-]+)([@>=<]?=?.*)?$/.exec(bdepend);
                 console.log(`[${where} ${pkg}]  => recursing for bdep ${bdepend}`);
-                plan_build_recursive(transaction, steps, parsed[1], 'host', pending);
+                await plan_build_recursive(transaction, steps, parsed[1], 'host', pending);
             }
             steps.push({
                 type: 'fetch_source',
@@ -318,7 +337,7 @@ const plan_build_recursive = function (transaction, steps, pkg, where, pending) 
     for (const rdepend of pkgdesc.rdepend) {
         const parsed = /^([a-z-]+\/[a-z0-9-]+)([@>=<]?=?.*)?$/.exec(rdepend);
         console.log(`[${where} ${pkg}]  => recursing for rdep ${rdepend}`);
-        plan_build_recursive(transaction, steps, parsed[1], where, pending);
+        await plan_build_recursive(transaction, steps, parsed[1], where, pending);
     }
 
     if (atom.category != 'virtual') {
@@ -399,7 +418,7 @@ const install_packages = async function (shortpkgs) {
     var steps = [];
     for (const pkg of shortpkgs) {
         const atom = shortpkg_to_atom(pkg);
-        plan_build_recursive(transaction, steps, atom_to_shortpkg(atom), 'target');
+        await plan_build_recursive(transaction, steps, atom_to_shortpkg(atom), 'target');
     }
 
     // TODO hoist fetches
@@ -416,9 +435,9 @@ const install_packages = async function (shortpkgs) {
                 input: process.stdin,
                 output: process.stdout
             });
-              
+
             rl.question("Is this OK? [Y/n] ", (answer) => {
-                console.log("421");
+                rl.close();
                 if (/^(y.*)?$/i.exec(answer)) {
                     res();
                 } else {
@@ -429,8 +448,8 @@ const install_packages = async function (shortpkgs) {
     } else {
         p = Promise.resolve(true);
     }
-    p.catch((err) =>{
-        if(err) { 
+    p.catch((err) => {
+        if (err) {
             console.error(err);
         }
         console.log("Stopping.");
@@ -449,6 +468,33 @@ const install_packages = async function (shortpkgs) {
         } else if (step.type == 'target_install') {
             await do_install([`${step.package}@${step.version}`], rpkg_config.target_root, 'target');
             queue_hooks(`${step.package}@${step.version}`, 'target', hooks);
+        } else if (step.type == 'fetch_binary') {
+            const file = `${step.package}@${step.version}.tar.xz`;
+            if (!fs.existsSync(path.join(get_host_directory('built'), file))) {
+                if (!fs.existsSync(path.dirname(path.join(get_host_directory('built'), file)))) {
+                    fs.mkdirSync(path.dirname(path.join(get_host_directory('built'), file)));
+                }
+
+                console.log(`Downloading: ${file}`);
+                const pkg_req = https.get(rpkg_config.repository + "/built/" + file);
+                const stream = fs.createWriteStream(path.join(get_host_directory('built'), file));
+                var total, downloaded = 0;
+                
+                const pkg_p = new Promise((resolve, reject) => {
+                    pkg_req.on('response', (res) => {
+                        total = parseInt(res.headers['content-length']);
+                        res.pipe(stream);
+                        res.on('data', (chunk) => {
+                            downloaded += chunk.length;
+                            process.stdout.write(`${file} ${downloaded}/${total}\r`);
+                        });
+                    });
+                    stream.on('finish', () => {
+                        stream.close(resolve);
+                    });
+                });
+                await pkg_p;
+            }
         }
     }
     await process_hooks('target', hooks);
@@ -528,8 +574,57 @@ const run_process = async function (name, cmd, dir) {
     return proc_p;
 }
 
+const synchronize_packages = async function () {
+    if (!rpkg_config.repository) throw 'No repository defined';
+
+    const manifest_req = https.get(rpkg_config.repository + "/packages/MANIFEST");
+    manifest_req.on('response', (res) => {
+        var manifest = "";
+        res.on('data', (data) => {
+            manifest += data.toString('utf-8');
+        })
+
+        res.on('end', async () => {
+            var parsed = {};
+            manifest.split("\n").filter(s => s.length > 0).forEach((s) => {
+                const a = s.split(" ");
+                parsed[a[0]] = a.slice(1);
+            });
+
+            var missing_files = [];
+            for (const pkgname in parsed) {
+                for (const version of parsed[pkgname]) {
+                    const f = `${pkgname}@${version}.yml`;
+                    if (!fs.existsSync(path.join(get_host_directory('packages'), f))) {
+                        missing_files.push(f);
+                    }
+                }
+            }
+
+            for (const file of missing_files) {
+                if (!fs.existsSync(path.dirname(path.join(get_host_directory('packages'), file)))) {
+                    fs.mkdirSync(path.dirname(path.join(get_host_directory('packages'), file)));
+                }
+
+                const stream = fs.createWriteStream(path.join(get_host_directory('packages'), file));
+                const pkg_req = https.get(rpkg_config.repository + "/packages/" + file);
+                const pkg_p = new Promise((resolve, reject) => {
+                    pkg_req.on('response', (res) => {
+                        res.pipe(stream);
+                        stream.on('finish', () => {
+                            stream.close(resolve);
+                        });
+                    })
+                });
+                await pkg_p;
+                console.log(file);
+            }
+        });
+    });
+}
+
 const argv = minimist(process.argv.slice(2), {
-    string: ["host_prefix", "target_prefix", "target_root", "build_in_container", "host_build_dir"],
+    string: ["host_prefix", "target_prefix", "target_root", "build_in_container", "host_build_dir", "repository"],
     boolean: ["without_default_depends", "skip_confirm"],
 });
 
@@ -551,6 +646,7 @@ if (argv.target_root) {
 
 rpkg_config.use_default_depends = !argv.without_default_depends;
 rpkg_config.confirm = !argv.skip_confirm;
+rpkg_config.repository = argv.repository;
 
 console.log(rpkg_config);
 
@@ -603,6 +699,8 @@ console.log(rpkg_config);
             } else {
                 console.error("target_install given with no packages");
             }
+        } else if (argv._[0] === 'sync') {
+            await synchronize_packages();
         }
     }
 })().catch((e) => {
