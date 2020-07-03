@@ -1,0 +1,7 @@
+version: "2.27.0"
+filename: git
+comp: tar.gz
+src_url: https://github.com/git/git/archive/v2.27.0.tar.gz
+pre_configure_script: make configure
+additional_make_options: PREFIX=/usr
+install: make DESTDIR=$(realpath ..) PREFIX=/usr install

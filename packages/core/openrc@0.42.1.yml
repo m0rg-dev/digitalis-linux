@@ -11,6 +11,13 @@ additional_make_options: >
   OS=Linux
   MKSYSVINIT=yes
 make: BRANDING="Digitalis Linux" make %{make_options}
+post_install_script: |
+  ln -sfv openrc-init sbin/init
+  ln -sfv openrc-shutdown sbin/shutdown
+  for tty in tty{1..7}; do
+    ln -sfv agetty etc/init.d/agetty.$tty
+    ln -svf /etc/init.d/agetty.$tty etc/runlevels/default
+  done
 post_unpack_script: mkdir -p run proc dev sys
 queue_hooks:
   ldconfig: true

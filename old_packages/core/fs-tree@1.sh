@@ -15,8 +15,9 @@ pkg_build() {
 
     ln -sv /proc/self/mounts etc/mtab
 
+    # root password is 'digitalis'
     cat > etc/passwd << "EOF"
-root:x:0:0:root:/root:/bin/zsh
+root:$6$waeH4/7J3Li$rN.U.Yhuj9YZ6BtODj7jzU0Q0FAD4m2w1OEerCd1PLHDab9bj3hAHTrVdNLW4dRd/k44o7OR5G9YfhbPBGdOt1:0:0:root:/root:/bin/bash
 bin:x:1:1:bin:/dev/null:/bin/false
 daemon:x:6:6:Daemon User:/dev/null:/bin/false
 messagebus:x:18:18:D-Bus Message Daemon User:/var/run/dbus:/bin/false

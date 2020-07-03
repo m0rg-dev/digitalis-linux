@@ -78,6 +78,13 @@ download http://download.savannah.gnu.org/releases/attr/attr-2.4.48.tar.gz
 download http://anduin.linuxfromscratch.org/LFS/udev-lfs-20171102.tar.xz
 download https://mirrors.edge.kernel.org/pub/linux/kernel/firmware/linux-firmware-20200619.tar.xz
 download https://nodejs.org/download/release/v14.4.0/node-v14.4.0.tar.xz
+download https://git.archlinux.org/mkinitcpio.git/snapshot/mkinitcpio-27.tar.gz
+download https://github.com/git/git/archive/v2.27.0.tar.gz git-2.27.0.tar.gz
+download https://github.com/asciidoc/asciidoc-py3/releases/download/9.0.1/asciidoc-9.0.1.tar.gz
+download ftp://xmlsoft.org/libxml2/libxml2-2.9.10.tar.gz
+download ftp://xmlsoft.org/libxslt/libxslt-1.1.34.tar.gz
+download http://www.libarchive.org/downloads/libarchive-3.4.3.tar.xz
+download https://busybox.net/downloads/busybox-1.31.1.tar.bz2
 
 #download https://raw.githubusercontent.com/robbat2/genkernel/v3.5.3.3/defaults/kernel-generic-config linux-config
 cp linux-config distfiles/

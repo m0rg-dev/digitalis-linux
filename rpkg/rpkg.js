@@ -369,7 +369,7 @@ const install_packages = async function (shortpkgs) {
 
     for (const pkg of shortpkgs) {
         const atom = shortpkg_to_atom(pkg);
-        add_to_transaction(transaction, atom_to_shortpkg(atom), '*', 'target');
+        add_to_transaction(transaction, atom_to_shortpkg(atom), atom.version || '*', 'target');
     }
 
     simplify_transaction(transaction);
@@ -412,39 +412,46 @@ const install_packages = async function (shortpkgs) {
     var p;
     if (rpkg_config.confirm) {
         p = new Promise((res, rej) => {
-            readline.question("Is this OK? [Y/n]", (answer) => {
-                if (/^y/i.exec(answer)) {
+            const rl = readline.createInterface({
+                input: process.stdin,
+                output: process.stdout
+            });
+              
+            rl.question("Is this OK? [Y/n] ", (answer) => {
+                console.log("421");
+                if (/^(y.*)?$/i.exec(answer)) {
                     res();
                 } else {
-                    rej();
+                    rej(false);
                 }
             });
         });
     } else {
-        p = Promise.resolve();
+        p = Promise.resolve(true);
     }
-
-    p.then(async () => {
-        var hooks = { host: {}, target: {} };
-        for (const step of steps) {
-            if (step.type == 'build') {
-                await process_hooks('host', hooks);
-                await do_build([`${step.package}@${step.version}`]);
-            } else if (step.type == 'host_install') {
-                await do_install([`${step.package}@${step.version}`], '/', 'host');
-                queue_hooks(`${step.package}@${step.version}`, 'host', hooks);
-            } else if (step.type == 'target_install') {
-                await do_install([`${step.package}@${step.version}`], rpkg_config.target_root, 'target');
-                queue_hooks(`${step.package}@${step.version}`, 'target', hooks);
-            }
+    p.catch((err) =>{
+        if(err) { 
+            console.error(err);
         }
-        await process_hooks('target', hooks);
-    }).catch(() =>{
         console.log("Stopping.");
         process.exit(1);
     });
-
     await p;
+
+    var hooks = { host: {}, target: {} };
+    for (const step of steps) {
+        if (step.type == 'build') {
+            await process_hooks('host', hooks);
+            await do_build([`${step.package}@${step.version}`]);
+        } else if (step.type == 'host_install') {
+            await do_install([`${step.package}@${step.version}`], '/', 'host');
+            queue_hooks(`${step.package}@${step.version}`, 'host', hooks);
+        } else if (step.type == 'target_install') {
+            await do_install([`${step.package}@${step.version}`], rpkg_config.target_root, 'target');
+            queue_hooks(`${step.package}@${step.version}`, 'target', hooks);
+        }
+    }
+    await process_hooks('target', hooks);
 }
 
 const do_build = async function (packages) {
@@ -545,6 +552,8 @@ if (argv.target_root) {
 rpkg_config.use_default_depends = !argv.without_default_depends;
 rpkg_config.confirm = !argv.skip_confirm;
 
+console.log(rpkg_config);
+
 (async () => {
     if (argv._.length > 0) {
         if (argv._[0] === 'install') {
@@ -578,6 +587,19 @@ rpkg_config.confirm = !argv.skip_confirm;
                     queue_hooks(pkg, 'target', hooks);
                 }
                 await process_hooks('target', hooks);
+            } else {
+                console.error("target_install given with no packages");
+            }
+        } else if (argv._[0] === 'postinstall') {
+            if (argv._.length > 1) {
+                for (const pkg of argv._.slice(1)) {
+                    const atom = shortpkg_to_atom(pkg);
+                    const pkgdesc = get_package_description(atom);
+                    if (pkgdesc.post_unpack_script) {
+                        console.log(`Running post-unpack script for ${pkg}`);
+                        await run_process('post-unpack', pkgdesc.post_unpack_script, '/');
+                    }
+                }
             } else {
                 console.error("target_install given with no packages");
             }

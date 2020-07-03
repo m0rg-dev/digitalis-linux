@@ -1,0 +1,20 @@
+# https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/mkinitcpio-busybox
+version: "1.31.1"
+filename: busybox
+comp: tar.bz2
+upstream: https://busybox.net/downloads/
+configure: ~
+# r?date doesn't build against this libc, so just don't bother
+pre_configure_script: |
+  CARCH=$(uname -m)
+  safeflags="-march=${CARCH/_/-} -mtune=generic -Os -pipe -fno-strict-aliasing"
+  make defconfig
+  sed -i 's|^\(CONFIG_EXTRA_CFLAGS\)=.*|\1="'"$safeflags"'"|' .config
+  sed -i 's/CONFIG_DATE=y/CONFIG_DATE=n/' .config
+  sed -i 's/CONFIG_RDATE=y/CONFIG_RDATE=n/' .config
+install: |
+  # install -D is *supposed* to do this for me...
+  mkdir -p $(realpath ..)/usr/lib/initcpio
+  install -Dm755 busybox $(realpath ..)/usr/lib/initcpio/
+queue_hooks:
+  ldconfig: false

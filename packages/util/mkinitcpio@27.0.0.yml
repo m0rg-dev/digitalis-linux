@@ -1,0 +1,13 @@
+version: "27"
+bdepend:
+  - util/git
+  - util/asciidoc
+rdepend:
+  - libs/libarchive
+  - core/mkinitcpio-busybox
+filename: mkinitcpio
+comp: tar.gz
+configure: ~
+upstream: https://git.archlinux.org/mkinitcpio.git/snapshot/
+queue_hooks:
+  ldconfig: false

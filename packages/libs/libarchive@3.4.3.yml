@@ -1,0 +1,5 @@
+version: "3.4.3"
+filename: libarchive
+upstream: http://www.libarchive.org/downloads/
+queue_hooks:
+  ldconfig: true

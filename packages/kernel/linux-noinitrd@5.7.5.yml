@@ -2,12 +2,11 @@ version: "5.7.5"
 bdepend:
   - libs/libelf
   - libs/openssl
-  - util/kmod
   - util/cpio
-rdepend:
   - util/kmod
-  - util/mkinitcpio
+rdepend:
   - util/util-linux
+  - util/kmod
 filename: linux
 upstream: https://cdn.kernel.org/pub/linux/kernel/v5.x/
 additional_sources: [linux-config]
@@ -16,6 +15,7 @@ configure: |
   make mrproper
   cp ../linux-config .config
   make olddefconfig
+  make mod2yesconfig
 install: |
   make INSTALL_MOD_PATH=$(realpath ..) modules_install
   mkdir -p ../boot
@@ -33,16 +33,5 @@ post_install_script: |
 
   # End /etc/modprobe.d/usb.conf
   EOF
-# dracut _really does not like_ running outside /. but if you're running this
-# script outside of /, you probably don't need an initramfs just yet
-#post_unpack_script: |
-#  if [[ "$(pwd)" = '/' ]]; then
-#    dracut boot/initramfs-%{version}.img --kver %{version}
-#  fi
-post_unpack_script: |
-  if [[ "$(pwd)" = '/' ]]; then
-    mkinitcpio -g boot/initramfs-%{version}.img -k %{version}
-    mkinitcpio -S autodetect -g boot/initramfs-%{version}-fallback.img -k %{version}
-  fi
 queue_hooks:
     ldconfig: true

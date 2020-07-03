@@ -1,4 +1,6 @@
 version: "5.5.0"
+rdepend:
+  - libs/libelf
 filename: iproute2
 upstream: https://www.kernel.org/pub/linux/utils/net/iproute2/
 pre_configure_script: |

@@ -11,6 +11,57 @@ additional_configure_options: >
   --bindir=/sbin --sbindir=/sbin --libdir=/usr/lib
   --sysconfdir=/etc --with-rootprefix= --with-rootlibdir=/lib
   --enable-manpages --disable-static
-post_install_script: sbin/udevadm hwdb -r . --update
+# mkinitcpio hooks from https://aur.archlinux.org/cgit/aur.git/tree/initcpio_{hooks,install}?h=eudev
+post_install_script: |
+  sbin/udevadm hwdb -r . --update
+  mkdir -p usr/lib/initcpio/{hooks,install}
+  cat >usr/lib/initcpio/hooks/udev <<'EOF'
+  #!/usr/bin/ash
+
+  run_earlyhook() {
+      udevd --daemon --resolve-names=never
+      udevd_running=1
+  }
+
+  run_hook() {
+      msg ":: Triggering uevents..."
+      udevadm trigger --action=add --type=subsystems
+      udevadm trigger --action=add --type=devices
+      udevadm settle
+  }
+
+  run_cleanuphook() {
+      udevadm control --exit
+      udevadm info --cleanup-db
+  }
+  EOF
+
+  cat >usr/lib/initcpio/install/udev <<'EOF'
+  #!/bin/bash
+
+  build() {
+      add_file "/etc/udev/udev.conf"
+      add_binary /sbin/udevd
+      add_binary /sbin/udevadm
+
+      for rule in 50-udev-default.rules 60-persistent-storage.rules 64-btrfs.rules 80-drivers.rules; do
+          add_file "/lib/udev/rules.d/$rule"
+      done
+
+      for tool in ata_id scsi_id; do
+          add_file "/lib/udev/$tool"
+      done
+
+      add_runscript
+  }
+
+  help() {
+      cat <<HELPEOF
+  This hook will use udev to create your root device node and detect the needed
+  modules for your root device. It is also required for firmware loading in
+  initramfs. It is recommended to use this hook.
+  HELPEOF
+  }
+  EOF
 queue_hooks:
   ldconfig: true
