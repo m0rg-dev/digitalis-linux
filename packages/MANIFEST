@@ -1,7 +1,7 @@
 core/bash 5.0.0
 core/dbus 1.12.18
 core/eudev 3.2.9
-core/fs-tree 1.0.0
+core/fs-tree 1.0.0 1.0.1
 core/grub 2.0.4
 core/iana-etc 2.30.0
 core/lfs-udev-rules 2017.11.2

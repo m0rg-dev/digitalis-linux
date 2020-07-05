@@ -20,6 +20,8 @@ var rpkg_config = {
     confirm: true
 };
 
+const PBR_NOISY_DEBUG = false;
+
 const get_host_directory = function (dir) {
     if (rpkg_config.directory_overrides[`host_${dir}`]) {
         return rpkg_config.directory_overrides[`host_${dir}`];
@@ -127,7 +129,10 @@ const get_all_versions = function (atom_without_version) {
     return versions;
 }
 
+var pkgdesc_memo = {};
 const get_package_description = function (atom) {
+    if (pkgdesc_memo[atom_to_path(atom)]) return pkgdesc_memo[atom_to_path(atom)];
+
     const pkg_path = path.join(get_host_directory('packages'), atom_to_path(atom) + ".yml");
     const raw_package = fs.readFileSync(pkg_path, "utf8");
 
@@ -182,6 +187,8 @@ const get_package_description = function (atom) {
         }
     } while (didreplace);
 
+    pkgdesc_memo[atom_to_path(atom)] = parsed_package;
+
     return parsed_package;
 }
 
@@ -231,10 +238,10 @@ const simplify_transaction = function (transaction) {
 
 const resolve_transaction = function (transaction) {
     for (const pkg in transaction.host) {
-        transaction.host[pkg] = transaction.host[pkg][0]; //semver.maxSatisfying(get_all_versions(shortpkg_to_atom_without_version(pkg)), transaction.host[pkg].join(' '));
+        transaction.host[pkg] = transaction.host[pkg][0];
     }
     for (const pkg in transaction.target) {
-        transaction.target[pkg] = transaction.target[pkg][0]; //semver.maxSatisfying(get_all_versions(shortpkg_to_atom_without_version(pkg)), transaction.target[pkg].join(' '));
+        transaction.target[pkg] = transaction.target[pkg][0];
     }
 }
 
@@ -257,16 +264,16 @@ const version_installed_or_pending = function (pkg, steps, where, pending) {
 
 const plan_build_recursive = async function (transaction, steps, pkg, where, pending) {
     if (!pending) pending = {};
-    console.log(`PBR: ${pkg} => ${where}`);
+    if (PBR_NOISY_DEBUG) console.log(`PBR: ${pkg} => ${where}`);
 
     const already_installed = version_installed_or_pending(pkg, steps, where, pending);
     if (already_installed) {
-        console.log(` => have existing version ${already_installed}`);
+        if (PBR_NOISY_DEBUG) console.log(` => have existing version ${already_installed}`);
         if (semver.satisfies(already_installed, transaction[where][pkg], { includePrerelease: true })) {
-            console.log('  which is OK');
+            if (PBR_NOISY_DEBUG) console.log('  which is OK');
             return;
         } else {
-            console.log('  which must be removed first');
+            if (PBR_NOISY_DEBUG) console.log('  which must be removed first');
             steps.push({
                 type: where + '_remove',
                 package: pkg
@@ -281,26 +288,25 @@ const plan_build_recursive = async function (transaction, steps, pkg, where, pen
 
     pending[where + ':' + pkg] = version;
 
-    console.log(`[${where} ${pkg}] => selected version ${version}`);
+    if (PBR_NOISY_DEBUG) console.log(`[${where} ${pkg}] => selected version ${version}`);
 
-    // TODO check for remote packages here when feasible
     var have_built_package = atom.category == 'virtual';
     if (!have_built_package) {
         have_built_package = fs.existsSync(path.join(get_host_directory('built'), atom_to_path(atom)) + ".tar.xz");
     }
 
     if (!have_built_package && rpkg_config.repository) {
-        console.log(`checking repo for ${pkg}`);
+        if (PBR_NOISY_DEBUG) console.log(`checking repo for ${pkg}`);
         const https_p = new Promise((res, rej) => {
             https.request(rpkg_config.repository + "/built/" + atom_to_path(atom) + ".tar.xz", {
                 method: 'HEAD'
             }, (https_res) => {
-                console.log(`${pkg}: ${https_res.statusCode}`);
-                if (https_res.statusCode == 200) res();
-                else rej();
+                if (PBR_NOISY_DEBUG) console.log(`${pkg}: ${https_res.statusCode}`);
+                if (https_res.statusCode == 200) res(true);
+                else res(false);
             }).end();
         });
-        https_p.then(() => have_built_package = true);
+        https_p.then((r) => have_built_package = r);
         await https_p;
     }
 
@@ -314,10 +320,10 @@ const plan_build_recursive = async function (transaction, steps, pkg, where, pen
 
     if (!have_built_package) {
         if (atom.category != 'virtual') {
-            console.log(' => missing package, must build from source');
+            if (PBR_NOISY_DEBUG) console.log(' => missing package, must build from source');
             for (const bdepend of pkgdesc.bdepend) {
                 const parsed = /^([a-z-]+\/[a-z0-9-]+)([@>=<]?=?.*)?$/.exec(bdepend);
-                console.log(`[${where} ${pkg}]  => recursing for bdep ${bdepend}`);
+                if (PBR_NOISY_DEBUG) console.log(`[${where} ${pkg}]  => recursing for bdep ${bdepend}`);
                 await plan_build_recursive(transaction, steps, parsed[1], 'host', pending);
             }
             steps.push({
@@ -331,12 +337,12 @@ const plan_build_recursive = async function (transaction, steps, pkg, where, pen
                 version: version
             });
         }
-        console.log(`[${where} ${pkg}] => built`);
+        if (PBR_NOISY_DEBUG) console.log(`[${where} ${pkg}] => built`);
     }
 
     for (const rdepend of pkgdesc.rdepend) {
         const parsed = /^([a-z-]+\/[a-z0-9-]+)([@>=<]?=?.*)?$/.exec(rdepend);
-        console.log(`[${where} ${pkg}]  => recursing for rdep ${rdepend}`);
+        if (PBR_NOISY_DEBUG) console.log(`[${where} ${pkg}]  => recursing for rdep ${rdepend}`);
         await plan_build_recursive(transaction, steps, parsed[1], where, pending);
     }
 
@@ -356,7 +362,7 @@ const plan_build_recursive = async function (transaction, steps, pkg, where, pen
         version: version
     });
 
-    console.log(`[${where} ${pkg}] => installed`);
+    if (PBR_NOISY_DEBUG) console.log(`[${where} ${pkg}] => installed`);
 }
 
 const queue_hooks = function (shortpkg, where, obj) {
@@ -413,8 +419,6 @@ const install_packages = async function (shortpkgs) {
 
     resolve_transaction(transaction);
 
-    console.log(transaction);
-
     var steps = [];
     for (const pkg of shortpkgs) {
         const atom = shortpkg_to_atom(pkg);
@@ -422,10 +426,26 @@ const install_packages = async function (shortpkgs) {
     }
 
     // TODO hoist fetches
+    var sorted_steps = [];
+    steps.filter((step) => step.type === 'fetch_binary').forEach((step) => sorted_steps.push(step));
+    steps.filter((step) => step.type === 'fetch_source').forEach((step) => sorted_steps.push(step));
+    steps.filter((step) => !step.type.startsWith('fetch_')).forEach((step) => sorted_steps.push(step));
+    steps = sorted_steps;
 
     console.log("Here's the plan: ");
+    var last_seen_type;
+    var current_line;
     for (const step of steps) {
-        console.log(`  ${step.type} ${step.package} ${step.version}`);
+        if (step.type != last_seen_type && current_line) {
+            console.log(current_line);
+            last_seen_type = step.type;
+            current_line = `${last_seen_type}:`;
+        }
+        current_line += ` ${step.package}@${step.version}`;
+        if (current_line.length > 100) {
+            console.log(current_line);
+            current_line = "    ";
+        }
     }
 
     var p;
@@ -479,7 +499,7 @@ const install_packages = async function (shortpkgs) {
                 const pkg_req = https.get(rpkg_config.repository + "/built/" + file);
                 const stream = fs.createWriteStream(path.join(get_host_directory('built'), file));
                 var total, downloaded = 0;
-                
+
                 const pkg_p = new Promise((resolve, reject) => {
                     pkg_req.on('response', (res) => {
                         total = parseInt(res.headers['content-length']);
@@ -648,7 +668,7 @@ rpkg_config.use_default_depends = !argv.without_default_depends;
 rpkg_config.confirm = !argv.skip_confirm;
 rpkg_config.repository = argv.repository;
 
-console.log(rpkg_config);
+//console.log(rpkg_config);
 
 (async () => {
     if (argv._.length > 0) {

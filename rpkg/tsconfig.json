@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "target": "ES2019",
+        "moduleResolution": "node",
+        "module": "CommonJS"
+    },
+    "exclude": [
+        "node_modules",
+        "rpkg.js",
+        "builder.js"
+    ]
+}
