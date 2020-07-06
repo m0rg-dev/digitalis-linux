@@ -3,6 +3,7 @@
         "deep-equal": "^2.0.3",
         "minimist": "^1.2.5",
         "semver": "^7.3.2",
+        "word-wrap": "^1.2.3",
         "yaml": "^1.10.0"
     },
     "devDependencies": {

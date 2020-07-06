@@ -5,3 +5,4 @@ stage3/
 stage2/
 stage*.tar
 s3root/
+repository/builds

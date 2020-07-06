@@ -1,6 +1,4 @@
-import { Database } from "./db.js";
-import * as semver from 'semver';
-import { assert } from "console";
+import { Repository } from "./repo.js";
 
 export type PackageCategory = string;
 export type PackageName = string;
@@ -8,42 +6,39 @@ export type PackageName = string;
 export class Atom {
     private category: PackageCategory;
     private name: PackageName;
-    private given_version_spec: string
 
     constructor(shortpkg_or_category: PackageCategory, pkg?: PackageName, version?: string) {
         if (version) {
             this.category = shortpkg_or_category;
             this.name = pkg;
-            this.given_version_spec = version;
         } else if (pkg) {
             this.category = shortpkg_or_category;
             this.name = pkg;
         } else {
-            const parsed = /^(?:([a-z-]+)\/)?([a-z0-9-]+)@?(.*)?$/.exec(shortpkg_or_category);
+            const parsed = /^(?:([a-z-]+)\/)?([a-z0-9-]+)$/.exec(shortpkg_or_category);
             this.category = parsed[1];
             this.name = parsed[2];
-            this.given_version_spec = parsed[3];
         }
     }
 
     getCategory(): PackageCategory { return this.category; }
     getName(): PackageName { return this.name; }
+    format(): string { return this.category + "/" + this.name }
 
-    async resolveUsingDatabase(db: Database, version_spec?: semver.Range): Promise<ResolvedAtom> {
+    async resolveUsingRepository(repo: Repository): Promise<ResolvedAtom> {
         const our_name = this.name;
 
         var category_p: Promise<PackageCategory>;
         var name_p = Promise.resolve(this.name);
-        var version_p: Promise<semver.Range>;
 
         if (this.category) {
             category_p = Promise.resolve(this.category);
         } else {
             // We have no category, so let's go ahead and spin through
             // all of the categories until we find ourself.
-            category_p = db.getAllCategories()
+            category_p = repo.getAllCategories()
                 .then(async function (categories) {
-                    return Promise.all(categories.map(category => db.getAllNames(category)
+                    return Promise.all(categories.map(category => repo.getAllNames(category)
                         .then(names => names.map(name => [category, name]))));
                 })
                 .then(async function (structured_names) {
@@ -62,50 +57,43 @@ export class Atom {
                 });
         }
 
-        // Maybe implement a check against the actual versions
-        // here someday?
-        if (version_spec) {
-            version_p = Promise.resolve(version_spec);
-        } else if (this.given_version_spec) {
-            version_p = Promise.resolve(new semver.Range(this.given_version_spec));
-        } else {
-            version_p = Promise.resolve(new semver.Range("*"));
-        }
 
-        return Promise.all([category_p, name_p, version_p])
+        return Promise.all([category_p, name_p])
             .then((values) => {
-                return new ResolvedAtom(values[0], values[1], values[2]);
+                return new ResolvedAtom(values[0], values[1]);
             });
     }
 };
 
 export class ResolvedAtom extends Atom {
-    private versions: semver.Range;
-
-    constructor(category: PackageCategory, name: PackageName, versions: semver.Range) {
-        super(category, name);
-        this.versions = versions;
-    }
-
     static parse(shortpkg: string): ResolvedAtom {
-        const parsed = /^([a-z-]+)\/([a-z0-9-]+)@?([>=<]?=?.*)$/.exec(shortpkg);
-        return new ResolvedAtom(parsed[1], parsed[2], new semver.Range(parsed[3]));
+        const parsed = /^([a-z-]+)\/([a-z0-9-]+)$/.exec(shortpkg);
+        if(!parsed) { throw `Bad shortpkg ${shortpkg}`; }
+        return new ResolvedAtom(parsed[1], parsed[2]);
     }
-
-    getVersions(): semver.Range { return this.versions; }
-    asAtom(version?: string): Atom { return new Atom(this.getCategory(), this.getName(), version); }
-    withVersion(version: semver.Range): ResolvedAtom { return new ResolvedAtom(this.getCategory(), this.getName(), version); }
 };
 
-export class SingleVersionAtom extends Atom {
-    private single_version: semver.SemVer;
+export class PackageVersion {
+    version: string;
 
-    constructor(category: PackageCategory, name: PackageName, version: semver.SemVer) {
-        super(category, name);
-        this.single_version = version;
+    constructor(version: string) {
+        this.version = version;
     }
 
-    getVersion(): semver.SemVer { return this.single_version; }
-};
+    compare(other: PackageVersion): number {
+        const parts_1 = this.version.split('.');
+        const parts_2 = other.version.split('.');
 
-export default class { Atom };
+        const min_length = Math.min(parts_1.length, parts_2.length);
+        // 1.2.3 > 0.1.2
+        for(var i = 0; i < min_length; i++) {
+            if(parts_1[i] > parts_2[i]) return 1;
+            if(parts_1[i] < parts_2[i]) return -1;
+        }
+        // 1.2.3 = 1.2.3
+        if(parts_1.length == parts_2.length) return 0;
+        // 1.2.3.1 > 1.2.3
+        if(parts_1.length > parts_2.length) return 1;
+        return -1;
+    }
+}

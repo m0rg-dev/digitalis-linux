@@ -1,6 +1,6 @@
 version: 2.31
 bdepend:
-  - kernel/linux-headers>=3.2
+  - kernel/linux-headers
 filename: glibc
 upstream: http://ftp.gnu.org/gnu/glibc/
 use_build_dir: true

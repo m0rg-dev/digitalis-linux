@@ -1,0 +1,172 @@
+builds: {}
+packages:
+  core/bash:
+    version: "5.0"
+  core/dbus:
+    version: 1.12.18
+  core/eudev:
+    version: 3.2.9
+  core/fs-tree:
+    version: 1.0.1
+  core/grub:
+    version: "2.04"
+  core/iana-etc:
+    version: "2.30"
+  core/lfs-udev-rules:
+    version: "20171102"
+  core/linux-firmware:
+    version: "20200619"
+  core/mkinitcpio-busybox:
+    version: 1.31.1
+  core/openrc:
+    version: 0.42.1
+  core/shadow:
+    version: 4.8.1
+  core/tzdata:
+    version: 2020a
+  core/udev-init-scripts:
+    version: "33"
+  core/zsh:
+    version: "5.8"
+  doc/man-pages:
+    version: "5.05"
+  editor/nano:
+    version: "4.9"
+  kernel/linux-headers:
+    version: 5.7.5
+  kernel/linux-noinitrd:
+    version: 5.7.5
+  kernel/linux:
+    version: 5.7.5
+  lang/gawk:
+    version: 5.1.0
+  lang/gcc:
+    version: 9.3.0
+  lang/node:
+    version: 14.4.0
+  lang/perl:
+    version: 5.32.0
+  lang/python:
+    version: 3.8.3
+  lang/sed:
+    version: "4.8"
+  libs/expat:
+    version: 2.2.9
+  libs/gettext:
+    version: "0.20"
+  libs/glibc:
+    version: 2.31
+  libs/gmp:
+    version: 6.2.0
+  libs/libarchive:
+    version: 3.4.3
+  libs/libattr:
+    version: 2.4.48
+  libs/libelf:
+    version: "0.180"
+  libs/libxml2:
+    version: 2.9.10
+  libs/libxslt:
+    version: 1.1.34
+  libs/mpc:
+    version: 1.1.0
+  libs/mpfr:
+    version: 4.0.2
+  libs/ncurses:
+    version: "6.2"
+  libs/openssl:
+    version: 1.1.1d
+  libs/readline:
+    version: "8.0"
+  libs/zlib:
+    version: 1.2.11
+  util/asciidoc:
+    version: 9.0.1
+  util/autoconf:
+    version: 2.69
+  util/automake:
+    version: 1.16.1
+  util/bc:
+    version: 2.5.3
+  util/binutils:
+    version: 2.34
+  util/bison:
+    version: 3.6
+  util/bzip2:
+    version: 1.0.8
+  util/coreutils:
+    version: 8.32
+  util/cpio:
+    version: "2.13"
+  util/dhcpcd:
+    version: 9.1.2
+  util/diffutils:
+    version: 3.7
+  util/e2fsprogs:
+    version: 1.45.5
+  util/file:
+    version: "5.39"
+  util/findutils:
+    version: 4.7.0
+  util/flex:
+    version: 2.6.4
+  util/git:
+    version: 2.27.0
+  util/gperf:
+    version: "3.1"
+  util/grep:
+    version: "3.4"
+  util/groff:
+    version: 1.22.4
+  util/gzip:
+    version: "1.10"
+  util/inetutils:
+    version: 1.9.4
+  util/iproute2:
+    version: 5.5.0
+  util/iwd:
+    version: 1.8
+  util/kmod:
+    version: "26"
+  util/libtool:
+    version: 2.4
+  util/m4:
+    version: 1.4.18
+  util/make:
+    version: 4.3
+  util/mkinitcpio:
+    version: "27"
+  util/openssh:
+    version: 8.3p1
+  util/patch:
+    version: 2.7.6
+  util/pkg-config:
+    version: 0.29.2
+  util/procps-ng:
+    version: 3.3.15
+  util/pv:
+    version: 1.6.6
+  util/tar:
+    version: "1.32"
+  util/texinfo:
+    version: 6.7
+  util/util-linux:
+    version: 2.35.1
+  util/which:
+    version: "2.21"
+  util/xz:
+    version: 5.2.5
+  virtual/base-system:
+    version: 1.0.0
+  virtual/build-tools:
+    version: 1.0.0
+categories:
+  - core
+  - doc
+  - editor
+  - kernel
+  - lang
+  - libs
+  - util
+  - virtual
+serial: 1593979401

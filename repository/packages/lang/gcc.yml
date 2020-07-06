@@ -1,13 +1,13 @@
 version: 9.3.0
 bdepend:
-  - libs/gmp>=6.2.0
-  - libs/mpc>=1.1.0
-  - libs/mpfr>=4.0.2
+  - libs/gmp
+  - libs/mpc
+  - libs/mpfr
   - libs/zlib
 rdepend:
-  - libs/gmp>=6.2.0
-  - libs/mpc>=1.1.0
-  - libs/mpfr>=4.0.2
+  - libs/gmp
+  - libs/mpc
+  - libs/mpfr
   - libs/zlib
 filename: gcc
 upstream: http://ftp.gnu.org/gnu/gcc/
