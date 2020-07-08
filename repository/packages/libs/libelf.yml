@@ -2,6 +2,7 @@ version: "0.180"
 filename: elfutils
 comp: tar.bz2
 upstream: https://sourceware.org/ftp/elfutils/%{version}
+license: GPL-3.0-or-later
 additional_configure_options: --disable-debuginfod
 install: make DESTDIR=$(realpath ..) install
 post_install_script: |

@@ -8,6 +8,7 @@ rdepend:
   - core/dbus
 filename: iwd
 upstream: https://mirrors.edge.kernel.org/pub/linux/network/wireless/
+license: LGPL-2.1-or-later
 pre_configure_script: autoreconf -fi
 additional_configure_options: --disable-systemd-service --sysconfdir=/etc/iwd --localstatedir=/var
 additional_make_options: LIBS=-lncursesw

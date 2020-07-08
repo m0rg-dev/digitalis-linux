@@ -2,6 +2,7 @@ version: 0.42.1
 filename: openrc
 comp: tar.gz
 upstream: https://github.com/OpenRC/openrc/archive/
+license: BSD-2-Clause
 configure: ~
 additional_make_options: >
   LIBNAME=/lib

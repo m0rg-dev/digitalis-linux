@@ -5,6 +5,7 @@ import * as YAML from 'yaml';
 import * as https from 'https';
 import { URL } from "url";
 import { Config } from "./config.js";
+import { Manifest, ManifestPackage } from "./manifest";
 
 export class Repository {
     private local_packages_path: string;
@@ -152,109 +153,27 @@ export class Repository {
     async buildManifest(): Promise<void> {
         const self = this;
         var manifest = new Manifest();
-        self.getAllCategories(true)
-            .then(async function (categories) {
-                return Promise.all(categories.map(async function (category) {
-                    return self.getAllNames(category, true).then(names => names.map(name => [category, name]))
-                }));
-            }).then(async function (structured_names) {
-                const all_names = structured_names.flat(1);
-                return Promise.all(all_names.map(async (name) => {
-                    const atom = new ResolvedAtom(name[0], name[1]);
-                    const desc = new PackageDescription(fs.readFileSync(path.join(self.local_packages_path, name[0], name[1] + ".yml")).toString('utf8'));
-                    return new ManifestObject(atom, desc.version);
-                }));
-            }).then(async function (all_packages) {
-                all_packages.forEach((pkg) => manifest.addPackage(pkg));
-                return Promise.all(all_packages.map(async (pkg) => {
-                    const err_1 = await new Promise((res, rej) => {
-                        fs.access(path.join(self.local_builds_path, pkg.atom.getCategory(), pkg.atom.getName() + "," + pkg.version.version),
-                            fs.constants.R_OK, (err) => {
-                                res(err);
-                            });
-                    });
-                    if (!err_1)
-                        manifest.addBuild(pkg);
-                }));
-            }).then(async function () {
-                return new Promise((res, rej) => {
-                    fs.writeFile(path.join(self.root_path, "Manifest.yml"), manifest.serialize(), (err) => {
-                        if (err) rej(err);
-                        else res();
-                    });
-                });
-            });
-    }
-};
-
-export class ManifestObject {
-    atom: ResolvedAtom
-    version: PackageVersion
-
-    constructor(atom: ResolvedAtom, version: PackageVersion) {
-        this.atom = atom;
-        this.version = version;
-    }
-};
-
-export class Manifest {
-    builds: Object;
-    packages: Object;
-    categories: Set<string>;
-    serial: number;
-
-    constructor() {
-        this.builds = {};
-        this.packages = {};
-        this.categories = new Set();
-    }
-
-    addPackage(pkg: ManifestObject) {
-        this.packages[pkg.atom.format()] = pkg.version;
-        this.categories.add(pkg.atom.getCategory())
-    }
-
-    addBuild(build: ManifestObject) {
-        this.builds[build.atom.format()] = build.version;
-    }
-
-    getPackage(key: ResolvedAtom): ManifestObject {
-        const v = this.packages[key.format()];
-        if (v) {
-            return new ManifestObject(key, v);
-        } else {
-            return undefined;
-        }
-    }
-
-    getAllPackages(): ManifestObject[] {
-        var r: ManifestObject[] = [];
-        for (const formatted_atom in this.packages) {
-            r.push(new ManifestObject(new ResolvedAtom(formatted_atom), this.packages[formatted_atom]));
-        }
-        return r;
-    }
-
-    getBuild(key: ResolvedAtom): ManifestObject {
-        const v = this.builds[key.format()];
-        if (v) {
-            return new ManifestObject(key, v);
-        } else {
-            return undefined;
-        }
-    }
-
-    getCategories(): string[] {
-        return Array.from(this.categories.values());
-    }
-
-    static deserialize(yml: string): Manifest {
-        return Object.assign(new Manifest(), YAML.parse(yml));
-    }
-
-    serialize(): string {
-        this.serial = Math.trunc(Date.now() / 1000);
-        return YAML.stringify(this);
+        const categories = await self.getAllCategories(true);
+        const structured_names = await Promise.all(categories.map(async function (category) {
+            return self.getAllNames(category, true).then(names => names.map(name => [category, name]))
+        }));
+        const all_names = structured_names.flat(1);
+        const all_packages = await Promise.all(all_names.map(async (name) => {
+            const atom = new ResolvedAtom(name[0], name[1]);
+            const raw_data = await fs.promises.readFile(path.join(self.local_packages_path, name[0], name[1] + ".yml"));
+            const desc = new PackageDescription(raw_data.toString('utf8'));
+            return new ManifestPackage(atom, desc.version, path.join(name[0], name[1] + ".yml"), raw_data);
+        }));
+        all_packages.forEach((pkg) => manifest.addPackage(pkg));
+        await Promise.all(all_packages.map(async (pkg) => {
+            try {
+                await fs.promises.access(path.join(self.local_builds_path, pkg.atom.getCategory(), pkg.atom.getName() + "," + pkg.version.version));
+                manifest.addBuild(pkg);
+            } catch (e) {
+                // if we can't read the build it doesn't exist - this can happen
+            }
+        }));
+        return fs.promises.writeFile(path.join(self.root_path, "Manifest.yml"), manifest.serialize());
     }
 };
 
@@ -273,6 +192,28 @@ export class PackageDescription {
     post_install_script: string;
     queue_hooks: object;
     version: PackageVersion;
+    license: string;
+
+    // Whether the terms of the license allow distributing the software in
+    // source and/or binary forms, with inclusion of their original license
+    // terms, with the original source code available, as part of an
+    // aggregate. Some software that is part of the Digitalis Linux
+    // distribution is licensed under more-permissive terms than that, but in
+    // this case we're going to distribute source + original license for all
+    // of those packages, so it's a good baseline. Packages marked
+    // 'packageable' (the default) are allowed to be distributed in source
+    // or binary forms through OS images or through the repository.
+    packageable: boolean;
+
+    // Whether the terms of the license allow distributing the software in
+    // binary form, possibly with the requirement that the original source code
+    // be made available, as a stand-alone package. This covers anything that
+    // falls into the 'packageable' category, but also covers things like
+    // linux-firmware that may not be distributable as part of an aggregate.
+    // Packages marked 'redistributable' (the default) are allowed to be
+    // distributed in source (where available) or binary forms through the
+    // repository, but won't be included in OS images unless also 'packageable'.
+    redistributable: boolean;
 
     constructor(raw_yaml: string) {
         const default_package = {
@@ -293,6 +234,12 @@ export class PackageDescription {
             pre_configure_script: null,
             post_install_script: null,
             queue_hooks: {},
+            redistributable: true,
+            packageable: true,
+            // other options include "given\n<LICENSE TEXT>", "file <file>" and "spdx"
+            // including a license expression in the package's 'license' field implies spdx
+            // for my own memory: https://github.com/spdx/license-list-data/tree/master/text/<license>.txt
+            license_location: 'from-package'
         };
 
         var yaml = YAML.parse(raw_yaml);
@@ -335,5 +282,6 @@ export class PackageDescription {
         this.post_install_script = parsed_package.post_install_script;
         this.queue_hooks = parsed_package.queue_hooks;
         this.version = new PackageVersion(parsed_package.version);
+        this.license = parsed_package.license;
     }
 }

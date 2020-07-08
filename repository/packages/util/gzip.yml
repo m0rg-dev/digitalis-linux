@@ -1,3 +1,4 @@
 version: "1.10"
 filename: gzip
 upstream: https://ftp.gnu.org/gnu/gzip/
+license: GPL-3.0-or-later

@@ -3,6 +3,7 @@ bdepend:
   - util/flex
 filename: grub
 upstream: https://ftp.gnu.org/gnu/grub/
+license: GPL-3.0-or-later
 additional_configure_options: --sbindir=/sbin --sysconfdir=/etc --disable-efiemu --disable-werror
 queue_hooks:
   ldconfig: false

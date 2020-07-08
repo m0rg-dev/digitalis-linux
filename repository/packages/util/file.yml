@@ -2,6 +2,7 @@ version: "5.39"
 comp: tar.gz
 filename: file
 upstream: ftp://ftp.astron.com/pub/
+license: BSD-2-Clause
 #install: make PREFIX=$(realpath ..)/usr install
 queue_hooks:
   ldconfig: true

@@ -1,165 +1,726 @@
 builds: {}
 packages:
   core/bash:
-    version: "5.0"
+    path: core/bash.yml
+    size: 221
+    hash: acb2c60b7a343cfdb3217ab0f4d20f48953ce65ffc324e87267122742a1c5342
+    atom:
+      category: core
+      name: bash
+    version:
+      version: "5.0"
   core/dbus:
-    version: 1.12.18
+    path: core/dbus.yml
+    size: 303
+    hash: d50c1a6bf166644aca2de14124711bd1cd9cd97446bc5dee0074a7767522667a
+    atom:
+      category: core
+      name: dbus
+    version:
+      version: 1.12.18
   core/eudev:
-    version: 3.2.9
+    path: core/eudev.yml
+    size: 1753
+    hash: 09181004d776ae5429aadd66d1d932e8e928ae9519bb950f15f6cac5c95c520c
+    atom:
+      category: core
+      name: eudev
+    version:
+      version: 3.2.9
   core/fs-tree:
-    version: 1.0.1
+    path: core/fs-tree.yml
+    size: 1526
+    hash: 19314a163be8edcccaeff4af032f52de79ebeac887fbd08a0f4524183ced514d
+    atom:
+      category: core
+      name: fs-tree
+    version:
+      version: 1.0.1
   core/grub:
-    version: "2.04"
+    path: core/grub.yml
+    size: 222
+    hash: 5a1cab03c912a61c9d72eeed8f429f3e994320ab5c977c7a3f8e40c1726a5918
+    atom:
+      category: core
+      name: grub
+    version:
+      version: "2.04"
   core/iana-etc:
-    version: "2.30"
+    path: core/iana-etc.yml
+    size: 94
+    hash: ceda66c749e9c525ce969e04ad76ddccb30d43a216be376db4e647911eb6e213
+    atom:
+      category: core
+      name: iana-etc
+    version:
+      version: "2.30"
   core/lfs-udev-rules:
-    version: "20171102"
+    path: core/lfs-udev-rules.yml
+    size: 222
+    hash: b3ad5bf231972739ec29e041748a55bfe254bde4d4be3b70b185ba260675b512
+    atom:
+      category: core
+      name: lfs-udev-rules
+    version:
+      version: "20171102"
   core/linux-firmware:
-    version: "20200619"
+    path: core/linux-firmware.yml
+    size: 157
+    hash: 751f07c0206047bbbe64add0ba6d7241d4b5e102860c3954ede2b4afa4bbd03d
+    atom:
+      category: core
+      name: linux-firmware
+    version:
+      version: "20200619"
   core/mkinitcpio-busybox:
-    version: 1.31.1
+    path: core/mkinitcpio-busybox.yml
+    size: 772
+    hash: 4f635936b224c87adb26042b03605081fd7c5951a4113742cbba9918d40c5e6f
+    atom:
+      category: core
+      name: mkinitcpio-busybox
+    version:
+      version: 1.31.1
   core/openrc:
-    version: 0.42.1
+    path: core/openrc.yml
+    size: 585
+    hash: 24c79bbb20b2e511a886e4614d7c38649297c6514bc13ac354399926f3511388
+    atom:
+      category: core
+      name: openrc
+    version:
+      version: 0.42.1
   core/shadow:
-    version: 4.8.1
+    path: core/shadow.yml
+    size: 716
+    hash: 391ec40bc1c0e8e4f861b9818b1dba651334f3dd19cbcaa552d3f631ed60455b
+    atom:
+      category: core
+      name: shadow
+    version:
+      version: 4.8.1
   core/tzdata:
-    version: 2020a
+    path: core/tzdata.yml
+    size: 745
+    hash: a23635afd156640cba354429031aad33e2fbf34f15ec1728246b3c9768287f6a
+    atom:
+      category: core
+      name: tzdata
+    version:
+      version: 2020a
   core/udev-init-scripts:
-    version: "33"
+    path: core/udev-init-scripts.yml
+    size: 3351
+    hash: d7ce946ff13f2b888efd3119e07ba8c7f4ac8d3f8880870617b612a559c573ba
+    atom:
+      category: core
+      name: udev-init-scripts
+    version:
+      version: "33"
   core/zsh:
-    version: "5.8"
+    path: core/zsh.yml
+    size: 401
+    hash: f092909013f6be415293b9f76a0b55baf45c458f60404554cce8ae2be21b49d2
+    atom:
+      category: core
+      name: zsh
+    version:
+      version: "5.8"
   doc/man-pages:
-    version: "5.05"
+    path: doc/man-pages.yml
+    size: 116
+    hash: 7748f17c859b1689e563868b3c2d3ab14030448f4e1b948596a8b82cb6500ac2
+    atom:
+      category: doc
+      name: man-pages
+    version:
+      version: "5.05"
   editor/nano:
-    version: "4.9"
+    path: editor/nano.yml
+    size: 107
+    hash: 3482fd78cec75e025cd305584f0aad8db1cc106a8be88e5e359fd41940cc0e7b
+    atom:
+      category: editor
+      name: nano
+    version:
+      version: "4.9"
   kernel/linux-headers:
-    version: 5.7.5
+    path: kernel/linux-headers.yml
+    size: 307
+    hash: 5ad8d1dd07ab7d95f0a2cd98f50dca0ec1d0a955027fa8e7cf17822e9cda9e08
+    atom:
+      category: kernel
+      name: linux-headers
+    version:
+      version: 5.7.5
   kernel/linux-noinitrd:
-    version: 5.7.5
+    path: kernel/linux-noinitrd.yml
+    size: 1030
+    hash: dd70a81be1e4b45eac8ce52edae8fa7480aaae59d71b3fb1d83fb2de9e411439
+    atom:
+      category: kernel
+      name: linux-noinitrd
+    version:
+      version: 5.7.5
   kernel/linux:
-    version: 5.7.5
+    path: kernel/linux.yml
+    size: 1504
+    hash: 3d101922d992fb107ccf7c91871d8e2875552c8af1831beddc06e6fbae52ec5e
+    atom:
+      category: kernel
+      name: linux
+    version:
+      version: 5.7.5
   lang/gawk:
-    version: 5.1.0
+    path: lang/gawk.yml
+    size: 101
+    hash: fab55aaf58de744afff6eee81548f02891de8c31269f769cad6861567ac679b8
+    atom:
+      category: lang
+      name: gawk
+    version:
+      version: 5.1.0
   lang/gcc:
-    version: 9.3.0
+    path: lang/gcc.yml
+    size: 1047
+    hash: 485db8f7c87a1ce6312752be7267f1a8387538b9a5c9ba7c613ee4d5e932efd3
+    atom:
+      category: lang
+      name: gcc
+    version:
+      version: 9.3.0
   lang/node:
-    version: 14.4.0
+    path: lang/node.yml
+    size: 251
+    hash: d8b2ab49bce7c56927e8890b049f95ebf5a8465de340fa9d8481cb4a975c7ff3
+    atom:
+      category: lang
+      name: node
+    version:
+      version: 14.4.0
   lang/perl:
-    version: 5.32.0
+    path: lang/perl.yml
+    size: 367
+    hash: 841e7f966eb334d375feec134b935237c7c9cc643b5436aaafc5b7b3f93c0a86
+    atom:
+      category: lang
+      name: perl
+    version:
+      version: 5.32.0
   lang/python:
-    version: 3.8.3
+    path: lang/python.yml
+    size: 170
+    hash: 4753a3667463c982bca18c14db3bab8362b93f9bf08768d59a084ac2e831c3bf
+    atom:
+      category: lang
+      name: python
+    version:
+      version: 3.8.3
   lang/sed:
-    version: "4.8"
+    path: lang/sed.yml
+    size: 183
+    hash: 6f054455e99f97d7c6b03bb8ef9d2b8c7eb5d1fb09f3dc27744770665d5b9014
+    atom:
+      category: lang
+      name: sed
+    version:
+      version: "4.8"
   libs/expat:
-    version: 2.2.9
+    path: libs/expat.yml
+    size: 117
+    hash: 06ed2d66911672a290e54ccd85e0ac16b43a66e611ff13d25c6ff0f971f10195
+    atom:
+      category: libs
+      name: expat
+    version:
+      version: 2.2.9
   libs/gettext:
-    version: "0.20"
+    path: libs/gettext.yml
+    size: 174
+    hash: eb36fbc9b8aada0800c7c240dafffe7c5c1211ac64a0ccb7cfa62737a951a0e1
+    atom:
+      category: libs
+      name: gettext
+    version:
+      version: "0.20"
   libs/glibc:
-    version: 2.31
+    path: libs/glibc.yml
+    size: 731
+    hash: a691b8a0abe1ff17dc5cd0470b920ab210be654d555bd5f8d9ef5f8fdbd288a4
+    atom:
+      category: libs
+      name: glibc
+    version:
+      version: 2.31
   libs/gmp:
-    version: 6.2.0
+    path: libs/gmp.yml
+    size: 374
+    hash: bccc2b11124f1f4016ab3e8f9f544f129bd9f12c79d7a342edb335e66ee650c5
+    atom:
+      category: libs
+      name: gmp
+    version:
+      version: 6.2.0
   libs/libarchive:
-    version: 3.4.3
+    path: libs/libarchive.yml
+    size: 114
+    hash: dec4b4f30c3db4f79772000717c3bd040e2d29e6c659cf6e4f358caff84548c7
+    atom:
+      category: libs
+      name: libarchive
+    version:
+      version: 3.4.3
   libs/libattr:
-    version: 2.4.48
+    path: libs/libattr.yml
+    size: 134
+    hash: 83ce6e873be5ed52bacfd8ed10e73886dfbb6c2efdb03793cc13e4656508e676
+    atom:
+      category: libs
+      name: libattr
+    version:
+      version: 2.4.48
   libs/libelf:
-    version: "0.180"
+    path: libs/libelf.yml
+    size: 372
+    hash: f97350a2c1ae3c3ba9c955cab5edd0ced21652126c357e5bc85e2d2771ef1cc1
+    atom:
+      category: libs
+      name: libelf
+    version:
+      version: "0.180"
   libs/libxml2:
-    version: 2.9.10
+    path: libs/libxml2.yml
+    size: 115
+    hash: ddccc38d6ce96c4377a35c77d736a88d7c4b591d31fd6d63762f9d198e6989cb
+    atom:
+      category: libs
+      name: libxml2
+    version:
+      version: 2.9.10
   libs/libxslt:
-    version: 1.1.34
+    path: libs/libxslt.yml
+    size: 115
+    hash: b0b1435be869bcc55dbb3bc877ab7c83c6296e11af3af702ff52b779345f4e94
+    atom:
+      category: libs
+      name: libxslt
+    version:
+      version: 1.1.34
   libs/mpc:
-    version: 1.1.0
+    path: libs/mpc.yml
+    size: 194
+    hash: c7ed783219e53acee1cd6a5b641bfd298d069d7e4efcd69d50bc5fd1f6e29cdd
+    atom:
+      category: libs
+      name: mpc
+    version:
+      version: 1.1.0
   libs/mpfr:
-    version: 4.0.2
+    path: libs/mpfr.yml
+    size: 217
+    hash: 60f2c580b6b104b52e22354c90e3d8183a59650ff03e01d51c787c63bac6b8bc
+    atom:
+      category: libs
+      name: mpfr
+    version:
+      version: 4.0.2
   libs/ncurses:
-    version: "6.2"
+    path: libs/ncurses.yml
+    size: 929
+    hash: fcaedd51e11e3b5fed83a87b1fd568b0f680f42c6fdf103af42fa6a77fdc5ea8
+    atom:
+      category: libs
+      name: ncurses
+    version:
+      version: "6.2"
   libs/openssl:
-    version: 1.1.1d
+    path: libs/openssl.yml
+    size: 361
+    hash: ae258606a75c25ee1aa38aee7802cad0b84b57a86209743a42ff1726efcaa2b4
+    atom:
+      category: libs
+      name: openssl
+    version:
+      version: 1.1.1d
   libs/readline:
-    version: "8.0"
+    path: libs/readline.yml
+    size: 352
+    hash: 985dbff3d0cbe5b6f35c4229559534d21aee943caffbc7c9976515c3fca56b10
+    atom:
+      category: libs
+      name: readline
+    version:
+      version: "8.0"
   libs/zlib:
-    version: 1.2.11
+    path: libs/zlib.yml
+    size: 225
+    hash: c856cd2a135d2b2e6f0e2720bcfaecb2c8f745aca58c808e5453591f67faec8f
+    atom:
+      category: libs
+      name: zlib
+    version:
+      version: 1.2.11
   util/asciidoc:
-    version: 9.0.1
+    path: util/asciidoc.yml
+    size: 331
+    hash: d6978cc318d825d8781ac587f44386d697fbfae4f0a2367fedaba9b63b966a58
+    atom:
+      category: util
+      name: asciidoc
+    version:
+      version: 9.0.1
   util/autoconf:
-    version: 2.69
+    path: util/autoconf.yml
+    size: 153
+    hash: 32c6df6bae8b8f29d638c4eafc618b7596ea1e47e7e721a1d7d34ae08eefaf2e
+    atom:
+      category: util
+      name: autoconf
+    version:
+      version: 2.69
   util/automake:
-    version: 1.16.1
+    path: util/automake.yml
+    size: 78
+    hash: 9bd286e8c348d9ecf274d95dd6397970712c2a34b36c66642e09c7d2aa8783ee
+    atom:
+      category: util
+      name: automake
+    version:
+      version: 1.16.1
   util/bc:
-    version: 2.5.3
+    path: util/bc.yml
+    size: 179
+    hash: e1c366e633aa2432ca6047c908e355d92dc45f53404d4c17652477b2a81e9d09
+    atom:
+      category: util
+      name: bc
+    version:
+      version: 2.5.3
   util/binutils:
-    version: 2.34
+    path: util/binutils.yml
+    size: 347
+    hash: 85590854c5b9448eb446ce8769dfe63dacc4d69ce66a55ff5d65a0a556205995
+    atom:
+      category: util
+      name: binutils
+    version:
+      version: 2.34
   util/bison:
-    version: 3.6
+    path: util/bison.yml
+    size: 99
+    hash: 6916816114411572cd1d6d77dd243106882eb48784181a190777f18a54667c51
+    atom:
+      category: util
+      name: bison
+    version:
+      version: 3.6
   util/bzip2:
-    version: 1.0.8
+    path: util/bzip2.yml
+    size: 677
+    hash: 62730b4f55977122a2cfaf97539fca9b505d15fb6b41021f672ec15e4f0f044e
+    atom:
+      category: util
+      name: bzip2
+    version:
+      version: 1.0.8
   util/coreutils:
-    version: 8.32
+    path: util/coreutils.yml
+    size: 275
+    hash: a09c10f6e81fc3810afaf6bde9e65e71924cbd532ab669d92b191096ccab9aa4
+    atom:
+      category: util
+      name: coreutils
+    version:
+      version: 8.32
   util/cpio:
-    version: "2.13"
+    path: util/cpio.yml
+    size: 84
+    hash: 11de28e19a0d6f7f5852477866a5c4e5aae7f5c3d7015859fa984d5bbebeafdb
+    atom:
+      category: util
+      name: cpio
+    version:
+      version: "2.13"
   util/dhcpcd:
-    version: 9.1.2
+    path: util/dhcpcd.yml
+    size: 114
+    hash: 2d479d36bc3341aacc431831420879e8c6e3ea0ee3a64889e51b8c707c10a865
+    atom:
+      category: util
+      name: dhcpcd
+    version:
+      version: 9.1.2
   util/diffutils:
-    version: 3.7
+    path: util/diffutils.yml
+    size: 77
+    hash: d07df7ec090a97b867f9ca1dee570fb931ce9fda558a482449591444dca2ccd0
+    atom:
+      category: util
+      name: diffutils
+    version:
+      version: 3.7
   util/e2fsprogs:
-    version: 1.45.5
+    path: util/e2fsprogs.yml
+    size: 380
+    hash: 5eacbbfa7bba06cc5707ccf209dabe1cb2a653e36e84521a43c79d1c9395880f
+    atom:
+      category: util
+      name: e2fsprogs
+    version:
+      version: 1.45.5
   util/file:
-    version: "5.39"
+    path: util/file.yml
+    size: 158
+    hash: 2c762d8a12b253efd506e4a5845a205f8aa2665644e95fc81b6bf2fb6a568e1c
+    atom:
+      category: util
+      name: file
+    version:
+      version: "5.39"
   util/findutils:
-    version: 4.7.0
+    path: util/findutils.yml
+    size: 289
+    hash: 0c37105f6a2062398bc62f8cb46fd8e25a2c96b87f742e760c1e7951a623183c
+    atom:
+      category: util
+      name: findutils
+    version:
+      version: 4.7.0
   util/flex:
-    version: 2.6.4
+    path: util/flex.yml
+    size: 231
+    hash: d1f90c1b9879aa417a022b810b3dc9dc8565ab6034a4cd4fa99e8a539425798e
+    atom:
+      category: util
+      name: flex
+    version:
+      version: 2.6.4
   util/git:
-    version: 2.27.0
+    path: util/git.yml
+    size: 235
+    hash: 63df79746a3285d51b7686229c67872a3d634ee357cf7cbea4aa0d3b07f14415
+    atom:
+      category: util
+      name: git
+    version:
+      version: 2.27.0
   util/gperf:
-    version: "3.1"
+    path: util/gperf.yml
+    size: 85
+    hash: 625f91115108e5c86119e1871da8fc0ca5e4c850051083613baf7665d8e14fbb
+    atom:
+      category: util
+      name: gperf
+    version:
+      version: "3.1"
   util/grep:
-    version: "3.4"
+    path: util/grep.yml
+    size: 113
+    hash: d9e284aef4a539eb6b9b806cef0d62a1bb74b60d16d5c9dc4c083323963c8b2a
+    atom:
+      category: util
+      name: grep
+    version:
+      version: "3.4"
   util/groff:
-    version: 1.22.4
+    path: util/groff.yml
+    size: 117
+    hash: 2e0eb466f2445fec3bc84ecee628625a6244fc493852c418aa702408e353e40c
+    atom:
+      category: util
+      name: groff
+    version:
+      version: 1.22.4
   util/gzip:
-    version: "1.10"
+    path: util/gzip.yml
+    size: 71
+    hash: f8cc41a117be7374be39971c8199b733442140fe2cc0b2afb6ea897671d1061d
+    atom:
+      category: util
+      name: gzip
+    version:
+      version: "1.10"
   util/inetutils:
-    version: 1.9.4
+    path: util/inetutils.yml
+    size: 80
+    hash: 5c49839f9735ed3083c138a14a25c7f6ce78a46868c52820862376d7b331d509
+    atom:
+      category: util
+      name: inetutils
+    version:
+      version: 1.9.4
   util/iproute2:
-    version: 5.5.0
+    path: util/iproute2.yml
+    size: 265
+    hash: 0eb9c072aaf2ce893709afc8e14a07829eedd11d4841445dfb479241cdf5fc1e
+    atom:
+      category: util
+      name: iproute2
+    version:
+      version: 5.5.0
   util/iwd:
-    version: 1.8
+    path: util/iwd.yml
+    size: 373
+    hash: 2939bb76dc3c071e2bcf5b645a2a6518dd6735e986520b55f5a66d7c24c5fe77
+    atom:
+      category: util
+      name: iwd
+    version:
+      version: 1.8
   util/kmod:
-    version: "26"
+    path: util/kmod.yml
+    size: 493
+    hash: b2fd872a78d874307768f930c55fe31c0d807af505538d2d892fad927074436c
+    atom:
+      category: util
+      name: kmod
+    version:
+      version: "26"
   util/libtool:
-    version: 2.4
+    path: util/libtool.yml
+    size: 103
+    hash: ed5540c7989fe26ab2cabe81a6a465ee70f35f8478605b9e47202fda99abce07
+    atom:
+      category: util
+      name: libtool
+    version:
+      version: 2.4
   util/m4:
-    version: 1.4.18
+    path: util/m4.yml
+    size: 198
+    hash: de21695bbcedbebbd8d1e885cc113b4b54976b9d936c22e3766d95249290dbfd
+    atom:
+      category: util
+      name: m4
+    version:
+      version: 1.4.18
   util/make:
-    version: 4.3
+    path: util/make.yml
+    size: 81
+    hash: 235e7b3d53f5138752f0b54b93c7709b25d73ecc24ed9d33de107b23989b8dac
+    atom:
+      category: util
+      name: make
+    version:
+      version: 4.3
   util/mkinitcpio:
-    version: "27"
+    path: util/mkinitcpio.yml
+    size: 250
+    hash: aa4a7106156fe532a608b0cc180a8e23343f69ef95a6176c427521644b6dd26e
+    atom:
+      category: util
+      name: mkinitcpio
+    version:
+      version: "27"
   util/openssh:
-    version: 8.3p1
+    path: util/openssh.yml
+    size: 164
+    hash: fdb058598af25e4ed0b047c274fc83f845d66a5289b7f4d0efd386fdb97225f9
+    atom:
+      category: util
+      name: openssh
+    version:
+      version: 8.3p1
   util/patch:
-    version: 2.7.6
+    path: util/patch.yml
+    size: 74
+    hash: bf82a7326d15fdf8329114f4c645d62494c2df48adc60637de1579ff25b2b8a5
+    atom:
+      category: util
+      name: patch
+    version:
+      version: 2.7.6
   util/pkg-config:
-    version: 0.29.2
+    path: util/pkg-config.yml
+    size: 177
+    hash: b7430b7e8bab29d95baa3aa3f5061421de050313a849990c0ebd637f555bce6d
+    atom:
+      category: util
+      name: pkg-config
+    version:
+      version: 0.29.2
   util/procps-ng:
-    version: 3.3.15
+    path: util/procps-ng.yml
+    size: 285
+    hash: ba588a93a0c65245f73ca1028d972a02e0724c4af3dbf52a13ada8d843e77fb9
+    atom:
+      category: util
+      name: procps-ng
+    version:
+      version: 3.3.15
   util/pv:
-    version: 1.6.6
+    path: util/pv.yml
+    size: 93
+    hash: b637d95ea9edcd7d838bba19c3f34976bb316b97d741657e40b6791527cf942a
+    atom:
+      category: util
+      name: pv
+    version:
+      version: 1.6.6
   util/tar:
-    version: "1.32"
+    path: util/tar.yml
+    size: 205
+    hash: 498c91c51c9c8fec974227dddf48c3a061ac4fb3f4366c753eed51c6fefab58f
+    atom:
+      category: util
+      name: tar
+    version:
+      version: "1.32"
   util/texinfo:
-    version: 6.7
+    path: util/texinfo.yml
+    size: 148
+    hash: e7c0f87fcb50aac324d883b9f54f944d33e862916d43b84c7a80e336f748394e
+    atom:
+      category: util
+      name: texinfo
+    version:
+      version: 6.7
   util/util-linux:
-    version: 2.35.1
+    path: util/util-linux.yml
+    size: 693
+    hash: 747dc63e52b231579a38bd79676692c0d0143a6c339d96c9f0c4c30acb870826
+    atom:
+      category: util
+      name: util-linux
+    version:
+      version: 2.35.1
   util/which:
-    version: "2.21"
+    path: util/which.yml
+    size: 85
+    hash: 1ebe2ce72a1e58c15bf33499522064836963f4b8559261f9dc7e8694e28dc102
+    atom:
+      category: util
+      name: which
+    version:
+      version: "2.21"
   util/xz:
-    version: 5.2.5
+    path: util/xz.yml
+    size: 344
+    hash: 6573597106b71d8d9dd6443b7d51a7f6a101ba0403434b6a2e992e85f8801c83
+    atom:
+      category: util
+      name: xz
+    version:
+      version: 5.2.5
   virtual/base-system:
-    version: 1.0.0
+    path: virtual/base-system.yml
+    size: 809
+    hash: 4fe972c7ba820baac5275a5a1a1ad0678cefbab5ea29d21fd54bd22c8137d545
+    atom:
+      category: virtual
+      name: base-system
+    version:
+      version: 1.0.0
   virtual/build-tools:
-    version: 1.0.0
+    path: virtual/build-tools.yml
+    size: 364
+    hash: 62fb0205f9509ac73c76912eee720fbc88c022a07bd8daeb72b0342e2fb7890b
+    atom:
+      category: virtual
+      name: build-tools
+    version:
+      version: 1.0.0
+sources: {}
 categories:
   - core
   - doc
@@ -169,4 +730,4 @@ categories:
   - libs
   - util
   - virtual
-serial: 1593979401
+serial: 1594058486

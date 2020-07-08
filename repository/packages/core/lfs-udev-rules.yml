@@ -1,8 +1,0 @@
-version: "20171102"
-filename: udev-lfs
-upstream: https://anduin.linuxfromscratch.org/LFS/
-configure: ~
-make: ~
-install: cd ..; make DESTDIR=$(realpath .) -f %{unpack_dir}/Makefile.lfs install
-queue_hooks:
-  ldconfig: false

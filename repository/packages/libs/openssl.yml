@@ -6,6 +6,7 @@ rdepend:
 filename: openssl
 comp: tar.gz
 upstream: https://www.openssl.org/source/
+license: OpenSSL
 configure: ./config
 additional_configure_opts: --openssldir=/etc/ssd --libdir=lib shared zlib-dynamic
 install: |

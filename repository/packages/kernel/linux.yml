@@ -10,6 +10,8 @@ rdepend:
   - util/util-linux
 filename: linux
 upstream: https://cdn.kernel.org/pub/linux/kernel/v5.x/
+license: GPL-2.0-only WITH Linux-syscall-note
+license_location: spdx
 additional_sources: [linux-config]
 # additional_source_urls: []
 configure: |

@@ -2,6 +2,7 @@ version: "6.2"
 filename: ncurses
 comp: tar.gz
 upstream: https://ftp.gnu.org/gnu/ncurses/
+license: MIT
 additional_configure_options: >
   --mandir=/usr/share/man
   --with-shared

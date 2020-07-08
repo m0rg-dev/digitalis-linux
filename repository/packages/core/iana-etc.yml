@@ -1,5 +1,0 @@
-version: "2.30"
-filename: iana-etc
-comp: tar.bz2
-upstream: http://sethwklein.net/
-configure: ~

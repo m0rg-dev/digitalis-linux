@@ -4,6 +4,7 @@ bdepend:
 filename: bzip2
 comp: tar.gz
 upstream: https://www.sourceware.org/pub/bzip2/
+license: bzip2-1.0.6
 configure: ~
 pre_configure_script: |
     sed -i 's@\(ln -s -f \)$(PREFIX)/bin/@\1@' Makefile

@@ -6,3 +6,5 @@ rdepend:
 filename: openssh
 comp: tar.gz
 upstream: https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/
+license: BSD-3-Clause
+license_location: file LICENCE

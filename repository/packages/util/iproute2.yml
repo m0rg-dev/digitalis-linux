@@ -3,6 +3,7 @@ rdepend:
   - libs/libelf
 filename: iproute2
 upstream: https://www.kernel.org/pub/linux/utils/net/iproute2/
+license: GPL-2.0-or-later
 pre_configure_script: |
   sed -i /ARPD/d Makefile
   rm -fv man/man8/arpd.8

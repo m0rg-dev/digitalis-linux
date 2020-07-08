@@ -68,6 +68,11 @@ class ResolvedAtom extends Atom {
         }
         return new ResolvedAtom(parsed[1], parsed[2]);
     }
+    static fromYAML(raw) {
+        const cat = raw['category'];
+        const name = raw['name'];
+        return new ResolvedAtom(cat, name);
+    }
 }
 exports.ResolvedAtom = ResolvedAtom;
 ;
@@ -93,6 +98,10 @@ class PackageVersion {
         if (parts_1.length > parts_2.length)
             return 1;
         return -1;
+    }
+    static fromYAML(raw) {
+        const version = raw['version'];
+        return new PackageVersion(version);
     }
 }
 exports.PackageVersion = PackageVersion;

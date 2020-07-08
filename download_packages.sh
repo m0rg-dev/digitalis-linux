@@ -85,6 +85,7 @@ download ftp://xmlsoft.org/libxml2/libxml2-2.9.10.tar.gz
 download ftp://xmlsoft.org/libxslt/libxslt-1.1.34.tar.gz
 download http://www.libarchive.org/downloads/libarchive-3.4.3.tar.xz
 download https://busybox.net/downloads/busybox-1.31.1.tar.bz2
+download https://gitweb.gentoo.org/proj/udev-gentoo-scripts.git/snapshot/udev-gentoo-scripts-33.tar.gz
 
 #download https://raw.githubusercontent.com/robbat2/genkernel/v3.5.3.3/defaults/kernel-generic-config linux-config
 cp linux-config distfiles/

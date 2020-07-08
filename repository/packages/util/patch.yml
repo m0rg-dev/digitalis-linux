@@ -1,3 +1,4 @@
 version: "2.7.6"
 filename: patch
 upstream: https://ftp.gnu.org/gnu/patch/
+license: GPL-3.0-or-later

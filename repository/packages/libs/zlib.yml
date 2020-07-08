@@ -1,6 +1,7 @@
 version: 1.2.11
 filename: zlib
 upstream: https://zlib.net/
+license: Zlib
 postinstallscript: |
     mkdir -p lib
     mv -v usr/lib/libz.so.* lib

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PackageDescription = exports.Manifest = exports.ManifestObject = exports.Repository = void 0;
+exports.PackageDescription = exports.Repository = void 0;
 const atom_js_1 = require("./atom.js");
 const fs = require("fs");
 const path = require("path");
@@ -8,6 +8,7 @@ const YAML = require("yaml");
 const https = require("https");
 const url_1 = require("url");
 const config_js_1 = require("./config.js");
+const manifest_1 = require("./manifest");
 class Repository {
     constructor(root_path, remote_url) {
         this.local_packages_path = path.join(root_path, "packages");
@@ -107,7 +108,7 @@ class Repository {
         return fs.promises.access(manifest_path, fs.constants.R_OK)
             .then(async (ok) => {
             return fs.promises.readFile(manifest_path).then((data) => {
-                const manifest = Manifest.deserialize(data.toString('utf8'));
+                const manifest = manifest_1.Manifest.deserialize(data.toString('utf8'));
                 if (self.remote_url && !self.manifest_fetched_already) {
                     return undefined;
                 }
@@ -129,7 +130,7 @@ class Repository {
                             response.on('end', async () => {
                                 await fs.promises.writeFile(manifest_path, raw_yml);
                                 self.manifest_fetched_already = true;
-                                resolve(Manifest.deserialize(raw_yml));
+                                resolve(manifest_1.Manifest.deserialize(raw_yml));
                             });
                         }
                         else {
@@ -150,102 +151,32 @@ class Repository {
     }
     async buildManifest() {
         const self = this;
-        var manifest = new Manifest();
-        self.getAllCategories(true)
-            .then(async function (categories) {
-            return Promise.all(categories.map(async function (category) {
-                return self.getAllNames(category, true).then(names => names.map(name => [category, name]));
-            }));
-        }).then(async function (structured_names) {
-            const all_names = structured_names.flat(1);
-            return Promise.all(all_names.map(async (name) => {
-                const atom = new atom_js_1.ResolvedAtom(name[0], name[1]);
-                const desc = new PackageDescription(fs.readFileSync(path.join(self.local_packages_path, name[0], name[1] + ".yml")).toString('utf8'));
-                return new ManifestObject(atom, desc.version);
-            }));
-        }).then(async function (all_packages) {
-            all_packages.forEach((pkg) => manifest.addPackage(pkg));
-            return Promise.all(all_packages.map(async (pkg) => {
-                const err_1 = await new Promise((res, rej) => {
-                    fs.access(path.join(self.local_builds_path, pkg.atom.getCategory(), pkg.atom.getName() + "," + pkg.version.version), fs.constants.R_OK, (err) => {
-                        res(err);
-                    });
-                });
-                if (!err_1)
-                    manifest.addBuild(pkg);
-            }));
-        }).then(async function () {
-            return new Promise((res, rej) => {
-                fs.writeFile(path.join(self.root_path, "Manifest.yml"), manifest.serialize(), (err) => {
-                    if (err)
-                        rej(err);
-                    else
-                        res();
-                });
-            });
-        });
+        var manifest = new manifest_1.Manifest();
+        const categories = await self.getAllCategories(true);
+        const structured_names = await Promise.all(categories.map(async function (category) {
+            return self.getAllNames(category, true).then(names => names.map(name => [category, name]));
+        }));
+        const all_names = structured_names.flat(1);
+        const all_packages = await Promise.all(all_names.map(async (name) => {
+            const atom = new atom_js_1.ResolvedAtom(name[0], name[1]);
+            const raw_data = await fs.promises.readFile(path.join(self.local_packages_path, name[0], name[1] + ".yml"));
+            const desc = new PackageDescription(raw_data.toString('utf8'));
+            return new manifest_1.ManifestPackage(atom, desc.version, path.join(name[0], name[1] + ".yml"), raw_data);
+        }));
+        all_packages.forEach((pkg) => manifest.addPackage(pkg));
+        await Promise.all(all_packages.map(async (pkg) => {
+            try {
+                await fs.promises.access(path.join(self.local_builds_path, pkg.atom.getCategory(), pkg.atom.getName() + "," + pkg.version.version));
+                manifest.addBuild(pkg);
+            }
+            catch (e) {
+                // if we can't read the build it doesn't exist - this can happen
+            }
+        }));
+        return fs.promises.writeFile(path.join(self.root_path, "Manifest.yml"), manifest.serialize());
     }
 }
 exports.Repository = Repository;
-;
-class ManifestObject {
-    constructor(atom, version) {
-        this.atom = atom;
-        this.version = version;
-    }
-}
-exports.ManifestObject = ManifestObject;
-;
-class Manifest {
-    constructor() {
-        this.builds = {};
-        this.packages = {};
-        this.categories = new Set();
-    }
-    addPackage(pkg) {
-        this.packages[pkg.atom.format()] = pkg.version;
-        this.categories.add(pkg.atom.getCategory());
-    }
-    addBuild(build) {
-        this.builds[build.atom.format()] = build.version;
-    }
-    getPackage(key) {
-        const v = this.packages[key.format()];
-        if (v) {
-            return new ManifestObject(key, v);
-        }
-        else {
-            return undefined;
-        }
-    }
-    getAllPackages() {
-        var r = [];
-        for (const formatted_atom in this.packages) {
-            r.push(new ManifestObject(new atom_js_1.ResolvedAtom(formatted_atom), this.packages[formatted_atom]));
-        }
-        return r;
-    }
-    getBuild(key) {
-        const v = this.builds[key.format()];
-        if (v) {
-            return new ManifestObject(key, v);
-        }
-        else {
-            return undefined;
-        }
-    }
-    getCategories() {
-        return Array.from(this.categories.values());
-    }
-    static deserialize(yml) {
-        return Object.assign(new Manifest(), YAML.parse(yml));
-    }
-    serialize() {
-        this.serial = Math.trunc(Date.now() / 1000);
-        return YAML.stringify(this);
-    }
-}
-exports.Manifest = Manifest;
 ;
 class PackageDescription {
     constructor(raw_yaml) {

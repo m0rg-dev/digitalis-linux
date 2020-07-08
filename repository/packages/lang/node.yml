@@ -7,5 +7,6 @@ filename: node
 src: "%{filename}-v%{version}.%{comp}"
 unpack_dir: "%{filename}-v%{version}"
 upstream: https://nodejs.org/download/release/v%{version}/
+license: MIT
 queue_hooks:
   ldconfig: false

@@ -4,7 +4,6 @@ rdepend:
     - core/eudev
     - core/fs-tree
     - core/grub
-    - core/iana-etc
     - core/lfs-udev-rules
     - core/openrc
     - core/shadow

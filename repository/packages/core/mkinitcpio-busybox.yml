@@ -3,6 +3,7 @@ version: "1.31.1"
 filename: busybox
 comp: tar.bz2
 upstream: https://busybox.net/downloads/
+license: GPL-2.0-only
 configure: ~
 # r?date doesn't build against this libc, so just don't bother
 pre_configure_script: |

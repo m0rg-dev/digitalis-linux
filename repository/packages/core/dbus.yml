@@ -6,6 +6,7 @@ rdepend:
 filename: dbus
 comp: tar.gz
 upstream: https://dbus.freedesktop.org/releases/dbus/
+license: GPL-2.0-or-later
 additional_configure_options: --prefix=/usr --sysconfdir=/etc --localstatedir=/var
 post_unpack_script: mkdir -p var/run/dbus
 queue_hooks:

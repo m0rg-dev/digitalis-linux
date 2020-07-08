@@ -1,6 +1,8 @@
 version: 5.7.5
 filename: linux
 src_url: https://cdn.kernel.org/pub/linux/kernel/v5.x/%{src}
+license: GPL-2.0-only WITH Linux-syscall-note
+license_location: spdx
 rdepend: []
 
 configure: ~

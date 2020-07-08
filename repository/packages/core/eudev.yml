@@ -2,10 +2,10 @@ version: "3.2.9"
 bdepend:
   - util/gperf
   - util/kmod
-  - core/lfs-udev-rules
 filename: eudev
 comp: tar.gz
 upstream: https://dev.gentoo/org/~blueness/eudev/
+license: GPL-2.0-or-later
 pre_configure_script: mkdir -pv ../{lib,etc}/udev/rules.d
 additional_configure_options: >
   --bindir=/sbin --sbindir=/sbin --libdir=/usr/lib

@@ -1,6 +1,7 @@
 version: "2.35.1"
 filename: util-linux
 upstream: https://www.kernel.org/pub/linux/utils/util-linux/v2.35/
+license: GPL-2.0-only
 pre_configure_script: |
   mkdir -p ../var/lib/hwclock
   cat /etc/group

@@ -4,3 +4,4 @@ bdepend:
 additional_configure_options: '--bindir=/bin'
 filename: autoconf
 upstream: http://ftp.gnu.org/gnu/autoconf/%{src}
+license: GPL-3.0-or-later WITH Autoconf-exception-3.0

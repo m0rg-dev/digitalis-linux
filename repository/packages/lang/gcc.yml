@@ -11,6 +11,8 @@ rdepend:
   - libs/zlib
 filename: gcc
 upstream: http://ftp.gnu.org/gnu/gcc/
+license: GFD-1.2-or-later AND GPL-3.0-or-later AND LGPL-2.1-or-later
+license_location: spdx
 additional_configure_options: --enable-languages=c,c++ --disable-multilib --disable-bootstrap --with-system-zlib
 pre_configure_script: |
   sed -e '/m64=/s/lib64/lib/' -i.orig ../%{unpack_dir}/gcc/config/i386/t-linux64

@@ -71,6 +71,12 @@ export class ResolvedAtom extends Atom {
         if(!parsed) { throw `Bad shortpkg ${shortpkg}`; }
         return new ResolvedAtom(parsed[1], parsed[2]);
     }
+
+    static fromYAML(raw: object): ResolvedAtom {
+        const cat = raw['category'];
+        const name = raw['name'];
+        return new ResolvedAtom(cat, name);
+    }
 };
 
 export class PackageVersion {
@@ -95,5 +101,10 @@ export class PackageVersion {
         // 1.2.3.1 > 1.2.3
         if(parts_1.length > parts_2.length) return 1;
         return -1;
+    }
+
+    static fromYAML(raw: object): PackageVersion {
+        const version = raw['version'];
+        return new PackageVersion(version);
     }
 }

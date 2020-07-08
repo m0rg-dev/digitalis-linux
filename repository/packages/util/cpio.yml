@@ -2,3 +2,4 @@ version: "2.13"
 filename: cpio
 comp: tar.gz
 upstream: https://ftp.gnu.org/gnu/cpio/
+license: GPL-3.0-or-later

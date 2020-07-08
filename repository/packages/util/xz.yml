@@ -1,6 +1,7 @@
 version: "5.2.5"
 filename: xz
 upstream: https://tukaani.org/
+license: GPL-2.0-or-later
 additional_configure_options: --disable-static
 post_install_script: |
   mkdir -p bin lib usr/lib

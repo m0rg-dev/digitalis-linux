@@ -1,6 +1,8 @@
 version: 2020a
 comp: tar.gz
 src: tzdata%{version}.%{comp}
+upstream: https://www.iana.org/time-zones/repository/releases/
+license: public_domain
 use_build_dir: true
 pre_configure_script: |
   for f in $(ls ..); do

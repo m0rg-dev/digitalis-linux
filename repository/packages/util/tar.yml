@@ -1,5 +1,6 @@
 version: "1.32"
 filename: tar
-upstream: https://ftp.gnu.org/gnu/tar/%{src}
+upstream: https://ftp.gnu.org/gnu/tar/
+license: GPL-3.0-or-later
 additional_configure_options: --bindir=/bin
 configure: "FORCE_UNSAFE_CONFIGURE=1 ../%{unpack_dir}/configure %{configure_options}"

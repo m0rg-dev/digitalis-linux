@@ -1,5 +1,6 @@
 version: "0.29.2"
 filename: pkg-config
 upstream: https://pkg-config.freedesktop.org/releases/
+license: GPL-2.0-or-later
 comp: tar.gz
 additional_configure_options: --with-internal-glib --disable-host-tool

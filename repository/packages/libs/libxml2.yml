@@ -2,5 +2,6 @@ version: "2.9.10"
 filename: libxml2
 comp: tar.gz
 upstream: ftp://xmlsoft.org/libxml2/
+license: MIT
 queue_hooks:
   ldconfig: true

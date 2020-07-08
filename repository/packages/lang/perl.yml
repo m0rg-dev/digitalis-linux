@@ -2,6 +2,8 @@ version: 5.32.0
 comp: tar.gz
 filename: perl
 upstream: https://www.cpan.org/src/5.0/
+license: Artistic-1.0-Perl
+license_location: file Artistic
 configure: >
     sh Configure -des -Dprefix=/usr
     -Dvendorprefix=/usr

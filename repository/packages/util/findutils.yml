@@ -3,6 +3,7 @@ filename: findutils
 use_build_dir: true
 additional_configure_options: --localstatedir=/var/lib/locate
 upstream: https://ftp.gnu.org/gnu/findutils/
+license: GPL-3.0-or-later
 postinstallscript: |
     mkdir -p bin
     mv -v usr/bin/find bin

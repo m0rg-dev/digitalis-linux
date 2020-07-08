@@ -1,4 +1,5 @@
 version: "3.4"
 filename: grep
 upstream: https://ftp.gnu.org/gnu/grep/
+license: GPL-3.0-or-later
 additional_configure_options: --bindir=/bin

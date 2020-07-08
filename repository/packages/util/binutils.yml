@@ -8,6 +8,9 @@ rdepend:
   - libs/zlib
 filename: binutils
 upstream: http://ftp.gnu.org/gnu/binutils/
+# parts of binutils are under LGPL or GPL2+ but this should cover it
+license: GPL-3.0-or-later
+license_location: file COPYING3
 additional_configure_options: >
   --enable-gold --enable-ld=default --enable-plugins --disable-werror
   --enable-64-bit-bfd --with-system-zlib
