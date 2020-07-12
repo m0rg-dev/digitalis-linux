@@ -10,10 +10,11 @@ additional_configure_options: >
   --without-normal
   --enable-pc-files
   --enable-widec
+install: |
+  make DESTDIR=/target_root install
+  mkdir -pv /target_root/usr/share/doc/ncurses-%{version}
+  cp -v -R doc/* /target_root/usr/share/doc/ncurses-%{version}
 post_install_script: |
-    mkdir -pv usr/share/doc/ncurses-6.2
-    cp -v -R %{unpack_dir}/doc/* usr/share/doc/ncurses-6.2
-
     mkdir -p lib usr/lib/pkgconfig
     mv -v usr/lib/libncursesw.so.6* lib
     ln -sfv ../../lib/$(readlink usr/lib/libncursesw.so) usr/lib/libncursesw.so

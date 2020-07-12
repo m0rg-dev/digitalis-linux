@@ -1,8 +1,7 @@
 import { Repository } from "./repo";
-import * as path from 'path';
 
 async function main() {
-    var r = new Repository(path.join(__dirname, "..", "repository"));
+    var r = new Repository(process.argv[2]);
     await r.buildManifest();
 }
 

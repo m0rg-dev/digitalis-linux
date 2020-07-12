@@ -13,6 +13,8 @@ class Atom {
         }
         else {
             const parsed = /^(?:([a-z-]+)\/)?([a-z0-9-]+)$/.exec(shortpkg_or_category);
+            if (!parsed)
+                throw `Couldn't parse shortpkg ${shortpkg_or_category}`;
             this.category = parsed[1];
             this.name = parsed[2];
         }
@@ -81,8 +83,8 @@ class PackageVersion {
         this.version = version;
     }
     compare(other) {
-        const parts_1 = this.version.split('.');
-        const parts_2 = other.version.split('.');
+        const parts_1 = this.version.toString().split('.');
+        const parts_2 = other.version.toString().split('.');
         const min_length = Math.min(parts_1.length, parts_2.length);
         // 1.2.3 > 0.1.2
         for (var i = 0; i < min_length; i++) {

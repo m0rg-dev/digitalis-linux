@@ -70,6 +70,9 @@ class Manifest {
     getBuild(key) {
         return this.builds[key.format()];
     }
+    getSource(key) {
+        return this.sources[key];
+    }
     getCategories() {
         return Array.from(this.categories.values());
     }
@@ -80,12 +83,12 @@ class Manifest {
             o.addPackage(ManifestPackage.fromYAML(parsed.packages[key]));
         }
         for (const key in parsed.builds) {
-            o.addPackage(ManifestPackage.fromYAML(parsed.builds[key]));
+            o.addBuild(ManifestPackage.fromYAML(parsed.builds[key]));
         }
         for (const key in parsed.sources) {
             o.addSource(ManifestObject.fromYAML(parsed.sources[key]));
         }
-        return Object.assign(new Manifest(), YAML.parse(yml));
+        return o;
     }
     serialize() {
         this.serial = Math.trunc(Date.now() / 1000);

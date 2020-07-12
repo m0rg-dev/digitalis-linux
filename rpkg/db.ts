@@ -15,22 +15,31 @@ export class Database {
 
     static async construct(db_path: string): Promise<Database> {
         var self = new Database(db_path);
-        return self.reload().then(() => self);
+        await self.reload();
+        return self;
     }
 
     async reload() {
         var self = this;
-        return fs.promises.access(path.join(this.db_path, "database.yml"), fs.constants.R_OK)
-        .then(async function () {
-            const data = await fs.promises.readFile(path.join(this.db_path, "database.yml"));
-            const obj = YAML.parse(data.toString('utf8'), {mapAsMap: true});
-            self.selected_packages = obj.selected;
-            self.installed_packages = obj.installed;
-        })
-        .catch(function () {
-            self.selected_packages = new Set();
-            self.installed_packages = new Map();
-        });
+        self.selected_packages = new Set();
+        self.installed_packages = new Map();
+        return fs.promises.access(path.join(self.db_path, "database.yml"), fs.constants.R_OK)
+            .then(async function () {
+                const data = await fs.promises.readFile(path.join(self.db_path, "database.yml"));
+                const obj = YAML.parse(data.toString('utf8'));
+                for (const selected of obj.selected) {
+                    self.selected_packages.add(selected);
+                }
+                for (const installed in obj.installed) {
+                    self.installed_packages.set(installed, PackageVersion.fromYAML(obj.installed[installed]));
+                }
+            })
+            .catch(function (err) {
+                console.log(`Couldn't read database: ${err}`);
+                // the database might not exist. may want to create it with the
+                // rpkg package itself rather than rebuilding it on errors because
+                // that's potentially dangerous
+            });
     }
 
     async commit() {
@@ -42,5 +51,13 @@ export class Database {
 
     getInstalledVersion(atom: ResolvedAtom): PackageVersion {
         return this.installed_packages.get(atom.format());
+    }
+
+    install(atom: ResolvedAtom, version: PackageVersion) {
+        this.installed_packages.set(atom.format(), version);
+    }
+
+    select(atom: ResolvedAtom) {
+        this.selected_packages.add(atom.format());
     }
 }

@@ -18,7 +18,6 @@ export class ManifestObject {
         }
     }
 
-
     static fromYAML(raw: object): ManifestObject {
         var o = new ManifestObject();
         o.path = raw['path'];
@@ -37,7 +36,6 @@ export class ManifestPackage extends ManifestObject {
         this.atom = atom;
         this.version = version;
     }
-
 
     static fromYAML(raw: object): ManifestPackage {
         const atom = ResolvedAtom.fromYAML(raw['atom']);
@@ -92,6 +90,10 @@ export class Manifest {
         return this.builds[key.format()];
     }
 
+    getSource(key: string): ManifestObject {
+        return this.sources[key];
+    }
+
     getCategories(): string[] {
         return Array.from(this.categories.values());
     }
@@ -104,12 +106,12 @@ export class Manifest {
             o.addPackage(ManifestPackage.fromYAML(parsed.packages[key]));
         }
         for (const key in parsed.builds) {
-            o.addPackage(ManifestPackage.fromYAML(parsed.builds[key]));
+            o.addBuild(ManifestPackage.fromYAML(parsed.builds[key]));
         }
         for (const key in parsed.sources) {
             o.addSource(ManifestObject.fromYAML(parsed.sources[key]));
         }
-        return Object.assign(new Manifest(), YAML.parse(yml));
+        return o;
     }
 
     serialize(): string {

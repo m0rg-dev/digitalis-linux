@@ -7,8 +7,10 @@ filename: openssl
 comp: tar.gz
 upstream: https://www.openssl.org/source/
 license: OpenSSL
-configure: ./config
-additional_configure_opts: --openssldir=/etc/ssd --libdir=lib shared zlib-dynamic
+configure: ./config %{configure_options}
+additional_configure_options: --openssldir=/etc/ssl --libdir=lib shared zlib-dynamic
 install: |
   sed -i '/INSTALL_LIBS/s/libcrypto.a libssl.a//' Makefile
-  make DESTDIR=$(realpath ..) MANSUFFIX=ssl install
+  make DESTDIR=/target_root MANSUFFIX=ssl install
+queue_hooks:
+  ldconfig: true

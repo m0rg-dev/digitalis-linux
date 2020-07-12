@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Step = exports.Transaction = exports.Location = void 0;
+exports.Step = exports.StepType = exports.Transaction = exports.Location = void 0;
 const atom_1 = require("./atom");
 const wrap = require("word-wrap");
 var Location;
@@ -27,9 +27,12 @@ class Transaction {
         return `${where.toString()} ${atom.format()}`;
     }
     async addToTransaction(atom, where) {
+        if (this.tx.has(Transaction.getKey(atom, where))) {
+            return;
+        }
         const desc_p = this.repo.getPackageDescription(atom);
         const build_p = this.repo.buildExists(atom);
-        return Promise.all([desc_p, build_p]).then(async (values) => {
+        await Promise.all([desc_p, build_p]).then(async (values) => {
             const desc = values[0];
             const have_build = values[1];
             if (this.selectDb(where).getInstalledVersion(atom)
@@ -45,16 +48,16 @@ class Transaction {
             if (!have_build) {
                 for (const bdepend of desc.bdepend) {
                     if (!this.tx.has(Transaction.getKey(bdepend, Location.Host))) {
-                        promises.push(this.addToTransaction(bdepend, Location.Host));
+                        await this.addToTransaction(bdepend, Location.Host);
                     }
                 }
             }
             for (const rdepend of desc.rdepend) {
                 if (!this.tx.has(Transaction.getKey(rdepend, where))) {
-                    promises.push(this.addToTransaction(rdepend, where));
+                    await this.addToTransaction(rdepend, where);
                 }
             }
-            await Promise.all(promises);
+            // await Promise.all(promises);
         });
     }
     async plan() {
@@ -65,7 +68,6 @@ class Transaction {
             const n = unmarked.values().next().value;
             this.visit(L, unmarked, tempmarked, n);
         }
-        console.log(L);
         var binfetch = [];
         var srcfetch = [];
         var install = [];
@@ -74,11 +76,15 @@ class Transaction {
             const where = (a[0] == Location.Host.toString()) ? Location.Host : Location.Target;
             const atom = atom_1.ResolvedAtom.parse(a[1]);
             if (await this.repo.buildExists(atom)) {
-                binfetch.push(new Step(StepType.FetchBinary, atom));
+                if (binfetch.every((item) => item.what != atom)) {
+                    binfetch.push(new Step(StepType.FetchBinary, atom));
+                }
             }
             else {
-                srcfetch.push(new Step(StepType.FetchSource, atom));
-                install.push(new Step(StepType.Build, atom));
+                if (srcfetch.every((item) => item.what != atom)) {
+                    srcfetch.push(new Step(StepType.FetchSource, atom));
+                    install.push(new Step(StepType.Build, atom));
+                }
             }
             install.push(new Step((where == Location.Host) ? StepType.HostInstall : StepType.TargetInstall, atom));
         }
@@ -128,7 +134,7 @@ var StepType;
     StepType["Build"] = "Build";
     StepType["HostInstall"] = "HostInstall";
     StepType["TargetInstall"] = "TargetInstall";
-})(StepType || (StepType = {}));
+})(StepType = exports.StepType || (exports.StepType = {}));
 ;
 class Step {
     constructor(type, what) {

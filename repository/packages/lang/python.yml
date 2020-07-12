@@ -3,5 +3,7 @@ filename: Python
 additional_configure_options: --with-ensurepip=yes
 upstream: https://www.python.org/ftp/python/%{version}/
 license: Python-2.0
+post_install_script: |
+  ln -s python3 /target_root/usr/bin/python
 queue_hooks:
   ldconfig: true

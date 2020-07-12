@@ -11,7 +11,7 @@ license_location: |
 
   THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 install: |
-  cd ..
+  cd /target_root
   mkdir -pv {bin,boot,etc/{opt,sysconfig},home,lib/firmware,mnt,opt}
   mkdir -pv {media/{floppy,cdrom},sbin,srv,var}
   install -dv -m 0750 root
@@ -71,5 +71,3 @@ install: |
 use_build_dir: true
 queue_hooks:
   ldconfig: true
-changelog: |
-  Changed permissions on / to 755.

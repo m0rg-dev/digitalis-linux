@@ -1,66 +1,146 @@
-#!/usr/bin/env bash
-
 set -e
-#set -x
+set -x
 
 ulimit -n 65536
 
 sh download_packages.sh
 
+IMAGE=alpine-bootstrap
 
-ctr=$(buildah from alpine-bootstrap)
+maybe_build() {
+    echo $1
+    [ -e s2repo/builds/$1,*.tar.xz ] || node rpkg/rpkg_build.js s2repo $1 $IMAGE
+}
 
-buildah run "$ctr" --  mkdir -p /var/lib/rpkg/{built,installed,distfiles,packages} /tmp
+commit_with_packages() {
+    local ctr=$(buildah from $IMAGE)
+    buildah run "$ctr" --  mkdir -p /var/lib/rpkg/database /tmp
+    buildah run "$ctr" --  mkdir -p /usr/share/rpkg
+    cd s2repo;
+        # tar ch follows links
+        tar ch . > /tmp/repo.tar
+        buildah add "$ctr" /tmp/repo.tar /var/lib/rpkg/repo
+    cd ..
+    buildah add "$ctr" rpkg/ /usr/share/rpkg
+
+    for package in $2; do
+        buildah run "$ctr" node /usr/share/rpkg/rpkg_install.js $package
+    done
+    buildah commit "$ctr" $1
+    buildah rm "$ctr"
+
+    IMAGE=$1
+}
+
+maybe_build core/fs-tree
+maybe_build kernel/linux-headers
+
+commit_with_packages digitalis-bootstrap-1.1 "core/fs-tree kernel/linux-headers"
+
+maybe_build libs/glibc
+maybe_build util/diffutils
+maybe_build lang/perl
+maybe_build libs/gmp
+
+commit_with_packages digitalis-bootstrap-1.2 "libs/glibc util/diffutils lang/perl libs/gmp"
+
+maybe_build libs/mpfr
+maybe_build util/texinfo
+maybe_build libs/zlib
+
+commit_with_packages digitalis-bootstrap-1.3 "libs/mpfr util/texinfo libs/zlib"
+
+maybe_build util/binutils
+maybe_build libs/mpc
+maybe_build util/autoconf
+
+commit_with_packages digitalis-bootstrap-1.4 "util/binutils libs/mpc util/autoconf"
+
+maybe_build libs/ncurses
+maybe_build util/libtool
+maybe_build lang/gcc
+maybe_build libs/gettext
+maybe_build util/automake
+maybe_build util/bzip2
+maybe_build libs/expat
+maybe_build util/pkg-config
+
+commit_with_packages digitalis-bootstrap-1.5 "libs/ncurses util/libtool lang/gcc util/automake libs/gettext util/bzip2 libs/expat util/pkg-config"
+
+# TODO auto-generate this from build-tools
+pkgs_16="
+kernel/linux-headers
+lang/gcc
+lang/perl
+lang/python
+libs/gettext
+util/autoconf
+util/bc
+util/binutils
+util/bison
+util/bzip2
+util/flex
+util/groff
+util/gzip
+util/libtool
+util/m4
+util/make
+util/patch
+util/pkg-config
+util/texinfo
+util/xz
+"
+
+pkgs_16="$pkgs_16 util/gperf util/which util/util-linux core/dbus libs/readline util/coreutils libs/openssl libs/libattr"
+
+for pkg in $pkgs_16; do maybe_build $pkg; done
+
+commit_with_packages digitalis-bootstrap-1.6 "$pkgs_16"
+
+node rpkg/rpkg_repo.js s2repo
+
+ctr=$(buildah from $IMAGE)
+buildah run "$ctr" --  mkdir -p /var/lib/rpkg/database /tmp
 buildah run "$ctr" --  mkdir -p /usr/share/rpkg
-buildah add "$ctr" packages/ /var/lib/rpkg/packages
-buildah add "$ctr" distfiles/ /var/lib/rpkg/distfiles
-buildah run "$ctr" -- sh -c "rm -rf /var/lib/rpkg/built/*"
-buildah run "$ctr" -- sh -c "rm -rf /var/lib/rpkg/installed/*"
-if [ -e stage2 ]; then
-    buildah add "$ctr" stage2/ /var/lib/rpkg/built
-fi
+cd s2repo;
+    # tar ch follows links
+    tar ch . > /tmp/repo.tar
+    buildah add "$ctr" /tmp/repo.tar /var/lib/rpkg/repo
+cd ..
 buildah add "$ctr" rpkg/ /usr/share/rpkg
 
-# There are a few dependencies in the base-system or build-tools sets that have to
-# be built first. rpkg isn't capable of figuring it out on its own (the "there are literally
-# 0 packages installed on the host system" case kinda puts it in GIGO mode, though it does
-# better than it might), so let's set them up manually.
-packages="core/fs-tree kernel/linux-headers libs/glibc libs/zlib util/diffutils lang/perl \
-    util/texinfo util/binutils util/libtool libs/gmp libs/mpfr libs/mpc lang/gcc libs/ncurses \
-    util/gzip util/xz util/bzip2 util/autoconf lang/python util/which"
+to_build=$(buildah run "$ctr" node --trace-warnings /usr/share/rpkg/rpkg.js _get_builds_for virtual/base-system)
+to_build=$(echo "$to_build")
+echo $to_build
 
-for package in $packages; do
-    if [ -e stage2/$package@*.tar.xz ]; then
-        echo "$package already built"
-        buildah run "$ctr" -- node /usr/share/rpkg/rpkg.js host_install $package
-    else
-        buildah run "$ctr" -- sh -ec "node /usr/share/rpkg/rpkg.js build $package; node /usr/share/rpkg/rpkg.js host_install $package"
-    fi
-done
-
-buildah run "$ctr" -- node /usr/share/rpkg/rpkg.js --skip_confirm --without_default_depends install build-tools coreutils
-
-buildah run "$ctr" -- mkdir -p /new_root
-buildah run "$ctr" -- node /usr/share/rpkg/rpkg.js --skip_confirm --without_default_depends --target_root=/new_root install base-system
-buildah run "$ctr" -- node /usr/share/rpkg/rpkg.js --skip_confirm --without_default_depends --target_root=/new_root install build-tools
-buildah run "$ctr" -- node /usr/share/rpkg/rpkg.js --skip_confirm --without_default_depends --target_root=/new_root install libelf cpio kmod dracut
-
-mkdir -p stage2/
-buildah unshare sh -c 'cp -urpv $(buildah mount '$ctr')/var/lib/rpkg/built/* 'stage2/ || true
-buildah umount "$ctr"
-
-ctr2=$(buildah from scratch)
-buildah run "$ctr" -- sh -c 'cd /new_root; tar cp .' > stage2.tar
-buildah add "$ctr2" stage2.tar
 buildah rm "$ctr"
 
-buildah add "$ctr2" rpkg/ /usr/share/rpkg
-buildah run "$ctr2" --  mkdir -p /var/lib/rpkg/{built,installed,distfiles,packages} /tmp
-buildah run "$ctr2" --  mkdir -p /usr/share/rpkg
-buildah add "$ctr2" packages/ /var/lib/rpkg/packages
-buildah add "$ctr2" distfiles/ /var/lib/rpkg/distfiles
-# need to run this in the final container because dracut is finicky
-buildah run "$ctr2" -- node /usr/share/rpkg/rpkg.js --skip_confirm install kernel/linux
+for build in $to_build; do
+    maybe_build $build
+done
 
-buildah commit "$ctr2" digitalis-stage2
-rm stage2.tar
+commit_with_packages digitalis-bootstrap-1.7 "$to_build"
+
+node rpkg/rpkg_repo.js s2repo
+
+ctr=$(buildah from $IMAGE)
+
+buildah run "$ctr" --  mkdir -p /var/lib/rpkg/database /tmp
+buildah run "$ctr" --  mkdir -p /usr/share/rpkg
+cd s2repo;
+    # tar ch follows links
+    tar ch . > /tmp/repo.tar
+    buildah add "$ctr" /tmp/repo.tar /var/lib/rpkg/repo
+cd ..
+buildah add "$ctr" rpkg/ /usr/share/rpkg
+
+buildah run "$ctr" mkdir -p /target_root/var/lib/rpkg/database
+buildah run "$ctr" node /usr/share/rpkg/rpkg.js --target_root=/target_root install virtual/base-system
+buildah run "$ctr" node /usr/share/rpkg/rpkg.js --target_root=/target_root install virtual/build-tools
+
+buildah run "$ctr" sh -c 'cd /target_root; tar cp .' > /tmp/stage2.tar
+buildah rm "$ctr"
+
+ctr=$(buildah from scratch)
+buildah add "$ctr" /tmp/stage2.tar
+buildah commit "$ctr" digitalis-bootstrap-2

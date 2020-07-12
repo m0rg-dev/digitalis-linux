@@ -102,6 +102,7 @@ class Repository {
             throw `Have outdated or missing local ${atom.format()} and no remotes defined`;
         }
     }
+    // TODO this is in desperate need of refactoring
     async maybeUpdateManifest() {
         const self = this;
         const manifest_path = path.join(self.root_path, "Manifest.yml");
@@ -166,14 +167,26 @@ class Repository {
         all_packages.forEach((pkg) => manifest.addPackage(pkg));
         await Promise.all(all_packages.map(async (pkg) => {
             try {
-                await fs.promises.access(path.join(self.local_builds_path, pkg.atom.getCategory(), pkg.atom.getName() + "," + pkg.version.version));
-                manifest.addBuild(pkg);
+                const data = await fs.promises.readFile(path.join(self.local_builds_path, pkg.atom.getCategory(), pkg.atom.getName() + "," + pkg.version.version + ".tar.xz"));
+                const build = new manifest_1.ManifestPackage(pkg.atom, pkg.version, path.join(self.local_builds_path, pkg.atom.getCategory(), pkg.atom.getName() + "," + pkg.version.version + ".tar.xz"), data);
+                manifest.addBuild(build);
             }
             catch (e) {
                 // if we can't read the build it doesn't exist - this can happen
             }
         }));
         return fs.promises.writeFile(path.join(self.root_path, "Manifest.yml"), manifest.serialize());
+    }
+    async getSourceFor(pkg) {
+        const manifest = await this.maybeUpdateManifest();
+        const src = manifest.getSource(pkg.src);
+        if (fs.existsSync(path.join(this.root_path, "sources", pkg.src))) {
+            console.log(`Source ${path.join(this.root_path, "sources", pkg.src)} is available locally.`);
+            return fs.promises.readFile(path.join(this.root_path, "sources", pkg.src));
+        }
+        else {
+            throw `Source ${pkg.src} is not available locally (NYI in rpkg)`;
+        }
     }
 }
 exports.Repository = Repository;
@@ -194,10 +207,16 @@ class PackageDescription {
             additional_make_options: '',
             configure: "../%{unpack_dir}/configure %{configure_options}",
             make: "make %{make_options}",
-            install: "make DESTDIR=$(realpath ..) install",
+            install: "make DESTDIR=/target_root install",
             pre_configure_script: null,
             post_install_script: null,
             queue_hooks: {},
+            redistributable: true,
+            packageable: true,
+            // other options include "given\n<LICENSE TEXT>", "file <file>" and "spdx"
+            // including a license expression in the package's 'license' field implies spdx
+            // for my own memory: https://github.com/spdx/license-list-data/tree/master/text/<license>.txt
+            license_location: 'from-package'
         };
         var yaml = YAML.parse(raw_yaml);
         const parsed_package = Object.assign(default_package, yaml);
@@ -236,6 +255,7 @@ class PackageDescription {
         this.post_install_script = parsed_package.post_install_script;
         this.queue_hooks = parsed_package.queue_hooks;
         this.version = new atom_js_1.PackageVersion(parsed_package.version);
+        this.license = parsed_package.license;
     }
 }
 exports.PackageDescription = PackageDescription;

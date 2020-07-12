@@ -9,3 +9,4 @@ cd build
 FORCE_UNSAFE_CONFIGURE=1 ../configure --host=$TARGET --prefix= CFLAGS=-I/new_root/usr/include
 make $GLOBAL_MAKE_OPTS
 make DESTDIR=/new_root install
+ln -s /bin/env /new_root/usr/bin/env

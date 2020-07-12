@@ -11,11 +11,12 @@ pre_configure_script: |
     sed -i "s@(PREFIX)/man@(PREFIX)/share/man@g" Makefile
     make -f Makefile-libbz2_so $MAKEOPTS
     make clean
-install: make install PREFIX=$(realpath ..)/usr
+install: |
+  make install PREFIX=/target_root/usr
+  mkdir -p /target_root/usr/lib /target_root/{bin,lib}
+  cp bzip2-shared /target_root/bin/bzip2
+  cp -av libbz2.so* /target_root/lib
 post_install_script: |
-  mkdir -p usr/lib bin lib
-  cp %{unpack_dir}/bzip2-shared bin/bzip2
-  cp -av %{unpack_dir}/libbz2.so* lib
   ln -sv ../../lib/libbz2.so.1.0 usr/lib/libbz2.so
   rm -v usr/bin/{bunzip2,bzcat,bzip2}
   ln -sv bzip2 bin/bunzip2

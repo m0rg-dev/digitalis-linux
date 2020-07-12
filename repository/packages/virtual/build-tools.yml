@@ -1,4 +1,8 @@
 version: 1.0.0
+src: ~
+configure: ~
+make: ~
+install: ~
 rdepend:
     - kernel/linux-headers
     - lang/gcc
@@ -10,8 +14,10 @@ rdepend:
     - util/bc
     - util/binutils
     - util/bison
+    - util/bzip2
     - util/flex
     - util/groff
+    - util/gzip
     - util/libtool
     - util/m4
     - util/make

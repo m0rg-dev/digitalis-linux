@@ -1,10 +1,13 @@
 version: 1.0.0
+src: ~
+configure: ~
+make: ~
+install: ~
 rdepend:
     - core/bash
     - core/eudev
     - core/fs-tree
     - core/grub
-    - core/lfs-udev-rules
     - core/openrc
     - core/shadow
     - core/tzdata

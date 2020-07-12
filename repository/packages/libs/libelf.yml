@@ -4,10 +4,10 @@ comp: tar.bz2
 upstream: https://sourceware.org/ftp/elfutils/%{version}
 license: GPL-3.0-or-later
 additional_configure_options: --disable-debuginfod
-install: make DESTDIR=$(realpath ..) install
-post_install_script: |
-  mkdir -p usr/lib/pkgconfig
-  install -vm644 %{unpack_dir}/config/libelf.pc usr/lib/pkgconfig
-  rm usr/lib/libelf.a
+install: |
+  make DESTDIR=/target_root install
+  mkdir -p /target_root/usr/lib/pkgconfig
+  install -vm644 config/libelf.pc /target_root/usr/lib/pkgconfig
+  rm /target_root/usr/lib/libelf.a
 queue_hooks:
   ldconfig: true

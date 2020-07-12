@@ -1,6 +1,9 @@
 version: "5.8"
 bdepend:
   - util/autoconf
+  - libs/ncurses
+rdepend:
+  - libs/ncurses
 filename: zsh
 unpack_dir: zsh-zsh-%{version}
 comp: tar.gz
@@ -8,8 +11,8 @@ upstream: https://github.com/zsh-users/zsh/archive/%{version}/
 license: MIT AND GPL-3.0-or-later
 pre_configure_script: ./Util/preconfig
 additional_configure_arguments: --bindir=/bin
-install: make DESTDIR=$(realpath ..) install.bin install.modules
-post_install_script:
+install: make DESTDIR=/target_root install.bin install.modules
+post_install_script: |
   mkdir -p bin
   mv usr/bin/zsh* bin/
 queue_hooks:

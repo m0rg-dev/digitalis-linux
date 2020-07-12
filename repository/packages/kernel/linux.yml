@@ -19,12 +19,12 @@ configure: |
   cp ../linux-config .config
   make olddefconfig
 install: |
-  make INSTALL_MOD_PATH=$(realpath ..) modules_install
-  mkdir -p ../boot
-  cp -iv arch/$(uname -m)/boot/bzImage ../boot/vmlinuz-%{version}
-  cp -iv .config ../boot/config-%{version}
-  install -d ../usr/share/doc/linux-%{version}
-  cp -r Documentation/* ../usr/share/doc/linux-%{version}
+  make INSTALL_MOD_PATH=/target_root modules_install
+  mkdir -p /target_root/boot
+  cp -iv arch/$(uname -m)/boot/bzImage /target_root/boot/vmlinuz-%{version}
+  cp -iv .config /target_root/boot/config-%{version}
+  install -d /target_root/usr/share/doc/linux-%{version}
+  cp -r Documentation/* /target_root/usr/share/doc/linux-%{version}
 post_install_script: |
   install -v -m755 -d etc/modprobe.d
   cat > etc/modprobe.d/usb.conf << "EOF"

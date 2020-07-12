@@ -1,7 +1,6 @@
 version: "33"
 rdepend:
   - core/eudev
-use_build_dir: true
 filename: udev-gentoo-scripts
 comp: tar.gz
 upstream: https://gitweb.gentoo.org/proj/udev-gentoo-scripts.git/snapshot/

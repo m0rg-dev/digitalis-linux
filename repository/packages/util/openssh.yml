@@ -8,3 +8,4 @@ comp: tar.gz
 upstream: https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/
 license: BSD-3-Clause
 license_location: file LICENCE
+additional_configure_options: --with-ssl-dir=/etc/ssl
