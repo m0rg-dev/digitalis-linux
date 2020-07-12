@@ -100,7 +100,17 @@ export class Transaction {
             install.push(new Step((where == Location.Host) ? StepType.HostInstall : StepType.TargetInstall, atom));
         }
 
-        return binfetch.concat(srcfetch, install);
+        var p = binfetch.concat(srcfetch, install);
+        p = p.filter(p => {
+            if(p.what.getCategory() == 'virtual') {
+                if(p.type == StepType.HostInstall || p.type == StepType.TargetInstall) {
+                    return 1;
+                }
+                return 0;
+            }
+            return 1;
+        });
+        return p;
     }
 
     private visit(L: string[], unmarked: Set<string>, tempmarked: Set<string>, n: string) {

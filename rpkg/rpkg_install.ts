@@ -21,7 +21,7 @@ async function main() {
     // TODO this shouldn't go here
     if(pkgdesc.queue_hooks['ldconfig']) {
         console.log("Running ldconfig...");
-        child_process.spawnSync('ldconfig', ['-X', '-R', target_root], { stdio: 'inherit' });
+        child_process.spawnSync('ldconfig', ['-X', '-r', target_root], { stdio: 'inherit' });
     }
     db.install(atom, pkgdesc.version);
     await db.commit();

@@ -1,8 +1,5 @@
 version: 1.0.0
 src: ~
-configure: ~
-make: ~
-install: ~
 rdepend:
     - kernel/linux-headers
     - lang/gcc

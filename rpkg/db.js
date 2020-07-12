@@ -30,7 +30,7 @@ class Database {
             }
         })
             .catch(function (err) {
-            console.log(`Couldn't read database: ${err}`);
+            console.warn(`Couldn't read database: ${err}`);
             // the database might not exist. may want to create it with the
             // rpkg package itself rather than rebuilding it on errors because
             // that's potentially dangerous

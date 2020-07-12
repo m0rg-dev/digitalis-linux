@@ -34,9 +34,11 @@ async function main() {
                     throw `NYI in rpkg`;
                 } else if (step.type == StepType.TargetInstall) {
                     console.log(`Installing: ${step.what.format()}`);
-                    child_process.spawnSync('node',
+                    const rc = child_process.spawnSync('node',
                         [path.join(__dirname, 'rpkg_install.js'), step.what.format(), (argv.target_root || '')],
                         { stdio: 'inherit' });
+                    if(rc.signal) throw `install killed by signal ${rc.signal}`;
+                    if(rc.status != 0) throw `install exited with failure status`;
                 }
             }
 

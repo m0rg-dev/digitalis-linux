@@ -1,48 +1,59 @@
 #!/usr/bin/env bash
 
 set -e
-#set -x
+set -x
 
 ulimit -n 65536
 
 sh download_packages.sh
 
-ctr=$(buildah from digitalis-stage2)
+node rpkg/rpkg_repo.js s3repo
 
-buildah run "$ctr" --  mkdir -p /var/lib/rpkg/{built,installed,distfiles,packages} /tmp
+maybe_build() {
+    echo $1
+    [ -e s3repo/builds/$1,*.tar.xz ] || node rpkg/rpkg_build.js s3repo $1 digitalis-bootstrap-2
+}
+
+ctr=$(buildah from digitalis-bootstrap-2)
+
+buildah run "$ctr" --  mkdir -p /var/lib/rpkg/database /tmp
 buildah run "$ctr" --  mkdir -p /usr/share/rpkg
-buildah add "$ctr" packages/ /var/lib/rpkg/packages
-buildah add "$ctr" distfiles/ /var/lib/rpkg/distfiles
-buildah run "$ctr" -- sh -c "rm -rf /var/lib/rpkg/built/*"
-if [ -e stage3 ]; then
-    buildah add "$ctr" stage3/ /var/lib/rpkg/built
-fi
+cd s3repo;
+    # tar ch follows links
+    tar ch . > /tmp/repo.tar
+    buildah add "$ctr" /tmp/repo.tar /var/lib/rpkg/repo
+cd ..
 buildah add "$ctr" rpkg/ /usr/share/rpkg
+buildah run "$ctr" mkdir -p /target_root/var/lib/rpkg/database
 
-buildah run "$ctr" -- mkdir -p /new_root
-buildah run "$ctr" -- node /usr/share/rpkg/rpkg.js \
-    --skip_confirm --without_default_depends --target_root=/new_root \
-    install base-system kernel/linux
-
-
-ctr2=$(buildah from scratch)
-buildah run "$ctr" -- sh -c 'cd /new_root; tar cp .' > stage3.tar
-buildah add "$ctr2" stage3.tar
-
-buildah run "$ctr" -- node /usr/share/rpkg/rpkg.js \
-    --skip_confirm --without_default_depends --target_root=/new_root \
-    install build-tools linux-firmware
-
-mkdir -p stage3/
-buildah unshare sh -c 'cp -urpv $(buildah mount '$ctr')/var/lib/rpkg/built/* 'stage3/ || true
-buildah umount "$ctr"
+to_build=$(buildah run "$ctr" node --trace-warnings /usr/share/rpkg/rpkg.js --target_root=/target_root _get_builds_for virtual/base-system)
+to_build="$to_build $(buildah run "$ctr" node --trace-warnings /usr/share/rpkg/rpkg.js --target_root=/target_root _get_builds_for virtual/build-tools)"
+echo $to_build
 
 buildah rm "$ctr"
 
-buildah add "$ctr2" rpkg/ /usr/share/rpkg
-buildah run "$ctr2" --  mkdir -p /var/lib/rpkg/{built,installed,distfiles,packages} /tmp
-buildah run "$ctr2" --  mkdir -p /usr/share/rpkg
-buildah add "$ctr2" packages/ /var/lib/rpkg/packages
+for build in $to_build; do
+    maybe_build $build
+done
 
-buildah commit "$ctr2" digitalis-stage3
-#rm stage3.tar
+ctr=$(buildah from digitalis-bootstrap-2)
+
+buildah run "$ctr" --  mkdir -p /var/lib/rpkg/database /tmp
+buildah run "$ctr" --  mkdir -p /usr/share/rpkg
+cd s3repo;
+    # tar ch follows links
+    tar ch . > /tmp/repo.tar
+    buildah add "$ctr" /tmp/repo.tar /var/lib/rpkg/repo
+cd ..
+buildah add "$ctr" rpkg/ /usr/share/rpkg
+
+buildah run "$ctr" mkdir -p /target_root/var/lib/rpkg/database
+buildah run "$ctr" node /usr/share/rpkg/rpkg.js --target_root=/target_root install virtual/base-system
+buildah run "$ctr" node /usr/share/rpkg/rpkg.js --target_root=/target_root install virtual/build-tools
+
+buildah run "$ctr" sh -c 'cd /target_root; tar cp .' > /tmp/stage3.tar
+buildah rm "$ctr"
+
+ctr=$(buildah from scratch)
+buildah add "$ctr" /tmp/stage3.tar
+buildah commit "$ctr" digitalis-builder

@@ -3,11 +3,11 @@ new_root/
 Makefile
 stage3/
 stage*.tar
-s3root/
 
 # Files created in these directories are a) large, b) not unique to digitalis, and
 # c) possibly incompatible with the license terms of the general repository. They
 # therefore should not be uploaded to GitHub.
 s2repo/builds
+s3repo/builds
 repository/builds
 repository/sources

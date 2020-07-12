@@ -110,7 +110,6 @@ cd ..
 buildah add "$ctr" rpkg/ /usr/share/rpkg
 
 to_build=$(buildah run "$ctr" node --trace-warnings /usr/share/rpkg/rpkg.js _get_builds_for virtual/base-system)
-to_build=$(echo "$to_build")
 echo $to_build
 
 buildah rm "$ctr"
@@ -137,6 +136,9 @@ buildah add "$ctr" rpkg/ /usr/share/rpkg
 buildah run "$ctr" mkdir -p /target_root/var/lib/rpkg/database
 buildah run "$ctr" node /usr/share/rpkg/rpkg.js --target_root=/target_root install virtual/base-system
 buildah run "$ctr" node /usr/share/rpkg/rpkg.js --target_root=/target_root install virtual/build-tools
+
+# Required to build core/eudev. Maybe someday we can handle these in an organized manner
+buildah run "$ctr" node /usr/share/rpkg/rpkg.js --target_root=/target_root install util/gperf
 
 buildah run "$ctr" sh -c 'cd /target_root; tar cp .' > /tmp/stage2.tar
 buildah rm "$ctr"

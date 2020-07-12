@@ -68,4 +68,10 @@ async function main() {
 function print_help() {
     console.log("Usage: rpkg [options] <action> [packages]");
 }
-main();
+try {
+    main();
+}
+catch (e) {
+    console.error(e);
+    process.exitCode = 1;
+}
