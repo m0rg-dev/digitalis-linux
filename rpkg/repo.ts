@@ -3,14 +3,17 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as YAML from 'yaml';
 import * as https from 'https';
+import * as child_process from 'child_process';
 import { URL } from "url";
 import { Config } from "./config.js";
 import { Manifest, ManifestPackage } from "./manifest";
+import { Database } from "./db.js";
+import * as byteSize from 'byte-size';
 
 export class Repository {
-    private local_packages_path: string;
-    private local_builds_path: string;
-    private root_path: string;
+    local_packages_path: string;
+    local_builds_path: string;
+    root_path: string;
     private remote_url: URL;
     private manifest_fetched_already: boolean;
 
@@ -140,7 +143,7 @@ export class Repository {
                         });
                     });
                 } else {
-                    throw "Don't have local manifest and no remotes defined";
+                    throw `Don't have local manifest and no remotes defined (${self.root_path})`;
                 }
             });
     }
@@ -169,7 +172,7 @@ export class Repository {
         await Promise.all(all_packages.map(async (pkg) => {
             try {
                 const data = await fs.promises.readFile(path.join(self.local_builds_path, pkg.atom.getCategory(), pkg.atom.getName() + "," + pkg.version.version + ".tar.xz"));
-                const build = new ManifestPackage(pkg.atom, pkg.version,path.join(self.local_builds_path, pkg.atom.getCategory(), pkg.atom.getName() + "," + pkg.version.version + ".tar.xz"), data);
+                const build = new ManifestPackage(pkg.atom, pkg.version, path.join(self.local_builds_path, pkg.atom.getCategory(), pkg.atom.getName() + "," + pkg.version.version + ".tar.xz"), data);
                 manifest.addBuild(build);
             } catch (e) {
                 // if we can't read the build it doesn't exist - this can happen
@@ -178,16 +181,122 @@ export class Repository {
         return fs.promises.writeFile(path.join(self.root_path, "Manifest.yml"), manifest.serialize());
     }
 
-    async getSourceFor(pkg: PackageDescription): Promise<Buffer> {
-        const manifest = await this.maybeUpdateManifest();
-        const src = manifest.getSource(pkg.src);
-
-        if(fs.existsSync(path.join(this.root_path, "sources", pkg.src))) {
-            console.log(`Source ${path.join(this.root_path, "sources", pkg.src)} is available locally.`);
-            return fs.promises.readFile(path.join(this.root_path, "sources", pkg.src));
+    async getSource(source: string): Promise<Buffer> {
+        if (fs.existsSync(path.join(this.root_path, "sources", source))) {
+            console.log(`Source ${path.join(this.root_path, "sources", source)} is available locally.`);
+            return fs.promises.readFile(path.join(this.root_path, "sources", source));
         } else {
-            throw `Source ${pkg.src} is not available locally (NYI in rpkg)`;
+            throw `Source ${source} is not available locally (NYI in rpkg)`;
         }
+    }
+
+    async getSourceFor(pkg: PackageDescription): Promise<Buffer> {
+        //const manifest = await this.maybeUpdateManifest();
+        //const src = manifest.getSource(pkg.src);
+        return this.getSource(pkg.src);
+    }
+
+    static run_build_stage(container_id: string, name: string, script: string) {
+        console.log(`Running ${name}...`);
+        const rc = child_process.spawnSync('buildah', ['run', container_id, 'sh', '-ec', script], { stdio: 'inherit' });
+        if (rc.signal) throw `${name} killed by signal ${rc.signal}`;
+        if (rc.status != 0) throw `${name} exited with failure status!`;
+    }
+
+    async buildPackage(atom: ResolvedAtom, container_id: string) {
+        var pkgdesc: PackageDescription = await this.getPackageDescription(atom);
+        child_process.spawnSync('buildah', ['config', '--workingdir', '/', container_id]);
+        child_process.spawnSync('buildah', ['run', container_id, 'mkdir', '/target_root', '/build'], { stdio: 'inherit' });
+
+        if (pkgdesc.additional_sources) {
+            for (const source of pkgdesc.additional_sources) {
+                const src: Buffer = await this.getSource(source);
+                child_process.spawnSync(
+                    'buildah', ['run', container_id, 'sh', '-c', `cat >/${source}`], {
+                    input: src,
+                }
+                );
+            }
+        }
+
+        if (pkgdesc.src) {
+            var src: Buffer = await this.getSourceFor(pkgdesc);
+            console.log(src.length);
+
+            console.log("Unpacking...");
+            const tar_args_by_comp = {
+                "tar.gz": "xz",
+                "tar.bz2": "xj",
+                "tar.xz": "xJ"
+            };
+            child_process.spawnSync(
+                'buildah', ['run', container_id, 'tar', tar_args_by_comp[pkgdesc.comp]], {
+                input: src,
+            }
+            );
+        }
+
+        if (pkgdesc.use_build_dir) {
+            child_process.spawnSync('buildah', ['config', '--workingdir', '/build', container_id], { stdio: 'inherit' });
+        } else {
+            child_process.spawnSync('buildah', ['config', '--workingdir', path.join("/", pkgdesc.unpack_dir), container_id], { stdio: 'inherit' });
+        }
+
+        if (pkgdesc.pre_configure_script) Repository.run_build_stage(container_id, "pre-configure script", pkgdesc.pre_configure_script);
+        if (pkgdesc.configure) Repository.run_build_stage(container_id, "configure", pkgdesc.configure);
+        if (pkgdesc.make) Repository.run_build_stage(container_id, "make", pkgdesc.make);
+        if (pkgdesc.install) Repository.run_build_stage(container_id, "make install", pkgdesc.install);
+
+        child_process.spawnSync('buildah', ['config', '--workingdir', '/target_root', container_id]);
+
+        if (pkgdesc.post_install_script) Repository.run_build_stage(container_id, "post-install script", pkgdesc.post_install_script);
+        // TODO autodetect
+        if (pkgdesc.queue_hooks['ldconfig']) Repository.run_build_stage(container_id, "ldconfig", "ldconfig -N -r .");
+
+        console.log("Compressing...");
+        // TODO these should pipe to each other but I'm lazy
+        const tar = child_process.spawnSync('buildah', ['run', container_id, 'tar', 'cp', '.'], {
+            maxBuffer: 2 * 1024 * 1024 * 1024 // 2 GiB
+        });
+        if (tar.signal) throw `tar killed by signal ${tar.signal}`;
+        if (tar.status != 0) throw "tar exited with failure status!";
+        console.log(`  Package is ${byteSize(tar.stdout.length)}.`);
+        const xz = child_process.spawnSync('xz', ['-T0', '-c'], {
+            input: tar.stdout,
+            maxBuffer: 2 * 1024 * 1024 * 1024 // 2 GiB
+        });
+        console.log(`  Compressed package is ${byteSize(xz.stdout.length)}.`);
+        const target_path = path.join(this.local_builds_path, atom.getCategory(), atom.getName() + "," + pkgdesc.version.version + ".tar.xz");
+        console.log(`Writing to ${target_path}...`);
+        if (!fs.existsSync(path.dirname(target_path))) fs.mkdirSync(path.dirname(target_path), { recursive: true });
+        fs.writeFileSync(target_path, xz.stdout);
+        console.log('Cleaning up (in build container)...');
+        child_process.spawnSync('buildah', ['run', container_id, 'rm', '-rf', '/target_root', '/build', pkgdesc.unpack_dir], { stdio: 'inherit' });
+    }
+
+    async installPackage(atom: ResolvedAtom, db: Database, target_root: string) {
+        const pkgdesc: PackageDescription = await this.getPackageDescription(atom);
+        console.log(`Installing ${atom.format()} ${pkgdesc.version.version}`);
+        if (atom.getCategory() != 'virtual') {
+            const build_path = path.join(this.local_builds_path, atom.getCategory(), atom.getName() + "," + pkgdesc.version.version + ".tar.xz");
+            const rc = child_process.spawnSync('tar', ['xpJf', build_path], {
+                cwd: target_root,
+                stdio: 'inherit'
+            });
+            if (rc.signal) throw `unpack killed by signal ${rc.signal}`;
+            if (rc.status != 0) throw `unpack exited with failure status`;
+            // TODO this shouldn't go here
+            if (pkgdesc.queue_hooks['ldconfig']) {
+                console.log("Running ldconfig...");
+                child_process.spawnSync('ldconfig', ['-X', '-r', target_root], { stdio: 'inherit' });
+            }
+        }
+        if (pkgdesc.post_unpack_script) {
+            console.log(`Running post-unpack script for ${atom.format()}`);
+            child_process.execSync(pkgdesc.post_unpack_script, { stdio: 'inherit', cwd: target_root });
+        }
+        db.install(atom, pkgdesc.version);
+        db.commit();
     }
 };
 
@@ -195,6 +304,7 @@ export class PackageDescription {
     comp: string;
     src: string;
     src_url: string;
+    additional_sources: string[];
     unpack_dir: string;
     bdepend: Atom[];
     rdepend: Atom[];
@@ -204,6 +314,7 @@ export class PackageDescription {
     install: string;
     pre_configure_script: string;
     post_install_script: string;
+    post_unpack_script: string;
     queue_hooks: object;
     version: PackageVersion;
     license: string;
@@ -247,6 +358,7 @@ export class PackageDescription {
             install: "make DESTDIR=/target_root install",
             pre_configure_script: null,
             post_install_script: null,
+            post_unpack_script: null,
             queue_hooks: {},
             redistributable: true,
             packageable: true,
@@ -294,8 +406,10 @@ export class PackageDescription {
         this.install = parsed_package.install;
         this.pre_configure_script = parsed_package.pre_configure_script;
         this.post_install_script = parsed_package.post_install_script;
+        this.post_unpack_script = parsed_package.post_unpack_script;
         this.queue_hooks = parsed_package.queue_hooks;
         this.version = new PackageVersion(parsed_package.version);
         this.license = parsed_package.license;
+        this.additional_sources = parsed_package.additional_sources;
     }
 }

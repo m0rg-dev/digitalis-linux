@@ -5,4 +5,4 @@ src_url: https://github.com/git/git/archive/v2.27.0.tar.gz
 license: GPL-2.0-only
 pre_configure_script: make configure
 additional_make_options: PREFIX=/usr
-install: make DESTDIR=$(realpath ..) PREFIX=/usr install
+install: make DESTDIR=/target_root PREFIX=/usr install

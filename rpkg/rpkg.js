@@ -8,12 +8,77 @@ const transaction_1 = require("./transaction");
 const atom_1 = require("./atom");
 const child_process = require("child_process");
 const path = require("path");
+const fs = require("fs");
+const byteSize = require("byte-size");
+byteSize.defaultOptions({
+    units: 'iec'
+});
 const argv = minimist(process.argv.slice(2), {
-    string: ["host_root", "target_root", "repository"],
-    boolean: ["without_default_depends", "skip_confirm"]
+    string: ["host_root", "target_root", "repository", "build_container"],
+    boolean: ["without_default_depends", "skip_confirm", "unshared"]
 });
 config_1.Config.setConfigKey('use_default_depends', !argv.without_default_depends);
+async function build_packages(argv) {
+    // We basically always want to do this because we're not actually installing to a target
+    // so our "targetdb" is going to be entirely bogus.
+    config_1.Config.setConfigKey('use_default_depends', false);
+    const buildah_from = child_process.spawn('buildah', ['from', argv.build_container || 'digitalis-builder']);
+    var container_id = "";
+    buildah_from.stdout.on('data', (data) => container_id += data.toString('utf8'));
+    const buildah_from_p = new Promise((res, rej) => {
+        buildah_from.on('exit', () => res());
+        buildah_from.on('error', () => rej());
+    });
+    const repo = new repo_1.Repository(argv.repository || '/var/lib/rpkg/repo');
+    const targetdb = db_1.Database.empty();
+    await buildah_from_p;
+    container_id = container_id.trim();
+    console.log(`Have working container: ${container_id}`);
+    var container_mounted = false;
+    try {
+        const mount_rc = child_process.spawnSync('buildah', ['mount', container_id]);
+        if (mount_rc.signal)
+            throw `mount killed by signal ${mount_rc.signal}`;
+        if (mount_rc.status != 0)
+            throw `mount exited with failure status`;
+        container_mounted = true;
+        var mountpoint = mount_rc.stdout.toString().trim();
+        console.log(`Container root at ${mountpoint}`);
+        const hostdb = await db_1.Database.construct(path.join(mountpoint, 'var/lib/rpkg/database/'));
+        console.log(hostdb);
+        const tx = new transaction_1.Transaction(repo, hostdb, targetdb);
+        await Promise.all(argv._.slice(1).map(async function (shortpkg) {
+            const resolved = await (new atom_1.Atom(shortpkg)).resolveUsingRepository(repo);
+            await tx.addToTransaction(resolved, transaction_1.Location.Target, true);
+        }));
+        const plan = await tx.plan();
+        transaction_1.Transaction.displayPlan(plan);
+        for (const step of plan) {
+            if (step.type == transaction_1.StepType.Build) {
+                const pkgdesc = await repo.getPackageDescription(step.what);
+                const build_path = path.join(repo.local_builds_path, step.what.getCategory(), step.what.getName() + "," + pkgdesc.version.version + ".tar.xz");
+                if (!fs.existsSync(build_path))
+                    await repo.buildPackage(step.what, container_id);
+            }
+            else if (step.type == transaction_1.StepType.HostInstall) {
+                await repo.installPackage(step.what, hostdb, mountpoint);
+            }
+        }
+    }
+    catch (e) {
+        console.error(`Got error: ${e}`);
+        process.exitCode = 1;
+    }
+    finally {
+        console.log("Cleaning up...");
+        if (container_mounted)
+            child_process.spawnSync('buildah', ['umount', container_id], { stdio: 'inherit' });
+        child_process.spawnSync('buildah', ['rm', container_id], { stdio: 'inherit' });
+    }
+}
 async function main() {
+    if (argv.repository)
+        argv.repository = path.resolve(argv.repository);
     if (argv._.length > 0) {
         if (argv._[0] == 'install') {
             const repo = new repo_1.Repository(argv.repository || '/var/lib/rpkg/repo');
@@ -31,8 +96,7 @@ async function main() {
                     throw `NYI in rpkg`;
                 }
                 else if (step.type == transaction_1.StepType.TargetInstall) {
-                    console.log(`Installing: ${step.what.format()}`);
-                    child_process.spawnSync('node', [path.join(__dirname, 'rpkg_install.js'), step.what.format(), (argv.target_root || '')], { stdio: 'inherit' });
+                    await repo.installPackage(step.what, targetdb, (argv.target_root || '/'));
                 }
             }
             // in case hostdb == targetdb
@@ -43,6 +107,14 @@ async function main() {
                 targetdb.select(resolved);
             });
             await targetdb.commit();
+        }
+        else if (argv._[0] == 'build') {
+            if (argv.unshared) {
+                await build_packages(argv);
+            }
+            else {
+                child_process.spawnSync('buildah', ['unshare', '--'].concat(process.argv).concat('--unshared'), { stdio: 'inherit' });
+            }
         }
         else if (argv._[0] == '_get_builds_for') {
             const repo = new repo_1.Repository(argv.repository || '/var/lib/rpkg/repo');

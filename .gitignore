@@ -1,7 +1,7 @@
 distfiles/
 new_root/
 Makefile
-stage3/
+live/
 stage*.tar
 
 # Files created in these directories are a) large, b) not unique to digitalis, and

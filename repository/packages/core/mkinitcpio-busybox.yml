@@ -15,7 +15,7 @@ pre_configure_script: |
   sed -i 's/CONFIG_RDATE=y/CONFIG_RDATE=n/' .config
 install: |
   # install -D is *supposed* to do this for me...
-  mkdir -p $(realpath ..)/usr/lib/initcpio
-  install -Dm755 busybox $(realpath ..)/usr/lib/initcpio/
+  mkdir -p /target_root/usr/lib/initcpio
+  install -Dm755 busybox /target_root/usr/lib/initcpio/
 queue_hooks:
   ldconfig: false

@@ -221,8 +221,8 @@ builds:
       version: 6.2.0
   util/flex:
     path: s3repo/builds/util/flex,2.6.4.tar.xz
-    size: 390792
-    hash: 108726403c43ea6d9262f2022ec894260a07fbe9701d2f2165de8668290b9ce2
+    size: 390420
+    hash: e7efb58e3ad03e5c16090cd2424f3301d7a583910090a7c72ce253c7bf1bcd93
     atom:
       &a87
       category: util
@@ -329,17 +329,6 @@ builds:
     version:
       &a130
       version: 5.2.5
-  util/autoconf:
-    path: s3repo/builds/util/autoconf,2.69.tar.xz
-    size: 546752
-    hash: 477f894dcc3b2f6433ec10eb3fdb3edce037daa17b93f9118098922533ba29cc
-    atom:
-      &a63
-      category: util
-      name: autoconf
-    version:
-      &a64
-      version: 2.69
   util/automake:
     path: s3repo/builds/util/automake,1.16.1.tar.xz
     size: 543308
@@ -351,6 +340,17 @@ builds:
     version:
       &a66
       version: 1.16.1
+  util/autoconf:
+    path: s3repo/builds/util/autoconf,2.69.tar.xz
+    size: 546752
+    hash: 477f894dcc3b2f6433ec10eb3fdb3edce037daa17b93f9118098922533ba29cc
+    atom:
+      &a63
+      category: util
+      name: autoconf
+    version:
+      &a64
+      version: 2.69
   core/openrc:
     path: s3repo/builds/core/openrc,0.42.1.tar.xz
     size: 560924
@@ -428,17 +428,6 @@ builds:
     version:
       &a20
       version: "5.8"
-  editor/nano:
-    path: s3repo/builds/editor/nano,4.9.tar.xz
-    size: 741048
-    hash: 05f89a79f46bf633b75e51768735c777f61f1b3891bccde374425001707d0c52
-    atom:
-      &a23
-      category: editor
-      name: nano
-    version:
-      &a24
-      version: "4.9"
   util/openssh:
     path: s3repo/builds/util/openssh,8.3p1.tar.xz
     size: 735476
@@ -450,6 +439,17 @@ builds:
     version:
       &a112
       version: 8.3p1
+  editor/nano:
+    path: s3repo/builds/editor/nano,4.9.tar.xz
+    size: 741048
+    hash: 05f89a79f46bf633b75e51768735c777f61f1b3891bccde374425001707d0c52
+    atom:
+      &a23
+      category: editor
+      name: nano
+    version:
+      &a24
+      version: "4.9"
   util/findutils:
     path: s3repo/builds/util/findutils,4.7.0.tar.xz
     size: 937620
@@ -1239,4 +1239,4 @@ categories:
   - libs
   - util
   - virtual
-serial: 1594566984
+serial: 1594575404

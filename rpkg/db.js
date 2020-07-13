@@ -11,10 +11,20 @@ class Database {
     }
     static async construct(db_path) {
         var self = new Database(db_path);
+        self.realdb = true;
         await self.reload();
         return self;
     }
+    static empty() {
+        var self = new Database('');
+        self.realdb = false;
+        self.selected_packages = new Set();
+        self.installed_packages = new Map();
+        return self;
+    }
     async reload() {
+        if (!this.realdb)
+            throw "Attempt to call reload() on a fake database";
         var self = this;
         self.selected_packages = new Set();
         self.installed_packages = new Map();
@@ -37,6 +47,8 @@ class Database {
         });
     }
     async commit() {
+        if (!this.realdb)
+            throw "Attempt to call commit() on a fake database";
         return fs.promises.writeFile(path.join(this.db_path, "database.yml"), YAML.stringify({
             selected: this.selected_packages,
             installed: this.installed_packages

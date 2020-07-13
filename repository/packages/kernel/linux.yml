@@ -45,6 +45,8 @@ post_unpack_script: |
   if [[ "$(pwd)" = '/' ]]; then
     mkinitcpio -g boot/initramfs-%{version}.img -k %{version}
     mkinitcpio -S autodetect -g boot/initramfs-%{version}-fallback.img -k %{version}
+    mkdir /etc/modules-load.d
+    mkinitcpio -M | tail -n +2 >/etc/modules-load.d/autodetect.conf
   fi
 queue_hooks:
     ldconfig: true

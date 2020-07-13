@@ -33,7 +33,8 @@ export class Transaction {
         return `${where.toString()} ${atom.format()}`
     }
 
-    async addToTransaction(atom: ResolvedAtom, where: Location): Promise<void> {
+    async addToTransaction(atom: ResolvedAtom, where: Location, with_rdeps?: boolean): Promise<void> {
+        if (with_rdeps === undefined) with_rdeps = true;
         if (this.tx.has(Transaction.getKey(atom, where))) {
             return;
         }
@@ -53,7 +54,6 @@ export class Transaction {
 
             this.tx.set(Transaction.getKey(atom, where), all_depends);
 
-            var promises: Promise<void>[] = [];
             if (!have_build) {
                 for (const bdepend of desc.bdepend) {
                     if (!this.tx.has(Transaction.getKey(bdepend, Location.Host))) {
@@ -61,9 +61,11 @@ export class Transaction {
                     }
                 }
             }
-            for (const rdepend of desc.rdepend) {
-                if (!this.tx.has(Transaction.getKey(rdepend, where))) {
-                    await this.addToTransaction(rdepend, where);
+            if (with_rdeps) {
+                for (const rdepend of desc.rdepend) {
+                    if (!this.tx.has(Transaction.getKey(rdepend, where))) {
+                        await this.addToTransaction(rdepend, where);
+                    }
                 }
             }
             // await Promise.all(promises);
@@ -102,8 +104,8 @@ export class Transaction {
 
         var p = binfetch.concat(srcfetch, install);
         p = p.filter(p => {
-            if(p.what.getCategory() == 'virtual') {
-                if(p.type == StepType.HostInstall || p.type == StepType.TargetInstall) {
+            if (p.what.getCategory() == 'virtual') {
+                if (p.type == StepType.HostInstall || p.type == StepType.TargetInstall) {
                     return 1;
                 }
                 return 0;

@@ -26,7 +26,9 @@ class Transaction {
     static getKey(atom, where) {
         return `${where.toString()} ${atom.format()}`;
     }
-    async addToTransaction(atom, where) {
+    async addToTransaction(atom, where, with_rdeps) {
+        if (with_rdeps === undefined)
+            with_rdeps = true;
         if (this.tx.has(Transaction.getKey(atom, where))) {
             return;
         }
@@ -44,7 +46,6 @@ class Transaction {
             }
             desc.rdepend.forEach(rdepend => all_depends.push(Transaction.getKey(rdepend, where)));
             this.tx.set(Transaction.getKey(atom, where), all_depends);
-            var promises = [];
             if (!have_build) {
                 for (const bdepend of desc.bdepend) {
                     if (!this.tx.has(Transaction.getKey(bdepend, Location.Host))) {
@@ -52,9 +53,11 @@ class Transaction {
                     }
                 }
             }
-            for (const rdepend of desc.rdepend) {
-                if (!this.tx.has(Transaction.getKey(rdepend, where))) {
-                    await this.addToTransaction(rdepend, where);
+            if (with_rdeps) {
+                for (const rdepend of desc.rdepend) {
+                    if (!this.tx.has(Transaction.getKey(rdepend, where))) {
+                        await this.addToTransaction(rdepend, where);
+                    }
                 }
             }
             // await Promise.all(promises);
