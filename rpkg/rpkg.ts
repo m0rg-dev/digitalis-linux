@@ -8,13 +8,14 @@ import * as child_process from 'child_process';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as byteSize from 'byte-size';
+import { report } from 'process';
 
 byteSize.defaultOptions({
     units: 'iec'
 });
 
 const argv = minimist(process.argv.slice(2), {
-    string: ["host_root", "target_root", "repository", "build_container"],
+    string: ["host_root", "target_root", "repository", "build_container", "remote_url"],
     boolean: ["without_default_depends", "skip_confirm", "unshared"]
 });
 
@@ -82,7 +83,7 @@ async function main() {
 
     if (argv._.length > 0) {
         if (argv._[0] == 'install') {
-            const repo = new Repository(argv.repository || '/var/lib/rpkg/repo');
+            const repo = new Repository(argv.repository || '/var/lib/rpkg/repo', argv.remote_url);
             const hostdb = await Database.construct((argv.host_root || '') + '/var/lib/rpkg/database/');
             const targetdb = await Database.construct((argv.target_root || '') + '/var/lib/rpkg/database/');
             const tx = new Transaction(repo, hostdb, targetdb);
@@ -118,6 +119,17 @@ async function main() {
             } else {
                 child_process.spawnSync('buildah', ['unshare', '--'].concat(process.argv).concat('--unshared'), { stdio: 'inherit' });
             }
+        } else if (argv._[0] == 'update') {
+            const repo = new Repository(argv.repository || '/var/lib/rpkg/repo', argv.remote_url);
+            const db = await Database.construct((argv.target_root || '') + '/var/lib/rpkg/database/');
+
+            const manifest = await repo.maybeUpdateManifest();
+            for (const pkg of manifest.getAllPackages()) {
+                if(db.getInstalledVersion(pkg.atom) && pkg.version.compare(db.getInstalledVersion(pkg.atom))) {
+                    console.log(`Found outdated package: ${pkg.atom.format()}`);
+                }
+            }
+
         } else if (argv._[0] == '_get_builds_for') {
             const repo = new Repository(argv.repository || '/var/lib/rpkg/repo');
             const hostdb = await Database.construct((argv.host_root || '') + '/var/lib/rpkg/database/');

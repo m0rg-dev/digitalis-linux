@@ -14,7 +14,7 @@ byteSize.defaultOptions({
     units: 'iec'
 });
 const argv = minimist(process.argv.slice(2), {
-    string: ["host_root", "target_root", "repository", "build_container"],
+    string: ["host_root", "target_root", "repository", "build_container", "remote_url"],
     boolean: ["without_default_depends", "skip_confirm", "unshared"]
 });
 config_1.Config.setConfigKey('use_default_depends', !argv.without_default_depends);
@@ -81,7 +81,7 @@ async function main() {
         argv.repository = path.resolve(argv.repository);
     if (argv._.length > 0) {
         if (argv._[0] == 'install') {
-            const repo = new repo_1.Repository(argv.repository || '/var/lib/rpkg/repo');
+            const repo = new repo_1.Repository(argv.repository || '/var/lib/rpkg/repo', argv.remote_url);
             const hostdb = await db_1.Database.construct((argv.host_root || '') + '/var/lib/rpkg/database/');
             const targetdb = await db_1.Database.construct((argv.target_root || '') + '/var/lib/rpkg/database/');
             const tx = new transaction_1.Transaction(repo, hostdb, targetdb);
@@ -114,6 +114,16 @@ async function main() {
             }
             else {
                 child_process.spawnSync('buildah', ['unshare', '--'].concat(process.argv).concat('--unshared'), { stdio: 'inherit' });
+            }
+        }
+        else if (argv._[0] == 'update') {
+            const repo = new repo_1.Repository(argv.repository || '/var/lib/rpkg/repo', argv.remote_url);
+            const db = await db_1.Database.construct((argv.target_root || '') + '/var/lib/rpkg/database/');
+            const manifest = await repo.maybeUpdateManifest();
+            for (const pkg of manifest.getAllPackages()) {
+                if (db.getInstalledVersion(pkg.atom) && pkg.version.compare(db.getInstalledVersion(pkg.atom))) {
+                    console.log(`Found outdated package: ${pkg.atom.format()}`);
+                }
             }
         }
         else if (argv._[0] == '_get_builds_for') {

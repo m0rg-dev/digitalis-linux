@@ -1,4 +1,5 @@
-version: "1.12.18"
+version: "1.12.18.3"
+upstream_version: "1.12.18"
 bdepend:
   - libs/expat
 rdepend:
@@ -8,6 +9,46 @@ comp: tar.gz
 upstream: https://dbus.freedesktop.org/releases/dbus/
 license: GPL-2.0-or-later
 additional_configure_options: --prefix=/usr --sysconfdir=/etc --localstatedir=/var
-post_unpack_script: mkdir -p var/run/dbus
+post_install_script: |
+  mkdir -p etc/init.d
+  cat >etc/init.d/dbus <<'EOF'
+  #!/sbin/openrc-run
+  # Copyright 1999-2019 Gentoo Authors
+  # Distributed under the terms of the GNU General Public License, v2 or later
+
+  extra_started_commands="reload"
+
+  description="An IPC message bus daemon"
+  pidfile="/run/dbus.pid"
+  command="/usr/bin/dbus-daemon"
+  command_args="--system"
+
+  dbus_socket="/run/dbus/system_bus_socket"
+
+  depend() {
+          need localmount
+          after bootmisc
+  }
+
+  start_pre() {
+          /usr/bin/dbus-uuidgen --ensure=/etc/machine-id
+
+          # We need to test if /var/run/dbus exists, since script will fail if it does not
+          checkpath -q -d "/run/dbus"
+  }
+
+  stop_post() {
+          [ ! -S "${dbus_socket}" ] || rm -f "${dbus_socket}"
+  }
+
+  reload() {
+          ebegin "Reloading D-BUS messagebus config"
+          dbus-send --print-reply --system --type=method_call \
+                          --dest=org.freedesktop.DBus \
+                          / org.freedesktop.DBus.ReloadConfig > /dev/null
+          eend $?
+  }
+  EOF
+  chmod +x etc/init.d/dbus
 queue_hooks:
   ldconfig: true

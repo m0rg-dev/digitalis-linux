@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as YAML from 'yaml';
 import * as https from 'https';
+import * as http from 'http';
 import * as child_process from 'child_process';
 import { URL } from "url";
 import { Config } from "./config.js";
@@ -86,7 +87,7 @@ export class Repository {
         if (self.remote_url) {
             return new Promise<PackageDescription>((resolve, reject) => {
                 console.log(`Retrieving ${atom.format()} from remote server...`);
-                https.get(new URL(`packages/${atom.getCategory()}/${atom.getName()}.yml`, self.remote_url), (response) => {
+                ((self.remote_url.protocol == 'https') ? https : http).get(new URL(`packages/${atom.getCategory()}/${atom.getName()}.yml`, self.remote_url), (response) => {
                     if (response.statusCode == 200) {
                         var raw_yml: string = "";
                         response.on('data', (data) => {
@@ -126,7 +127,8 @@ export class Repository {
                 if (self.remote_url) {
                     return new Promise<Manifest>((resolve, reject) => {
                         console.log("Retrieving Manifest.yml from remote server...");
-                        https.get(new URL('Manifest.yml', self.remote_url), (response) => {
+
+                        ((self.remote_url.protocol == 'https') ? https : http).get(new URL('Manifest.yml', self.remote_url), (response) => {
                             if (response.statusCode == 200) {
                                 var raw_yml: string = "";
                                 response.on('data', (data) => {
@@ -198,7 +200,7 @@ export class Repository {
 
     static run_build_stage(container_id: string, name: string, script: string) {
         console.log(`Running ${name}...`);
-        const rc = child_process.spawnSync('buildah', ['run', container_id, 'sh', '-ec', script], { stdio: 'inherit' });
+        const rc = child_process.spawnSync('buildah', ['run', container_id, 'sh', '-exc', script], { stdio: 'inherit' });
         if (rc.signal) throw `${name} killed by signal ${rc.signal}`;
         if (rc.status != 0) throw `${name} exited with failure status!`;
     }
@@ -279,6 +281,27 @@ export class Repository {
         console.log(`Installing ${atom.format()} ${pkgdesc.version.version}`);
         if (atom.getCategory() != 'virtual') {
             const build_path = path.join(this.local_builds_path, atom.getCategory(), atom.getName() + "," + pkgdesc.version.version + ".tar.xz");
+
+            // TODO this is awful
+            if (this.remote_url && !fs.existsSync(build_path)) {
+                await new Promise((resolve, reject) => {
+                    ((this.remote_url.protocol == 'https') ? https : http).get(new URL(`builds/${atom.getCategory()}/${atom.getName()},${pkgdesc.version.version}.tar.xz`, this.remote_url), async (response) => {
+                        if (response.statusCode == 200) {
+                            await fs.promises.mkdir(path.dirname(build_path), { recursive: true });
+                            const stream = fs.createWriteStream(build_path);
+                            response.pipe(stream);
+                            stream.on('finish', function () {
+                                stream.close();
+                                resolve();
+                            })
+                        } else {
+                            fs.promises.unlink(build_path);
+                            reject(`Got ${response.statusCode} from repo while looking for ${atom.format()}`);
+                        }
+                    });
+                });
+            }
+
             const rc = child_process.spawnSync('tar', ['xpJf', build_path], {
                 cwd: target_root,
                 stdio: 'inherit'
@@ -343,9 +366,10 @@ export class PackageDescription {
     constructor(raw_yaml: string) {
         const default_package = {
             comp: 'tar.xz',
-            src: '%{filename}-%{version}.%{comp}',
+            upstream_version: '%{version}',
+            src: '%{filename}-%{upstream_version}.%{comp}',
             src_url: '%{upstream}/%{src}',
-            unpack_dir: '%{filename}-%{version}',
+            unpack_dir: '%{filename}-%{upstream_version}',
             bdepend: [],
             rdepend: [],
             use_build_dir: false,

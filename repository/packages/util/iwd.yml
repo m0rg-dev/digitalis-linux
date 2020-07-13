@@ -1,4 +1,5 @@
-version: 1.8
+version: "1.8.2"
+upstream_version: "1.8"
 bdepend:
   - libs/readline
   - core/dbus
@@ -12,3 +13,17 @@ license: LGPL-2.1-or-later
 pre_configure_script: autoreconf -fi
 additional_configure_options: --disable-systemd-service --sysconfdir=/etc/iwd --localstatedir=/var
 additional_make_options: LIBS=-lncursesw
+post_install_script: |
+  mkdir -p etc/init.d
+  cat >etc/init.d/iwd <<EOF
+  #!/sbin/openrc-run
+
+  description="wireless networking daemon"
+  supervisor=supervise-daemon
+  command=/usr/libexec/iwd
+
+  depend() {
+    after dbus
+  }
+  EOF
+  chmod +x etc/init.d/iwd
