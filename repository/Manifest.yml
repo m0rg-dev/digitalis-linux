@@ -4,550 +4,605 @@ builds:
     size: 1272
     hash: 85f06fccc5d9b8dff37401197e63c160aedfa1a15f6e21c8dbe5ec1db9a713d1
     atom:
-      &a7
+      &a11
       category: core
       name: fs-tree
     version:
-      &a8
+      &a12
       version: 1.0.1
   core/udev-init-scripts:
     path: ../repository/builds/core/udev-init-scripts,33.tar.xz
     size: 3124
     hash: 63545c8b333c0828e2e14f6754e963f95f310d51902c40ce5f003dac439bc136
     atom:
-      &a21
+      &a29
       category: core
       name: udev-init-scripts
     version:
-      &a22
+      &a30
       version: "33"
   gui/libxshmfence:
     path: ../repository/builds/gui/libxshmfence,1.3.tar.xz
     size: 11240
     hash: f612105df1c005066644521b403d9989486892a39975b9c4d44545f2fc4fc0bd
     atom:
-      &a69
+      &a81
       category: gui
       name: libxshmfence
     version:
-      &a70
+      &a82
       version: "1.3"
+  util/itstool:
+    path: ../repository/builds/util/itstool,2.0.6.tar.xz
+    size: 16236
+    hash: 3e5810aa4ee7e2f19d88b042c9e3a05551a9627c999b433862519377f7728a24
+    atom:
+      &a249
+      category: util
+      name: itstool
+    version:
+      &a250
+      version: 2.0.6
+  util/make-ca:
+    path: ../repository/builds/util/make-ca,1.7.1.tar.xz
+    size: 9064
+    hash: fd2d8d420db89130dfe707eb19ccef8b85ecec34e8cba92943000f9e2e2a7e20
+    atom:
+      &a261
+      category: util
+      name: make-ca
+    version:
+      &a262
+      version: 1.7.1
   util/mkinitcpio:
     path: ../repository/builds/util/mkinitcpio,27.tar.xz
     size: 32596
     hash: fd11b98903c83971bb23df2e9c509292c314942581028f9d5525d27495ae7426
     atom:
-      &a243
+      &a265
       category: util
       name: mkinitcpio
     version:
-      &a244
+      &a266
       version: "27"
+  util/xmlto:
+    path: ../repository/builds/util/xmlto,0.0.28.tar.xz
+    size: 31932
+    hash: 61b81eeb3389189f7cf36e96069b77af8bb2d93141d1276a91f33f79fce59959
+    atom:
+      &a287
+      category: util
+      name: xmlto
+    version:
+      &a288
+      version: 0.0.28
   gui/libxau:
     path: ../repository/builds/gui/libxau,1.0.9.tar.xz
     size: 44852
     hash: e6b73283e22a0ea3cf5ce8474311a70bafcc51ee4f98cbb5d5f1ed900b7c89ab
     atom:
-      &a43
+      &a55
       category: gui
       name: libxau
     version:
-      &a44
+      &a56
       version: 1.0.9
   gui/libxdamage:
     path: ../repository/builds/gui/libxdamage,1.1.5.tar.xz
     size: 44332
     hash: 0bac8a97709d1b37260135e513eb4b502e03cc511522dc27daa864fe8b7e3e8f
     atom:
-      &a49
+      &a61
       category: gui
       name: libxdamage
     version:
-      &a50
+      &a62
       version: 1.1.5
   gui/xtrans:
     path: ../repository/builds/gui/xtrans,1.4.0.tar.xz
     size: 42436
     hash: 88964269eac1c0ac43c458f402015aa823a70dc483135ca10a3623b6b9a6bbb0
     atom:
-      &a93
+      &a105
       category: gui
       name: xtrans
     version:
-      &a94
+      &a106
       version: 1.4.0
   libs/libffi:
     path: ../repository/builds/libs/libffi,3.3.tar.xz
     size: 46692
     hash: 348679e44009244a26c3f8bdce45d72a9575bc29f7434d0c0d1066cb15fe8cc4
     atom:
-      &a145
+      &a159
       category: libs
       name: libffi
     version:
-      &a146
+      &a160
       version: "3.3"
   util/intltool:
     path: ../repository/builds/util/intltool,0.51.0.tar.xz
     size: 33732
     hash: 1c3a989c216d9feb1730536a36cad7d121abd8c4859e48ca9f10136841042c19
     atom:
-      &a227
+      &a245
       category: util
       name: intltool
     version:
-      &a228
+      &a246
       version: 0.51.0
   util/pv:
     path: ../repository/builds/util/pv,1.6.6.tar.xz
     size: 34788
     hash: 8f95b4931406519cd8c26ac319b1ea003e040ddddea158d057d14f152ae2e274
     atom:
-      &a255
+      &a277
       category: util
       name: pv
     version:
-      &a256
+      &a278
       version: 1.6.6
   util/which:
     path: ../repository/builds/util/which,2.21.tar.xz
     size: 32860
     hash: f23a5440f8158d1927d759c973091791e178ed8caf7af6a619bd05a3ba230dcc
     atom:
-      &a263
+      &a285
       category: util
       name: which
     version:
-      &a264
+      &a286
       version: "2.21"
+  core/docbook-xml:
+    path: ../repository/builds/core/docbook-xml,4.5.tar.xz
+    size: 59260
+    hash: 11e029a497e5e49d04aeb9b78704569c0e1175a68bb8625c27aa6ef681ac336b
+    atom:
+      &a5
+      category: core
+      name: docbook-xml
+    version:
+      &a6
+      version: "4.5"
   gui/libfontenc:
     path: ../repository/builds/gui/libfontenc,1.1.4.tar.xz
     size: 55712
     hash: fc022f573e530846c659493a8fb6c69e764dd6b3bd8badce9939afab4ed01222
     atom:
-      &a33
+      &a45
       category: gui
       name: libfontenc
     version:
-      &a34
+      &a46
       version: 1.1.4
   gui/libxxf86vm:
     path: ../repository/builds/gui/libxxf86vm,1.1.4.tar.xz
     size: 69552
     hash: 833ec9f212789be54a7e71558ca9bf0712aadcf698337244998321cd343ce9b6
     atom:
-      &a73
+      &a85
       category: gui
       name: libxxf86vm
     version:
-      &a74
+      &a86
       version: 1.1.4
   libs/fribidi:
     path: ../repository/builds/libs/fribidi,1.0.10.tar.xz
     size: 79544
     hash: 484b9de32c13518c1540d2eb920b75412b9c5ddca1d71073e2016882da11413b
     atom:
-      &a121
+      &a135
       category: libs
       name: fribidi
     version:
-      &a122
+      &a136
       version: 1.0.10
   libs/mtdev:
     path: ../repository/builds/libs/mtdev,1.1.6.tar.xz
     size: 78732
     hash: 445adedfeb0fa5be7fa9db2c16fec2251d14c7d8c2ce8c314ea85e12eae3db55
     atom:
-      &a161
+      &a179
       category: libs
       name: mtdev
     version:
-      &a162
+      &a180
       version: 1.1.6
   util/bc:
     path: ../repository/builds/util/bc,2.5.3.tar.xz
     size: 76076
     hash: d6d4e7d4cc1c31c0082016a4369a48237b9abb6e2f8bf4705f9c8d7478d01c02
     atom:
-      &a187
+      &a205
       category: util
       name: bc
     version:
-      &a188
+      &a206
       version: 2.5.3
   libs/zlib:
     path: ../repository/builds/libs/zlib,1.2.11.tar.xz
     size: 93900
     hash: b8f831762ab89cbb7e6a606a07604ca8779f2f283c807055fcdd2632cf67a6c0
     atom:
-      &a171
+      &a189
       category: libs
       name: zlib
     version:
-      &a172
+      &a190
       version: 1.2.11
   gui/xcb-proto:
     path: ../repository/builds/gui/xcb-proto,1.14.tar.xz
     size: 101932
     hash: f427b02476b0f664a4f81f168774cd77e18448e3b2dc5b49a996a105a37374a3
     atom:
-      &a81
+      &a93
       category: gui
       name: xcb-proto
     version:
-      &a82
+      &a94
       version: "1.14"
   core/tzdata:
     path: ../repository/builds/core/tzdata,2020a.tar.xz
     size: 119268
     hash: b1080e5ee5a507246ac8de0d9162b8f7b2a3b9e6b4b97ea0a8f8c15186930c53
     atom:
-      &a19
+      &a27
       category: core
       name: tzdata
     version:
-      &a20
+      &a28
       version: 2020a
   gui/libpciaccess:
     path: ../repository/builds/gui/libpciaccess,0.16.tar.xz
     size: 130736
     hash: e5cf1ef7289433b28216d0b05bd80c49633a5a3a4d9478f4b5380dcdc7ffc423
     atom:
-      &a37
+      &a49
       category: gui
       name: libpciaccess
     version:
-      &a38
+      &a50
       version: "0.16"
   libs/libattr:
     path: ../repository/builds/libs/libattr,2.4.48.tar.xz
     size: 116440
     hash: c8487ebdcb13f98e9f78b651daa6ed4e9ff959f4cbce5a7d484243a92bcf9ab7
     atom:
-      &a137
+      &a151
       category: libs
       name: libattr
     version:
-      &a138
+      &a152
       version: 2.4.48
   perl/xml-parser:
     path: ../repository/builds/perl/xml-parser,2.46.tar.xz
     size: 122708
     hash: e121e9b8e86b5b32ca1905d0ec27087ace912a2ffcfd00a1169d9d0e9f1f9bef
     atom:
-      &a173
+      &a191
       category: perl
       name: xml-parser
     version:
-      &a174
+      &a192
       version: "2.46"
-  gui/libxfixes:
-    path: ../repository/builds/gui/libxfixes,5.0.3.tar.xz
-    size: 138652
-    hash: cc8f9afef43fb1e2d90be35099aae3103852214057f42f4c8158496136770abe
-    atom:
-      &a53
-      category: gui
-      name: libxfixes
-    version:
-      &a54
-      version: 5.0.3
   gui/libsm:
     path: ../repository/builds/gui/libsm,1.2.3.tar.xz
     size: 140380
     hash: 4ec8255b7e2fd1e4613e3829932f2e484ebe709db848f5dd3099506b13484e0f
     atom:
-      &a39
+      &a51
       category: gui
       name: libsm
     version:
-      &a40
+      &a52
       version: 1.2.3
+  gui/libxfixes:
+    path: ../repository/builds/gui/libxfixes,5.0.3.tar.xz
+    size: 138652
+    hash: cc8f9afef43fb1e2d90be35099aae3103852214057f42f4c8158496136770abe
+    atom:
+      &a65
+      category: gui
+      name: libxfixes
+    version:
+      &a66
+      version: 5.0.3
   python/mako:
     path: ../repository/builds/python/mako,1.1.3.tar.xz
     size: 141052
     hash: 3f2e7ef23d9bb31ef71f42d30d671783ab6cc1ba96211f878bc39bb9687eee82
     atom:
-      &a175
+      &a193
       category: python
       name: mako
     version:
-      &a176
+      &a194
       version: 1.1.3
   util/gzip:
     path: ../repository/builds/util/gzip,1.10.tar.xz
     size: 137956
     hash: c5e462b648ab39749ff6bfb8bb50e5ecccf69119bbccc737bcf5462ee75891ee
     atom:
-      &a223
+      &a241
       category: util
       name: gzip
     version:
-      &a224
+      &a242
       version: "1.10"
   libs/mpc:
     path: ../repository/builds/libs/mpc,1.1.0.tar.xz
     size: 151464
     hash: c017d720052b6f609572a6fc7e647156bc88e750e8b4b1539026f6ddcc471753
     atom:
-      &a157
+      &a175
       category: libs
       name: mpc
     version:
-      &a158
+      &a176
       version: 1.1.0
   util/asciidoc:
     path: ../repository/builds/util/asciidoc,9.0.1.tar.xz
     size: 165384
     hash: b57411602e35296965d4ea889784095bbd82f918c587b9b2b6ece1a730f33f8d
     atom:
-      &a181
+      &a199
       category: util
       name: asciidoc
     version:
-      &a182
+      &a200
       version: 9.0.1
   util/gperf:
     path: ../repository/builds/util/gperf,3.1.tar.xz
     size: 175440
     hash: aa18ee7b2e0559891761e142208802987fdca2a0db6bcc3ec10ed14546e158b9
     atom:
-      &a217
+      &a235
       category: util
       name: gperf
     version:
-      &a218
+      &a236
       version: "3.1"
   libs/libevdev:
     path: ../repository/builds/libs/libevdev,1.9.0.tar.xz
     size: 193148
     hash: a64571ae06f3b7f221b27db4dd12aa0755a6e81cc7a9245cd57b8730befa2269
     atom:
-      &a143
+      &a157
       category: libs
       name: libevdev
     version:
-      &a144
+      &a158
       version: 1.9.0
   util/dhcpcd:
     path: ../repository/builds/util/dhcpcd,9.1.2.tar.xz
     size: 182416
     hash: d4a6318dac16dac9309b0da7deb00505c489c031c3dae81e7588bdf29708cddb
     atom:
-      &a203
+      &a221
       category: util
       name: dhcpcd
     version:
-      &a204
+      &a222
       version: 9.1.2
   util/bzip2:
     path: ../repository/builds/util/bzip2,1.0.8.tar.xz
     size: 208732
     hash: 232a0211d8aa552685fbdddfad945ed28c67af7fad80d2c7cf37445492bc5653
     atom:
-      &a193
+      &a211
       category: util
       name: bzip2
     version:
-      &a194
+      &a212
       version: 1.0.8
   libs/libcheck:
     path: ../repository/builds/libs/libcheck,0.15.0.tar.xz
     size: 220884
     hash: feff1fd11316275c3e0f25332b3d9d6f3b887d99b52850adc7f58f29d28d5713
     atom:
-      &a139
+      &a153
       category: libs
       name: libcheck
     version:
-      &a140
+      &a154
       version: 0.15.0
   gui/xkbcomp:
     path: ../repository/builds/gui/xkbcomp,1.4.3.tar.xz
     size: 244492
     hash: 2ea7898979d005b8341914104be4e3d922d9b8d0ddebe33a1346fc9cdbfda9b4
     atom:
-      &a83
+      &a95
       category: gui
       name: xkbcomp
     version:
-      &a84
+      &a96
       version: 1.4.3
   util/less:
     path: ../repository/builds/util/less,530.tar.xz
     size: 237896
     hash: 0733efeb47a81acd24515ba00fa394c5a6c2857f103384789524d1963b73ace5
     atom:
-      &a235
+      &a255
       category: util
       name: less
     version:
-      &a236
+      &a256
       version: "530"
   gui/libdrm:
     path: ../repository/builds/gui/libdrm,2.4.102.tar.xz
     size: 248448
     hash: e6d438186d129f47255adedbb0e291a61bae988d722c90ecb868f8b08039412a
     atom:
-      &a29
+      &a41
       category: gui
       name: libdrm
     version:
-      &a30
+      &a42
       version: 2.4.102
   libs/libinput:
     path: ../repository/builds/libs/libinput,1.15.6.tar.xz
     size: 248108
     hash: 22e978f043f2d82531d8c481ea5fc33fe8cbb3e7a64abd5735faefbc67bd9488
     atom:
-      &a147
+      &a161
       category: libs
       name: libinput
     version:
-      &a148
+      &a162
       version: 1.15.6
+  libs/libtasn1:
+    path: ../repository/builds/libs/libtasn1,4.16.0.tar.xz
+    size: 268804
+    hash: 075c747d80cd93cdcbeaa117d27f7b9b982c640b21bae90fdc83e996adee4d0a
+    atom:
+      &a167
+      category: libs
+      name: libtasn1
+    version:
+      &a168
+      version: 4.16.0
   util/patch:
     path: ../repository/builds/util/patch,2.7.6.tar.xz
     size: 277248
     hash: c7e592e41178297fa558221d558a8a322386ab8332384c583fd29a782a2cc98e
     atom:
-      &a249
+      &a271
       category: util
       name: patch
     version:
-      &a250
+      &a272
       version: 2.7.6
   gui/libxrandr:
     path: ../repository/builds/gui/libxrandr,1.5.2.tar.xz
     size: 288940
     hash: 0c97b918534ff4336f9af6eee345400faa3746e153f1ea704309ee7e39c48b58
     atom:
-      &a65
+      &a77
       category: gui
       name: libxrandr
     version:
-      &a66
+      &a78
       version: 1.5.2
   util/kmod:
     path: ../repository/builds/util/kmod,26.tar.xz
     size: 311004
     hash: 703f897487c6858d1f9e0eebcb80583af9c61c42fc46e5e814699599fc50086e
     atom:
-      &a233
+      &a253
       category: util
       name: kmod
     version:
-      &a234
+      &a254
       version: "26"
   gui/libxpm:
     path: ../repository/builds/gui/libxpm,3.5.13.tar.xz
     size: 313804
     hash: 8cc3834ae8fb7a7bee73e9baf171421f9370b9055f8536d98753f3cf5d2a9e2b
     atom:
-      &a63
+      &a75
       category: gui
       name: libxpm
     version:
-      &a64
+      &a76
       version: 3.5.13
   util/m4:
     path: ../repository/builds/util/m4,1.4.18.tar.xz
     size: 320280
     hash: 4c8d53d2482961477c6b4755befffbfd1806f94b517c6e19f659b2c3be4a3efe
     atom:
-      &a239
+      &a259
       category: util
       name: m4
     version:
-      &a240
+      &a260
       version: 1.4.18
   gui/libxrender:
     path: ../repository/builds/gui/libxrender,0.9.10.tar.xz
     size: 335000
     hash: 800c307dc4adb66528ab2889d31d5d498c75a942e91d2516a3a19752fea2eb33
     atom:
-      &a67
+      &a79
       category: gui
       name: libxrender
     version:
-      &a68
+      &a80
       version: 0.9.10
   libs/mpfr:
     path: ../repository/builds/libs/mpfr,4.0.2.tar.xz
     size: 333308
     hash: ceadfb7b79c3413f772d65e3f8588622ce40ecf9bce1d174e6696c9c2597a929
     atom:
-      &a159
+      &a177
       category: libs
       name: mpfr
     version:
-      &a160
+      &a178
       version: 4.0.2
   gui/libice:
     path: ../repository/builds/gui/libice,1.0.10.tar.xz
     size: 372964
     hash: ffb49219a8f540982d9569867d723991761d68c5aecbaf549f5b7f16aaa74ac0
     atom:
-      &a35
+      &a47
       category: gui
       name: libice
     version:
-      &a36
+      &a48
       version: 1.0.10
   libs/pango:
     path: ../repository/builds/libs/pango,1.45.3.tar.xz
     size: 362320
     hash: 6b85b7100852d2000938af7867898ab2175535467560f48229a2739ee7ec3933
     atom:
-      &a167
+      &a185
       category: libs
       name: pango
     version:
-      &a168
+      &a186
       version: 1.45.3
   libs/gmp:
     path: ../repository/builds/libs/gmp,6.2.0.tar.xz
     size: 393084
     hash: e62b31179bb4ac2d48d57e5096172c121fbdac6a4861799f5132f0fc8cc69e1c
     atom:
-      &a129
+      &a143
       category: libs
       name: gmp
     version:
-      &a130
+      &a144
       version: 6.2.0
   util/flex:
     path: ../repository/builds/util/flex,2.6.4.tar.xz
     size: 390476
     hash: 76f2b0fac034bfff4c1690eca4a78a19d23a6a0ec488ef1906bd19e8bf4750a5
     atom:
-      &a213
+      &a231
       category: util
       name: flex
     version:
-      &a214
+      &a232
       version: 2.6.4
   libs/expat:
     path: ../repository/builds/libs/expat,2.2.9.tar.xz
     size: 395592
     hash: dbe1d74c6d6f13a4d251da5c1fa301683185d75ff5cad34660aea357c6ceb3ce
     atom:
-      &a115
+      &a129
       category: libs
       name: expat
     version:
-      &a116
+      &a130
       version: 2.2.9
   util/cpio:
     path: ../repository/builds/util/cpio,2.13.tar.xz
     size: 394144
     hash: e4c992c88e7e31f9d4c7fafd1b4a3ee5cab7c64e75b893a66b4d067fd770a5dd
     atom:
-      &a199
+      &a217
       category: util
       name: cpio
     version:
-      &a200
+      &a218
       version: "2.13"
   core/dbus:
     path: ../repository/builds/core/dbus,1.12.18.3.tar.xz
@@ -565,551 +620,573 @@ builds:
     size: 437756
     hash: 22ef765383bf9223bcd1495796be698ae594d01cbaec9529d0efcf8301b16920
     atom:
-      &a111
+      &a125
       category: lang
       name: sed
     version:
-      &a112
+      &a126
       version: "4.8"
   libs/readline:
     path: ../repository/builds/libs/readline,8.0.tar.xz
     size: 429624
     hash: 75bcc6ae7082276c0c5060ed261ee405e350bad70242be958c64b80480a30f01
     atom:
-      &a169
+      &a187
       category: libs
       name: readline
     version:
-      &a170
+      &a188
       version: "8.0"
   gui/libxkbfile:
     path: ../repository/builds/gui/libxkbfile,1.1.0.tar.xz
     size: 444328
     hash: 8e4662a1fc54b6fb8ef80f859aa430f68ddbfe7b406b5a6db7c193ce3fd2ae60
     atom:
-      &a59
+      &a71
       category: gui
       name: libxkbfile
     version:
-      &a60
+      &a72
       version: 1.1.0
   util/libtool:
     path: ../repository/builds/util/libtool,2.4.tar.xz
     size: 451160
     hash: 6d87431f3cb4757367cfb3df080695e833ce27ffac8875850b61820785860494
     atom:
-      &a237
+      &a257
       category: util
       name: libtool
     version:
-      &a238
+      &a258
       version: 2.4
   util/file:
     path: ../repository/builds/util/file,5.39.tar.xz
     size: 478860
     hash: 4216289ee3b01dba9828e04c23390b82a5a93bc935854b5f1b3c7fef5c2079f4
     atom:
-      &a209
+      &a227
       category: util
       name: file
     version:
-      &a210
+      &a228
       version: "5.39"
   util/grep:
     path: ../repository/builds/util/grep,3.4.tar.xz
     size: 476460
     hash: 85d7c6e8fa15ac59480b7e131769621f1efedb6903fb23ae9be5ca24b8e39ab7
     atom:
-      &a219
+      &a237
       category: util
       name: grep
     version:
-      &a220
+      &a238
       version: "3.4"
   util/iwd:
     path: ../repository/builds/util/iwd,1.8.2.tar.xz
     size: 496224
     hash: ad13f8764a5b54dcc265ac194a9febd267c83d1c7b0aba7e1ed35dbb57c5c42a
     atom:
-      &a231
+      &a251
       category: util
       name: iwd
     version:
-      &a232
+      &a252
       version: 1.8.2
   core/mkinitcpio-busybox:
     path: ../repository/builds/core/mkinitcpio-busybox,1.31.1.tar.xz
     size: 522192
     hash: 29062833a8b3069c4a7a2cbf8f4279cf101215d801a1ece3052ea125bd9286e2
     atom:
-      &a13
+      &a17
       category: core
       name: mkinitcpio-busybox
     version:
-      &a14
+      &a18
       version: 1.31.1
   gui/xorgproto:
     path: ../repository/builds/gui/xorgproto,2020.1.tar.xz
     size: 509488
     hash: 807be0bf239a324a13515ddc88835658adbbabd5c610f2817f16026de83e1336
     atom:
-      &a89
+      &a101
       category: gui
       name: xorgproto
     version:
-      &a90
+      &a102
       version: "2020.1"
-  gui/libxext:
-    path: ../repository/builds/gui/libxext,1.3.4.tar.xz
-    size: 525524
-    hash: cffcb40f8e6ee356285427d4303e13113a990b0441674eb48ef75c69e05e30bb
-    atom:
-      &a51
-      category: gui
-      name: libxext
-    version:
-      &a52
-      version: 1.3.4
   util/xz:
     path: ../repository/builds/util/xz,5.2.5.tar.xz
     size: 523316
     hash: b78282d93279b5c990c588b1c1b83672d44c53e12197ddad3f7a23596662d4c2
     atom:
-      &a265
+      &a289
       category: util
       name: xz
     version:
-      &a266
+      &a290
       version: 5.2.5
+  gui/libxext:
+    path: ../repository/builds/gui/libxext,1.3.4.tar.xz
+    size: 525524
+    hash: cffcb40f8e6ee356285427d4303e13113a990b0441674eb48ef75c69e05e30bb
+    atom:
+      &a63
+      category: gui
+      name: libxext
+    version:
+      &a64
+      version: 1.3.4
   gui/xkeyboard-config:
     path: ../repository/builds/gui/xkeyboard-config,2.5.1.tar.xz
     size: 527564
     hash: 92a7eacdf411ed6110c7d2bafe37d8d6754697a0a536faba43744d73a890aacc
     atom:
-      &a85
+      &a97
       category: gui
       name: xkeyboard-config
     version:
-      &a86
+      &a98
       version: 2.5.1
   util/autoconf:
     path: ../repository/builds/util/autoconf,2.69.tar.xz
     size: 547072
     hash: 204a031ea82388b996b296ff6c89a286b3604fe5f5d9b9549e3932d47f4f8425
     atom:
-      &a183
+      &a201
       category: util
       name: autoconf
     version:
-      &a184
+      &a202
       version: 2.69
   util/automake:
     path: ../repository/builds/util/automake,1.16.1.tar.xz
     size: 543500
     hash: 88e86707b4c1f9f634b940b73f23f53a1eadefc57483629484a2f6013d8928aa
     atom:
-      &a185
+      &a203
       category: util
       name: automake
     version:
-      &a186
+      &a204
       version: 1.16.1
   core/openrc:
     path: ../repository/builds/core/openrc,0.42.1.tar.xz
     size: 561260
     hash: 1402bc121fb883037c069d743285c344903fb3eaa2cc1f4702e7704d940c834a
     atom:
-      &a15
+      &a19
       category: core
       name: openrc
     version:
-      &a16
+      &a20
       version: 0.42.1
   gui/libxmu:
     path: ../repository/builds/gui/libxmu,1.1.3.tar.xz
     size: 565872
     hash: f31641ee0057d4d8a9895ef583b3c10963d6695f321e1f6b175f0160cf23bd2c
     atom:
-      &a61
+      &a73
       category: gui
       name: libxmu
     version:
-      &a62
+      &a74
       version: 1.1.3
   gui/libxft:
     path: ../repository/builds/gui/libxft,2.3.3.tar.xz
     size: 588176
     hash: b393d3730a02763cfc31f7fdc258733585d6ced2fc86719d6b8675d53701851a
     atom:
-      &a57
+      &a69
       category: gui
       name: libxft
     version:
-      &a58
+      &a70
       version: 2.3.3
   util/make:
     path: ../repository/builds/util/make,4.3.tar.xz
     size: 618276
     hash: b78894c96c1bf51c5c6e35a8b8564d4096a311cbade3f1f7088448639b51d8be
     atom:
-      &a241
+      &a263
       category: util
       name: make
     version:
-      &a242
+      &a264
       version: 4.3
   util/pkg-config:
     path: ../repository/builds/util/pkg-config,0.29.2.tar.xz
     size: 622124
     hash: 8f21dea165b4232ae1cccfa91f641c392dec838e1de99fa6cf5fb555d30f75e9
     atom:
-      &a251
+      &a273
       category: util
       name: pkg-config
     version:
-      &a252
+      &a274
       version: 0.29.2
   util/diffutils:
     path: ../repository/builds/util/diffutils,3.7.tar.xz
     size: 637060
     hash: f14cb8d4850f19f3a5e1b895a77988252f142be174793b209e54fcd44f783ecc
     atom:
-      &a205
+      &a223
       category: util
       name: diffutils
     version:
-      &a206
+      &a224
       version: 3.7
   util/curl:
-    path: ../repository/builds/util/curl,7.71.1.tar.xz
-    size: 652228
-    hash: 5feaf62de34742c14102704bb772f55a1fd6f9b5ed7d275c6c81a6109648b9b5
+    path: ../repository/builds/util/curl,7.71.1.2.tar.xz
+    size: 652340
+    hash: 5242df5ec09c17d68c4d615c61ed509c803b8c22aeb812ea8f185611fa6a5c88
     atom:
-      &a201
+      &a219
       category: util
       name: curl
     version:
-      &a202
-      version: 7.71.1
+      &a220
+      version: 7.71.1.2
   util/procps-ng:
     path: ../repository/builds/util/procps-ng,3.3.15.tar.xz
     size: 652924
     hash: 0922ff0f736078698786fcad59001c98b3e7ff615200cda40df7f356057999fc
     atom:
-      &a253
+      &a275
       category: util
       name: procps-ng
     version:
-      &a254
+      &a276
       version: 3.3.15
   util/iproute2:
     path: ../repository/builds/util/iproute2,5.5.0.tar.xz
     size: 666032
     hash: 8ce04f1cfda7cf8b9a0dc6adfda654271abf9e930405e5a52dbacb9139d58e65
     atom:
-      &a229
+      &a247
       category: util
       name: iproute2
     version:
-      &a230
+      &a248
       version: 5.5.0
   core/zsh:
     path: ../repository/builds/core/zsh,5.8.tar.xz
     size: 673820
     hash: b9c8b48fa25d1019acab440dc77dd23792499412da428ef613f6b35d9a87c212
     atom:
-      &a23
+      &a31
       category: core
       name: zsh
     version:
-      &a24
+      &a32
       version: "5.8"
+  core/shared-mime-info:
+    path: ../repository/builds/core/shared-mime-info,2.0.tar.xz
+    size: 710276
+    hash: 830faaec9f28b24808c90fd42721b7ffda6ee1c0bd31c3b616a39a0c607906b8
+    atom:
+      &a25
+      category: core
+      name: shared-mime-info
+    version:
+      &a26
+      version: "2.0"
   python/setuptools:
     path: ../repository/builds/python/setuptools,49.2.0.tar.xz
     size: 706992
     hash: b160b3785021a7de541bf81ac273e7229068629908356475155c939027b3254b
     atom:
-      &a179
+      &a197
       category: python
       name: setuptools
     version:
-      &a180
+      &a198
       version: 49.2.0
   util/openssh:
     path: ../repository/builds/util/openssh,8.3p1.tar.xz
     size: 734860
     hash: 335ebe391e2d1ac99ae5745188b4833505088d76027d4d8cf0e5b52802ef449a
     atom:
-      &a247
+      &a269
       category: util
       name: openssh
     version:
-      &a248
+      &a270
       version: 8.3p1
   editor/nano:
     path: ../repository/builds/editor/nano,4.9.tar.xz
     size: 740688
     hash: cc1feab51114a0413a17e75f3664cef0e208fac8154f27d0068b1f1a7cc85016
     atom:
-      &a27
+      &a35
       category: editor
       name: nano
     version:
-      &a28
+      &a36
       version: "4.9"
   libs/libuv:
     path: ../repository/builds/libs/libuv,1.38.1.tar.xz
     size: 740788
     hash: 6ed6a2fe1284a2309ccced69d6e67e846ab7eb1b5a9f662cc5337bfe6662055f
     atom:
-      &a151
+      &a169
       category: libs
       name: libuv
     version:
-      &a152
+      &a170
       version: 1.38.1
   gui/libxfont2:
     path: ../repository/builds/gui/libxfont2,2.0.4.tar.xz
     size: 856468
     hash: 38d77734726ff2f468ba14511893872805b5bde6c13abc3fb0e384de892d8f78
     atom:
-      &a55
+      &a67
       category: gui
       name: libxfont2
     version:
-      &a56
+      &a68
       version: 2.0.4
   gui/xterm:
     path: ../repository/builds/gui/xterm,358.tar.xz
     size: 862100
     hash: 01fcd9e69741f5b8c44c33ac10f5b5a85c80c2e9957a0a2535f26fffed030da9
     atom:
-      &a91
+      &a103
       category: gui
       name: xterm
     version:
-      &a92
+      &a104
       version: "358"
   libs/libpng:
     path: ../repository/builds/libs/libpng,1.6.37.tar.xz
     size: 860504
     hash: 5d0cade2157c1027d2bcb98da23315f9e48b62f942489a832f8fef832d1ff404
     atom:
-      &a149
+      &a163
       category: libs
       name: libpng
     version:
-      &a150
+      &a164
       version: 1.6.37
   python/meson:
     path: ../repository/builds/python/meson,0.55.0.tar.xz
     size: 909872
     hash: bd84a16cfaeb3215fc1259d050b5234127d986134e56ddb6fd6a60541aafe9a2
     atom:
-      &a177
+      &a195
       category: python
       name: meson
     version:
-      &a178
+      &a196
       version: 0.55.0
   util/findutils:
     path: ../repository/builds/util/findutils,4.7.0.tar.xz
     size: 937596
     hash: 7e635e34b3f4cc461d2c6f4f5cc1e507778f4aeaf1496c48ac4ac75e4d337a80
     atom:
-      &a211
+      &a229
       category: util
       name: findutils
     version:
-      &a212
+      &a230
       version: 4.7.0
   gui/libepoxy:
     path: ../repository/builds/gui/libepoxy,1.5.4.tar.xz
     size: 1029360
     hash: c6f789e8cbe6d7535f2949b31e04fc11fc3ba3cc148979e293e2ba81eabbeded
     atom:
-      &a31
+      &a43
       category: gui
       name: libepoxy
     version:
-      &a32
+      &a44
       version: 1.5.4
   libs/fontconfig:
     path: ../repository/builds/libs/fontconfig,2.13.1.tar.xz
     size: 1045280
     hash: 716ba2acbc7f21b249128051a5388e3a29a70e033789b856ef4ae75f63e8e1d6
     atom:
-      &a117
+      &a131
       category: libs
       name: fontconfig
     version:
-      &a118
+      &a132
       version: 2.13.1
   kernel/linux-headers:
     path: ../repository/builds/kernel/linux-headers,5.7.5.tar.xz
     size: 1075828
     hash: 4f1a076b191ef6158e9482a2dea0bc89638bf2c242b8289bc9545c07ba9e0a00
     atom:
-      &a95
+      &a107
       category: kernel
       name: linux-headers
     version:
-      &a96
+      &a108
       version: 5.7.5
   util/bison:
     path: ../repository/builds/util/bison,3.6.tar.xz
     size: 1068060
     hash: fbe068b26c329cd0d279ac98e321d6ca4aec8ec2fd7404ee324afdea29493683
     atom:
-      &a191
+      &a209
       category: util
       name: bison
     version:
-      &a192
+      &a210
       version: 3.6
   libs/ncurses:
     path: ../repository/builds/libs/ncurses,6.2.tar.xz
     size: 1128108
     hash: dab7eeb827eedfce061e2087e1b33c56525ec97adad94983a28bf5576f9775b6
     atom:
-      &a163
+      &a181
       category: libs
       name: ncurses
     version:
-      &a164
+      &a182
       version: "6.2"
   gui/openbox:
-    path: ../repository/builds/gui/openbox,3.6.1.1.tar.xz
-    size: 1175096
-    hash: f4967e582140ddc1f1e5c171a7f9a99f157f2aa0272a622cdac0c1992bb87831
+    path: ../repository/builds/gui/openbox,3.6.1.2.tar.xz
+    size: 1180636
+    hash: 8cea8e60e220bef61f53a3ffef23947de5f69f487ece9eb1b9ddf1dfd8e6b07e
     atom:
-      &a77
+      &a89
       category: gui
       name: openbox
     version:
-      &a78
-      version: 3.6.1.1
+      &a90
+      version: 3.6.1.2
   libs/gobject-introspection:
     path: ../repository/builds/libs/gobject-introspection,1.64.1.tar.xz
     size: 1221500
     hash: cfc4408a34385f1ebf214c501216157bdcb9e969aa93f3cd1953ffd7aa821c2c
     atom:
-      &a131
+      &a145
       category: libs
       name: gobject-introspection
     version:
-      &a132
+      &a146
       version: 1.64.1
   libs/libxslt:
     path: ../repository/builds/libs/libxslt,1.1.34.tar.xz
     size: 1298928
     hash: 9d668d624cfebf09e75fa2d6900547d6620ba987769094a53a101a5d77a9f2b7
     atom:
-      &a155
+      &a173
       category: libs
       name: libxslt
     version:
-      &a156
+      &a174
       version: 1.1.34
   util/tar:
     path: ../repository/builds/util/tar,1.32.tar.xz
     size: 1312836
     hash: 6e065fa2d59f83f6d3ad94a87d16537234ac0c858afb604e87f987f7ee0b51a2
     atom:
-      &a257
+      &a279
       category: util
       name: tar
     version:
-      &a258
+      &a280
       version: "1.32"
   core/shadow:
     path: ../repository/builds/core/shadow,4.8.1.tar.xz
     size: 1349656
     hash: 4f58db1b90f03bac7fe31b515607fed9b426f5d9f89949e7bcc2181789071b69
     atom:
-      &a17
+      &a23
       category: core
       name: shadow
     version:
-      &a18
+      &a24
       version: 4.8.1
   util/inetutils:
     path: ../repository/builds/util/inetutils,1.9.4.tar.xz
     size: 1344164
     hash: 615d3343a36840e85a65d1ded206d4e5fcea068709f5fd28b458b5c23f182857
     atom:
-      &a225
+      &a243
       category: util
       name: inetutils
     version:
-      &a226
+      &a244
       version: 1.9.4
   doc/man-pages:
     path: ../repository/builds/doc/man-pages,5.05.tar.xz
     size: 1401740
     hash: 6029005f7e716eea6f7d2c13b138819b49c0c003ce4b0344049d20b5865ba568
     atom:
-      &a25
+      &a33
       category: doc
       name: man-pages
     version:
-      &a26
+      &a34
       version: "5.05"
   util/ninja:
     path: ../repository/builds/util/ninja,1.10.0.tar.xz
     size: 1503224
     hash: ce3dd51c8b7de3c53711268cc6477ac410330a5ea85648df5e098490c4b809bb
     atom:
-      &a245
+      &a267
       category: util
       name: ninja
     version:
-      &a246
+      &a268
       version: 1.10.0
   util/texinfo:
     path: ../repository/builds/util/texinfo,6.7.tar.xz
     size: 1602636
     hash: 59c70a6d18b665474340a295e966cb7b0385e73266709582b706853ebd5620c2
     atom:
-      &a259
+      &a281
       category: util
       name: texinfo
     version:
-      &a260
+      &a282
       version: 6.7
   lang/gawk:
     path: ../repository/builds/lang/gawk,5.1.0.tar.xz
     size: 1718844
     hash: b0dddf844748d083b8a8adddc60088b771478815f4626b41c4756f4688dbf24b
     atom:
-      &a99
+      &a111
       category: lang
       name: gawk
     version:
-      &a100
+      &a112
       version: 5.1.0
   gui/libxcb:
     path: ../repository/builds/gui/libxcb,1.14.tar.xz
     size: 1836180
     hash: f2a80920bd3fa7485023c2adf393f1a2a24d37d863825bf86ec1dfc5fde97e7e
     atom:
-      &a47
+      &a59
       category: gui
       name: libxcb
     version:
-      &a48
+      &a60
       version: "1.14"
   gui/libxt:
     path: ../repository/builds/gui/libxt,1.2.0.tar.xz
     size: 2120680
     hash: 92cfdee68e8a4a8e51d3d0a2e30bb31815e5f989d576bbb854387e14d9c709bf
     atom:
-      &a71
+      &a83
       category: gui
       name: libxt
     version:
-      &a72
+      &a84
       version: 1.2.0
+  gui/dejavu-fonts-ttf:
+    path: ../repository/builds/gui/dejavu-fonts-ttf,2.37.2.tar.xz
+    size: 2474952
+    hash: 051e366c64a8974e477decee7a6a5a4d47c102d0a64e0dae55e970f41e943e3c
+    atom:
+      &a39
+      category: gui
+      name: dejavu-fonts-ttf
+    version:
+      &a40
+      version: 2.37.2
   core/bash:
     path: ../repository/builds/core/bash,5.0.tar.xz
     size: 2648492
@@ -1126,341 +1203,396 @@ builds:
     size: 2673840
     hash: d9d3aaac27e682671e196516ad2e2e32d8fb3d7cb4b70fa79547529e2d35a08c
     atom:
-      &a5
+      &a9
       category: core
       name: eudev
     version:
-      &a6
+      &a10
       version: 3.2.9
   libs/openssl:
     path: ../repository/builds/libs/openssl,1.1.1d.tar.xz
     size: 2698244
     hash: 49066af48c62891f6e4352628fe8e05db3a018d0e2ed9ea6ebfa5cb401f6db0e
     atom:
-      &a165
+      &a183
       category: libs
       name: openssl
     version:
-      &a166
+      &a184
       version: 1.1.1d
   gui/libxaw:
     path: ../repository/builds/gui/libxaw,1.0.13.tar.xz
     size: 2737848
     hash: fb44667c10e025c60492598238feceef2a915945a71fd409f23298dddfaebce9
     atom:
-      &a45
+      &a57
       category: gui
       name: libxaw
     version:
-      &a46
+      &a58
       version: 1.0.13
   libs/glib:
     path: ../repository/builds/libs/glib,2.65.0.tar.xz
     size: 2777772
     hash: 007beb23c26a5177ac7b22cec5850d42a8a512784c8ec01dfba746069f990a5f
     atom:
-      &a125
+      &a141
       category: libs
       name: glib
     version:
-      &a126
+      &a142
       version: 2.65.0
   libs/freetype:
     path: ../repository/builds/libs/freetype,2.10.2.tar.xz
     size: 2908020
     hash: c2cf091947f7d5aa9edd3edf36e7e75d51eeadee1422259185798b88855154e9
     atom:
-      &a119
+      &a133
       category: libs
       name: freetype
     version:
-      &a120
+      &a134
       version: 2.10.2
+  core/p11-kit:
+    path: ../repository/builds/core/p11-kit,0.23.20.1.tar.xz
+    size: 3536784
+    hash: 9029a39db86a906667df8a51e95c4d3eef539c05ac2adf629ac2d03eabba55f7
+    atom:
+      &a21
+      category: core
+      name: p11-kit
+    version:
+      &a22
+      version: 0.23.20.1
   util/e2fsprogs:
     path: ../repository/builds/util/e2fsprogs,1.45.5.tar.xz
     size: 3587212
     hash: 4b62ce1af196f00cc06fd6592c8855b1f92cb676f15afa17a71e00dd0249e044
     atom:
-      &a207
+      &a225
       category: util
       name: e2fsprogs
     version:
-      &a208
+      &a226
       version: 1.45.5
   gui/pixman:
     path: ../repository/builds/gui/pixman,0.40.0.tar.xz
     size: 3655988
     hash: 56065565dd12669b6000b7e529373ad80ae99fc5b1cc9e3b54acc95163091981
     atom:
-      &a79
+      &a91
       category: gui
       name: pixman
     version:
-      &a80
+      &a92
       version: 0.40.0
   libs/libarchive:
     path: ../repository/builds/libs/libarchive,3.4.3.1.tar.xz
     size: 3695880
     hash: bb729ec1b29266e487e7ca611370e7f9a5557e04b350d2762e887e08470fefd6
     atom:
-      &a135
+      &a149
       category: libs
       name: libarchive
     version:
-      &a136
+      &a150
       version: 3.4.3.1
   util/groff:
     path: ../repository/builds/util/groff,1.22.4.tar.xz
     size: 4706204
     hash: 6eddd8b965dbff9e3958dc1d0594f67b3d045c3978039d3dac059d4fb8e639ee
     atom:
-      &a221
+      &a239
       category: util
       name: groff
     version:
-      &a222
+      &a240
       version: 1.22.4
+  libs/gdk-pixbuf:
+    path: ../repository/builds/libs/gdk-pixbuf,2.40.0.tar.xz
+    size: 5085404
+    hash: 0ede8d2b99a6d994b27220f2a650bb5ce54755ab8c3996de8918d84506a421bf
+    atom:
+      &a137
+      category: libs
+      name: gdk-pixbuf
+    version:
+      &a138
+      version: 2.40.0
   libs/gettext:
     path: ../repository/builds/libs/gettext,0.20.tar.xz
     size: 5172976
     hash: d75dc4eafc0e80e9ef697ece5de13d06a38b6873a1dae1aef3dfbb7eefb40531
     atom:
-      &a123
+      &a139
       category: libs
       name: gettext
     version:
-      &a124
+      &a140
       version: "0.20"
   libs/libxml2:
     path: ../repository/builds/libs/libxml2,2.9.10.tar.xz
     size: 5432884
     hash: 4745b6b72fbb1d0bedb38815f3fd9d60c0b6ae9842a446f7db2bcc8d769cb6be
     atom:
-      &a153
+      &a171
       category: libs
       name: libxml2
     version:
-      &a154
+      &a172
       version: 2.9.10
   util/util-linux:
     path: ../repository/builds/util/util-linux,2.35.1.tar.xz
     size: 5470636
     hash: 0df5919079592917cd85393e8e913a057d74735d155b756e818aba3aa0afc0d1
     atom:
-      &a261
+      &a283
       category: util
       name: util-linux
     version:
-      &a262
+      &a284
       version: 2.35.1
   libs/libelf:
     path: ../repository/builds/libs/libelf,0.180.tar.xz
     size: 5665636
     hash: 8ad14d074429c8d0e472105a8d23429236c80184ee190484afe7f1df8eb4ac54
     atom:
-      &a141
+      &a155
       category: libs
       name: libelf
     version:
-      &a142
+      &a156
       version: "0.180"
   core/grub:
     path: ../repository/builds/core/grub,2.04.tar.xz
     size: 6024764
     hash: 92044ee911c7aa4528a59bea13f2ac8d28a4ac8f50c079d3929981d38e98b8e4
     atom:
-      &a9
+      &a13
       category: core
       name: grub
     version:
-      &a10
+      &a14
       version: "2.04"
   util/coreutils:
     path: ../repository/builds/util/coreutils,8.32.tar.xz
     size: 6169060
     hash: c6b7bd6e1d116c075c0734445a6eab4aa31af37d2974bba36d31abc30f322223
     atom:
-      &a197
+      &a215
       category: util
       name: coreutils
     version:
-      &a198
+      &a216
       version: 8.32
   libs/cairo:
     path: ../repository/builds/libs/cairo,1.16.0.tar.xz
     size: 7125352
     hash: 352fdb07b1ca160f958c903e474dbf144cd413d0c2a758495b72fba2fac821ff
     atom:
-      &a113
+      &a127
       category: libs
       name: cairo
     version:
-      &a114
+      &a128
       version: 1.16.0
   util/cmake:
     path: ../repository/builds/util/cmake,3.17.3.tar.xz
     size: 7448560
     hash: 7e13dd4f3941e676182cc0c6ea2bf5976b0530b5eb72d45bb5c8715358ae0acf
     atom:
-      &a195
+      &a213
       category: util
       name: cmake
     version:
-      &a196
+      &a214
       version: 3.17.3
   gui/libx11:
     path: ../repository/builds/gui/libx11,1.6.9.tar.xz
     size: 8734040
     hash: b6d7e7056703547bbd3de490ca656b4dac15469da856d582028a72e8fa141954
     atom:
-      &a41
+      &a53
       category: gui
       name: libx11
     version:
-      &a42
+      &a54
       version: 1.6.9
+  gui/adwaita-icon-theme:
+    path: ../repository/builds/gui/adwaita-icon-theme,3.36.1.tar.xz
+    size: 9119292
+    hash: 77ffff87cd41e446ff42625be9b26cea99ae5174a91c8c127d77a96f78c2b383
+    atom:
+      &a37
+      category: gui
+      name: adwaita-icon-theme
+    version:
+      &a38
+      version: 3.36.1
   libs/harfbuzz:
     path: ../repository/builds/libs/harfbuzz,2.6.8.2.tar.xz
     size: 9693272
     hash: b8c8e78285e4b110012a0895873e17793cc30c611b369811a73552ae809ddbeb
     atom:
-      &a133
+      &a147
       category: libs
       name: harfbuzz
     version:
-      &a134
+      &a148
       version: 2.6.8.2
   lang/perl:
     path: ../repository/builds/lang/perl,5.32.0.tar.xz
     size: 11897628
     hash: 4cd4f4f4d6c69a08efc43fbc0849b44c30e9537665808875493623519accd76d
     atom:
-      &a107
+      &a119
       category: lang
       name: perl
     version:
-      &a108
+      &a120
       version: 5.32.0
   gui/xorg-server:
     path: ../repository/builds/gui/xorg-server,1.20.8.2.tar.xz
     size: 13770976
     hash: 0bae79ddc1ad7cb46806bd6556263ddb97d35b390e70fd4a6a796b4e56095e36
     atom:
-      &a87
+      &a99
       category: gui
       name: xorg-server
     version:
-      &a88
+      &a100
       version: 1.20.8.2
+  core/docbook-xsl:
+    path: ../repository/builds/core/docbook-xsl,1.79.2.tar.xz
+    size: 20668228
+    hash: eea847fabb113988d915f8702b24913c8080eb157318f3c7e821c7ccb390b03e
+    atom:
+      &a7
+      category: core
+      name: docbook-xsl
+    version:
+      &a8
+      version: 1.79.2
   lang/node:
     path: ../repository/builds/lang/node,14.4.0.tar.xz
     size: 22260120
     hash: 7ebecc070129d28ca58ef973289b2d492aca66c838fe55e40a190118f1050448
     atom:
-      &a105
+      &a117
       category: lang
       name: node
     version:
-      &a106
+      &a118
       version: 14.4.0
   gui/mesa:
     path: ../repository/builds/gui/mesa,20.1.3.tar.xz
     size: 25000084
     hash: 8c0aff3e85431b0137defefe482d81e67bd6ff84c29367da424d963c45935b7b
     atom:
-      &a75
+      &a87
       category: gui
       name: mesa
     version:
-      &a76
+      &a88
       version: 20.1.3
-  libs/glibc:
-    path: ../repository/builds/libs/glibc,2.31.tar.xz
-    size: 31491716
-    hash: 9ef8a56ac98ee4d1714e34ed489290056cae5c41235f20a8c4d017615974cff4
-    atom:
-      &a127
-      category: libs
-      name: glibc
-    version:
-      &a128
-      version: 2.31
   kernel/linux:
     path: ../repository/builds/kernel/linux,5.7.5.tar.xz
     size: 37333644
     hash: dd498f266213ad661af4e55f0a2b7bc222747515051457e9753a1be2aa57774b
     atom:
-      &a97
+      &a109
       category: kernel
       name: linux
     version:
-      &a98
+      &a110
       version: 5.7.5
+  libs/librsvg:
+    path: ../repository/builds/libs/librsvg,2.49.3.tar.xz
+    size: 37532468
+    hash: d73889d2653dc3293cf3a0c66d49f79e070f0d5191b9a7d17fd31efca7767c52
+    atom:
+      &a165
+      category: libs
+      name: librsvg
+    version:
+      &a166
+      version: 2.49.3
   lang/python:
     path: ../repository/builds/lang/python,3.8.3.1.tar.xz
     size: 40817516
     hash: c8db909c7b9b3e30bec99fa67d3b33fda12cdaf380cb3d294b7a274ae96e3554
     atom:
-      &a109
+      &a121
       category: lang
       name: python
     version:
-      &a110
+      &a122
       version: 3.8.3.1
   util/git:
     path: ../repository/builds/util/git,2.27.0.tar.xz
     size: 41397148
     hash: 15420a4fe963b5887ebe82fa6caa89ed1b2cbd77f545cb506229463fc9f2c023
     atom:
-      &a215
+      &a233
       category: util
       name: git
     version:
-      &a216
+      &a234
       version: 2.27.0
   lang/llvm:
     path: ../repository/builds/lang/llvm,10.0.0.tar.xz
     size: 43640516
     hash: 1834a65e407b82825cee09b41e6629a1094fe6cdaaf0c88159fb81eb83ce69c1
     atom:
-      &a103
+      &a115
       category: lang
       name: llvm
     version:
-      &a104
+      &a116
       version: 10.0.0
+  lang/rustc:
+    path: ../repository/builds/lang/rustc,1.44.1.tar.xz
+    size: 53936324
+    hash: 19d634528925c40cc3d87d047c3316abb53b768f73684322cf92faae31990d32
+    atom:
+      &a123
+      category: lang
+      name: rustc
+    version:
+      &a124
+      version: 1.44.1
   util/binutils:
     path: ../repository/builds/util/binutils,2.34.tar.xz
     size: 60357848
     hash: 7ac4fe5653349830f1d6ef3a64ad7695a304cd18916752e010283fa5271621fc
     atom:
-      &a189
+      &a207
       category: util
       name: binutils
     version:
-      &a190
+      &a208
       version: 2.34
   core/linux-firmware:
     path: ../repository/builds/core/linux-firmware,20200619.tar.xz
     size: 142976880
     hash: 4e0cb4ce05227655f92c39521ce57ab7e9848c99958073b372ada0dc0d1e542e
     atom:
-      &a11
+      &a15
       category: core
       name: linux-firmware
     version:
-      &a12
+      &a16
       version: "20200619"
   lang/gcc:
     path: ../repository/builds/lang/gcc,9.3.0.tar.xz
     size: 195077828
     hash: a85c7d056787be17342c67df88de5c5408d027463ea97e57b44d8d2e4d0c8b85
     atom:
-      &a101
+      &a113
       category: lang
       name: gcc
     version:
-      &a102
+      &a114
       version: 9.3.0
 packages:
   core/bash:
@@ -1475,240 +1607,276 @@ packages:
     hash: 74bfa2ceec9c7cb1c834ca2a78802a635c99a29cd90bc4cf4aacda62b6599c7c
     atom: *a3
     version: *a4
+  core/docbook-xml:
+    path: core/docbook-xml.yml
+    size: 3297
+    hash: d63396ff5ef89db4d9103b7ed184febb770b6623a81030dd4d3113b37c5aeb52
+    atom: *a5
+    version: *a6
+  core/docbook-xsl:
+    path: core/docbook-xsl.yml
+    size: 2558
+    hash: 5f40a1cef77fcbfc5fce9f49a610e02459edc3a8fd4a3e0150968334d33feaf1
+    atom: *a7
+    version: *a8
   core/eudev:
     path: core/eudev.yml
     size: 1755
     hash: 47207258798ecbdfa440fcc134317799b8e8f86f07c576be71f42c6d56af54d8
-    atom: *a5
-    version: *a6
+    atom: *a9
+    version: *a10
   core/fs-tree:
     path: core/fs-tree.yml
     size: 2325
     hash: 6d87fc81efac410d2af6bf334bfd73f770061926fbea1cecf48a9dd60be9fecd
-    atom: *a7
-    version: *a8
+    atom: *a11
+    version: *a12
   core/grub:
     path: core/grub.yml
     size: 248
     hash: b1b93f2651ac98219d0eb5d9a8ed28ace9629256bb19f5b3fcb91ea07a4497ad
-    atom: *a9
-    version: *a10
+    atom: *a13
+    version: *a14
   core/linux-firmware:
     path: core/linux-firmware.yml
     size: 529
     hash: 38630e1c76196588d00b581aa150ffbd366346d6fefdeb3fc95c6d7440797d5e
-    atom: *a11
-    version: *a12
+    atom: *a15
+    version: *a16
   core/mkinitcpio-busybox:
     path: core/mkinitcpio-busybox.yml
     size: 790
     hash: 694e02a56e12adc3670200b31b4be0a1646f97885d23853249d26bc5d976bb20
-    atom: *a13
-    version: *a14
+    atom: *a17
+    version: *a18
   core/openrc:
     path: core/openrc.yml
     size: 607
     hash: 019c0e26e5706236683d84ebe34ba7497574fb65bbe28ae6b833665e8a092d18
-    atom: *a15
-    version: *a16
+    atom: *a19
+    version: *a20
+  core/p11-kit:
+    path: core/p11-kit.yml
+    size: 1052
+    hash: c604e530dfb8e49046ca4996897d6cc268dc5db1c8158c00f2fb51ffbb4c408d
+    atom: *a21
+    version: *a22
   core/shadow:
     path: core/shadow.yml
     size: 2451
     hash: 89468bc29504aa40793208aeacfc76de21d9bb799c27da265352141f8e7648f4
-    atom: *a17
-    version: *a18
+    atom: *a23
+    version: *a24
+  core/shared-mime-info:
+    path: core/shared-mime-info.yml
+    size: 728
+    hash: b100a9f84b43399fae83f606e8fc28b28aebfbd22afc56b41abe8a734018563b
+    atom: *a25
+    version: *a26
   core/tzdata:
     path: core/tzdata.yml
     size: 787
     hash: 83f46751a2f216d2fb385db9b8cb3ce42e133aed499f44c6447932e291976ba6
-    atom: *a19
-    version: *a20
+    atom: *a27
+    version: *a28
   core/udev-init-scripts:
     path: core/udev-init-scripts.yml
     size: 323
     hash: c148e8b41000715a9cda0e4f6bb4ca384f984224d2db3be7b53176739e863731
-    atom: *a21
-    version: *a22
+    atom: *a29
+    version: *a30
   core/zsh:
     path: core/zsh.yml
     size: 478
     hash: d317cb3e49d2bd28265359c687b50100211a5e806fcf4fe6281ca79ee54186ef
-    atom: *a23
-    version: *a24
+    atom: *a31
+    version: *a32
   doc/man-pages:
     path: doc/man-pages.yml
     size: 290
     hash: 41a9f70b249170d096a9a7a9154cefb5ccab4942343bf4c016b6671f11620668
-    atom: *a25
-    version: *a26
+    atom: *a33
+    version: *a34
   editor/nano:
     path: editor/nano.yml
     size: 314
     hash: f79c1f576be84872283d88ed28934f025a1f31c0ea97ab8b2622232a83043a99
-    atom: *a27
-    version: *a28
+    atom: *a35
+    version: *a36
+  gui/adwaita-icon-theme:
+    path: gui/adwaita-icon-theme.yml
+    size: 144
+    hash: 45b79d5c161565f2c3879bea2ea9c4703d8add4c84bdc714107630c1f7f1630f
+    atom: *a37
+    version: *a38
+  gui/dejavu-fonts-ttf:
+    path: gui/dejavu-fonts-ttf.yml
+    size: 294
+    hash: 40b23e2406e5306bc202634a35cfa98a4e537b414b1071c656a8cff4f3c25109
+    atom: *a39
+    version: *a40
   gui/libdrm:
     path: gui/libdrm.yml
     size: 686
     hash: 79e5ab3c1519d45872ae7638dcba2ad93f6d48414be30e5a4f21407796662244
-    atom: *a29
-    version: *a30
+    atom: *a41
+    version: *a42
   gui/libepoxy:
     path: gui/libepoxy.yml
     size: 511
     hash: 6136e9a3017a3f8fce3fccbbd7a085ed91f7432990219dee35d958f22bdd4b1d
-    atom: *a31
-    version: *a32
+    atom: *a43
+    version: *a44
   gui/libfontenc:
     path: gui/libfontenc.yml
     size: 147
     hash: 8495870456a0b0b11ad70e60818c70dcb7a3fd4e627bc34d8abc6b77c6bdc076
-    atom: *a33
-    version: *a34
+    atom: *a45
+    version: *a46
   gui/libice:
     path: gui/libice.yml
     size: 143
     hash: 86694807ae688bbc6641bf864a0d5140b76b84e3995f481319f5d7f364801cab
-    atom: *a35
-    version: *a36
+    atom: *a47
+    version: *a48
   gui/libpciaccess:
     path: gui/libpciaccess.yml
     size: 149
     hash: 41a80fe5d32f96bdf29aed55809e3c5ca976d0f52d3340b0ade235a012674834
-    atom: *a37
-    version: *a38
+    atom: *a49
+    version: *a50
   gui/libsm:
     path: gui/libsm.yml
     size: 204
     hash: e504c839cc7877a7e5b792d437fc1a71ba20ab8e1551420c175405454129d9fa
-    atom: *a39
-    version: *a40
+    atom: *a51
+    version: *a52
   gui/libx11:
     path: gui/libx11.yml
     size: 224
     hash: 1a8c21267c762e18c7fda882b49e896ec3b95af392258afbcb12bbbbe2e57a4e
-    atom: *a41
-    version: *a42
+    atom: *a53
+    version: *a54
   gui/libxau:
     path: gui/libxau.yml
     size: 143
     hash: f0dce812bcf08b66595c2dd425b11994be40b77b0d8f84daf62af08237839c9c
-    atom: *a43
-    version: *a44
+    atom: *a55
+    version: *a56
   gui/libxaw:
     path: gui/libxaw.yml
     size: 329
     hash: 991e1e30330d8a0347aef4858ac5c3512f54c8a92137f67e3d15576dbaa4ebea
-    atom: *a45
-    version: *a46
+    atom: *a57
+    version: *a58
   gui/libxcb:
     path: gui/libxcb.yml
     size: 194
     hash: a0aa6b8bff4565d63e051680fddb06fe2cccacd09f8ee1bc955d3780af0cab2b
-    atom: *a47
-    version: *a48
+    atom: *a59
+    version: *a60
   gui/libxdamage:
     path: gui/libxdamage.yml
     size: 218
     hash: 6b8ca38440b93738550de8d57b928972c068b97bb48cb75bb657ebc9bcd55350
-    atom: *a49
-    version: *a50
+    atom: *a61
+    version: *a62
   gui/libxext:
     path: gui/libxext.yml
     size: 209
     hash: 77d8eedd12a7043d08f30ffb6f67b94e5a6abd5866db6e53327cee7e917b5c61
-    atom: *a51
-    version: *a52
+    atom: *a63
+    version: *a64
   gui/libxfixes:
     path: gui/libxfixes.yml
     size: 195
     hash: 91d6d7f99912285abd6b491220b69dc69f09f745b577f4272b2839fdc15405bd
-    atom: *a53
-    version: *a54
+    atom: *a65
+    version: *a66
   gui/libxfont2:
     path: gui/libxfont2.yml
     size: 271
     hash: b5a0a6993f3228c3c2b0d4036229e018299a2bf5e888bbd2a10ba877e741a766
-    atom: *a55
-    version: *a56
+    atom: *a67
+    version: *a68
   gui/libxft:
     path: gui/libxft.yml
     size: 322
     hash: 7df88467ff1d33feb0736d9ab1250cc36503c18298c5aaf4d54e8febfa600ca2
-    atom: *a57
-    version: *a58
+    atom: *a69
+    version: *a70
   gui/libxkbfile:
     path: gui/libxkbfile.yml
     size: 213
     hash: ea7bfb97b843731c5c9176af3bc57d24a30e682bfa84002733e36d7dcb0e1e58
-    atom: *a59
-    version: *a60
+    atom: *a71
+    version: *a72
   gui/libxmu:
     path: gui/libxmu.yml
     size: 268
     hash: e5af6f9b9010b7898372bb4deaabb4e9f84b7ff40fedcde9b7932e4dc8c630b9
-    atom: *a61
-    version: *a62
+    atom: *a73
+    version: *a74
   gui/libxpm:
     path: gui/libxpm.yml
     size: 209
     hash: d40f4d9bd4936da6a4821c009b5f96860072d23ed56ab4453ffcfc5d9f797efd
-    atom: *a63
-    version: *a64
+    atom: *a75
+    version: *a76
   gui/libxrandr:
     path: gui/libxrandr.yml
     size: 219
     hash: b4ce3903634309844f441e073f67d663049ed751d081a431ad8f0268601f5311
-    atom: *a65
-    version: *a66
+    atom: *a77
+    version: *a78
   gui/libxrender:
     path: gui/libxrender.yml
     size: 174
     hash: be54ad5d97a3987e41dd22853750449d94d789861c13e3e85979bdc617f0a87c
-    atom: *a67
-    version: *a68
+    atom: *a79
+    version: *a80
   gui/libxshmfence:
     path: gui/libxshmfence.yml
     size: 173
     hash: 082ac12e1520afdbf5821966cbe2218a9ba012f2a28ea1302c96b22923d80add
-    atom: *a69
-    version: *a70
+    atom: *a81
+    version: *a82
   gui/libxt:
     path: gui/libxt.yml
     size: 183
     hash: 23252f15bc259d68de99956c566c9cc0b25b1a7cc860953d4d5856d58324fa5a
-    atom: *a71
-    version: *a72
+    atom: *a83
+    version: *a84
   gui/libxxf86vm:
     path: gui/libxxf86vm.yml
     size: 173
     hash: 215ded563f6c1ead1d172b46b816e9a2d801c3bccddf637e8a97b93345aad877
-    atom: *a73
-    version: *a74
+    atom: *a85
+    version: *a86
   gui/mesa:
     path: gui/mesa.yml
     size: 881
     hash: aa91063c1e648e75822ac9f50465ae51cd30952ecbc447504282b5df203dc8f4
-    atom: *a75
-    version: *a76
+    atom: *a87
+    version: *a88
   gui/openbox:
     path: gui/openbox.yml
-    size: 435
-    hash: 5835e242459ce4bfaa2ef37c45e2976c326aea27e5deb808dca6ae9186778c70
-    atom: *a77
-    version: *a78
+    size: 469
+    hash: 211f224aa593375c9ba0488fbcf0332f9373dc515ffa215db6963879abc437a3
+    atom: *a89
+    version: *a90
   gui/pixman:
     path: gui/pixman.yml
     size: 174
     hash: 46467efbc8ec1fce7f699502f32015a4d9fb5fdb7f8e703ef33e8d2b5c99b4bb
-    atom: *a79
-    version: *a80
+    atom: *a91
+    version: *a92
   gui/xcb-proto:
     path: gui/xcb-proto.yml
     size: 102
     hash: ab1b94d4b84e8772acbfd9da7ec3760f5baeff92e24b602fd11e1058adc3040a
-    atom: *a81
-    version: *a82
+    atom: *a93
+    version: *a94
   gui/xf86-input-libinput:
     path: gui/xf86-input-libinput.yml
     size: 1915
@@ -1722,554 +1890,599 @@ packages:
     path: gui/xkbcomp.yml
     size: 218
     hash: 00d5b5efe9a2b698b5eb4948c0dadf6b77fa2a730a878bafa761ff41575271df
-    atom: *a83
-    version: *a84
+    atom: *a95
+    version: *a96
   gui/xkeyboard-config:
     path: gui/xkeyboard-config.yml
     size: 186
     hash: 6e5af01d1dda1a01a304c0984697a4d75acf5ace39f913f3d7dd6e3d122dcd9a
-    atom: *a85
-    version: *a86
+    atom: *a97
+    version: *a98
   gui/xorg-server:
     path: gui/xorg-server.yml
     size: 382
     hash: d5935201fffa43e41789f81f96a403265f4591be08c12d0b401caad8798a4c00
-    atom: *a87
-    version: *a88
+    atom: *a99
+    version: *a100
   gui/xorgproto:
     path: gui/xorgproto.yml
     size: 119
     hash: 9e551d3cb38d1a73d4932e4cfcaee1c1db5555d478b038ba655ad4d6b491aa7f
-    atom: *a89
-    version: *a90
+    atom: *a101
+    version: *a102
   gui/xterm:
     path: gui/xterm.yml
     size: 280
     hash: a052eefa7d263e7234aea3ca3f2904b3879ec1a6393e4e24e573f3fa6825c643
-    atom: *a91
-    version: *a92
+    atom: *a103
+    version: *a104
   gui/xtrans:
     path: gui/xtrans.yml
     size: 143
     hash: c9445335e8109c8b8b4049810750af0ae5426e76cff0d50f0b7ce18e89748b84
-    atom: *a93
-    version: *a94
+    atom: *a105
+    version: *a106
   kernel/linux-headers:
     path: kernel/linux-headers.yml
     size: 396
     hash: a4cff56c49179e9be97d101d7d2c89cdace7411ce5eea04c97331e23eaf20fae
-    atom: *a95
-    version: *a96
+    atom: *a107
+    version: *a108
   kernel/linux:
     path: kernel/linux.yml
     size: 1719
     hash: 01467c4849dc4a09408462e2bfaf98461386f8ced9981057cbf2827da76bbf31
-    atom: *a97
-    version: *a98
+    atom: *a109
+    version: *a110
   lang/gawk:
     path: lang/gawk.yml
     size: 127
     hash: 0205c93157cbe1e7b529ac4867d1630fabd72c8fe29f738d8339b9bf820b3416
-    atom: *a99
-    version: *a100
+    atom: *a111
+    version: *a112
   lang/gcc:
     path: lang/gcc.yml
     size: 1139
     hash: 7a756d92a53637d85b757891039b7b1155f140b86bdf89ce9184314d0782385c
-    atom: *a101
-    version: *a102
+    atom: *a113
+    version: *a114
   lang/llvm:
     path: lang/llvm.yml
     size: 893
     hash: 2f17703dd4d8a8cb4a05d20d29b234a7d971b93530595b3ec054b80d1b1b4fdd
-    atom: *a103
-    version: *a104
+    atom: *a115
+    version: *a116
   lang/node:
     path: lang/node.yml
     size: 264
     hash: 0c69f835a45c504ef89f69c7c872ba699984a90e901f7bc71bceac56f86ec45d
-    atom: *a105
-    version: *a106
+    atom: *a117
+    version: *a118
   lang/perl:
     path: lang/perl.yml
     size: 426
     hash: e6c8fddcbfdbe6374e46db4f20ba683a78ee3492a9b746cd0e6cd0d09fce88c7
-    atom: *a107
-    version: *a108
+    atom: *a119
+    version: *a120
   lang/python:
     path: lang/python.yml
     size: 335
     hash: 05a0c5adc5fab14cdc74e2066cac9ac9b3ba54f8b05dc032ee6d3f9ef70fa317
-    atom: *a109
-    version: *a110
+    atom: *a121
+    version: *a122
+  lang/rustc:
+    path: lang/rustc.yml
+    size: 866
+    hash: c44ec8738a424fdac1e4c8a0c1bb48a7984c6cdfa583d2129071122113e91397
+    atom: *a123
+    version: *a124
   lang/sed:
     path: lang/sed.yml
     size: 209
     hash: 36fbbc33e1527f289b2a382d7d427f9cbb6fcbfc1ab873d024f318633a48dec9
-    atom: *a111
-    version: *a112
+    atom: *a125
+    version: *a126
   libs/cairo:
     path: libs/cairo.yml
     size: 294
     hash: c97a05b6ce6f722ccfdc38922ad0dd7c7209c83d8e3455a640f1147ae9e546f5
-    atom: *a113
-    version: *a114
+    atom: *a127
+    version: *a128
   libs/expat:
     path: libs/expat.yml
     size: 130
     hash: 75296f4518688e1cd4c855d8e49f75da66fc17999a4a719de7363393a102e3aa
-    atom: *a115
-    version: *a116
+    atom: *a129
+    version: *a130
   libs/fontconfig:
     path: libs/fontconfig.yml
     size: 231
     hash: 323eb15aaffc28cdee30e7726c3c6a1baf46c405fe6a2437671e9dbe132f9b20
-    atom: *a117
-    version: *a118
+    atom: *a131
+    version: *a132
   libs/freetype:
     path: libs/freetype.yml
     size: 142
     hash: e6a83693cba581b0ae85ecbd557f354f4cedde94e6ba34d5237574d3223d0246
-    atom: *a119
-    version: *a120
+    atom: *a133
+    version: *a134
   libs/fribidi:
     path: libs/fribidi.yml
     size: 168
     hash: 2061d8aa3aa0ce69a46011093bc769abf8b56fcfa28330fb02068c46d72780fc
-    atom: *a121
-    version: *a122
+    atom: *a135
+    version: *a136
+  libs/gdk-pixbuf:
+    path: libs/gdk-pixbuf.yml
+    size: 512
+    hash: 19b03f9103be5048b4e69c4012e72a8c93369a68d5076ccefb18fdcb650dd5dd
+    atom: *a137
+    version: *a138
   libs/gettext:
     path: libs/gettext.yml
     size: 200
     hash: b6faf00b8c0d1e0c2868e44b7bafea234266b2cfbb2f42d5320e284a468ed9e3
-    atom: *a123
-    version: *a124
+    atom: *a139
+    version: *a140
   libs/glib:
     path: libs/glib.yml
     size: 603
     hash: c81266931e80b8ee7c5b5fb77ea6dcac38f255e0a2448e0232715d502481b527
-    atom: *a125
-    version: *a126
+    atom: *a141
+    version: *a142
   libs/glibc:
     path: libs/glibc.yml
-    size: 844
-    hash: b9eb625473d2f477ecd418230b1bdae21c72ebc24005958f4de731e2acaec22a
-    atom: *a127
-    version: *a128
+    size: 918
+    hash: f5a86e5b4d121ec68c5a385de469849ab268023dcbe8f39921b4034ef581ec08
+    atom:
+      category: libs
+      name: glibc
+    version:
+      version: 2.31.1
   libs/gmp:
     path: libs/gmp.yml
     size: 421
     hash: ec5433d5ebe3825f8c01af3e6f7b8197db38a74c65defca7e61a5c77aca1a567
-    atom: *a129
-    version: *a130
+    atom: *a143
+    version: *a144
   libs/gobject-introspection:
     path: libs/gobject-introspection.yml
     size: 503
     hash: c417b03058984725448db720e0dff86e54dd3eb6989a8d76e98da53fd0a18140
-    atom: *a131
-    version: *a132
+    atom: *a145
+    version: *a146
   libs/harfbuzz:
     path: libs/harfbuzz.yml
     size: 348
     hash: 1308259d37d13f5bf29256ab68424ed2d0b9d1246bb58f25477a499da5de4ea3
-    atom: *a133
-    version: *a134
+    atom: *a147
+    version: *a148
   libs/libarchive:
     path: libs/libarchive.yml
     size: 216
     hash: 9d3e1c73bd5039249d01e3070920612337dcae06f82dccae30d4320b0eae1682
-    atom: *a135
-    version: *a136
+    atom: *a149
+    version: *a150
   libs/libattr:
     path: libs/libattr.yml
     size: 183
     hash: 40a28617b1a8453cfa5a684bf200ba138ee3771899614e61cceae69a57641786
-    atom: *a137
-    version: *a138
+    atom: *a151
+    version: *a152
   libs/libcheck:
     path: libs/libcheck.yml
     size: 172
     hash: abb647b0135a32db3a7dd9086c65640f156f2876403355bd822e5b25bec96517
-    atom: *a139
-    version: *a140
+    atom: *a153
+    version: *a154
   libs/libelf:
     path: libs/libelf.yml
     size: 402
     hash: ab47f75ecf6b6cec2a3a573c8da66396a207556d8038bbb566dbb5d1173bdb47
-    atom: *a141
-    version: *a142
+    atom: *a155
+    version: *a156
   libs/libevdev:
     path: libs/libevdev.yml
     size: 135
     hash: cb2e622abc7c29b18af2fc0251527aa95ea3a57ef95fec45892fb384d2c7783a
-    atom: *a143
-    version: *a144
+    atom: *a157
+    version: *a158
   libs/libffi:
     path: libs/libffi.yml
     size: 192
     hash: f50d659e0b9d057645b80422326c14aa7823ec4ad68b153df579dd217c737cb7
-    atom: *a145
-    version: *a146
+    atom: *a159
+    version: *a160
   libs/libinput:
     path: libs/libinput.yml
     size: 590
     hash: 282d2e22c2039a43d5961ab1ecd4b2a823c9480d89d54745f69b3d1ee64dbf7f
-    atom: *a147
-    version: *a148
+    atom: *a161
+    version: *a162
   libs/libpng:
     path: libs/libpng.yml
     size: 133
     hash: ae945e69961fa4f9534a8ce567f4b40b210fa185bd93d24b234241d82889dd67
-    atom: *a149
-    version: *a150
+    atom: *a163
+    version: *a164
+  libs/librsvg:
+    path: libs/librsvg.yml
+    size: 455
+    hash: cf88e6626dbaf042da733e77d0cd02efbb7ed8a61f2ad1761e7dc3918bf5148f
+    atom: *a165
+    version: *a166
+  libs/libtasn1:
+    path: libs/libtasn1.yml
+    size: 150
+    hash: d74d2d1d66d21a55cd9c95dc2be96d143af14ae8a97547ae434a31e3d6978b88
+    atom: *a167
+    version: *a168
   libs/libuv:
     path: libs/libuv.yml
     size: 292
     hash: d848daebe470ae3e1f897dac9ca95c198ef47b7cf3e427a92c9e7231b4edd8ac
-    atom: *a151
-    version: *a152
+    atom: *a169
+    version: *a170
   libs/libxml2:
     path: libs/libxml2.yml
     size: 128
     hash: c5983dfff4ecc693ce14906d534f1fa120e635c9eff12f63b55d17bbef39decd
-    atom: *a153
-    version: *a154
+    atom: *a171
+    version: *a172
   libs/libxslt:
     path: libs/libxslt.yml
     size: 180
     hash: f207f1ff191fa6d3a44124ed967c1820783c0c001b8aeb8cb33d054294bf232a
-    atom: *a155
-    version: *a156
+    atom: *a173
+    version: *a174
   libs/mpc:
     path: libs/mpc.yml
     size: 259
     hash: b0c77e6648741bf147881468c7468a5c2dff3542382c32e76f603438511548c3
-    atom: *a157
-    version: *a158
+    atom: *a175
+    version: *a176
   libs/mpfr:
     path: libs/mpfr.yml
     size: 282
     hash: 414352b6add34b49d0d4a13ef38f9902961aaa859ecb6e50ae0c99b55cd24c27
-    atom: *a159
-    version: *a160
+    atom: *a177
+    version: *a178
   libs/mtdev:
     path: libs/mtdev.yml
     size: 100
     hash: bf84a636ae7e34a056ba7e88918bebdade31d9eae9121600cd92fff934958623
-    atom: *a161
-    version: *a162
+    atom: *a179
+    version: *a180
   libs/ncurses:
     path: libs/ncurses.yml
     size: 1010
     hash: bea8e4ef5344e45f6eb3f9bb28282ed1a7dceaa49ad1196793fbcb604af2495c
-    atom: *a163
-    version: *a164
+    atom: *a181
+    version: *a182
   libs/openssl:
     path: libs/openssl.yml
     size: 429
     hash: 7903d262694a64c22c7fb7e866ff532827ae811fd5c23c5a24cab02ccc572232
-    atom: *a165
-    version: *a166
+    atom: *a183
+    version: *a184
   libs/pango:
     path: libs/pango.yml
     size: 735
     hash: c9e14950aade72a67eb9b8e9d19aa2b15acd7f1b0ce44a1131ec2c5a18bff815
-    atom: *a167
-    version: *a168
+    atom: *a185
+    version: *a186
   libs/readline:
     path: libs/readline.yml
     size: 378
     hash: 64bbb816fe707ab6f8698674cae9018b07685efe6476f17cc77391b144dd8152
-    atom: *a169
-    version: *a170
+    atom: *a187
+    version: *a188
   libs/zlib:
     path: libs/zlib.yml
     size: 239
     hash: 192e4275f93ae96c7bcaaf39ffa119c0d5e2f335582ec03bca8309590675c596
-    atom: *a171
-    version: *a172
+    atom: *a189
+    version: *a190
   perl/xml-parser:
     path: perl/xml-parser.yml
     size: 137
     hash: 77b561a63823e7ef782163af0a265d3e392d57fc8346e9514c35fa1a59c68900
-    atom: *a173
-    version: *a174
+    atom: *a191
+    version: *a192
   python/mako:
     path: python/mako.yml
     size: 202
     hash: 0ff1ab9a5d7b1fc5e94e87aca05eaaacedd6592850de34506e6589fba4a320c3
-    atom: *a175
-    version: *a176
+    atom: *a193
+    version: *a194
   python/meson:
     path: python/meson.yml
     size: 273
     hash: 7f8e3ae6586226f18c378d254f0e4a94b4d54e835fcf8a24f4ece13e73046fc4
-    atom: *a177
-    version: *a178
+    atom: *a195
+    version: *a196
   python/setuptools:
     path: python/setuptools.yml
     size: 209
     hash: 9e6624637248fdf25ec583a09d3ee9cb9896250c211f496f9191a9b9c6026a23
-    atom: *a179
-    version: *a180
+    atom: *a197
+    version: *a198
   util/asciidoc:
     path: util/asciidoc.yml
     size: 390
     hash: f474c5634b4b788789d7c3fb43569b1ccfa9e6ec315c5725b5cd2dfbe51d4fa1
-    atom: *a181
-    version: *a182
+    atom: *a199
+    version: *a200
   util/autoconf:
     path: util/autoconf.yml
     size: 207
     hash: caa16519cb2aad4c25733a095ae3f1c5df8c3e3ed400a368ca2b5dc4a7256472
-    atom: *a183
-    version: *a184
+    atom: *a201
+    version: *a202
   util/automake:
     path: util/automake.yml
     size: 125
     hash: 34e4a00cc4a0755c9b24fa5a59863683bf63d5fefed98f064bf4fbe349cf462e
-    atom: *a185
-    version: *a186
+    atom: *a203
+    version: *a204
   util/bc:
     path: util/bc.yml
     size: 235
     hash: d8b9c90d02fec0aac1cb7388218658ed74d0fa27f0f584d09def0d65f53b5d22
-    atom: *a187
-    version: *a188
+    atom: *a205
+    version: *a206
   util/binutils:
     path: util/binutils.yml
     size: 474
     hash: d887e26df3e26f1ffa51a22f133c6f8997d3321f7ef06b42c32b029462da4a95
-    atom: *a189
-    version: *a190
+    atom: *a207
+    version: *a208
   util/bison:
     path: util/bison.yml
     size: 125
     hash: 70929c62ab96ff2e7d0a44344449dd92fd6ebd66f0523f6ba18d826647f51ac8
-    atom: *a191
-    version: *a192
+    atom: *a209
+    version: *a210
   util/bzip2:
     path: util/bzip2.yml
     size: 726
     hash: 379f5e7e0d67edbd4ef9e265dc4a8fe922737a4f95035727f511b6d0347ffd86
-    atom: *a193
-    version: *a194
+    atom: *a211
+    version: *a212
   util/cmake:
     path: util/cmake.yml
     size: 432
     hash: 307fcabbf6a09a20d52aa2e8dddc97ef80a39727e94b5abaabb81cacf32ad81f
-    atom: *a195
-    version: *a196
+    atom: *a213
+    version: *a214
   util/coreutils:
     path: util/coreutils.yml
     size: 345
     hash: 68d8ac2dcec6a1c8f2e3a56c96a8db53987cf68f050072501349de141a807755
-    atom: *a197
-    version: *a198
+    atom: *a215
+    version: *a216
   util/cpio:
     path: util/cpio.yml
     size: 110
     hash: 21a9a6879c1860086525af6751f199bfffb998796b883a71a491f4e996d7b904
-    atom: *a199
-    version: *a200
+    atom: *a217
+    version: *a218
   util/curl:
     path: util/curl.yml
-    size: 117
-    hash: e7002ba9bc84bee6e76dba7a206bf3ea6377c03cb92ea863d977cecacc218c82
-    atom: *a201
-    version: *a202
+    size: 232
+    hash: 9a69f89aa4b567d088406b6a88966ff3178b2f0fd993092c4377201bc503cb64
+    atom: *a219
+    version: *a220
   util/dhcpcd:
     path: util/dhcpcd.yml
     size: 135
     hash: de40ac7b720ee0090f9859aa579606898d5f04f60eee3d903cad5733e2f61458
-    atom: *a203
-    version: *a204
+    atom: *a221
+    version: *a222
   util/diffutils:
     path: util/diffutils.yml
     size: 103
     hash: 7fa2e31307b25ad54c44ebe8d15d58e3fe0e4bdc5eec15d46454bb47168328fa
-    atom: *a205
-    version: *a206
+    atom: *a223
+    version: *a224
   util/e2fsprogs:
     path: util/e2fsprogs.yml
     size: 402
     hash: fb51d8591b23420605b3799a680143b30bf5085fcea23ee4de6c914bdcbdbe67
-    atom: *a207
-    version: *a208
+    atom: *a225
+    version: *a226
   util/file:
     path: util/file.yml
     size: 180
     hash: 8ff7042246c5897183bf4804dd7a2bb68ea579214483457f96b3f52630513040
-    atom: *a209
-    version: *a210
+    atom: *a227
+    version: *a228
   util/findutils:
     path: util/findutils.yml
     size: 315
     hash: 29a30414ce2144a348dcfcc9f8515a6f63515f1f6457844761c9adcf59636a6c
-    atom: *a211
-    version: *a212
+    atom: *a229
+    version: *a230
   util/flex:
     path: util/flex.yml
     size: 253
     hash: ba695706272fd674524eae15d3d289ad7a4610ab58ca23973a3b1bc1101300d6
-    atom: *a213
-    version: *a214
+    atom: *a231
+    version: *a232
   util/git:
     path: util/git.yml
     size: 255
     hash: 1d46fc2e61950fcd3009e9ef8e91cafde182f4441da794cbbd58b0be05f43085
-    atom: *a215
-    version: *a216
+    atom: *a233
+    version: *a234
   util/gperf:
     path: util/gperf.yml
     size: 111
     hash: a8714968d44a52c37af7532d8a3f8de8b66dfaa347c005b9c6dea85f63522aa4
-    atom: *a217
-    version: *a218
+    atom: *a235
+    version: *a236
   util/grep:
     path: util/grep.yml
     size: 139
     hash: f38839e9a63552d344a2a49b675989dc8acf9714ec7429e3e98662720013ebe1
-    atom: *a219
-    version: *a220
+    atom: *a237
+    version: *a238
   util/groff:
     path: util/groff.yml
     size: 142
     hash: 7c9fe5e319170a46a7b8c0a1fd3b9b25e134899311ee781b55752687e068cf9a
-    atom: *a221
-    version: *a222
+    atom: *a239
+    version: *a240
   util/gzip:
     path: util/gzip.yml
     size: 97
     hash: 42a12cfa7e3a2cbaa261d38c3ff4eb5c9d1ea95775f2c6bf9355b9c7e2b31b4c
-    atom: *a223
-    version: *a224
+    atom: *a241
+    version: *a242
   util/inetutils:
     path: util/inetutils.yml
     size: 106
     hash: d38d28b1ee0994cd2d004e0ca9f31eebf5748dfd10f94cff549596e3416f3889
-    atom: *a225
-    version: *a226
+    atom: *a243
+    version: *a244
   util/intltool:
     path: util/intltool.yml
     size: 202
     hash: 7a2b3e10a207ea909e0e351bacca2046ef31fc1442a7113a13a19a1256aaa5a9
-    atom: *a227
-    version: *a228
+    atom: *a245
+    version: *a246
   util/iproute2:
     path: util/iproute2.yml
     size: 291
     hash: 94c5c205d07f2bbdf86cc8f0b6fef3145fcd1ef1d1444e47d309bac72456889b
-    atom: *a229
-    version: *a230
+    atom: *a247
+    version: *a248
+  util/itstool:
+    path: util/itstool.yml
+    size: 119
+    hash: 97fb1cf02163eeea7cbefc5c48dab793612a1838a29785b164c91a69721ec777
+    atom: *a249
+    version: *a250
   util/iwd:
     path: util/iwd.yml
     size: 689
     hash: f89fef784e2ba0ef328959c95d9c127ac0c4c37ff2f8ffcbc4b4ad45aecb9a93
-    atom: *a231
-    version: *a232
+    atom: *a251
+    version: *a252
   util/kmod:
     path: util/kmod.yml
     size: 519
     hash: e9429a7653fdcf3cfc7c3de8ab81c3224fb840d063a7a52fc11b9dd406c41e51
-    atom: *a233
-    version: *a234
+    atom: *a253
+    version: *a254
   util/less:
     path: util/less.yml
     size: 113
     hash: 76b78df4eac7f51ab74d143d1b93205674bf72f92d374921e90753cc0cb00e46
-    atom: *a235
-    version: *a236
+    atom: *a255
+    version: *a256
   util/libtool:
     path: util/libtool.yml
     size: 129
     hash: e6ffb30945180052f4fa524e342c4779cb09065f3cff413c2df0a708dda88446
-    atom: *a237
-    version: *a238
+    atom: *a257
+    version: *a258
   util/m4:
     path: util/m4.yml
     size: 224
     hash: 4b9069902f789ed7c1b207ae91040e49bb35a4243b833a99069a242443d50972
-    atom: *a239
-    version: *a240
+    atom: *a259
+    version: *a260
+  util/make-ca:
+    path: util/make-ca.yml
+    size: 212
+    hash: ea37fc0b1ed6fbe62eb3c3f8d79f35477b03eb361a82982b8ebc5732899a383b
+    atom: *a261
+    version: *a262
   util/make:
     path: util/make.yml
     size: 107
     hash: 7999d638dce9b68f09808e6fe8bcd624faddd8291720a66fb22f4d2fabfbdc1a
-    atom: *a241
-    version: *a242
+    atom: *a263
+    version: *a264
   util/mkinitcpio:
     path: util/mkinitcpio.yml
     size: 306
     hash: b35569fd0441f35cac22766e8c13eea4764ded3c30ef058065fc78519015952a
-    atom: *a243
-    version: *a244
+    atom: *a265
+    version: *a266
   util/ninja:
     path: util/ninja.yml
     size: 261
     hash: d16c93859657395ddf987eebe191d88ff3b0ba4cda08cc97db1e1a16abe5d8ec
-    atom: *a245
-    version: *a246
+    atom: *a267
+    version: *a268
   util/openssh:
     path: util/openssh.yml
     size: 270
     hash: cb41eb3b238bd4955ff4e2f13d7f49c770906af6484d5c396bd444d25c19ffab
-    atom: *a247
-    version: *a248
+    atom: *a269
+    version: *a270
   util/patch:
     path: util/patch.yml
     size: 100
     hash: ec939a67b965be1e5777155874b72b2abda573733f6c8234639b663ed8173e7d
-    atom: *a249
-    version: *a250
+    atom: *a271
+    version: *a272
   util/pkg-config:
     path: util/pkg-config.yml
     size: 203
     hash: 72f80dc676993cfa6fa99f5fb4319a2b1d30c76546eadd1ce8914c5749855932
-    atom: *a251
-    version: *a252
+    atom: *a273
+    version: *a274
   util/procps-ng:
     path: util/procps-ng.yml
     size: 311
     hash: 5bf414fbbec3871e00115321c763554236d5a39abda66738af0c16ebdf8911d9
-    atom: *a253
-    version: *a254
+    atom: *a275
+    version: *a276
   util/pv:
     path: util/pv.yml
     size: 115
     hash: 8c2806f09eb34a7cabd45e880e3e7b64c89bbf7733f7487f32890d9a0ad34b52
-    atom: *a255
-    version: *a256
+    atom: *a277
+    version: *a278
   util/tar:
     path: util/tar.yml
     size: 225
     hash: 09f3b7d10574b201fa0027132cd6814401fe372a59dbf268d9ea5f176a1ef603
-    atom: *a257
-    version: *a258
+    atom: *a279
+    version: *a280
   util/texinfo:
     path: util/texinfo.yml
     size: 174
     hash: 686be21367eedc252d7bf6b51d4829dc5294368071a213ef607cf0ac6507297c
-    atom: *a259
-    version: *a260
+    atom: *a281
+    version: *a282
   util/util-linux:
     path: util/util-linux.yml
     size: 715
     hash: 94edfe3715bdb65bcc84245682bf01e195301650515a03273b94f5f82651cbbe
-    atom: *a261
-    version: *a262
+    atom: *a283
+    version: *a284
   util/which:
     path: util/which.yml
     size: 111
     hash: e672d539e917dc453627a3c69d76799c30248f7bd9635634151cce193df81822
-    atom: *a263
-    version: *a264
+    atom: *a285
+    version: *a286
+  util/xmlto:
+    path: util/xmlto.yml
+    size: 187
+    hash: c8e93fdafdb04b0fb63bf9c9937d3eeeebb322aa93f0d92b1067accfccc341a5
+    atom: *a287
+    version: *a288
   util/xz:
     path: util/xz.yml
     size: 370
     hash: 0c4fd0a9eb94c441c531bd4144ca25c7d4d5fe8397261d28790764d98338ea79
-    atom: *a265
-    version: *a266
+    atom: *a289
+    version: *a290
   virtual/base-system:
     path: virtual/base-system.yml
     size: 786
@@ -2301,4 +2514,4 @@ categories:
   - python
   - util
   - virtual
-serial: 1594753361
+serial: 1594770975

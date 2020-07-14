@@ -226,16 +226,24 @@ export class Repository {
             console.log(src.length);
 
             console.log("Unpacking...");
-            const tar_args_by_comp = {
-                "tar.gz": "xz",
-                "tar.bz2": "xj",
-                "tar.xz": "xJ"
-            };
-            child_process.spawnSync(
-                'buildah', ['run', container_id, 'tar', tar_args_by_comp[pkgdesc.comp], '--no-same-owner'], {
-                input: src,
-                stdio: ['pipe', 'inherit', 'inherit']
-            });
+            if (pkgdesc.comp.startsWith('tar')) {
+                const tar_args_by_comp = {
+                    "tar.gz": "xz",
+                    "tar.bz2": "xj",
+                    "tar.xz": "xJ"
+                };
+                child_process.spawnSync(
+                    'buildah', ['run', container_id, 'tar', tar_args_by_comp[pkgdesc.comp], '--no-same-owner'], {
+                    input: src,
+                    stdio: ['pipe', 'inherit', 'inherit']
+                });
+            } else if(pkgdesc.comp == 'zip') {
+                child_process.spawnSync(
+                    'buildah', ['run', container_id, 'sh', '-c', `mkdir -p ${pkgdesc.unpack_dir}; cd ${pkgdesc.unpack_dir}; bsdtar -x -f -`], {
+                    input: src,
+                    stdio: ['pipe', 'inherit', 'inherit']
+                });
+            }
         }
 
         if (pkgdesc.use_build_dir) {
@@ -278,7 +286,7 @@ export class Repository {
 
     async installPackage(atom: ResolvedAtom, db: Database, target_root: string) {
         const pkgdesc: PackageDescription = await this.getPackageDescription(atom);
-        console.log(`Installing ${atom.format()} ${pkgdesc.version.version}`);
+        console.log(`Installing ${atom.format()} ${pkgdesc.version.version} to ${target_root}`);
         if (atom.getCategory() != 'virtual') {
             const build_path = path.join(this.local_builds_path, atom.getCategory(), atom.getName() + "," + pkgdesc.version.version + ".tar.xz");
 

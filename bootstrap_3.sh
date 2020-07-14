@@ -39,7 +39,9 @@ maybe_build() {
 node rpkg/rpkg_repo.js s3repo
 
 node rpkg/rpkg.js --repository=s3repo --build_container=digitalis-bootstrap-2 build virtual/base-system
+node rpkg/rpkg_repo.js s3repo
 node rpkg/rpkg.js --repository=s3repo --build_container=digitalis-bootstrap-2 build virtual/build-tools
+node rpkg/rpkg_repo.js s3repo
 
 ctr=$(buildah from digitalis-bootstrap-2)
 

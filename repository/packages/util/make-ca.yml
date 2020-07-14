@@ -1,0 +1,7 @@
+version: "1.7.1"
+upstream_version: "1.7"
+filename: make-ca
+upstream: https://github.com/djlucas/make-ca/releases/download/v%{upstream_version}
+configure: ~
+post_install_script: |
+  install -vdm755 /etc/ssl/local

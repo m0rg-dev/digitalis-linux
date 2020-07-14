@@ -340,17 +340,6 @@ builds:
     version:
       &a134
       version: 5.2.5
-  util/autoconf:
-    path: s3repo/builds/util/autoconf,2.69.tar.xz
-    size: 546752
-    hash: 477f894dcc3b2f6433ec10eb3fdb3edce037daa17b93f9118098922533ba29cc
-    atom:
-      &a65
-      category: util
-      name: autoconf
-    version:
-      &a66
-      version: 2.69
   util/automake:
     path: s3repo/builds/util/automake,1.16.1.tar.xz
     size: 543308
@@ -362,6 +351,17 @@ builds:
     version:
       &a68
       version: 1.16.1
+  util/autoconf:
+    path: s3repo/builds/util/autoconf,2.69.tar.xz
+    size: 546752
+    hash: 477f894dcc3b2f6433ec10eb3fdb3edce037daa17b93f9118098922533ba29cc
+    atom:
+      &a65
+      category: util
+      name: autoconf
+    version:
+      &a66
+      version: 2.69
   core/openrc:
     path: s3repo/builds/core/openrc,0.42.1.tar.xz
     size: 560924
@@ -704,16 +704,16 @@ builds:
       &a32
       version: 14.4.0
   libs/glibc:
-    path: s3repo/builds/libs/glibc,2.31.tar.xz
-    size: 31629832
-    hash: ad96fdd9e0d18504d1e29f9a252ff082adab5b25f90f3d722c6c6a4d3041a2a1
+    path: s3repo/builds/libs/glibc,2.31.1.tar.xz
+    size: 31497836
+    hash: 145784ed3206ffbf2da7d0d19ef5c6d15d2e8835c87bf7fbc0657cfff43192bd
     atom:
       &a43
       category: libs
       name: glibc
     version:
       &a44
-      version: 2.31
+      version: 2.31.1
   lang/python:
     path: s3repo/builds/lang/python,3.8.3.1.tar.xz
     size: 38810536
@@ -802,6 +802,15 @@ packages:
     hash: 019c0e26e5706236683d84ebe34ba7497574fb65bbe28ae6b833665e8a092d18
     atom: *a11
     version: *a12
+  core/p11-kit:
+    path: core/p11-kit.yml
+    size: 1052
+    hash: c604e530dfb8e49046ca4996897d6cc268dc5db1c8158c00f2fb51ffbb4c408d
+    atom:
+      category: core
+      name: p11-kit
+    version:
+      version: 0.23.20.1
   core/shadow:
     path: core/shadow.yml
     size: 2451
@@ -838,15 +847,231 @@ packages:
     hash: f79c1f576be84872283d88ed28934f025a1f31c0ea97ab8b2622232a83043a99
     atom: *a23
     version: *a24
+  gui/libdrm:
+    path: gui/libdrm.yml
+    size: 686
+    hash: 79e5ab3c1519d45872ae7638dcba2ad93f6d48414be30e5a4f21407796662244
+    atom:
+      category: gui
+      name: libdrm
+    version:
+      version: 2.4.102
+  gui/libepoxy:
+    path: gui/libepoxy.yml
+    size: 511
+    hash: 6136e9a3017a3f8fce3fccbbd7a085ed91f7432990219dee35d958f22bdd4b1d
+    atom:
+      category: gui
+      name: libepoxy
+    version:
+      version: 1.5.4
+  gui/libfontenc:
+    path: gui/libfontenc.yml
+    size: 147
+    hash: 8495870456a0b0b11ad70e60818c70dcb7a3fd4e627bc34d8abc6b77c6bdc076
+    atom:
+      category: gui
+      name: libfontenc
+    version:
+      version: 1.1.4
+  gui/libice:
+    path: gui/libice.yml
+    size: 143
+    hash: 86694807ae688bbc6641bf864a0d5140b76b84e3995f481319f5d7f364801cab
+    atom:
+      category: gui
+      name: libice
+    version:
+      version: 1.0.10
+  gui/libpciaccess:
+    path: gui/libpciaccess.yml
+    size: 149
+    hash: 41a80fe5d32f96bdf29aed55809e3c5ca976d0f52d3340b0ade235a012674834
+    atom:
+      category: gui
+      name: libpciaccess
+    version:
+      version: "0.16"
+  gui/libsm:
+    path: gui/libsm.yml
+    size: 204
+    hash: e504c839cc7877a7e5b792d437fc1a71ba20ab8e1551420c175405454129d9fa
+    atom:
+      category: gui
+      name: libsm
+    version:
+      version: 1.2.3
+  gui/libx11:
+    path: gui/libx11.yml
+    size: 224
+    hash: 1a8c21267c762e18c7fda882b49e896ec3b95af392258afbcb12bbbbe2e57a4e
+    atom:
+      category: gui
+      name: libx11
+    version:
+      version: 1.6.9
+  gui/libxau:
+    path: gui/libxau.yml
+    size: 143
+    hash: f0dce812bcf08b66595c2dd425b11994be40b77b0d8f84daf62af08237839c9c
+    atom:
+      category: gui
+      name: libxau
+    version:
+      version: 1.0.9
+  gui/libxaw:
+    path: gui/libxaw.yml
+    size: 329
+    hash: 991e1e30330d8a0347aef4858ac5c3512f54c8a92137f67e3d15576dbaa4ebea
+    atom:
+      category: gui
+      name: libxaw
+    version:
+      version: 1.0.13
+  gui/libxcb:
+    path: gui/libxcb.yml
+    size: 194
+    hash: a0aa6b8bff4565d63e051680fddb06fe2cccacd09f8ee1bc955d3780af0cab2b
+    atom:
+      category: gui
+      name: libxcb
+    version:
+      version: "1.14"
+  gui/libxdamage:
+    path: gui/libxdamage.yml
+    size: 218
+    hash: 6b8ca38440b93738550de8d57b928972c068b97bb48cb75bb657ebc9bcd55350
+    atom:
+      category: gui
+      name: libxdamage
+    version:
+      version: 1.1.5
+  gui/libxext:
+    path: gui/libxext.yml
+    size: 209
+    hash: 77d8eedd12a7043d08f30ffb6f67b94e5a6abd5866db6e53327cee7e917b5c61
+    atom:
+      category: gui
+      name: libxext
+    version:
+      version: 1.3.4
+  gui/libxfixes:
+    path: gui/libxfixes.yml
+    size: 195
+    hash: 91d6d7f99912285abd6b491220b69dc69f09f745b577f4272b2839fdc15405bd
+    atom:
+      category: gui
+      name: libxfixes
+    version:
+      version: 5.0.3
+  gui/libxfont2:
+    path: gui/libxfont2.yml
+    size: 271
+    hash: b5a0a6993f3228c3c2b0d4036229e018299a2bf5e888bbd2a10ba877e741a766
+    atom:
+      category: gui
+      name: libxfont2
+    version:
+      version: 2.0.4
+  gui/libxft:
+    path: gui/libxft.yml
+    size: 322
+    hash: 7df88467ff1d33feb0736d9ab1250cc36503c18298c5aaf4d54e8febfa600ca2
+    atom:
+      category: gui
+      name: libxft
+    version:
+      version: 2.3.3
+  gui/libxkbfile:
+    path: gui/libxkbfile.yml
+    size: 213
+    hash: ea7bfb97b843731c5c9176af3bc57d24a30e682bfa84002733e36d7dcb0e1e58
+    atom:
+      category: gui
+      name: libxkbfile
+    version:
+      version: 1.1.0
+  gui/libxmu:
+    path: gui/libxmu.yml
+    size: 268
+    hash: e5af6f9b9010b7898372bb4deaabb4e9f84b7ff40fedcde9b7932e4dc8c630b9
+    atom:
+      category: gui
+      name: libxmu
+    version:
+      version: 1.1.3
+  gui/libxpm:
+    path: gui/libxpm.yml
+    size: 209
+    hash: d40f4d9bd4936da6a4821c009b5f96860072d23ed56ab4453ffcfc5d9f797efd
+    atom:
+      category: gui
+      name: libxpm
+    version:
+      version: 3.5.13
+  gui/libxrandr:
+    path: gui/libxrandr.yml
+    size: 219
+    hash: b4ce3903634309844f441e073f67d663049ed751d081a431ad8f0268601f5311
+    atom:
+      category: gui
+      name: libxrandr
+    version:
+      version: 1.5.2
+  gui/libxrender:
+    path: gui/libxrender.yml
+    size: 174
+    hash: be54ad5d97a3987e41dd22853750449d94d789861c13e3e85979bdc617f0a87c
+    atom:
+      category: gui
+      name: libxrender
+    version:
+      version: 0.9.10
+  gui/libxshmfence:
+    path: gui/libxshmfence.yml
+    size: 173
+    hash: 082ac12e1520afdbf5821966cbe2218a9ba012f2a28ea1302c96b22923d80add
+    atom:
+      category: gui
+      name: libxshmfence
+    version:
+      version: "1.3"
+  gui/libxt:
+    path: gui/libxt.yml
+    size: 183
+    hash: 23252f15bc259d68de99956c566c9cc0b25b1a7cc860953d4d5856d58324fa5a
+    atom:
+      category: gui
+      name: libxt
+    version:
+      version: 1.2.0
+  gui/libxxf86vm:
+    path: gui/libxxf86vm.yml
+    size: 173
+    hash: 215ded563f6c1ead1d172b46b816e9a2d801c3bccddf637e8a97b93345aad877
+    atom:
+      category: gui
+      name: libxxf86vm
+    version:
+      version: 1.1.4
   gui/mesa:
     path: gui/mesa.yml
-    size: 122
-    hash: 0a963b7ec710bf907d61a9c6917900ebd7cc50502ab5ffe7ab0ddd46aaf8b1e1
+    size: 881
+    hash: aa91063c1e648e75822ac9f50465ae51cd30952ecbc447504282b5df203dc8f4
     atom:
       category: gui
       name: mesa
     version:
       version: 20.1.3
+  gui/openbox:
+    path: gui/openbox.yml
+    size: 469
+    hash: 211f224aa593375c9ba0488fbcf0332f9373dc515ffa215db6963879abc437a3
+    atom:
+      category: gui
+      name: openbox
+    version:
+      version: 3.6.1.2
   gui/pixman:
     path: gui/pixman.yml
     size: 174
@@ -856,15 +1081,78 @@ packages:
       name: pixman
     version:
       version: 0.40.0
+  gui/xcb-proto:
+    path: gui/xcb-proto.yml
+    size: 102
+    hash: ab1b94d4b84e8772acbfd9da7ec3760f5baeff92e24b602fd11e1058adc3040a
+    atom:
+      category: gui
+      name: xcb-proto
+    version:
+      version: "1.14"
+  gui/xf86-input-libinput:
+    path: gui/xf86-input-libinput.yml
+    size: 1915
+    hash: e5ae29984058dbb1d9a2643ba737037964273e0eb0d0e465289654bd5f442e43
+    atom:
+      category: gui
+      name: xf86-input-libinput
+    version:
+      version: 0.30.0.1
+  gui/xkbcomp:
+    path: gui/xkbcomp.yml
+    size: 218
+    hash: 00d5b5efe9a2b698b5eb4948c0dadf6b77fa2a730a878bafa761ff41575271df
+    atom:
+      category: gui
+      name: xkbcomp
+    version:
+      version: 1.4.3
+  gui/xkeyboard-config:
+    path: gui/xkeyboard-config.yml
+    size: 186
+    hash: 6e5af01d1dda1a01a304c0984697a4d75acf5ace39f913f3d7dd6e3d122dcd9a
+    atom:
+      category: gui
+      name: xkeyboard-config
+    version:
+      version: 2.5.1
   gui/xorg-server:
     path: gui/xorg-server.yml
-    size: 171
-    hash: 6029b0eeebcc177bf0c8c36a8407b6b92e2bc770e7c09f96ee6cb31e18b2d5c7
+    size: 382
+    hash: d5935201fffa43e41789f81f96a403265f4591be08c12d0b401caad8798a4c00
     atom:
       category: gui
       name: xorg-server
     version:
-      version: 1.20.8
+      version: 1.20.8.2
+  gui/xorgproto:
+    path: gui/xorgproto.yml
+    size: 119
+    hash: 9e551d3cb38d1a73d4932e4cfcaee1c1db5555d478b038ba655ad4d6b491aa7f
+    atom:
+      category: gui
+      name: xorgproto
+    version:
+      version: "2020.1"
+  gui/xterm:
+    path: gui/xterm.yml
+    size: 280
+    hash: a052eefa7d263e7234aea3ca3f2904b3879ec1a6393e4e24e573f3fa6825c643
+    atom:
+      category: gui
+      name: xterm
+    version:
+      version: "358"
+  gui/xtrans:
+    path: gui/xtrans.yml
+    size: 143
+    hash: c9445335e8109c8b8b4049810750af0ae5426e76cff0d50f0b7ce18e89748b84
+    atom:
+      category: gui
+      name: xtrans
+    version:
+      version: 1.4.0
   kernel/linux-headers:
     path: kernel/linux-headers.yml
     size: 396
@@ -892,6 +1180,15 @@ packages:
     hash: 7a756d92a53637d85b757891039b7b1155f140b86bdf89ce9184314d0782385c
     atom: *a29
     version: *a30
+  lang/llvm:
+    path: lang/llvm.yml
+    size: 893
+    hash: 2f17703dd4d8a8cb4a05d20d29b234a7d971b93530595b3ec054b80d1b1b4fdd
+    atom:
+      category: lang
+      name: llvm
+    version:
+      version: 10.0.0
   lang/node:
     path: lang/node.yml
     size: 264
@@ -910,28 +1207,82 @@ packages:
     hash: 05a0c5adc5fab14cdc74e2066cac9ac9b3ba54f8b05dc032ee6d3f9ef70fa317
     atom: *a35
     version: *a36
+  lang/rustc:
+    path: lang/rustc.yml
+    size: 760
+    hash: d8ea736fb1f66b5993e6d92f720ab267d591edab5a47d38a4e87ad7f697fe2d2
+    atom:
+      category: lang
+      name: rustc
+    version:
+      version: 1.44.1
   lang/sed:
     path: lang/sed.yml
     size: 209
     hash: 36fbbc33e1527f289b2a382d7d427f9cbb6fcbfc1ab873d024f318633a48dec9
     atom: *a37
     version: *a38
+  libs/cairo:
+    path: libs/cairo.yml
+    size: 294
+    hash: c97a05b6ce6f722ccfdc38922ad0dd7c7209c83d8e3455a640f1147ae9e546f5
+    atom:
+      category: libs
+      name: cairo
+    version:
+      version: 1.16.0
   libs/expat:
     path: libs/expat.yml
     size: 130
     hash: 75296f4518688e1cd4c855d8e49f75da66fc17999a4a719de7363393a102e3aa
     atom: *a39
     version: *a40
+  libs/fontconfig:
+    path: libs/fontconfig.yml
+    size: 231
+    hash: 323eb15aaffc28cdee30e7726c3c6a1baf46c405fe6a2437671e9dbe132f9b20
+    atom:
+      category: libs
+      name: fontconfig
+    version:
+      version: 2.13.1
+  libs/freetype:
+    path: libs/freetype.yml
+    size: 142
+    hash: e6a83693cba581b0ae85ecbd557f354f4cedde94e6ba34d5237574d3223d0246
+    atom:
+      category: libs
+      name: freetype
+    version:
+      version: 2.10.2
+  libs/fribidi:
+    path: libs/fribidi.yml
+    size: 168
+    hash: 2061d8aa3aa0ce69a46011093bc769abf8b56fcfa28330fb02068c46d72780fc
+    atom:
+      category: libs
+      name: fribidi
+    version:
+      version: 1.0.10
   libs/gettext:
     path: libs/gettext.yml
     size: 200
     hash: b6faf00b8c0d1e0c2868e44b7bafea234266b2cfbb2f42d5320e284a468ed9e3
     atom: *a41
     version: *a42
+  libs/glib:
+    path: libs/glib.yml
+    size: 603
+    hash: c81266931e80b8ee7c5b5fb77ea6dcac38f255e0a2448e0232715d502481b527
+    atom:
+      category: libs
+      name: glib
+    version:
+      version: 2.65.0
   libs/glibc:
     path: libs/glibc.yml
-    size: 844
-    hash: b9eb625473d2f477ecd418230b1bdae21c72ebc24005958f4de731e2acaec22a
+    size: 918
+    hash: f5a86e5b4d121ec68c5a385de469849ab268023dcbe8f39921b4034ef581ec08
     atom: *a43
     version: *a44
   libs/gmp:
@@ -940,33 +1291,114 @@ packages:
     hash: ec5433d5ebe3825f8c01af3e6f7b8197db38a74c65defca7e61a5c77aca1a567
     atom: *a45
     version: *a46
+  libs/gobject-introspection:
+    path: libs/gobject-introspection.yml
+    size: 503
+    hash: c417b03058984725448db720e0dff86e54dd3eb6989a8d76e98da53fd0a18140
+    atom:
+      category: libs
+      name: gobject-introspection
+    version:
+      version: 1.64.1
+  libs/harfbuzz:
+    path: libs/harfbuzz.yml
+    size: 348
+    hash: 1308259d37d13f5bf29256ab68424ed2d0b9d1246bb58f25477a499da5de4ea3
+    atom:
+      category: libs
+      name: harfbuzz
+    version:
+      version: 2.6.8.2
   libs/libarchive:
     path: libs/libarchive.yml
-    size: 136
-    hash: d1dd0939a50517434238dec6b3d81d219dafa351445612c215e03264cef29cf8
+    size: 216
+    hash: 9d3e1c73bd5039249d01e3070920612337dcae06f82dccae30d4320b0eae1682
     atom:
       category: libs
       name: libarchive
     version:
-      version: 3.4.3
+      version: 3.4.3.1
   libs/libattr:
     path: libs/libattr.yml
     size: 183
     hash: 40a28617b1a8453cfa5a684bf200ba138ee3771899614e61cceae69a57641786
     atom: *a47
     version: *a48
+  libs/libcheck:
+    path: libs/libcheck.yml
+    size: 172
+    hash: abb647b0135a32db3a7dd9086c65640f156f2876403355bd822e5b25bec96517
+    atom:
+      category: libs
+      name: libcheck
+    version:
+      version: 0.15.0
   libs/libelf:
     path: libs/libelf.yml
     size: 402
     hash: ab47f75ecf6b6cec2a3a573c8da66396a207556d8038bbb566dbb5d1173bdb47
     atom: *a49
     version: *a50
+  libs/libevdev:
+    path: libs/libevdev.yml
+    size: 135
+    hash: cb2e622abc7c29b18af2fc0251527aa95ea3a57ef95fec45892fb384d2c7783a
+    atom:
+      category: libs
+      name: libevdev
+    version:
+      version: 1.9.0
   libs/libffi:
     path: libs/libffi.yml
     size: 192
     hash: f50d659e0b9d057645b80422326c14aa7823ec4ad68b153df579dd217c737cb7
     atom: *a51
     version: *a52
+  libs/libinput:
+    path: libs/libinput.yml
+    size: 590
+    hash: 282d2e22c2039a43d5961ab1ecd4b2a823c9480d89d54745f69b3d1ee64dbf7f
+    atom:
+      category: libs
+      name: libinput
+    version:
+      version: 1.15.6
+  libs/libpng:
+    path: libs/libpng.yml
+    size: 133
+    hash: ae945e69961fa4f9534a8ce567f4b40b210fa185bd93d24b234241d82889dd67
+    atom:
+      category: libs
+      name: libpng
+    version:
+      version: 1.6.37
+  libs/librsvg:
+    path: libs/librsvg.yml
+    size: 175
+    hash: 149c47a7b1a089162b46de1d52aafb5765ca56597da282ac2465720b2b3312c7
+    atom:
+      category: libs
+      name: librsvg
+    version:
+      version: 2.49.3
+  libs/libtasn1:
+    path: libs/libtasn1.yml
+    size: 150
+    hash: d74d2d1d66d21a55cd9c95dc2be96d143af14ae8a97547ae434a31e3d6978b88
+    atom:
+      category: libs
+      name: libtasn1
+    version:
+      version: 4.16.0
+  libs/libuv:
+    path: libs/libuv.yml
+    size: 292
+    hash: d848daebe470ae3e1f897dac9ca95c198ef47b7cf3e427a92c9e7231b4edd8ac
+    atom:
+      category: libs
+      name: libuv
+    version:
+      version: 1.38.1
   libs/libxml2:
     path: libs/libxml2.yml
     size: 128
@@ -997,6 +1429,15 @@ packages:
     hash: 414352b6add34b49d0d4a13ef38f9902961aaa859ecb6e50ae0c99b55cd24c27
     atom: *a55
     version: *a56
+  libs/mtdev:
+    path: libs/mtdev.yml
+    size: 100
+    hash: bf84a636ae7e34a056ba7e88918bebdade31d9eae9121600cd92fff934958623
+    atom:
+      category: libs
+      name: mtdev
+    version:
+      version: 1.1.6
   libs/ncurses:
     path: libs/ncurses.yml
     size: 1010
@@ -1009,6 +1450,15 @@ packages:
     hash: 7903d262694a64c22c7fb7e866ff532827ae811fd5c23c5a24cab02ccc572232
     atom: *a59
     version: *a60
+  libs/pango:
+    path: libs/pango.yml
+    size: 735
+    hash: c9e14950aade72a67eb9b8e9d19aa2b15acd7f1b0ce44a1131ec2c5a18bff815
+    atom:
+      category: libs
+      name: pango
+    version:
+      version: 1.45.3
   libs/readline:
     path: libs/readline.yml
     size: 378
@@ -1021,6 +1471,42 @@ packages:
     hash: 192e4275f93ae96c7bcaaf39ffa119c0d5e2f335582ec03bca8309590675c596
     atom: *a63
     version: *a64
+  perl/xml-parser:
+    path: perl/xml-parser.yml
+    size: 137
+    hash: 77b561a63823e7ef782163af0a265d3e392d57fc8346e9514c35fa1a59c68900
+    atom:
+      category: perl
+      name: xml-parser
+    version:
+      version: "2.46"
+  python/mako:
+    path: python/mako.yml
+    size: 202
+    hash: 0ff1ab9a5d7b1fc5e94e87aca05eaaacedd6592850de34506e6589fba4a320c3
+    atom:
+      category: python
+      name: mako
+    version:
+      version: 1.1.3
+  python/meson:
+    path: python/meson.yml
+    size: 273
+    hash: 7f8e3ae6586226f18c378d254f0e4a94b4d54e835fcf8a24f4ece13e73046fc4
+    atom:
+      category: python
+      name: meson
+    version:
+      version: 0.55.0
+  python/setuptools:
+    path: python/setuptools.yml
+    size: 209
+    hash: 9e6624637248fdf25ec583a09d3ee9cb9896250c211f496f9191a9b9c6026a23
+    atom:
+      category: python
+      name: setuptools
+    version:
+      version: 49.2.0
   util/asciidoc:
     path: util/asciidoc.yml
     size: 390
@@ -1066,6 +1552,15 @@ packages:
     hash: 379f5e7e0d67edbd4ef9e265dc4a8fe922737a4f95035727f511b6d0347ffd86
     atom: *a75
     version: *a76
+  util/cmake:
+    path: util/cmake.yml
+    size: 432
+    hash: 307fcabbf6a09a20d52aa2e8dddc97ef80a39727e94b5abaabb81cacf32ad81f
+    atom:
+      category: util
+      name: cmake
+    version:
+      version: 3.17.3
   util/coreutils:
     path: util/coreutils.yml
     size: 345
@@ -1081,6 +1576,15 @@ packages:
       name: cpio
     version:
       version: "2.13"
+  util/curl:
+    path: util/curl.yml
+    size: 232
+    hash: 9a69f89aa4b567d088406b6a88966ff3178b2f0fd993092c4377201bc503cb64
+    atom:
+      category: util
+      name: curl
+    version:
+      version: 7.71.1.2
   util/dhcpcd:
     path: util/dhcpcd.yml
     size: 135
@@ -1156,6 +1660,15 @@ packages:
     hash: d38d28b1ee0994cd2d004e0ca9f31eebf5748dfd10f94cff549596e3416f3889
     atom: *a99
     version: *a100
+  util/intltool:
+    path: util/intltool.yml
+    size: 202
+    hash: 7a2b3e10a207ea909e0e351bacca2046ef31fc1442a7113a13a19a1256aaa5a9
+    atom:
+      category: util
+      name: intltool
+    version:
+      version: 0.51.0
   util/iproute2:
     path: util/iproute2.yml
     size: 291
@@ -1192,21 +1705,21 @@ packages:
     hash: 4b9069902f789ed7c1b207ae91040e49bb35a4243b833a99069a242443d50972
     atom: *a111
     version: *a112
+  util/make-ca:
+    path: util/make-ca.yml
+    size: 212
+    hash: ea37fc0b1ed6fbe62eb3c3f8d79f35477b03eb361a82982b8ebc5732899a383b
+    atom:
+      category: util
+      name: make-ca
+    version:
+      version: 1.7.1
   util/make:
     path: util/make.yml
     size: 107
     hash: 7999d638dce9b68f09808e6fe8bcd624faddd8291720a66fb22f4d2fabfbdc1a
     atom: *a113
     version: *a114
-  util/meson:
-    path: util/meson.yml
-    size: 242
-    hash: 417a0bea68a250a492f6bf737acb5757f4b203cfcaf12802fa44c761aba4e51e
-    atom:
-      category: util
-      name: meson
-    version:
-      version: 0.55.0
   util/mkinitcpio:
     path: util/mkinitcpio.yml
     size: 306
@@ -1309,6 +1822,8 @@ categories:
   - kernel
   - lang
   - libs
+  - perl
+  - python
   - util
   - virtual
-serial: 1594695478
+serial: 1594761434

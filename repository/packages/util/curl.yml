@@ -1,6 +1,10 @@
-version: "7.71.1"
+version: "7.71.1.2"
+upstream_version: "7.71.1"
+rdepend:
+  - core/p11-kit
 filename: curl
 upstream: https://curl.haxx.se/download/
 license: curl
+additional_configure_options: --with-ca-path=/etc/ssl/certs
 queue_hooks:
   ldconfig: true
