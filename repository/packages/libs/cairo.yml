@@ -1,0 +1,17 @@
+version: "1.16.0"
+bdepend:
+  - gui/xorgproto
+  - gui/libx11
+  - gui/libxcb
+  - libs/libpng
+  - gui/pixman
+rdepend:
+  - gui/libx11
+  - gui/libxcb
+  - libs/libpng
+  - gui/pixman
+filename: cairo
+upstream: https://www.cairographics.org/releases/
+license: LGPL-2.1-only
+queue_hooks:
+  ldconfig: true

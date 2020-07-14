@@ -1,0 +1,20 @@
+version: "3.6.1.1"
+upstream_version: "3.6.1"
+bdepend:
+  - libs/glib
+  - libs/pango
+  - gui/xorgproto
+  - libs/libxml2
+rdepend:
+  - libs/glib
+  - libs/pango
+  - libs/libffi
+  - libs/libxml2
+filename: openbox
+comp: tar.gz
+unpack_dir: openbox-release-%{upstream_version}
+src_url: https://github.com/Mikachu/openbox/archive/release-%{version}.tar.gz
+license: GPL-2.0-or-later
+pre_configure_script: ./bootstrap
+queue_hooks:
+  ldconfig: true
