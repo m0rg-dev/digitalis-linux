@@ -1,0 +1,13 @@
+version: "1.2.0"
+bdepend:
+  - gui/xorgproto
+  - gui/libx11
+  - gui/libsm
+rdepend:
+  - gui/libx11
+  - gui/libsm
+filename: libXt
+comp: tar.bz2
+license: MIT
+queue_hooks:
+  ldconfig: true
