@@ -1,0 +1,24 @@
+version: "1.5.4"
+bdepend:
+  - python/meson
+  - util/ninja
+  - gui/xorgproto
+  - gui/libx11
+  - gui/mesa
+rdepend:
+  - gui/xorgproto
+  - gui/libx11
+  - gui/mesa
+filename: libepoxy
+upstream: https://github.com/anholt/libepoxy/releases/download/%{version}/
+license: MIT
+configure: |
+  mkdir build
+  meson %{configure_options} build
+make: ninja -C build -j1
+install: DESTDIR=/target_root ninja -C build install
+post_install_script: |
+  mkdir -p usr/lib
+  mv usr/lib64/pkgconfig usr/lib/
+queue_hooks:
+  ldconfig: true

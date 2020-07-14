@@ -1,0 +1,5 @@
+version: "2.46"
+filename: XML-Parser
+comp: tar.gz
+upstream: https://cpan.metacpan.org/authors/id/T/TO/TODDR/
+configure: perl Makefile.PL

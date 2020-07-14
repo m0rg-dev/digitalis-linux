@@ -1,0 +1,10 @@
+version: "49.2.0"
+upstream: ~
+src: ~
+license: MIT
+use_build_dir: true
+configure: ~
+make: ~
+install: |
+  python3 -m ensurepip
+  python3 -m pip install --no-use-pep517 --root=/target_root setuptools==%{version}

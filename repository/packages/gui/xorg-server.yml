@@ -1,0 +1,20 @@
+version: "1.20.8.2"
+upstream_version: "1.20.8"
+bdepend:
+  - gui/pixman
+  - gui/xorgproto
+  - gui/xtrans
+  - gui/libxkbfile
+  - gui/libxfont2
+  - gui/libepoxy
+rdepend:
+  - gui/pixman
+  - gui/libxkbfile
+  - gui/libxfont2
+  - gui/libepoxy
+  - gui/xkeyboard-config
+  - gui/xkbcomp
+filename: xorg-server
+upstream: https://www.x.org/releases/individual/xserver/
+comp: tar.bz2
+license: MIT

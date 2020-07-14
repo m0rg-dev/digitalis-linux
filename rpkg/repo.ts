@@ -232,10 +232,10 @@ export class Repository {
                 "tar.xz": "xJ"
             };
             child_process.spawnSync(
-                'buildah', ['run', container_id, 'tar', tar_args_by_comp[pkgdesc.comp]], {
+                'buildah', ['run', container_id, 'tar', tar_args_by_comp[pkgdesc.comp], '--no-same-owner'], {
                 input: src,
-            }
-            );
+                stdio: ['pipe', 'inherit', 'inherit']
+            });
         }
 
         if (pkgdesc.use_build_dir) {

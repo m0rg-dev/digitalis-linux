@@ -1,0 +1,11 @@
+version: "1.14"
+bdepend:
+  - gui/xcb-proto
+  - gui/libxau
+rdepend:
+  - gui/libxau
+filename: libxcb
+upstream: https://www.x.org/releases/individual/xcb/
+license: MIT
+queue_hooks:
+  ldconfig: true

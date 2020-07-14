@@ -1,0 +1,14 @@
+version: "0.55.0"
+rdepend:
+  - python/setuptools
+upstream: ~
+src: ~
+license: Apache-2.0
+filename: meson
+use_build_dir: true
+# this is dumb
+configure: ~
+make: ~
+install: |
+  python3 -m ensurepip
+  python3 -m pip install --no-use-pep517 --root=/target_root meson==%{version}

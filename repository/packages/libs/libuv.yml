@@ -1,0 +1,13 @@
+version: "1.38.1"
+filename: libuv
+comp: tar.gz
+src: '%{filename}-v%{version}.%{comp}'
+unpack_dir: "%{filename}-v%{version}"
+src_url: https://dist.libuv.org/dist/v%{version}/libuv-v%{version}.tar.gz
+license: MIT
+pre_configure_script: |
+  pwd
+  ls
+  sh autogen.sh
+queue_hooks:
+  ldconfig: true

@@ -1,0 +1,26 @@
+version: "10.0.0"
+bdepend:
+  - util/cmake
+  - util/ninja
+rdepend:
+  - libs/libxml2
+filename: llvm
+src: llvm-%{version}.src.%{comp}
+unpack_dir: llvm-%{version}.src
+upstream: https://github.com/llvm/llvm-project/releases/download/llvmorg-%{version}/
+use_build_dir: true
+configure: |
+  CC=gcc CXX=g++                                  \
+  cmake -DCMAKE_INSTALL_PREFIX=/usr               \
+        -DLLVM_ENABLE_FFI=ON                      \
+        -DCMAKE_BUILD_TYPE=Release                \
+        -DLLVM_BUILD_LLVM_DYLIB=ON                \
+        -DLLVM_LINK_LLVM_DYLIB=ON                 \
+        -DLLVM_ENABLE_RTTI=ON                     \
+        -DLLVM_TARGETS_TO_BUILD="host;AMDGPU;BPF" \
+        -DLLVM_BUILD_TESTS=ON                     \
+        -Wno-dev -G Ninja ../%{unpack_dir}
+make: ninja %{make_options}
+install: DESTDIR=/target_root ninja install
+queue_hooks:
+  ldconfig: true

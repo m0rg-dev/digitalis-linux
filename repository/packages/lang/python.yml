@@ -1,4 +1,9 @@
-version: "3.8.3"
+version: "3.8.3.1"
+upstream_version: "3.8.3"
+bdepend:
+  - libs/libffi
+rdepend:
+  - libs/libffi
 filename: Python
 additional_configure_options: --with-ensurepip=yes
 upstream: https://www.python.org/ftp/python/%{version}/

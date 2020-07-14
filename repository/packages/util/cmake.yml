@@ -1,0 +1,16 @@
+version: "3.17.3"
+bdepend:
+  - libs/libarchive
+  - libs/libuv
+  - util/curl
+rdepend:
+  - libs/libarchive
+  - libs/libuv
+  - util/curl
+filename: cmake
+comp: tar.gz
+upstream:  https://cmake.org/files/v3.17/
+license: BSD-3-Clause
+pre_configure_script: sed -i '/"lib64"/s/64//' Modules/GNUInstallDirs.cmake
+additional_configure_options: --system-libs --no-system-jsoncpp --no-system-librhash
+configure: ./bootstrap %{configure_options}

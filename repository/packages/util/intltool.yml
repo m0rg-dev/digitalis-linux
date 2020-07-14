@@ -1,0 +1,9 @@
+version: "0.51.0"
+bdepend:
+  - perl/xml-parser
+rdepend:
+  - perl/xml-parser
+filename: intltool
+comp: tar.gz
+upstream: https://launchpad.net/intltool/trunk/%{version}/+download/
+license: GPL-2.0-or-later

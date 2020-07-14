@@ -1,0 +1,5 @@
+version: "530"
+filename: less
+comp: tar.gz
+upstream: https://ftp.gnu.org/gnu/less/less-530
+license: BSD-2-Clause

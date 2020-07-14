@@ -1,0 +1,21 @@
+version: "2.4.102"
+bdepend:
+  - python/meson
+  - util/ninja
+  - gui/libpciaccess
+rdepend:
+  - gui/libpciaccess
+filename: libdrm
+upstream: https://dri.freedesktop.org/libdrm/
+license: MIT
+queue_hooks:
+  ldconfig: true
+additional_configure_options: -Dbuildtype=release -Ddri-drivers="i965,nouveau" -Dgallium-drivers="i915,nouveau,r600,radeonsi,svga,swrast,virgl" -Dgallium-nine=false -Dglx=dri -Dosmesa=gallium
+configure: |
+  mkdir build
+  meson %{configure_options} build/
+make: ninja %{make_options} -C build
+install: DESTDIR=/target_root ninja -C build install
+post_install_script: |
+  mkdir -p /target_root/usr/lib
+  mv /target_root/usr/lib64/pkgconfig /target_root/usr/lib/pkgconfig

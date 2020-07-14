@@ -1,0 +1,10 @@
+version: "0.40.0"
+bdepend:
+  - gui/mesa
+rdepend:
+  - gui/mesa
+filename: pixman
+upstream: https://www.x.org/releases/individual/lib/
+license: MIT
+queue_hooks:
+  ldconfig: true

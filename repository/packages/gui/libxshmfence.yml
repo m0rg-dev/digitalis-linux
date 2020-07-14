@@ -1,0 +1,9 @@
+version: "1.3"
+bdepend:
+  - gui/xorgproto
+filename: libxshmfence
+comp: tar.bz2
+upstream: https://www.x.org/archive/individual/lib/
+license: MIT
+queue_hooks:
+  ldconfig: true

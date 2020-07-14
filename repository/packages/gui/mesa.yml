@@ -1,0 +1,36 @@
+version: "20.1.3"
+bdepend:
+  - gui/libdrm
+  - gui/libx11
+  - gui/libxdamage
+  - gui/libxext
+  - gui/libxrandr
+  - gui/libxshmfence
+  - gui/libxxf86vm
+  - gui/xorgproto
+  - lang/llvm
+  - python/mako
+  - python/meson
+  - util/ninja
+rdepend:
+  - gui/libdrm
+  - gui/libx11
+  - gui/libxdamage
+  - gui/libxext
+  - gui/libxrandr
+  - gui/libxshmfence
+  - gui/libxxf86vm
+filename: mesa
+upstream: https://archive.mesa3d.org/
+license: MIT
+configure: |
+  llvm-config --version
+  mkdir build
+  meson -D platforms=x11,drm,surfaceless -Dbuildtype=release -Ddri-drivers=auto -Dgallium-drivers=auto -Dgallium-nine=false -Dglx=dri -Dosmesa=gallium -Dvalgrind=false -Dlibunwind=false --prefix=/usr build/
+make: ninja %{make_options} -C build
+install: DESTDIR=/target_root ninja -C build install
+post_install_script: |
+  mkdir -p usr/lib
+  mv usr/lib64/pkgconfig usr/lib/
+queue_hooks:
+  ldconfig: true

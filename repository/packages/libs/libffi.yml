@@ -1,0 +1,8 @@
+version: "3.3"
+filename: libffi
+upstream: https://github.com/libffi/libffi/archive/v%{version}.tar.gz
+comp: tar.gz
+license: MIT
+pre_configure_script: ./autogen.sh
+queue_hooks:
+  ldconfig: true

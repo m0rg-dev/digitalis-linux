@@ -1,0 +1,6 @@
+version: "7.71.1"
+filename: curl
+upstream: https://curl.haxx.se/download/
+license: curl
+queue_hooks:
+  ldconfig: true
