@@ -1871,6 +1871,15 @@ packages:
     hash: 46467efbc8ec1fce7f699502f32015a4d9fb5fdb7f8e703ef33e8d2b5c99b4bb
     atom: *a91
     version: *a92
+  gui/qt5-base:
+    path: gui/qt5-base.yml
+    size: 677
+    hash: 431c1e7d3ec5937a248d89585c0ad6af44570a3e4dfefc586117ebad15bfe282
+    atom:
+      category: gui
+      name: qt5-base
+    version:
+      version: 5.15.0
   gui/xcb-proto:
     path: gui/xcb-proto.yml
     size: 102
@@ -2514,4 +2523,4 @@ categories:
   - python
   - util
   - virtual
-serial: 1594770975
+serial: 1594771638

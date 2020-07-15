@@ -1,0 +1,45 @@
+version: "5.15.0"
+bdepend:
+  - gui/xorgproto
+  - gui/libx11
+  - libs/glib
+  - libs/harfbuzz
+  - libs/libpng
+  - gui/mesa
+  - libs/mtdev
+  - util/make-ca
+filename: qt-everywhere-src
+upstream: https://download.qt.io/archive/qt/5.15/%{version}/single/
+# per BLFS we're going to install this into /opt. may change someday?
+pre_configure_script: |
+  # TODO this is coreutils' problem
+  ln -s /usr/bin/pwd /bin/
+  sed -i 's/python /python3 /' qtdeclarative/qtdeclarative.pro qtdeclarative/src/3rdparty/masm/masm.pri
+configure_options: -prefix /opt/qt5 -sysconfdir /etc/xdg -confirm-license -opensource -dbus-linked -openssl-linked
+  -system-harfbuzz -nomake examples -no-rpath -skip qtwebengine -archdatadir /usr/lib/qt5 -bindir /usr/bin -plugindir
+  /usr/lib/qt5/plugins -importdir /usr/lib/qt5/imports -headerdir /usr/include/qt5 -datadir /usr/share/qt5 -docdir
+  /usr/share/doc/qt5 -translationdir /usr/share/qt5/translations -examplesdir /usr/share/doc/qt5/examples
+install: make INSTALL_ROOT=/target_root install
+post_install_script: |
+  mkdir -p etc/profile.d/
+  cat > etc/profile.d/qt5.sh << "EOF"
+  # Begin /etc/profile.d/qt5.sh
+
+  QT5DIR=/usr
+  export QT5DIR
+  pathappend $QT5DIR/bin
+
+  # End /etc/profile.d/qt5.sh
+  EOF
+
+  mkdir -p etc/sudoers.d
+  cat > etc/sudoers.d/qt << "EOF"
+  Defaults env_keep += QT5DIR
+  EOF
+
+  for file in moc uic rcc qmake lconvert lrelease lupdate; do
+    ln -sfrvn /usr/bin/$file usr/bin/$file-qt5
+  done
+license: GPL-3.0-or-later
+queue_hooks:
+  ldconfig: true
