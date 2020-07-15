@@ -1,0 +1,13 @@
+version: "5.15.0"
+bdepend:
+  - gui/qt5-base
+rdepend:
+  - gui/qt5-base
+filename: qtx11extras-everywhere-src
+upstream: https://download.qt.io/official_releases/qt/5.15/%{version}/submodules/
+configure: qmake; cd src/x11extras; qmake
+make: cd src/x11extras; make %{make_options}
+install: cd src/x11extras; make INSTALL_ROOT=/target_root install
+license: GPL-3.0-or-later
+queue_hooks:
+  ldconfig: true

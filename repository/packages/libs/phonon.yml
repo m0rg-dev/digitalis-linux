@@ -1,0 +1,13 @@
+version: "4.11.1"
+bdepend:
+  - util/cmake
+  - util/extra-cmake-modules
+  - libs/glib
+  - gui/qt5-base
+filename: phonon
+upstream: https://download.kde.org/stable/phonon/%{version}
+license: LGPL-2.1-or-later
+use_build_dir: true
+configure: cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release ../%{unpack_dir}
+queue_hooks:
+  ldconfig: true

@@ -2,20 +2,28 @@ version: "5.15.0"
 bdepend:
   - gui/xorgproto
   - gui/libx11
+  - gui/libxcb
   - libs/glib
   - libs/harfbuzz
   - libs/libpng
   - gui/mesa
   - libs/mtdev
   - util/make-ca
+rdepend:
+  - gui/libx11
+  - gui/libxcb
+  - libs/glib
+  - libs/harfbuzz
+  - libs/libpng
+  - libs/mtdev
+  - gui/mesa
 filename: qt-everywhere-src
 upstream: https://download.qt.io/archive/qt/5.15/%{version}/single/
-# per BLFS we're going to install this into /opt. may change someday?
 pre_configure_script: |
   # TODO this is coreutils' problem
   ln -s /usr/bin/pwd /bin/
   sed -i 's/python /python3 /' qtdeclarative/qtdeclarative.pro qtdeclarative/src/3rdparty/masm/masm.pri
-configure_options: -prefix /opt/qt5 -sysconfdir /etc/xdg -confirm-license -opensource -dbus-linked -openssl-linked
+configure_options: -prefix /usr -sysconfdir /etc/xdg -confirm-license -opensource -dbus-linked -openssl-linked
   -system-harfbuzz -nomake examples -no-rpath -skip qtwebengine -archdatadir /usr/lib/qt5 -bindir /usr/bin -plugindir
   /usr/lib/qt5/plugins -importdir /usr/lib/qt5/imports -headerdir /usr/include/qt5 -datadir /usr/share/qt5 -docdir
   /usr/share/doc/qt5 -translationdir /usr/share/qt5/translations -examplesdir /usr/share/doc/qt5/examples

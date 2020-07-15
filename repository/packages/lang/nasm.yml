@@ -1,0 +1,4 @@
+version: "2.15.02"
+filename: nasm
+upstream: http://www.nasm.us/pub/nasm/releasebuilds/%{version}
+license: BSD-2-Clause

@@ -97,7 +97,8 @@ async function main() {
 
             for (const step of plan) {
                 if (step.type == StepType.Build) {
-                    throw `NYI in rpkg`;
+                    console.log("\nThis plan would require packages to be compiled from source.");
+                    process.exit(1);
                 } else if (step.type == StepType.TargetInstall) {
                     await repo.installPackage(step.what, targetdb, (argv.target_root || '/'));
                 }

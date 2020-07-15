@@ -1,0 +1,7 @@
+version: "1.38"
+filename: libgpg-error
+comp: tar.bz2
+upstream: https://www.gnupg.org/ftp/gcrypt/libgpg-error/
+license: LGPL-2.1-or-later
+queue_hooks:
+  ldconfig: true

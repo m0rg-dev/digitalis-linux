@@ -1,0 +1,35 @@
+version: "5.72.0"
+bdepend:
+  - util/cmake
+  - util/extra-cmake-modules
+  - gui/qt5-base
+  - gui/knotifications
+  - libs/libgcrypt
+  - gui/kcoreaddons
+  - gui/kconfig
+  - gui/kwindowsystem
+  - gui/ki18n
+  - gui/kconfigwidgets
+  - gui/kwidgetsaddons
+  - gui/kdbusaddons
+  - gui/kservice
+rdepend:
+  - gui/qt5-base
+  - gui/knotifications
+  - libs/libgcrypt
+  - gui/kcoreaddons
+  - gui/kconfig
+  - gui/kwindowsystem
+  - gui/ki18n
+  - gui/kconfigwidgets
+  - gui/kwidgetsaddons
+  - gui/kdbusaddons
+  - gui/kservice
+filename: kwallet
+comp: tar.xz
+upstream: http://download.kde.org/stable/frameworks/5.72/
+license: LGPL-2.1-or-later
+use_build_dir: true
+configure: cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -Wno-dev ../%{unpack_dir}
+queue_hooks:
+  ldconfig: true

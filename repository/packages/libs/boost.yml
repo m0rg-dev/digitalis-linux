@@ -1,0 +1,14 @@
+version: "1.73.0"
+comp: tar.bz2
+src: boost_1_73_0.%{comp}
+unpack_dir: boost_1_73_0
+upstream: https://dl.bintray.com/boostorg/release/%{version}/source/
+license: BSL-1.0
+configure: ./bootstrap.sh --prefix=/target_root/usr --with-python=python3
+make: ./b2 stage %{make_options} threading=multi link=shared
+install: ./b2 install --prefix=/target_root/usr threading=multi link=shared
+post_install_script: |
+  mkdir -p usr/include/boost/uuid
+  ln -svf detail/sha1.hpp usr/include/boost/uuid/sha1.hpp
+queue_hooks:
+  ldconfig: true

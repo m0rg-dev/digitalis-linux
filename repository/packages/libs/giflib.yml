@@ -1,0 +1,15 @@
+version: "5.2.1"
+rdepend:
+  - util/xmlto
+filename: giflib
+comp: tar.gz
+upstream: https://sourceforge.net/projects/giflib/files/
+license: MIT
+configure: ~
+install: |
+  DESTDIR=/target_root make PREFIX=/usr install
+  find doc \( -name Makefile\* -o -name \*.1 -o -name \*.xml \) -exec rm -v {} \;
+  install -v -dm755 /target_root/usr/share/doc/giflib-5.2.1
+  cp -v -R doc/* /target_root/usr/share/doc/giflib-5.2.1
+queue_hooks:
+  ldconfig: true
