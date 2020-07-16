@@ -49,5 +49,3 @@ post_install_script: |
     ln -sfrvn /usr/bin/$file usr/bin/$file-qt5
   done
 license: GPL-3.0-or-later
-queue_hooks:
-  ldconfig: true

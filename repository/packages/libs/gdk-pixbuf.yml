@@ -24,5 +24,3 @@ post_install_script: |
   mkdir -p usr/lib
   mv usr/lib64/pkgconfig usr/lib/
 post_unpack_script: chroot . gdk-pixbuf-query-loaders --update-cache
-queue_hooks:
-  ldconfig: true

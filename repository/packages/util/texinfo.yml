@@ -6,5 +6,3 @@ rdepend:
 filename: texinfo
 upstream: http://ftp.gnu.org/gnu/texinfo/
 license: GPL-3.0-or-later
-queue_hooks:
-  ldconfig: true

@@ -48,5 +48,3 @@ post_unpack_script: |
     mkdir /etc/modules-load.d
     mkinitcpio -M | tail -n +2 >/etc/modules-load.d/autodetect.conf
   fi
-queue_hooks:
-    ldconfig: true

@@ -1,6 +1,6 @@
 version: "1.76"
 filename: URI
 comp: tar.gz
-upstream: https://www.cpan.org/authors/id/O/OA/OALDERS/URI-1.76.tar.gz
+upstream: https://www.cpan.org/authors/id/O/OA/OALDERS/
 license: Artistic
 configure: perl Makefile.PL

@@ -4,9 +4,7 @@ bdepend:
   - libs/gettext
 filename: flex
 comp: tar.gz
-upstream: https://github.com/westes/flex/releases/download/v%{version}/%{src}
+upstream: https://github.com/westes/flex/releases/download/v%{version}/
 license: BSD-3-Clause
 pre_configure_script: ./autogen.sh
-queue_hooks:
-  ldconfig: true
   

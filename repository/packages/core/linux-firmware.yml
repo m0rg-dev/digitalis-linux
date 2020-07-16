@@ -12,5 +12,3 @@ pre_config_script: |
 post_install-script: |
   mkdir -p usr/share/licenses/linux-firmware.d/
   cp WHENCE LICENCE.* usr/share/licenses/linux-firmware.d/
-queue_hooks:
-  ldconfig: false

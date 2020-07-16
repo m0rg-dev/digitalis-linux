@@ -70,5 +70,3 @@ install: |
   chmod -v 600  var/log/btmp
   chmod -v 755 .
 use_build_dir: true
-queue_hooks:
-  ldconfig: true

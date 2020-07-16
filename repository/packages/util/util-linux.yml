@@ -19,5 +19,3 @@ additional_configure_options: >
             --without-python     \
             --without-systemd    \
             --without-systemdsystemunitdir
-queue_hooks:
-  ldconfig: true

@@ -13,5 +13,3 @@ pre_configure_script: |
   sed -i '/MV.*old/d' Makefile.in
   sed -i '/{OLDSUFF}/c:' support/shlib-install
 additional_configure_options: --disable-static
-queue_hooks:
-  ldconfig: true

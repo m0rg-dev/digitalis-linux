@@ -14,5 +14,3 @@ install: DESTDIR=/target_root ninja -C build install
 post_install_script: |
   mkdir -p usr/lib
   mv usr/lib64/pkgconfig usr/lib/
-queue_hooks:
-  ldconfig: true

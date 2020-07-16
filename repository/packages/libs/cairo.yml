@@ -13,5 +13,3 @@ rdepend:
 filename: cairo
 upstream: https://www.cairographics.org/releases/
 license: LGPL-2.1-only
-queue_hooks:
-  ldconfig: true

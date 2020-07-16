@@ -20,5 +20,3 @@ upstream: https://download.gnome.org/sources/librsvg/2.49/
 license: LGPL-2.1-or-later
 pre_configure_script: |
   pkg-config --cflags xproto
-queue_hooks:
-  ldconfig: true

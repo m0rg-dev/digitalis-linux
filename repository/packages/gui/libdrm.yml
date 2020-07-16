@@ -8,8 +8,6 @@ rdepend:
 filename: libdrm
 upstream: https://dri.freedesktop.org/libdrm/
 license: MIT
-queue_hooks:
-  ldconfig: true
 additional_configure_options: -Dbuildtype=release -Ddri-drivers="i965,nouveau" -Dgallium-drivers="i915,nouveau,r600,radeonsi,svga,swrast,virgl" -Dgallium-nine=false -Dglx=dri -Dosmesa=gallium
 configure: |
   mkdir build

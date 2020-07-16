@@ -9,5 +9,3 @@ configure: qmake; cd src/x11extras; qmake
 make: cd src/x11extras; make %{make_options}
 install: cd src/x11extras; make INSTALL_ROOT=/target_root install
 license: GPL-3.0-or-later
-queue_hooks:
-  ldconfig: true

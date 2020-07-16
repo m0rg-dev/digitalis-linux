@@ -6,5 +6,3 @@ filename: curl
 upstream: https://curl.haxx.se/download/
 license: curl
 additional_configure_options: --with-ca-path=/etc/ssl/certs
-queue_hooks:
-  ldconfig: true

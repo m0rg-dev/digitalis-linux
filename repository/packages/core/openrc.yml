@@ -1,7 +1,7 @@
 version: 0.42.1
 filename: openrc
 comp: tar.gz
-upstream: https://github.com/OpenRC/openrc/archive/
+src_url: https://github.com/OpenRC/openrc/archive/%{version}.%{comp}
 license: BSD-2-Clause
 configure: ~
 additional_make_options: >
@@ -20,5 +20,3 @@ post_install_script: |
     ln -svf /etc/init.d/agetty.$tty etc/runlevels/default
   done
 post_unpack_script: mkdir -p run proc dev sys
-queue_hooks:
-  ldconfig: true

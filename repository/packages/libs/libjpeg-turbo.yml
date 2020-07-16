@@ -9,5 +9,3 @@ license: IGJ AND BSD-3-Clause AND zlib
 use_build_dir: true
 configure: |
   cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=release -DCMAKE_INSTALL_DEFAULT_LIBDIR=/lib ../%{unpack_dir}
-queue_hooks:
-  ldconfig: true

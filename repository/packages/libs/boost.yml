@@ -10,5 +10,3 @@ install: ./b2 install --prefix=/target_root/usr threading=multi link=shared
 post_install_script: |
   mkdir -p usr/include/boost/uuid
   ln -svf detail/sha1.hpp usr/include/boost/uuid/sha1.hpp
-queue_hooks:
-  ldconfig: true

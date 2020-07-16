@@ -50,5 +50,3 @@ post_install_script: |
   }
   EOF
   chmod +x etc/init.d/dbus
-queue_hooks:
-  ldconfig: true

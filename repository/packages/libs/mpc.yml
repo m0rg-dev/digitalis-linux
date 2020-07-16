@@ -8,5 +8,3 @@ upstream: https://ftp.gnu.org/gnu/mpc/
 license: LGPL-3.0-or-later
 license_location: file COPYING.LESSER
 additional_configure_options: --disable-static
-queue_hooks:
-  ldconfig: true

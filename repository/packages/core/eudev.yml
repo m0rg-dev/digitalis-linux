@@ -4,7 +4,7 @@ bdepend:
   - util/kmod
 filename: eudev
 comp: tar.gz
-upstream: https://dev.gentoo/org/~blueness/eudev/
+upstream: https://dev.gentoo.org/~blueness/eudev/
 license: GPL-2.0-or-later
 pre_configure_script: mkdir -pv ../{lib,etc}/udev/rules.d
 additional_configure_options: >
@@ -63,5 +63,3 @@ post_install_script: |
   HELPEOF
   }
   EOF
-queue_hooks:
-  ldconfig: true

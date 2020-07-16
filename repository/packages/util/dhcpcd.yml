@@ -1,6 +1,5 @@
 version: 9.1.2
 filename: dhcpcd
-upstream: https:/roy.marples.name/downloads/dhcpcd/
+upstream: https://roy.marples.name/downloads/dhcpcd/
 license: BSD-2-Clause
-queue_hooks:
-  ldconfig: true
+additional_configure_options: --sysconfdir=/etc

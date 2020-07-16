@@ -9,5 +9,3 @@ upstream: https://download.kde.org/stable/phonon/%{version}
 license: LGPL-2.1-or-later
 use_build_dir: true
 configure: cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release ../%{unpack_dir}
-queue_hooks:
-  ldconfig: true

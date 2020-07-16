@@ -28,5 +28,3 @@ post_install_script: |
     rm -vf                     usr/lib/libcursesw.so
     echo "INPUT(-lncursesw)" > usr/lib/libcursesw.so
     ln -sfv libncurses.so      usr/lib/libcurses.so
-queue_hooks:
-  ldconfig: true

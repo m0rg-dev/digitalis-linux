@@ -18,5 +18,3 @@ post_install_script: |
   done
 
   ln -svf kmod bin/lsmod
-queue_hooks:
-  ldconfig: true

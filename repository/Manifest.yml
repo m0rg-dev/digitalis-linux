@@ -1,1284 +1,250 @@
 builds:
   core/fs-tree:
     path: ../repository/builds/core/fs-tree,1.0.1.tar.xz
-    size: 1272
-    hash: 85f06fccc5d9b8dff37401197e63c160aedfa1a15f6e21c8dbe5ec1db9a713d1
+    size: 2008
+    hash: e7ecb4509e876ca7bf1b1acd274a336c93a83a5e7a759e47a476d0df2216c9af
     atom:
-      &a11
+      &a7
       category: core
       name: fs-tree
     version:
-      &a12
+      &a8
       version: 1.0.1
   core/udev-init-scripts:
     path: ../repository/builds/core/udev-init-scripts,33.tar.xz
-    size: 3124
-    hash: 63545c8b333c0828e2e14f6754e963f95f310d51902c40ce5f003dac439bc136
+    size: 3372
+    hash: a68d41aec7ade483ac9a2f6eef06932ece4da5b23e41f510940824fb5bfb09b2
     atom:
-      &a29
+      &a17
       category: core
       name: udev-init-scripts
     version:
-      &a30
+      &a18
       version: "33"
-  gui/libxshmfence:
-    path: ../repository/builds/gui/libxshmfence,1.3.tar.xz
-    size: 11240
-    hash: f612105df1c005066644521b403d9989486892a39975b9c4d44545f2fc4fc0bd
-    atom:
-      &a201
-      category: gui
-      name: libxshmfence
-    version:
-      &a202
-      version: "1.3"
-  gui/qt5-x11extras:
-    path: ../repository/builds/gui/qt5-x11extras,5.15.0.tar.xz
-    size: 10852
-    hash: df47f496bd5bf409e9e64dce38dfb26093c11dc4b9980cbd10ef8e382438d9d0
-    atom:
-      &a223
-      category: gui
-      name: qt5-x11extras
-    version:
-      &a224
-      version: 5.15.0
-  util/itstool:
-    path: ../repository/builds/util/itstool,2.0.6.tar.xz
-    size: 16236
-    hash: 3e5810aa4ee7e2f19d88b042c9e3a05551a9627c999b433862519377f7728a24
-    atom:
-      &a421
-      category: util
-      name: itstool
-    version:
-      &a422
-      version: 2.0.6
-  util/make-ca:
-    path: ../repository/builds/util/make-ca,1.7.1.tar.xz
-    size: 9064
-    hash: fd2d8d420db89130dfe707eb19ccef8b85ecec34e8cba92943000f9e2e2a7e20
-    atom:
-      &a433
-      category: util
-      name: make-ca
-    version:
-      &a434
-      version: 1.7.1
-  gui/kcrash:
-    path: ../repository/builds/gui/kcrash,5.72.0.tar.xz
-    size: 18052
-    hash: ceccd9640d1e574607ef4752db09049caa1d0cb7b58bdabb8fe30b1b58efd03a
-    atom:
-      &a79
-      category: gui
-      name: kcrash
-    version:
-      &a80
-      version: 5.72.0
-  gui/kidletime:
-    path: ../repository/builds/gui/kidletime,5.72.0.tar.xz
-    size: 22556
-    hash: 5a780ecf8abc535d6b9b4d2283993f967ade6ff5bb8f25859d745c14e27f0e98
-    atom:
-      &a107
-      category: gui
-      name: kidletime
-    version:
-      &a108
-      version: 5.72.0
-  gui/xcb-util-keysyms:
-    path: ../repository/builds/gui/xcb-util-keysyms,0.4.0.tar.xz
-    size: 16956
-    hash: 8513238eb1d5945ed2a328a7fd79337594c4043d57282559f0380fb41e5f8b6d
-    atom:
-      &a237
-      category: gui
-      name: xcb-util-keysyms
-    version:
-      &a238
-      version: 0.4.0
-  util/mkinitcpio:
-    path: ../repository/builds/util/mkinitcpio,27.tar.xz
-    size: 32596
-    hash: fd11b98903c83971bb23df2e9c509292c314942581028f9d5525d27495ae7426
-    atom:
-      &a437
-      category: util
-      name: mkinitcpio
-    version:
-      &a438
-      version: "27"
-  util/xmlto:
-    path: ../repository/builds/util/xmlto,0.0.28.tar.xz
-    size: 31932
-    hash: 61b81eeb3389189f7cf36e96069b77af8bb2d93141d1276a91f33f79fce59959
-    atom:
-      &a459
-      category: util
-      name: xmlto
-    version:
-      &a460
-      version: 0.0.28
-  gui/kded:
-    path: ../repository/builds/gui/kded,5.72.0.tar.xz
-    size: 35960
-    hash: e79be605a946624ea0c3e0c7436d11ec488f4ed8d82e950b4f51378819d25197
-    atom:
-      &a85
-      category: gui
-      name: kded
-    version:
-      &a86
-      version: 5.72.0
-  gui/kdnssd:
-    path: ../repository/builds/gui/kdnssd,5.72.0.tar.xz
-    size: 41344
-    hash: 62753b1ab62fb32c685484126e1cd774f17cd8839224792951819e19abb77a9e
-    atom:
-      &a89
-      category: gui
-      name: kdnssd
-    version:
-      &a90
-      version: 5.72.0
-  gui/kplotting:
-    path: ../repository/builds/gui/kplotting,5.72.0.tar.xz
-    size: 42560
-    hash: 2a42f117ca3766b90940bd0f5528243032704551a34c76180657fc968d0db576
-    atom:
-      &a135
-      category: gui
-      name: kplotting
-    version:
-      &a136
-      version: 5.72.0
-  gui/kpty:
-    path: ../repository/builds/gui/kpty,5.72.0.tar.xz
-    size: 40304
-    hash: ab58d906be2e5fe202ce2a088fd6fb716f828ec09af57215a200df5ff61dd9f1
-    atom:
-      &a137
-      category: gui
-      name: kpty
-    version:
-      &a138
-      version: 5.72.0
-  gui/libxau:
-    path: ../repository/builds/gui/libxau,1.0.9.tar.xz
-    size: 44852
-    hash: e6b73283e22a0ea3cf5ce8474311a70bafcc51ee4f98cbb5d5f1ed900b7c89ab
-    atom:
-      &a173
-      category: gui
-      name: libxau
-    version:
-      &a174
-      version: 1.0.9
-  gui/libxdamage:
-    path: ../repository/builds/gui/libxdamage,1.1.5.tar.xz
-    size: 44332
-    hash: 0bac8a97709d1b37260135e513eb4b502e03cc511522dc27daa864fe8b7e3e8f
-    atom:
-      &a179
-      category: gui
-      name: libxdamage
-    version:
-      &a180
-      version: 1.1.5
-  gui/xtrans:
-    path: ../repository/builds/gui/xtrans,1.4.0.tar.xz
-    size: 42436
-    hash: 88964269eac1c0ac43c458f402015aa823a70dc483135ca10a3623b6b9a6bbb0
-    atom:
-      &a249
-      category: gui
-      name: xtrans
-    version:
-      &a250
-      version: 1.4.0
   libs/libffi:
     path: ../repository/builds/libs/libffi,3.3.tar.xz
-    size: 46692
-    hash: 348679e44009244a26c3f8bdce45d72a9575bc29f7434d0c0d1066cb15fe8cc4
+    size: 46988
+    hash: 3d465c4334da539eeff11d094d71e9b8682ec7e2cad439fe92f5933a0b093cdf
     atom:
-      &a315
+      &a51
       category: libs
       name: libffi
     version:
-      &a316
+      &a52
       version: "3.3"
-  perl/uri:
-    path: ../repository/builds/perl/uri,1.76.tar.xz
-    size: 46280
-    hash: 4e9bc55a24cd5f44650761e0d28f3f67662edbcd5604fa8ba13db26104da3870
-    atom:
-      &a359
-      category: perl
-      name: uri
-    version:
-      &a360
-      version: "1.76"
-  util/intltool:
-    path: ../repository/builds/util/intltool,0.51.0.tar.xz
-    size: 33732
-    hash: 1c3a989c216d9feb1730536a36cad7d121abd8c4859e48ca9f10136841042c19
-    atom:
-      &a417
-      category: util
-      name: intltool
-    version:
-      &a418
-      version: 0.51.0
   util/pv:
     path: ../repository/builds/util/pv,1.6.6.tar.xz
-    size: 34788
-    hash: 8f95b4931406519cd8c26ac319b1ea003e040ddddea158d057d14f152ae2e274
+    size: 37880
+    hash: 1fce4ca65afe14e9e827000283ff9c405271948ddb2fe66e05077ce9855d52a4
     atom:
-      &a449
+      &a123
       category: util
       name: pv
     version:
-      &a450
+      &a124
       version: 1.6.6
   util/which:
     path: ../repository/builds/util/which,2.21.tar.xz
-    size: 32860
-    hash: f23a5440f8158d1927d759c973091791e178ed8caf7af6a619bd05a3ba230dcc
+    size: 44232
+    hash: 2892eb08480e7dedbce485fa706815c1f7299d55ba394719a0af388ada010a0f
     atom:
-      &a457
+      &a131
       category: util
       name: which
     version:
-      &a458
+      &a132
       version: "2.21"
-  core/docbook-xml:
-    path: ../repository/builds/core/docbook-xml,4.5.tar.xz
-    size: 59260
-    hash: 11e029a497e5e49d04aeb9b78704569c0e1175a68bb8625c27aa6ef681ac336b
-    atom:
-      &a5
-      category: core
-      name: docbook-xml
-    version:
-      &a6
-      version: "4.5"
-  gui/kdbusaddons:
-    path: ../repository/builds/gui/kdbusaddons,5.72.0.tar.xz
-    size: 56372
-    hash: ba93e28ae3046a26a8f9f985a050bd2336363747988c7efa3e772f214d55bdda
-    atom:
-      &a81
-      category: gui
-      name: kdbusaddons
-    version:
-      &a82
-      version: 5.72.0
-  gui/kguiaddons:
-    path: ../repository/builds/gui/kguiaddons,5.72.0.tar.xz
-    size: 50664
-    hash: 824b93a1c5ac2e2328caeca34b23707408bf713912b5c6220277700b35d02371
-    atom:
-      &a99
-      category: gui
-      name: kguiaddons
-    version:
-      &a100
-      version: 5.72.0
-  gui/libfontenc:
-    path: ../repository/builds/gui/libfontenc,1.1.4.tar.xz
-    size: 55712
-    hash: fc022f573e530846c659493a8fb6c69e764dd6b3bd8badce9939afab4ed01222
-    atom:
-      &a163
-      category: gui
-      name: libfontenc
-    version:
-      &a164
-      version: 1.1.4
-  gui/kdesu:
-    path: ../repository/builds/gui/kdesu,5.72.0.tar.xz
-    size: 72140
-    hash: bcaebde78f0583f6774304cfc21cd3a63f3029f63c697cb13a7b72d344b68d80
-    atom:
-      &a87
-      category: gui
-      name: kdesu
-    version:
-      &a88
-      version: 5.72.0
-  gui/knotifyconfig:
-    path: ../repository/builds/gui/knotifyconfig,5.72.0.tar.xz
-    size: 80416
-    hash: 65261d8b239c9a702cf179ca970a6290ff2557fd081f9282f029655b5684f27f
-    atom:
-      &a127
-      category: gui
-      name: knotifyconfig
-    version:
-      &a128
-      version: 5.72.0
-  gui/libxxf86vm:
-    path: ../repository/builds/gui/libxxf86vm,1.1.4.tar.xz
-    size: 69552
-    hash: 833ec9f212789be54a7e71558ca9bf0712aadcf698337244998321cd343ce9b6
-    atom:
-      &a207
-      category: gui
-      name: libxxf86vm
-    version:
-      &a208
-      version: 1.1.4
-  gui/qqc2-desktop-style:
-    path: ../repository/builds/gui/qqc2-desktop-style,5.72.0.tar.xz
-    size: 71660
-    hash: 0761177ce9f103604fe476b99e164e17b38ee2c5b01b8cb81c2e481df0e35e3a
-    atom:
-      &a219
-      category: gui
-      name: qqc2-desktop-style
-    version:
-      &a220
-      version: 5.72.0
-  gui/threadweaver:
-    path: ../repository/builds/gui/threadweaver,5.72.0.tar.xz
-    size: 77340
-    hash: 0b9271bbea9655ad9bf628898a8ad371cc2e20e1c0c83f1c32f543c47d433ff0
-    atom:
-      &a233
-      category: gui
-      name: threadweaver
-    version:
-      &a234
-      version: 5.72.0
-  libs/at-spi2-atk:
-    path: ../repository/builds/libs/at-spi2-atk,2.34.2.tar.xz
-    size: 71288
-    hash: 659a8b5b3b31216864741f2cefd2d558071052ee80abfef8eca4519c3020db3e
-    atom:
-      &a273
-      category: libs
-      name: at-spi2-atk
-    version:
-      &a274
-      version: 2.34.2
-  libs/fribidi:
-    path: ../repository/builds/libs/fribidi,1.0.10.tar.xz
-    size: 79544
-    hash: 484b9de32c13518c1540d2eb920b75412b9c5ddca1d71073e2016882da11413b
-    atom:
-      &a289
-      category: libs
-      name: fribidi
-    version:
-      &a290
-      version: 1.0.10
-  libs/mtdev:
-    path: ../repository/builds/libs/mtdev,1.1.6.tar.xz
-    size: 78732
-    hash: 445adedfeb0fa5be7fa9db2c16fec2251d14c7d8c2ce8c314ea85e12eae3db55
-    atom:
-      &a345
-      category: libs
-      name: mtdev
-    version:
-      &a346
-      version: 1.1.6
   util/bc:
     path: ../repository/builds/util/bc,2.5.3.tar.xz
-    size: 76076
-    hash: d6d4e7d4cc1c31c0082016a4369a48237b9abb6e2f8bf4705f9c8d7478d01c02
+    size: 77088
+    hash: 51013642d6c233f2d95ef33e9e8aa1d57bbbdb41a8f8df13c32c9476c5981a8e
     atom:
-      &a375
+      &a69
       category: util
       name: bc
     version:
-      &a376
+      &a70
       version: 2.5.3
-  gui/kactivities-stats:
-    path: ../repository/builds/gui/kactivities-stats,5.72.0.tar.xz
-    size: 94148
-    hash: e512731e5784972d1d99532c539a4600925551915135fa5d8b3324a41e2a115e
-    atom:
-      &a51
-      category: gui
-      name: kactivities-stats
-    version:
-      &a52
-      version: 5.72.0
-  gui/kauth:
-    path: ../repository/builds/gui/kauth,5.72.0.tar.xz
-    size: 94944
-    hash: 7372c4f12c67dc6fb7c6f5ed87c311ecb156a80eb7f5607dce12f541dfd964a9
-    atom:
-      &a59
-      category: gui
-      name: kauth
-    version:
-      &a60
-      version: 5.72.0
-  gui/kjobwidgets:
-    path: ../repository/builds/gui/kjobwidgets,5.72.0.tar.xz
-    size: 85500
-    hash: 00659fdaf64f0c78ffa14cc2da84a877d6671d812210aaf45194f7ba1d6c541a
-    atom:
-      &a121
-      category: gui
-      name: kjobwidgets
-    version:
-      &a122
-      version: 5.72.0
   libs/zlib:
     path: ../repository/builds/libs/zlib,1.2.11.tar.xz
-    size: 93900
-    hash: b8f831762ab89cbb7e6a606a07604ca8779f2f283c807055fcdd2632cf67a6c0
+    size: 94088
+    hash: f962febf397449a199fbd56d17f885b3eed58098ffd913fa1e271cffb4c7c57a
     atom:
-      &a357
+      &a63
       category: libs
       name: zlib
     version:
-      &a358
+      &a64
       version: 1.2.11
-  gui/kapidox:
-    path: ../repository/builds/gui/kapidox,5.72.0.tar.xz
-    size: 109760
-    hash: 5be0215d62d3b902a12644761ddbac0e14484c71ae73df76496845232e0edffd
-    atom:
-      &a55
-      category: gui
-      name: kapidox
-    version:
-      &a56
-      version: 5.72.0
-  gui/karchive:
-    path: ../repository/builds/gui/karchive,5.72.0.tar.xz
-    size: 107028
-    hash: 0ee4602744384fbe3129015035d0c75bf12660f88a18a247c63b85b06c39dc6a
-    atom:
-      &a57
-      category: gui
-      name: karchive
-    version:
-      &a58
-      version: 5.72.0
-  gui/kimageformats:
-    path: ../repository/builds/gui/kimageformats,5.72.0.tar.xz
-    size: 113760
-    hash: c61bff6926a48e91fcd9e06b0cd57cd54333354c2bbda901b1a089748c75d310
-    atom:
-      &a109
-      category: gui
-      name: kimageformats
-    version:
-      &a110
-      version: 5.72.0
-  gui/kinit:
-    path: ../repository/builds/gui/kinit,5.72.0.tar.xz
-    size: 110964
-    hash: 8f4bb17fba3ca2e93e176e5eb9f864bf7f4148c078709f5af1cd967754370caf
-    atom:
-      &a111
-      category: gui
-      name: kinit
-    version:
-      &a112
-      version: 5.72.0
-  gui/kitemviews:
-    path: ../repository/builds/gui/kitemviews,5.72.0.tar.xz
-    size: 111948
-    hash: 880fa3d402225dbfa2314295413e5b1ef88f2926b077e4adceefd5febf785a1f
-    atom:
-      &a119
-      category: gui
-      name: kitemviews
-    version:
-      &a120
-      version: 5.72.0
-  gui/xcb-proto:
-    path: ../repository/builds/gui/xcb-proto,1.14.tar.xz
-    size: 101932
-    hash: f427b02476b0f664a4f81f168774cd77e18448e3b2dc5b49a996a105a37374a3
-    atom:
-      &a235
-      category: gui
-      name: xcb-proto
-    version:
-      &a236
-      version: "1.14"
-  util/extra-cmake-modules:
-    path: ../repository/builds/util/extra-cmake-modules,5.72.0.tar.xz
-    size: 106452
-    hash: 4809d7cfa364f5e5eb0229e3ffcd687d09638dfbdae3b14681a422b30582dd9b
-    atom:
-      &a397
-      category: util
-      name: extra-cmake-modules
-    version:
-      &a398
-      version: 5.72.0
   core/tzdata:
     path: ../repository/builds/core/tzdata,2020a.tar.xz
-    size: 119268
-    hash: b1080e5ee5a507246ac8de0d9162b8f7b2a3b9e6b4b97ea0a8f8c15186930c53
+    size: 118712
+    hash: 3cafe9ef5decb39be73b760a7841113089e7e631c136f5425448ee173b46b5d1
     atom:
-      &a27
+      &a15
       category: core
       name: tzdata
     version:
-      &a28
+      &a16
       version: 2020a
-  gui/kcompletion:
-    path: ../repository/builds/gui/kcompletion,5.72.0.tar.xz
-    size: 126220
-    hash: d95353d8fa724849f609a0df3d9d264357c1b01e9e9a7a03e86824385340f1a6
-    atom:
-      &a69
-      category: gui
-      name: kcompletion
-    version:
-      &a70
-      version: 5.72.0
-  gui/kglobalaccel:
-    path: ../repository/builds/gui/kglobalaccel,5.72.0.tar.xz
-    size: 119572
-    hash: 935154395652e4217183d44872f0a7d14df26bd056c20de11808c9654450a0b5
-    atom:
-      &a97
-      category: gui
-      name: kglobalaccel
-    version:
-      &a98
-      version: 5.72.0
-  gui/kquickcharts:
-    path: ../repository/builds/gui/kquickcharts,5.72.0.tar.xz
-    size: 115224
-    hash: fcac2c74241113aca72f324130ff01b7b454ec63c6e621b33bc9a27d29ce89c2
-    atom:
-      &a139
-      category: gui
-      name: kquickcharts
-    version:
-      &a140
-      version: 5.72.0
-  gui/libpciaccess:
-    path: ../repository/builds/gui/libpciaccess,0.16.tar.xz
-    size: 130736
-    hash: e5cf1ef7289433b28216d0b05bd80c49633a5a3a4d9478f4b5380dcdc7ffc423
-    atom:
-      &a167
-      category: gui
-      name: libpciaccess
-    version:
-      &a168
-      version: "0.16"
-  gui/libxtst:
-    path: ../repository/builds/gui/libxtst,1.2.3.tar.xz
-    size: 115052
-    hash: 1a0b73c244efe582bf5e542a8fe17cc69619ce6a2e7dbca9b8d2fd37cd78f5bb
-    atom:
-      &a205
-      category: gui
-      name: libxtst
-    version:
-      &a206
-      version: 1.2.3
   libs/libattr:
     path: ../repository/builds/libs/libattr,2.4.48.tar.xz
-    size: 116440
-    hash: c8487ebdcb13f98e9f78b651daa6ed4e9ff959f4cbce5a7d484243a92bcf9ab7
+    size: 116724
+    hash: 081cd79325b5a138a36926cf9726e4801d7b41f764537157bdf11ea619105030
     atom:
-      &a307
+      &a47
       category: libs
       name: libattr
     version:
-      &a308
+      &a48
       version: 2.4.48
-  perl/xml-parser:
-    path: ../repository/builds/perl/xml-parser,2.46.tar.xz
-    size: 122708
-    hash: e121e9b8e86b5b32ca1905d0ec27087ace912a2ffcfd00a1169d9d0e9f1f9bef
-    atom:
-      &a361
-      category: perl
-      name: xml-parser
-    version:
-      &a362
-      version: "2.46"
-  gui/kactivities:
-    path: ../repository/builds/gui/kactivities,5.72.0.tar.xz
-    size: 133840
-    hash: 0636c06842c7e7f21d2506fabb79257be0cef04990fc930be262546c8b1db6be
-    atom:
-      &a53
-      category: gui
-      name: kactivities
-    version:
-      &a54
-      version: 5.72.0
-  gui/kcodecs:
-    path: ../repository/builds/gui/kcodecs,5.72.0.tar.xz
-    size: 144680
-    hash: dffb91d4bf5440ccf0b0bf150ace48efeea21be96afac63ce0ec8ceef2fdb72e
-    atom:
-      &a67
-      category: gui
-      name: kcodecs
-    version:
-      &a68
-      version: 5.72.0
-  gui/kitemmodels:
-    path: ../repository/builds/gui/kitemmodels,5.72.0.tar.xz
-    size: 133728
-    hash: 1bfa61ff1d5da79507004f641ecb03af30b770d8e8c56d30cd4befb4244cd656
-    atom:
-      &a117
-      category: gui
-      name: kitemmodels
-    version:
-      &a118
-      version: 5.72.0
-  gui/kpeople:
-    path: ../repository/builds/gui/kpeople,5.72.0.tar.xz
-    size: 137436
-    hash: 7f76750a92194f6d94ce061461f21f677cee3b521ed8cb7fc31db7d0a1544478
-    atom:
-      &a133
-      category: gui
-      name: kpeople
-    version:
-      &a134
-      version: 5.72.0
-  gui/libsm:
-    path: ../repository/builds/gui/libsm,1.2.3.tar.xz
-    size: 140380
-    hash: 4ec8255b7e2fd1e4613e3829932f2e484ebe709db848f5dd3099506b13484e0f
-    atom:
-      &a169
-      category: gui
-      name: libsm
-    version:
-      &a170
-      version: 1.2.3
-  gui/libxfixes:
-    path: ../repository/builds/gui/libxfixes,5.0.3.tar.xz
-    size: 138652
-    hash: cc8f9afef43fb1e2d90be35099aae3103852214057f42f4c8158496136770abe
-    atom:
-      &a183
-      category: gui
-      name: libxfixes
-    version:
-      &a184
-      version: 5.0.3
-  python/mako:
-    path: ../repository/builds/python/mako,1.1.3.tar.xz
-    size: 141052
-    hash: 3f2e7ef23d9bb31ef71f42d30d671783ab6cc1ba96211f878bc39bb9687eee82
-    atom:
-      &a363
-      category: python
-      name: mako
-    version:
-      &a364
-      version: 1.1.3
-  util/gzip:
-    path: ../repository/builds/util/gzip,1.10.tar.xz
-    size: 137956
-    hash: c5e462b648ab39749ff6bfb8bb50e5ecccf69119bbccc737bcf5462ee75891ee
-    atom:
-      &a413
-      category: util
-      name: gzip
-    version:
-      &a414
-      version: "1.10"
-  gui/kbookmarks:
-    path: ../repository/builds/gui/kbookmarks,5.72.0.tar.xz
-    size: 150200
-    hash: bd819cc7069f335f94acae7fae0b7e814fff192865992eff0444b28c5a9c7951
-    atom:
-      &a61
-      category: gui
-      name: kbookmarks
-    version:
-      &a62
-      version: 5.72.0
-  gui/kfilemetadata:
-    path: ../repository/builds/gui/kfilemetadata,5.72.0.tar.xz
-    size: 150484
-    hash: 64b38ab5c8b53ead2530fffe84c6170c504319e09b8f6e0b2f13a9311c9ccbb3
-    atom:
-      &a95
-      category: gui
-      name: kfilemetadata
-    version:
-      &a96
-      version: 5.72.0
-  gui/kiconthemes:
-    path: ../repository/builds/gui/kiconthemes,5.72.0.tar.xz
-    size: 151156
-    hash: 3a018da15e5521eec5932c88174c2bf3032df1dfcb352fd21eff61f0a478c7e7
-    atom:
-      &a105
-      category: gui
-      name: kiconthemes
-    version:
-      &a106
-      version: 5.72.0
-  gui/knotifications:
-    path: ../repository/builds/gui/knotifications,5.72.0.tar.xz
-    size: 162284
-    hash: a45769c6b055da561d5cfc09589234be0cbbad6c117d832f797a8c302c232aab
-    atom:
-      &a125
-      category: gui
-      name: knotifications
-    version:
-      &a126
-      version: 5.72.0
-  gui/krunner:
-    path: ../repository/builds/gui/krunner,5.72.0.tar.xz
-    size: 148288
-    hash: e60e9dee3c3bc37658a1785c3ef30a78059019f6b66aee1ef6d54f13ffd3c928
-    atom:
-      &a141
-      category: gui
-      name: krunner
-    version:
-      &a142
-      version: 5.72.0
   libs/mpc:
     path: ../repository/builds/libs/mpc,1.1.0.tar.xz
-    size: 151464
-    hash: c017d720052b6f609572a6fc7e647156bc88e750e8b4b1539026f6ddcc471753
+    size: 153680
+    hash: 78bba23314faca97bbe3f19a8276111a6163c5d5b48917f41132d81c19633e45
     atom:
-      &a341
+      &a53
       category: libs
       name: mpc
     version:
-      &a342
+      &a54
       version: 1.1.0
-  util/asciidoc:
-    path: ../repository/builds/util/asciidoc,9.0.1.tar.xz
-    size: 165384
-    hash: b57411602e35296965d4ea889784095bbd82f918c587b9b2b6ece1a730f33f8d
+  util/gzip:
+    path: ../repository/builds/util/gzip,1.10.tar.xz
+    size: 148028
+    hash: 8a3202f7b8572bb5ea44857b9e163bd28fbc53dfb4a91ce1c749fa3850fa9eed
     atom:
-      &a369
+      &a97
       category: util
-      name: asciidoc
+      name: gzip
     version:
-      &a370
-      version: 9.0.1
+      &a98
+      version: "1.10"
   util/gperf:
     path: ../repository/builds/util/gperf,3.1.tar.xz
-    size: 175440
-    hash: aa18ee7b2e0559891761e142208802987fdca2a0db6bcc3ec10ed14546e158b9
+    size: 177332
+    hash: 901d14846347df796337fabbb7a44a23701b6f761fce0de30e163e410139708a
     atom:
-      &a407
+      &a91
       category: util
       name: gperf
     version:
-      &a408
+      &a92
       version: "3.1"
-  gui/kpackage:
-    path: ../repository/builds/gui/kpackage,5.72.0.tar.xz
-    size: 188856
-    hash: a484bbb1521734d9071fac451afa37853d2147474b68ae39eac4a0ac5ec489b0
-    atom:
-      &a129
-      category: gui
-      name: kpackage
-    version:
-      &a130
-      version: 5.72.0
-  libs/libevdev:
-    path: ../repository/builds/libs/libevdev,1.9.0.tar.xz
-    size: 193148
-    hash: a64571ae06f3b7f221b27db4dd12aa0755a6e81cc7a9245cd57b8730befa2269
-    atom:
-      &a313
-      category: libs
-      name: libevdev
-    version:
-      &a314
-      version: 1.9.0
   util/dhcpcd:
     path: ../repository/builds/util/dhcpcd,9.1.2.tar.xz
-    size: 182416
-    hash: d4a6318dac16dac9309b0da7deb00505c489c031c3dae81e7588bdf29708cddb
+    size: 182628
+    hash: 2c6fcd67ad67d654f381b58e8ff2efdb658727d75329d4c3755942b2e4b6dc70
     atom:
-      &a391
+      &a79
       category: util
       name: dhcpcd
     version:
-      &a392
+      &a80
       version: 9.1.2
-  gui/attica:
-    path: ../repository/builds/gui/attica,5.72.0.tar.xz
-    size: 206172
-    hash: 1fdbf63ac2da43da5768ceb7d58c36e06f0adf9efb836dec45aa6cf1421bd5a8
-    atom:
-      &a39
-      category: gui
-      name: attica
-    version:
-      &a40
-      version: 5.72.0
-  gui/kwindowsystem:
-    path: ../repository/builds/gui/kwindowsystem,5.72.0.tar.xz
-    size: 197168
-    hash: ad735862a611879960eca584644b9d5c979d3036fdac75c6bf5681d85541960a
-    atom:
-      &a155
-      category: gui
-      name: kwindowsystem
-    version:
-      &a156
-      version: 5.72.0
-  libs/at-spi2-core:
-    path: ../repository/builds/libs/at-spi2-core,2.36.0.tar.xz
-    size: 197372
-    hash: 79ea4225ed3714fc2db18db1a9b71bf8923a36c8b509003c8e562a2551d9b0f3
-    atom:
-      &a275
-      category: libs
-      name: at-spi2-core
-    version:
-      &a276
-      version: 2.36.0
   util/bzip2:
     path: ../repository/builds/util/bzip2,1.0.8.tar.xz
-    size: 208732
-    hash: 232a0211d8aa552685fbdddfad945ed28c67af7fad80d2c7cf37445492bc5653
+    size: 209796
+    hash: 1b848da249390d358c19ce1a0244fe5d4a5bf86813fce26f58ad9fafb17a9262
     atom:
-      &a381
+      &a75
       category: util
       name: bzip2
     version:
-      &a382
+      &a76
       version: 1.0.8
-  libs/giflib:
-    path: ../repository/builds/libs/giflib,5.2.1.tar.xz
-    size: 225108
-    hash: 706178eebc8367f2c991076a77db8d0054074c646fe6742073a238510869cfe9
-    atom:
-      &a295
-      category: libs
-      name: giflib
-    version:
-      &a296
-      version: 5.2.1
-  libs/libcheck:
-    path: ../repository/builds/libs/libcheck,0.15.0.tar.xz
-    size: 220884
-    hash: feff1fd11316275c3e0f25332b3d9d6f3b887d99b52850adc7f58f29d28d5713
-    atom:
-      &a309
-      category: libs
-      name: libcheck
-    version:
-      &a310
-      version: 0.15.0
-  gui/kdeclarative:
-    path: ../repository/builds/gui/kdeclarative,5.72.0.tar.xz
-    size: 241360
-    hash: 5712c21418f44808ee2691824de98ef09744676f00ada84fa43884cdaebe0fdb
-    atom:
-      &a83
-      category: gui
-      name: kdeclarative
-    version:
-      &a84
-      version: 5.72.0
-  gui/kholidays:
-    path: ../repository/builds/gui/kholidays,5.72.0.tar.xz
-    size: 239452
-    hash: 30b1ccb7bed6e0a98cfafca93e9e5b0bcc053c376fcc9bfbfa7d8ba3629818ca
-    atom:
-      &a101
-      category: gui
-      name: kholidays
-    version:
-      &a102
-      version: 5.72.0
-  gui/xkbcomp:
-    path: ../repository/builds/gui/xkbcomp,1.4.3.tar.xz
-    size: 244492
-    hash: 2ea7898979d005b8341914104be4e3d922d9b8d0ddebe33a1346fc9cdbfda9b4
-    atom:
-      &a239
-      category: gui
-      name: xkbcomp
-    version:
-      &a240
-      version: 1.4.3
-  gui/syndication:
-    path: ../repository/builds/gui/syndication,5.72.0.tar.xz
-    size: 231660
-    hash: 0c3bfe493ecc2a1d9a5ea2bcfaaefa356683837e1d44b4e852799eff47c8c9e2
-    atom:
-      &a229
-      category: gui
-      name: syndication
-    version:
-      &a230
-      version: 5.72.0
   util/less:
     path: ../repository/builds/util/less,530.tar.xz
-    size: 237896
-    hash: 0733efeb47a81acd24515ba00fa394c5a6c2857f103384789524d1963b73ace5
+    size: 249324
+    hash: f9533e8fa23d40e96cd33b47f056136504ca75562f3c1d7bbb33c11e5fa4f023
     atom:
-      &a427
+      &a107
       category: util
       name: less
     version:
-      &a428
+      &a108
       version: "530"
-  gui/libdrm:
-    path: ../repository/builds/gui/libdrm,2.4.102.tar.xz
-    size: 248448
-    hash: e6d438186d129f47255adedbb0e291a61bae988d722c90ecb868f8b08039412a
-    atom:
-      &a159
-      category: gui
-      name: libdrm
-    version:
-      &a160
-      version: 2.4.102
-  libs/libinput:
-    path: ../repository/builds/libs/libinput,1.15.6.tar.xz
-    size: 248108
-    hash: 22e978f043f2d82531d8c481ea5fc33fe8cbb3e7a64abd5735faefbc67bd9488
-    atom:
-      &a323
-      category: libs
-      name: libinput
-    version:
-      &a324
-      version: 1.15.6
-  gui/bluez-qt:
-    path: ../repository/builds/gui/bluez-qt,5.72.0.tar.xz
-    size: 275052
-    hash: 51e2b325b91773a35e0e7bc38b9a9e76099d77b8b9cbad6c94f27d3b9c5698aa
-    atom:
-      &a43
-      category: gui
-      name: bluez-qt
-    version:
-      &a44
-      version: 5.72.0
-  gui/kparts:
-    path: ../repository/builds/gui/kparts,5.72.0.tar.xz
-    size: 269436
-    hash: ccfc45cac8b6b58431b62bae763e29e82853bd71c1150db10b542cdf879a6838
-    atom:
-      &a131
-      category: gui
-      name: kparts
-    version:
-      &a132
-      version: 5.72.0
-  libs/libtasn1:
-    path: ../repository/builds/libs/libtasn1,4.16.0.tar.xz
-    size: 268804
-    hash: 075c747d80cd93cdcbeaa117d27f7b9b982c640b21bae90fdc83e996adee4d0a
-    atom:
-      &a331
-      category: libs
-      name: libtasn1
-    version:
-      &a332
-      version: 4.16.0
   util/patch:
     path: ../repository/builds/util/patch,2.7.6.tar.xz
-    size: 277248
-    hash: c7e592e41178297fa558221d558a8a322386ab8332384c583fd29a782a2cc98e
+    size: 288284
+    hash: 07b9a12ebe2de539ff287eb806d3df17290264b9781e17696b4b9456c3974731
     atom:
-      &a443
+      &a117
       category: util
       name: patch
     version:
-      &a444
+      &a118
       version: 2.7.6
-  gui/kcmutils:
-    path: ../repository/builds/gui/kcmutils,5.72.0.tar.xz
-    size: 286476
-    hash: eec75c6c7e3bf295ab543d13c50d16a9fa2dd48626af61628adb74d9a5d903a7
-    atom:
-      &a65
-      category: gui
-      name: kcmutils
-    version:
-      &a66
-      version: 5.72.0
-  gui/ktextwidgets:
-    path: ../repository/builds/gui/ktextwidgets,5.72.0.tar.xz
-    size: 283832
-    hash: 0706ea00485d7a6bda8ddf4fd3f50830a4eb970ebd56155b7ec22254d878d6a7
-    atom:
-      &a147
-      category: gui
-      name: ktextwidgets
-    version:
-      &a148
-      version: 5.72.0
-  gui/libxrandr:
-    path: ../repository/builds/gui/libxrandr,1.5.2.tar.xz
-    size: 288940
-    hash: 0c97b918534ff4336f9af6eee345400faa3746e153f1ea704309ee7e39c48b58
-    atom:
-      &a197
-      category: gui
-      name: libxrandr
-    version:
-      &a198
-      version: 1.5.2
-  gui/purpose:
-    path: ../repository/builds/gui/purpose,5.72.0.tar.xz
-    size: 298920
-    hash: 5c15b1d89a934e4c5f9d9a362066f8f5771e5979b3971d9579c3da3219b64937
-    atom:
-      &a217
-      category: gui
-      name: purpose
-    version:
-      &a218
-      version: 5.72.0
-  gui/sonnet:
-    path: ../repository/builds/gui/sonnet,5.72.0.tar.xz
-    size: 296480
-    hash: e316c95c4d9e2ae95591fceb921ae9950420896c04666fef89e678fce8906624
-    atom:
-      &a227
-      category: gui
-      name: sonnet
-    version:
-      &a228
-      version: 5.72.0
-  util/kmod:
-    path: ../repository/builds/util/kmod,26.tar.xz
-    size: 311004
-    hash: 703f897487c6858d1f9e0eebcb80583af9c61c42fc46e5e814699599fc50086e
-    atom:
-      &a425
-      category: util
-      name: kmod
-    version:
-      &a426
-      version: "26"
-  gui/libxpm:
-    path: ../repository/builds/gui/libxpm,3.5.13.tar.xz
-    size: 313804
-    hash: 8cc3834ae8fb7a7bee73e9baf171421f9370b9055f8536d98753f3cf5d2a9e2b
-    atom:
-      &a195
-      category: gui
-      name: libxpm
-    version:
-      &a196
-      version: 3.5.13
   util/m4:
     path: ../repository/builds/util/m4,1.4.18.tar.xz
-    size: 320280
-    hash: 4c8d53d2482961477c6b4755befffbfd1806f94b517c6e19f659b2c3be4a3efe
+    size: 322916
+    hash: 0d10b8124a382f344ff0d79f155de17808ffedc3d9da682ac3458a719958ed7a
     atom:
-      &a431
+      &a111
       category: util
       name: m4
     version:
-      &a432
+      &a112
       version: 1.4.18
-  gui/kcalendarcore:
-    path: ../repository/builds/gui/kcalendarcore,5.72.0.tar.xz
-    size: 332648
-    hash: f9408ca8a817139e6ac94061fd9e1ff9b7670efa8791e14561c4383d9a741f47
+  util/kmod:
+    path: ../repository/builds/util/kmod,26.tar.xz
+    size: 321780
+    hash: 89482a2ae8ae47da95355fd64de6830192e48d415dc7ca51adcc78469496e750
     atom:
-      &a63
-      category: gui
-      name: kcalendarcore
+      &a105
+      category: util
+      name: kmod
     version:
-      &a64
-      version: 5.72.0
-  gui/kirigami2:
-    path: ../repository/builds/gui/kirigami2,5.72.0.tar.xz
-    size: 331620
-    hash: 097216315678661f7cbf891758ec0cf0a8abd48f42e2839f1ad5f2f99a39fc6d
-    atom:
-      &a115
-      category: gui
-      name: kirigami2
-    version:
-      &a116
-      version: 5.72.0
-  gui/libxrender:
-    path: ../repository/builds/gui/libxrender,0.9.10.tar.xz
-    size: 335000
-    hash: 800c307dc4adb66528ab2889d31d5d498c75a942e91d2516a3a19752fea2eb33
-    atom:
-      &a199
-      category: gui
-      name: libxrender
-    version:
-      &a200
-      version: 0.9.10
+      &a106
+      version: "26"
   libs/mpfr:
     path: ../repository/builds/libs/mpfr,4.0.2.tar.xz
-    size: 333308
-    hash: ceadfb7b79c3413f772d65e3f8588622ce40ecf9bce1d174e6696c9c2597a929
+    size: 333304
+    hash: 41c090ecf188b5d1c322c875649fa2b52088088f7dae1339def4ed610906a012
     atom:
-      &a343
+      &a55
       category: libs
       name: mpfr
     version:
-      &a344
+      &a56
       version: 4.0.2
-  libs/phonon:
-    path: ../repository/builds/libs/phonon,4.11.1.tar.xz
-    size: 328096
-    hash: a46b59e09be6dd47d00287efa94d5ffa3c04c5513481c5b3ee3dfd7c4f6abddf
-    atom:
-      &a353
-      category: libs
-      name: phonon
-    version:
-      &a354
-      version: 4.11.1
-  gui/kconfigwidgets:
-    path: ../repository/builds/gui/kconfigwidgets,5.72.0.tar.xz
-    size: 354176
-    hash: e2be7eff83d3d8214ec844013ebb941edac27ca3ad795a1cbbf7b474b56e0102
-    atom:
-      &a73
-      category: gui
-      name: kconfigwidgets
-    version:
-      &a74
-      version: 5.72.0
-  gui/kservice:
-    path: ../repository/builds/gui/kservice,5.72.0.tar.xz
-    size: 345404
-    hash: f141a150e3a0f46d12871813c3eb6094eb3f8691ad089a5ff1b066bbce5118ba
-    atom:
-      &a143
-      category: gui
-      name: kservice
-    version:
-      &a144
-      version: 5.72.0
-  gui/kwallet:
-    path: ../repository/builds/gui/kwallet,5.72.0.tar.xz
-    size: 357684
-    hash: 17ebdf80541b8c9d6818802d93804a9c7c9110a645ae1e0b32bca68962d6d058
-    atom:
-      &a151
-      category: gui
-      name: kwallet
-    version:
-      &a152
-      version: 5.72.0
-  gui/libice:
-    path: ../repository/builds/gui/libice,1.0.10.tar.xz
-    size: 372964
-    hash: ffb49219a8f540982d9569867d723991761d68c5aecbaf549f5b7f16aaa74ac0
-    atom:
-      &a165
-      category: gui
-      name: libice
-    version:
-      &a166
-      version: 1.0.10
-  libs/libgpg-error:
-    path: ../repository/builds/libs/libgpg-error,1.38.tar.xz
-    size: 375632
-    hash: f4e527ae12273bce4fc8375ce8fe279e463f7350676ecc52884fdac75934bec1
-    atom:
-      &a319
-      category: libs
-      name: libgpg-error
-    version:
-      &a320
-      version: "1.38"
-  libs/pango:
-    path: ../repository/builds/libs/pango,1.45.3.tar.xz
-    size: 362320
-    hash: 6b85b7100852d2000938af7867898ab2175535467560f48229a2739ee7ec3933
-    atom:
-      &a351
-      category: libs
-      name: pango
-    version:
-      &a352
-      version: 1.45.3
-  gui/kconfig:
-    path: ../repository/builds/gui/kconfig,5.72.0.tar.xz
-    size: 377132
-    hash: a1226794e64fd8ec161a4ea2870a589316e9e41faae056484079661698f50d52
-    atom:
-      &a71
-      category: gui
-      name: kconfig
-    version:
-      &a72
-      version: 5.72.0
-  gui/kdoctools:
-    path: ../repository/builds/gui/kdoctools,5.72.0.tar.xz
-    size: 387140
-    hash: 8ad47d91296f10c6b8c9c473d180073ba12e73c9c1073eba9ecebb7c6571786f
-    atom:
-      &a91
-      category: gui
-      name: kdoctools
-    version:
-      &a92
-      version: 5.72.0
-  libs/gmp:
-    path: ../repository/builds/libs/gmp,6.2.0.tar.xz
-    size: 393084
-    hash: e62b31179bb4ac2d48d57e5096172c121fbdac6a4861799f5132f0fc8cc69e1c
-    atom:
-      &a299
-      category: libs
-      name: gmp
-    version:
-      &a300
-      version: 6.2.0
   util/flex:
     path: ../repository/builds/util/flex,2.6.4.tar.xz
-    size: 390476
-    hash: 76f2b0fac034bfff4c1690eca4a78a19d23a6a0ec488ef1906bd19e8bf4750a5
+    size: 390568
+    hash: fdcbddbaafa33f897f0332a25b6bde0b2416e10e69653b3b7f142ff2ea2a9bbf
     atom:
-      &a403
+      &a89
       category: util
       name: flex
     version:
-      &a404
+      &a90
       version: 2.6.4
   libs/expat:
     path: ../repository/builds/libs/expat,2.2.9.tar.xz
-    size: 395592
-    hash: dbe1d74c6d6f13a4d251da5c1fa301683185d75ff5cad34660aea357c6ceb3ce
+    size: 396028
+    hash: 87523006981f23146e5a0d1169f3876d5ce04645f06129eba1062c0925d6f15b
     atom:
-      &a283
+      &a39
       category: libs
       name: expat
     version:
-      &a284
+      &a40
       version: 2.2.9
-  util/cpio:
-    path: ../repository/builds/util/cpio,2.13.tar.xz
-    size: 394144
-    hash: e4c992c88e7e31f9d4c7fafd1b4a3ee5cab7c64e75b893a66b4d067fd770a5dd
+  libs/gmp:
+    path: ../repository/builds/libs/gmp,6.2.0.tar.xz
+    size: 407932
+    hash: 1939b202c7be8be57fc18e3440a73644786c588132f671ff2aca6e65e04d2e23
     atom:
-      &a387
-      category: util
-      name: cpio
+      &a45
+      category: libs
+      name: gmp
     version:
-      &a388
-      version: "2.13"
+      &a46
+      version: 6.2.0
   core/dbus:
     path: ../repository/builds/core/dbus,1.12.18.3.tar.xz
-    size: 419656
-    hash: d7e3fe0200a5e3d1750d24f76dc2804747e35b645e6cd457d0932e73aae0b3c4
+    size: 429004
+    hash: 401f84ffb223a1b16c923698cb3da6c7a8ca0e04a1f5f3cf169b9107735d165a
     atom:
       &a3
       category: core
@@ -1286,802 +252,318 @@ builds:
     version:
       &a4
       version: 1.12.18.3
-  gui/solid:
-    path: ../repository/builds/gui/solid,5.72.0.tar.xz
-    size: 423828
-    hash: 8eacb986c89ceea1b4e3af02c7b35cbe742fb52243a06adec279e66c9905b2c2
-    atom:
-      &a225
-      category: gui
-      name: solid
-    version:
-      &a226
-      version: 5.72.0
-  libs/atk:
-    path: ../repository/builds/libs/atk,2.36.0.tar.xz
-    size: 411900
-    hash: 3af00f52abb1615f1e45c9d8d5c7ea1a65d45940c17751c45ce35a269d7cc70a
-    atom:
-      &a277
-      category: libs
-      name: atk
-    version:
-      &a278
-      version: 2.36.0
-  lang/sed:
-    path: ../repository/builds/lang/sed,4.8.tar.xz
-    size: 437756
-    hash: 22ef765383bf9223bcd1495796be698ae594d01cbaec9529d0efcf8301b16920
-    atom:
-      &a271
-      category: lang
-      name: sed
-    version:
-      &a272
-      version: "4.8"
-  libs/lmdb:
-    path: ../repository/builds/libs/lmdb,0.9.24.tar.xz
-    size: 427516
-    hash: 3943809284c10100eb1b1bd1305a24ad56f9b573c101d336e79795d29e7a1ade
-    atom:
-      &a339
-      category: libs
-      name: lmdb
-    version:
-      &a340
-      version: 0.9.24
   libs/readline:
     path: ../repository/builds/libs/readline,8.0.tar.xz
-    size: 429624
-    hash: 75bcc6ae7082276c0c5060ed261ee405e350bad70242be958c64b80480a30f01
+    size: 440220
+    hash: d15296661411cf8f52b2ac7ed1588082768d1e6fd02939abc23508a012e3cb37
     atom:
-      &a355
+      &a61
       category: libs
       name: readline
     version:
-      &a356
+      &a62
       version: "8.0"
-  gui/libxkbfile:
-    path: ../repository/builds/gui/libxkbfile,1.1.0.tar.xz
-    size: 444328
-    hash: 8e4662a1fc54b6fb8ef80f859aa430f68ddbfe7b406b5a6db7c193ce3fd2ae60
+  lang/sed:
+    path: ../repository/builds/lang/sed,4.8.tar.xz
+    size: 448040
+    hash: a3a2d24587a7a0e6d01246fe4822b421f2dc3c1ca57d5db6ebd19be0a648f6a4
     atom:
-      &a191
-      category: gui
-      name: libxkbfile
+      &a37
+      category: lang
+      name: sed
     version:
-      &a192
-      version: 1.1.0
-  libs/libjpeg-turbo:
-    path: ../repository/builds/libs/libjpeg-turbo,2.0.5.tar.xz
-    size: 449548
-    hash: 3b375d32b6ab2e7e8e27241d85087a7adc191e04e5b999c81ce844464dcf6d1e
-    atom:
-      &a325
-      category: libs
-      name: libjpeg-turbo
-    version:
-      &a326
-      version: 2.0.5
+      &a38
+      version: "4.8"
   util/libtool:
     path: ../repository/builds/util/libtool,2.4.tar.xz
-    size: 451160
-    hash: 6d87431f3cb4757367cfb3df080695e833ce27ffac8875850b61820785860494
+    size: 453428
+    hash: fc02b4541424134a78957e5112f714484f3898d8215ce2785f324222418e10e7
     atom:
-      &a429
+      &a109
       category: util
       name: libtool
     version:
-      &a430
+      &a110
       version: 2.4
-  gui/kcoreaddons:
-    path: ../repository/builds/gui/kcoreaddons,5.72.0.tar.xz
-    size: 468760
-    hash: 3cec986980e766459c4b8769862fee7a8938e07f12aa721a5ba1c646493058c6
-    atom:
-      &a77
-      category: gui
-      name: kcoreaddons
-    version:
-      &a78
-      version: 5.72.0
-  util/file:
-    path: ../repository/builds/util/file,5.39.tar.xz
-    size: 478860
-    hash: 4216289ee3b01dba9828e04c23390b82a5a93bc935854b5f1b3c7fef5c2079f4
-    atom:
-      &a399
-      category: util
-      name: file
-    version:
-      &a400
-      version: "5.39"
   util/grep:
     path: ../repository/builds/util/grep,3.4.tar.xz
-    size: 476460
-    hash: 85d7c6e8fa15ac59480b7e131769621f1efedb6903fb23ae9be5ca24b8e39ab7
+    size: 486592
+    hash: 927c56db9dd7100c9b5538ef366ac3d53caada8d5e508418d750045776ac18ef
     atom:
-      &a409
+      &a93
       category: util
       name: grep
     version:
-      &a410
+      &a94
       version: "3.4"
-  gui/kcontacts:
-    path: ../repository/builds/gui/kcontacts,5.72.0.tar.xz
-    size: 503996
-    hash: f81d080366bdcefb411c74d27202406e432d670a06e48eef86376ac3c461a501
+  util/file:
+    path: ../repository/builds/util/file,5.39.tar.xz
+    size: 479144
+    hash: 19fbf042b30145ddcea3e201e740d0c37e82c9128e7785a44f8acd44e38a8bc7
     atom:
-      &a75
-      category: gui
-      name: kcontacts
+      &a85
+      category: util
+      name: file
     version:
-      &a76
-      version: 5.72.0
+      &a86
+      version: "5.39"
   util/iwd:
     path: ../repository/builds/util/iwd,1.8.2.tar.xz
-    size: 496224
-    hash: ad13f8764a5b54dcc265ac194a9febd267c83d1c7b0aba7e1ed35dbb57c5c42a
+    size: 505620
+    hash: 1e8198503a585d3fec35ccbe2e30e4336843cae90cb6404d14a132068665bf1d
     atom:
-      &a423
+      &a103
       category: util
       name: iwd
     version:
-      &a424
+      &a104
       version: 1.8.2
-  core/mkinitcpio-busybox:
-    path: ../repository/builds/core/mkinitcpio-busybox,1.31.1.tar.xz
-    size: 522192
-    hash: 29062833a8b3069c4a7a2cbf8f4279cf101215d801a1ece3052ea125bd9286e2
-    atom:
-      &a17
-      category: core
-      name: mkinitcpio-busybox
-    version:
-      &a18
-      version: 1.31.1
-  gui/baloo:
-    path: ../repository/builds/gui/baloo,5.72.0.tar.xz
-    size: 508300
-    hash: c08890be0baec33e38b033ad1b54f5b17a455b9bfa7e2f72f311ecccd7b3314d
-    atom:
-      &a41
-      category: gui
-      name: baloo
-    version:
-      &a42
-      version: 5.72.0
-  gui/xorgproto:
-    path: ../repository/builds/gui/xorgproto,2020.1.tar.xz
-    size: 509488
-    hash: 807be0bf239a324a13515ddc88835658adbbabd5c610f2817f16026de83e1336
-    atom:
-      &a245
-      category: gui
-      name: xorgproto
-    version:
-      &a246
-      version: "2020.1"
   util/xz:
     path: ../repository/builds/util/xz,5.2.5.tar.xz
-    size: 523316
-    hash: b78282d93279b5c990c588b1c1b83672d44c53e12197ddad3f7a23596662d4c2
+    size: 535620
+    hash: 465c71c154bcfdf6c8023564ec2efbed23bce886859db7bc464ac94639edb7aa
     atom:
-      &a461
+      &a133
       category: util
       name: xz
     version:
-      &a462
+      &a134
       version: 5.2.5
-  gui/libxext:
-    path: ../repository/builds/gui/libxext,1.3.4.tar.xz
-    size: 525524
-    hash: cffcb40f8e6ee356285427d4303e13113a990b0441674eb48ef75c69e05e30bb
-    atom:
-      &a181
-      category: gui
-      name: libxext
-    version:
-      &a182
-      version: 1.3.4
-  gui/xkeyboard-config:
-    path: ../repository/builds/gui/xkeyboard-config,2.5.1.tar.xz
-    size: 527564
-    hash: 92a7eacdf411ed6110c7d2bafe37d8d6754697a0a536faba43744d73a890aacc
-    atom:
-      &a241
-      category: gui
-      name: xkeyboard-config
-    version:
-      &a242
-      version: 2.5.1
-  util/autoconf:
-    path: ../repository/builds/util/autoconf,2.69.tar.xz
-    size: 547072
-    hash: 204a031ea82388b996b296ff6c89a286b3604fe5f5d9b9549e3932d47f4f8425
-    atom:
-      &a371
-      category: util
-      name: autoconf
-    version:
-      &a372
-      version: 2.69
   util/automake:
     path: ../repository/builds/util/automake,1.16.1.tar.xz
-    size: 543500
-    hash: 88e86707b4c1f9f634b940b73f23f53a1eadefc57483629484a2f6013d8928aa
+    size: 546988
+    hash: fee933b929654326ee26dec7fa85c6c57ffe588edd33fb9920195211d658cd23
     atom:
-      &a373
+      &a67
       category: util
       name: automake
     version:
-      &a374
+      &a68
       version: 1.16.1
   core/openrc:
     path: ../repository/builds/core/openrc,0.42.1.tar.xz
-    size: 561260
-    hash: 1402bc121fb883037c069d743285c344903fb3eaa2cc1f4702e7704d940c834a
+    size: 562056
+    hash: 4a05f21adc8b6dff446ec43ada6de5d87de7c1ee650c00254830316c4390e6a7
     atom:
-      &a19
+      &a11
       category: core
       name: openrc
     version:
-      &a20
+      &a12
       version: 0.42.1
-  gui/libxmu:
-    path: ../repository/builds/gui/libxmu,1.1.3.tar.xz
-    size: 565872
-    hash: f31641ee0057d4d8a9895ef583b3c10963d6695f321e1f6b175f0160cf23bd2c
+  util/autoconf:
+    path: ../repository/builds/util/autoconf,2.69.tar.xz
+    size: 559820
+    hash: d4188b4ac87d1438e7be95b904004e18e104cd62ca84713769b1c1febb0174cf
     atom:
-      &a193
-      category: gui
-      name: libxmu
+      &a65
+      category: util
+      name: autoconf
     version:
-      &a194
-      version: 1.1.3
-  gui/libxft:
-    path: ../repository/builds/gui/libxft,2.3.3.tar.xz
-    size: 588176
-    hash: b393d3730a02763cfc31f7fdc258733585d6ced2fc86719d6b8675d53701851a
-    atom:
-      &a187
-      category: gui
-      name: libxft
-    version:
-      &a188
-      version: 2.3.3
-  libs/libical:
-    path: ../repository/builds/libs/libical,3.0.8.tar.xz
-    size: 595008
-    hash: 8dfb67e92a28a80c2bfadad730bfae1752b2cf9ceb4c156338d4a523420e0289
-    atom:
-      &a321
-      category: libs
-      name: libical
-    version:
-      &a322
-      version: 3.0.8
+      &a66
+      version: 2.69
   util/make:
     path: ../repository/builds/util/make,4.3.tar.xz
-    size: 618276
-    hash: b78894c96c1bf51c5c6e35a8b8564d4096a311cbade3f1f7088448639b51d8be
+    size: 628356
+    hash: bd06d127bb642bcd8db2891ba7a0c890c1ad08a75bf7cb57fd0d2e7f41c5f0cc
     atom:
-      &a435
+      &a113
       category: util
       name: make
     version:
-      &a436
+      &a114
       version: 4.3
   util/pkg-config:
     path: ../repository/builds/util/pkg-config,0.29.2.tar.xz
-    size: 622124
-    hash: 8f21dea165b4232ae1cccfa91f641c392dec838e1de99fa6cf5fb555d30f75e9
+    size: 632536
+    hash: 80528407ac8ee521bb75f1eaa092f2e9c74f4064839d13f6272b3bff0cf4fe05
     atom:
-      &a445
+      &a119
       category: util
       name: pkg-config
     version:
-      &a446
+      &a120
       version: 0.29.2
   util/diffutils:
     path: ../repository/builds/util/diffutils,3.7.tar.xz
-    size: 637060
-    hash: f14cb8d4850f19f3a5e1b895a77988252f142be174793b209e54fcd44f783ecc
+    size: 647608
+    hash: fd81601aaa4fd5823bf35c27825d51af2b94379d0ada82728999c8b67eb15424
     atom:
-      &a393
+      &a81
       category: util
       name: diffutils
     version:
-      &a394
+      &a82
       version: 3.7
-  util/curl:
-    path: ../repository/builds/util/curl,7.71.1.2.tar.xz
-    size: 652340
-    hash: 5242df5ec09c17d68c4d615c61ed509c803b8c22aeb812ea8f185611fa6a5c88
-    atom:
-      &a389
-      category: util
-      name: curl
-    version:
-      &a390
-      version: 7.71.1.2
   util/procps-ng:
     path: ../repository/builds/util/procps-ng,3.3.15.tar.xz
-    size: 652924
-    hash: 0922ff0f736078698786fcad59001c98b3e7ff615200cda40df7f356057999fc
+    size: 662580
+    hash: e07e0cb94a852ff7ea6cae711307f9c50c8682f28f4e4f858f6da45ef37cd30f
     atom:
-      &a447
+      &a121
       category: util
       name: procps-ng
     version:
-      &a448
+      &a122
       version: 3.3.15
-  util/iproute2:
-    path: ../repository/builds/util/iproute2,5.5.0.tar.xz
-    size: 666032
-    hash: 8ce04f1cfda7cf8b9a0dc6adfda654271abf9e930405e5a52dbacb9139d58e65
-    atom:
-      &a419
-      category: util
-      name: iproute2
-    version:
-      &a420
-      version: 5.5.0
   core/zsh:
     path: ../repository/builds/core/zsh,5.8.tar.xz
-    size: 673820
-    hash: b9c8b48fa25d1019acab440dc77dd23792499412da428ef613f6b35d9a87c212
+    size: 676304
+    hash: 8a4fa04ad20907071d05955cf9a3fd751292194ae0b36fafc2b3633b5138b9f3
     atom:
-      &a31
+      &a19
       category: core
       name: zsh
     version:
-      &a32
+      &a20
       version: "5.8"
-  gui/kxmlgui:
-    path: ../repository/builds/gui/kxmlgui,5.72.0.tar.xz
-    size: 692292
-    hash: e608a63a7e76a44529b47eb5caab8f249e808f62ef4f0cfcd299091cfeb4c34d
+  util/iproute2:
+    path: ../repository/builds/util/iproute2,5.5.0.tar.xz
+    size: 672040
+    hash: 8f93fc1aa94c2918f4bee69ef71d0dd9eed1c86452e836483b6b931502491658
     atom:
-      &a157
-      category: gui
-      name: kxmlgui
-    version:
-      &a158
-      version: 5.72.0
-  core/shared-mime-info:
-    path: ../repository/builds/core/shared-mime-info,2.0.tar.xz
-    size: 710276
-    hash: 830faaec9f28b24808c90fd42721b7ffda6ee1c0bd31c3b616a39a0c607906b8
-    atom:
-      &a25
-      category: core
-      name: shared-mime-info
-    version:
-      &a26
-      version: "2.0"
-  python/setuptools:
-    path: ../repository/builds/python/setuptools,49.2.0.tar.xz
-    size: 706992
-    hash: b160b3785021a7de541bf81ac273e7229068629908356475155c939027b3254b
-    atom:
-      &a367
-      category: python
-      name: setuptools
-    version:
-      &a368
-      version: 49.2.0
-  util/openssh:
-    path: ../repository/builds/util/openssh,8.3p1.tar.xz
-    size: 734860
-    hash: 335ebe391e2d1ac99ae5745188b4833505088d76027d4d8cf0e5b52802ef449a
-    atom:
-      &a441
+      &a101
       category: util
-      name: openssh
+      name: iproute2
     version:
-      &a442
-      version: 8.3p1
+      &a102
+      version: 5.5.0
   editor/nano:
     path: ../repository/builds/editor/nano,4.9.tar.xz
-    size: 740688
-    hash: cc1feab51114a0413a17e75f3664cef0e208fac8154f27d0068b1f1a7cc85016
+    size: 756904
+    hash: b107bfe92ad0cb59ae8db9f388fdb90a70515e4b3dd91dbc628818293870e0c3
     atom:
-      &a35
+      &a23
       category: editor
       name: nano
     version:
-      &a36
+      &a24
       version: "4.9"
-  libs/libuv:
-    path: ../repository/builds/libs/libuv,1.38.1.tar.xz
-    size: 740788
-    hash: 6ed6a2fe1284a2309ccced69d6e67e846ab7eb1b5a9f662cc5337bfe6662055f
+  util/openssh:
+    path: ../repository/builds/util/openssh,8.3p1.tar.xz
+    size: 756180
+    hash: 2541f5d9f01e9f3de78c96fa95c9198ea53f2e7771a6b2a0e11d6fdac19d7de4
     atom:
-      &a333
-      category: libs
-      name: libuv
+      &a115
+      category: util
+      name: openssh
     version:
-      &a334
-      version: 1.38.1
-  gui/knewstuff:
-    path: ../repository/builds/gui/knewstuff,5.72.0.tar.xz
-    size: 812952
-    hash: 89c6402d58e760b26bee83ea10c05ec0c1f1d1c1d05f69c2f26cf723565e9962
-    atom:
-      &a123
-      category: gui
-      name: knewstuff
-    version:
-      &a124
-      version: 5.72.0
-  lang/nasm:
-    path: ../repository/builds/lang/nasm,2.15.02.tar.xz
-    size: 804284
-    hash: 736c07a9aed954b0de10711f215528ad538bfe958815db9c4d484041518e4516
-    atom:
-      &a261
-      category: lang
-      name: nasm
-    version:
-      &a262
-      version: 2.15.02
-  gui/kunitconversion:
-    path: ../repository/builds/gui/kunitconversion,5.72.0.tar.xz
-    size: 829224
-    hash: d9fb94a9df9a1ba04e4c547b6bbf7c1ecfd7fc8504826597e260e90dc0cea5e3
-    atom:
-      &a149
-      category: gui
-      name: kunitconversion
-    version:
-      &a150
-      version: 5.72.0
-  gui/libxfont2:
-    path: ../repository/builds/gui/libxfont2,2.0.4.tar.xz
-    size: 856468
-    hash: 38d77734726ff2f468ba14511893872805b5bde6c13abc3fb0e384de892d8f78
-    atom:
-      &a185
-      category: gui
-      name: libxfont2
-    version:
-      &a186
-      version: 2.0.4
-  gui/xterm:
-    path: ../repository/builds/gui/xterm,358.tar.xz
-    size: 862100
-    hash: 01fcd9e69741f5b8c44c33ac10f5b5a85c80c2e9957a0a2535f26fffed030da9
-    atom:
-      &a247
-      category: gui
-      name: xterm
-    version:
-      &a248
-      version: "358"
-  libs/libpng:
-    path: ../repository/builds/libs/libpng,1.6.37.tar.xz
-    size: 860504
-    hash: 5d0cade2157c1027d2bcb98da23315f9e48b62f942489a832f8fef832d1ff404
-    atom:
-      &a327
-      category: libs
-      name: libpng
-    version:
-      &a328
-      version: 1.6.37
-  python/meson:
-    path: ../repository/builds/python/meson,0.55.0.tar.xz
-    size: 909872
-    hash: bd84a16cfaeb3215fc1259d050b5234127d986134e56ddb6fd6a60541aafe9a2
-    atom:
-      &a365
-      category: python
-      name: meson
-    version:
-      &a366
-      version: 0.55.0
+      &a116
+      version: 8.3p1
   util/findutils:
     path: ../repository/builds/util/findutils,4.7.0.tar.xz
-    size: 937596
-    hash: 7e635e34b3f4cc461d2c6f4f5cc1e507778f4aeaf1496c48ac4ac75e4d337a80
+    size: 947228
+    hash: c82c70db2f7e26af5a5c192958b010015615b5d94d3c44ed760079974e79559d
     atom:
-      &a401
+      &a87
       category: util
       name: findutils
     version:
-      &a402
+      &a88
       version: 4.7.0
-  gui/libepoxy:
-    path: ../repository/builds/gui/libepoxy,1.5.4.tar.xz
-    size: 1029360
-    hash: c6f789e8cbe6d7535f2949b31e04fc11fc3ba3cc148979e293e2ba81eabbeded
-    atom:
-      &a161
-      category: gui
-      name: libepoxy
-    version:
-      &a162
-      version: 1.5.4
-  libs/fontconfig:
-    path: ../repository/builds/libs/fontconfig,2.13.1.tar.xz
-    size: 1045280
-    hash: 716ba2acbc7f21b249128051a5388e3a29a70e033789b856ef4ae75f63e8e1d6
-    atom:
-      &a285
-      category: libs
-      name: fontconfig
-    version:
-      &a286
-      version: 2.13.1
-  kernel/linux-headers:
-    path: ../repository/builds/kernel/linux-headers,5.7.5.tar.xz
-    size: 1075828
-    hash: 4f1a076b191ef6158e9482a2dea0bc89638bf2c242b8289bc9545c07ba9e0a00
-    atom:
-      &a251
-      category: kernel
-      name: linux-headers
-    version:
-      &a252
-      version: 5.7.5
   util/bison:
     path: ../repository/builds/util/bison,3.6.tar.xz
-    size: 1068060
-    hash: fbe068b26c329cd0d279ac98e321d6ca4aec8ec2fd7404ee324afdea29493683
+    size: 1068628
+    hash: 812ca690adec59f679d70016f4d31f5fdfcbd38c2efe7332488b978ebb645499
     atom:
-      &a379
+      &a73
       category: util
       name: bison
     version:
-      &a380
+      &a74
       version: 3.6
-  gui/libxi:
-    path: ../repository/builds/gui/libxi,1.7.10.tar.xz
-    size: 1118592
-    hash: ded51072618b1aa306315225a8c774f8054169f9765317bf17f290862308b6b0
+  kernel/linux-headers:
+    path: ../repository/builds/kernel/linux-headers,5.7.5.tar.xz
+    size: 1083164
+    hash: d2a57a1da87ab043ace13af103e5c6888184eecb797f5e3d806db4be1e91b6b1
     atom:
-      &a189
-      category: gui
-      name: libxi
+      &a25
+      category: kernel
+      name: linux-headers
     version:
-      &a190
-      version: 1.7.10
+      &a26
+      version: 5.7.5
   libs/ncurses:
     path: ../repository/builds/libs/ncurses,6.2.tar.xz
-    size: 1128108
-    hash: dab7eeb827eedfce061e2087e1b33c56525ec97adad94983a28bf5576f9775b6
+    size: 1127992
+    hash: cab89b9f23b912c7fbf9627a93a3563a9d77dc00de531bb6f32c883df7e5e9ca
     atom:
-      &a347
+      &a57
       category: libs
       name: ncurses
     version:
-      &a348
+      &a58
       version: "6.2"
-  gui/ki18n:
-    path: ../repository/builds/gui/ki18n,5.72.0.tar.xz
-    size: 1193564
-    hash: 17ad342a6a80db420d901ecbf3dfa031b3ad11d6ea4b13e346b5bd799f51fa1a
-    atom:
-      &a103
-      category: gui
-      name: ki18n
-    version:
-      &a104
-      version: 5.72.0
-  gui/openbox:
-    path: ../repository/builds/gui/openbox,3.6.1.2.tar.xz
-    size: 1180636
-    hash: 8cea8e60e220bef61f53a3ffef23947de5f69f487ece9eb1b9ddf1dfd8e6b07e
-    atom:
-      &a211
-      category: gui
-      name: openbox
-    version:
-      &a212
-      version: 3.6.1.2
-  libs/gobject-introspection:
-    path: ../repository/builds/libs/gobject-introspection,1.64.1.tar.xz
-    size: 1221500
-    hash: cfc4408a34385f1ebf214c501216157bdcb9e969aa93f3cd1953ffd7aa821c2c
-    atom:
-      &a301
-      category: libs
-      name: gobject-introspection
-    version:
-      &a302
-      version: 1.64.1
-  libs/libxslt:
-    path: ../repository/builds/libs/libxslt,1.1.34.tar.xz
-    size: 1298928
-    hash: 9d668d624cfebf09e75fa2d6900547d6620ba987769094a53a101a5d77a9f2b7
-    atom:
-      &a337
-      category: libs
-      name: libxslt
-    version:
-      &a338
-      version: 1.1.34
-  libs/libgcrypt:
-    path: ../repository/builds/libs/libgcrypt,1.8.6.tar.xz
-    size: 1327060
-    hash: 9a612f61b35a5986a979c1ed8d3e7fde2738302f39b833e6ba202240ebbd4f49
-    atom:
-      &a317
-      category: libs
-      name: libgcrypt
-    version:
-      &a318
-      version: 1.8.6
   util/tar:
     path: ../repository/builds/util/tar,1.32.tar.xz
-    size: 1312836
-    hash: 6e065fa2d59f83f6d3ad94a87d16537234ac0c858afb604e87f987f7ee0b51a2
+    size: 1322628
+    hash: d0d0f427b00273aeacaed190ca54294eeebb7c3f3f2f91f8b0e457a2ded7860e
     atom:
-      &a451
+      &a125
       category: util
       name: tar
     version:
-      &a452
+      &a126
       version: "1.32"
   core/shadow:
     path: ../repository/builds/core/shadow,4.8.1.tar.xz
-    size: 1349656
-    hash: 4f58db1b90f03bac7fe31b515607fed9b426f5d9f89949e7bcc2181789071b69
+    size: 1351028
+    hash: 483558b8ea4115bbc9e0f386c523699e24c058b4b14df6db2f9212d4f4d3d044
     atom:
-      &a23
+      &a13
       category: core
       name: shadow
     version:
-      &a24
+      &a14
       version: 4.8.1
   util/inetutils:
     path: ../repository/builds/util/inetutils,1.9.4.tar.xz
-    size: 1344164
-    hash: 615d3343a36840e85a65d1ded206d4e5fcea068709f5fd28b458b5c23f182857
+    size: 1354924
+    hash: 36016ac2c6ae1300ab281b57497b99c4949298e18c238153ff053ec758cc1eba
     atom:
-      &a415
+      &a99
       category: util
       name: inetutils
     version:
-      &a416
+      &a100
       version: 1.9.4
   doc/man-pages:
     path: ../repository/builds/doc/man-pages,5.05.tar.xz
-    size: 1401740
-    hash: 6029005f7e716eea6f7d2c13b138819b49c0c003ce4b0344049d20b5865ba568
+    size: 1401844
+    hash: 881f0ffa70534c9c06b3f21acbdaac34d47bfd7d80d782eddd7812ebcd24eed9
     atom:
-      &a33
+      &a21
       category: doc
       name: man-pages
     version:
-      &a34
+      &a22
       version: "5.05"
-  gui/syntax-highlighting:
-    path: ../repository/builds/gui/syntax-highlighting,5.72.0.tar.xz
-    size: 1475520
-    hash: 750635c9782bcb525d9e29b1f3caa4c924666f4c9d96f32cda5a5b07eb1f70ee
-    atom:
-      &a231
-      category: gui
-      name: syntax-highlighting
-    version:
-      &a232
-      version: 5.72.0
-  util/ninja:
-    path: ../repository/builds/util/ninja,1.10.0.tar.xz
-    size: 1503224
-    hash: ce3dd51c8b7de3c53711268cc6477ac410330a5ea85648df5e098490c4b809bb
-    atom:
-      &a439
-      category: util
-      name: ninja
-    version:
-      &a440
-      version: 1.10.0
-  gui/kwidgetsaddons:
-    path: ../repository/builds/gui/kwidgetsaddons,5.72.0.tar.xz
-    size: 1542020
-    hash: 1b7b6165226ffa4f18b6722505fdc9137095ee8e7371c221eda61651718ee12f
-    atom:
-      &a153
-      category: gui
-      name: kwidgetsaddons
-    version:
-      &a154
-      version: 5.72.0
-  gui/frameworkintegration:
-    path: ../repository/builds/gui/frameworkintegration,5.72.0.tar.xz
-    size: 1618500
-    hash: 1b0410fe2d539e9dbf31b23478489f2d97dae7f1a2a1438311f35a3ebd43f968
-    atom:
-      &a47
-      category: gui
-      name: frameworkintegration
-    version:
-      &a48
-      version: 5.72.0
   util/texinfo:
     path: ../repository/builds/util/texinfo,6.7.tar.xz
-    size: 1602636
-    hash: 59c70a6d18b665474340a295e966cb7b0385e73266709582b706853ebd5620c2
+    size: 1617152
+    hash: 350f026b6ec7bc61379d63399a0531c47ef9bfda9ccf50a03649b7b9e4adabdd
     atom:
-      &a453
+      &a127
       category: util
       name: texinfo
     version:
-      &a454
+      &a128
       version: 6.7
-  gui/kemoticons:
-    path: ../repository/builds/gui/kemoticons,5.72.0.tar.xz
-    size: 1649708
-    hash: 0237f52cf310c4634697d16a3f1e3436d97b635394654d7a8bb20eb749fd2c1f
-    atom:
-      &a93
-      category: gui
-      name: kemoticons
-    version:
-      &a94
-      version: 5.72.0
   lang/gawk:
     path: ../repository/builds/lang/gawk,5.1.0.tar.xz
-    size: 1718844
-    hash: b0dddf844748d083b8a8adddc60088b771478815f4626b41c4756f4688dbf24b
+    size: 1727168
+    hash: 4b0190e557716081993bd7e4e203feeef3f70b0327787d1d7fb668bd2cff0646
     atom:
-      &a255
+      &a27
       category: lang
       name: gawk
     version:
-      &a256
+      &a28
       version: 5.1.0
-  gui/libxcb:
-    path: ../repository/builds/gui/libxcb,1.14.tar.xz
-    size: 1836180
-    hash: f2a80920bd3fa7485023c2adf393f1a2a24d37d863825bf86ec1dfc5fde97e7e
-    atom:
-      &a177
-      category: gui
-      name: libxcb
-    version:
-      &a178
-      version: "1.14"
-  gui/libxt:
-    path: ../repository/builds/gui/libxt,1.2.0.tar.xz
-    size: 2120680
-    hash: 92cfdee68e8a4a8e51d3d0a2e30bb31815e5f989d576bbb854387e14d9c709bf
-    atom:
-      &a203
-      category: gui
-      name: libxt
-    version:
-      &a204
-      version: 1.2.0
-  gui/dejavu-fonts-ttf:
-    path: ../repository/builds/gui/dejavu-fonts-ttf,2.37.2.tar.xz
-    size: 2474952
-    hash: 051e366c64a8974e477decee7a6a5a4d47c102d0a64e0dae55e970f41e943e3c
-    atom:
-      &a45
-      category: gui
-      name: dejavu-fonts-ttf
-    version:
-      &a46
-      version: 2.37.2
-  gui/ktexteditor:
-    path: ../repository/builds/gui/ktexteditor,5.72.0.tar.xz
-    size: 2618476
-    hash: 213d499ad9683318b427cd8bc58835d9165e0906788ee667b98379e90a6d91e5
-    atom:
-      &a145
-      category: gui
-      name: ktexteditor
-    version:
-      &a146
-      version: 5.72.0
   core/bash:
     path: ../repository/builds/core/bash,5.0.tar.xz
-    size: 2648492
-    hash: 93b3925b23b06b66f9369a9eb41c636fd372b0193b097fc85415eb31c997e78b
+    size: 2660472
+    hash: dacd8e34dbd8b7314d78a7fd3ff042974e6b58cb5e06b0e996523c7e9a9db14e
     atom:
       &a1
       category: core
@@ -2091,610 +573,363 @@ builds:
       version: "5.0"
   core/eudev:
     path: ../repository/builds/core/eudev,3.2.9.tar.xz
-    size: 2673840
-    hash: d9d3aaac27e682671e196516ad2e2e32d8fb3d7cb4b70fa79547529e2d35a08c
+    size: 2686800
+    hash: 6d47779beac53256be16bf849ba31ad9f2c436d7d9da9847526821d2f7808135
     atom:
-      &a9
+      &a5
       category: core
       name: eudev
     version:
-      &a10
+      &a6
       version: 3.2.9
   libs/openssl:
     path: ../repository/builds/libs/openssl,1.1.1d.tar.xz
-    size: 2698244
-    hash: 49066af48c62891f6e4352628fe8e05db3a018d0e2ed9ea6ebfa5cb401f6db0e
+    size: 2708928
+    hash: 2da3227ecbef29c062dc3f0e797bde65a16e99dfa87632420aed59ee92d8b319
     atom:
-      &a349
+      &a59
       category: libs
       name: openssl
     version:
-      &a350
+      &a60
       version: 1.1.1d
-  gui/libxaw:
-    path: ../repository/builds/gui/libxaw,1.0.13.tar.xz
-    size: 2737848
-    hash: fb44667c10e025c60492598238feceef2a915945a71fd409f23298dddfaebce9
-    atom:
-      &a175
-      category: gui
-      name: libxaw
-    version:
-      &a176
-      version: 1.0.13
-  libs/glib:
-    path: ../repository/builds/libs/glib,2.65.0.tar.xz
-    size: 2777772
-    hash: 007beb23c26a5177ac7b22cec5850d42a8a512784c8ec01dfba746069f990a5f
-    atom:
-      &a297
-      category: libs
-      name: glib
-    version:
-      &a298
-      version: 2.65.0
-  libs/freetype:
-    path: ../repository/builds/libs/freetype,2.10.2.tar.xz
-    size: 2908020
-    hash: c2cf091947f7d5aa9edd3edf36e7e75d51eeadee1422259185798b88855154e9
-    atom:
-      &a287
-      category: libs
-      name: freetype
-    version:
-      &a288
-      version: 2.10.2
-  gui/plasma-framework:
-    path: ../repository/builds/gui/plasma-framework,5.72.0.tar.xz
-    size: 3504868
-    hash: e2a5079f27f5517983c93777ec0454cd92849406f9d671c69450c8c3910dea01
-    atom:
-      &a215
-      category: gui
-      name: plasma-framework
-    version:
-      &a216
-      version: 5.72.0
-  core/p11-kit:
-    path: ../repository/builds/core/p11-kit,0.23.20.1.tar.xz
-    size: 3536784
-    hash: 9029a39db86a906667df8a51e95c4d3eef539c05ac2adf629ac2d03eabba55f7
-    atom:
-      &a21
-      category: core
-      name: p11-kit
-    version:
-      &a22
-      version: 0.23.20.1
   util/e2fsprogs:
     path: ../repository/builds/util/e2fsprogs,1.45.5.tar.xz
-    size: 3587212
-    hash: 4b62ce1af196f00cc06fd6592c8855b1f92cb676f15afa17a71e00dd0249e044
+    size: 3595484
+    hash: 19f72e3e56b646379144a2ece37ee7bb4685cf7eab10d1ca650fb70489d81681
     atom:
-      &a395
+      &a83
       category: util
       name: e2fsprogs
     version:
-      &a396
+      &a84
       version: 1.45.5
-  gui/pixman:
-    path: ../repository/builds/gui/pixman,0.40.0.tar.xz
-    size: 3655988
-    hash: 56065565dd12669b6000b7e529373ad80ae99fc5b1cc9e3b54acc95163091981
-    atom:
-      &a213
-      category: gui
-      name: pixman
-    version:
-      &a214
-      version: 0.40.0
-  libs/libarchive:
-    path: ../repository/builds/libs/libarchive,3.4.3.1.tar.xz
-    size: 3695880
-    hash: bb729ec1b29266e487e7ca611370e7f9a5557e04b350d2762e887e08470fefd6
-    atom:
-      &a305
-      category: libs
-      name: libarchive
-    version:
-      &a306
-      version: 3.4.3.1
-  gui/kio:
-    path: ../repository/builds/gui/kio,5.72.0.tar.xz
-    size: 3918280
-    hash: 770e0212671a3910a4e53f45fd59c8ee405bc46d93c4a609d9faa4c16e4d6a51
-    atom:
-      &a113
-      category: gui
-      name: kio
-    version:
-      &a114
-      version: 5.72.0
   util/groff:
     path: ../repository/builds/util/groff,1.22.4.tar.xz
-    size: 4706204
-    hash: 6eddd8b965dbff9e3958dc1d0594f67b3d045c3978039d3dac059d4fb8e639ee
+    size: 4714972
+    hash: 0951f117b501514df2ce0c80e054c585c65e96903c8e3f23df82927c6436e422
     atom:
-      &a411
+      &a95
       category: util
       name: groff
     version:
-      &a412
+      &a96
       version: 1.22.4
-  libs/gdk-pixbuf:
-    path: ../repository/builds/libs/gdk-pixbuf,2.40.0.1.tar.xz
-    size: 5093360
-    hash: 9dd00b0667860b2ed91c29713e4b865df012e5e31d83fcb59db007be6e6cdc17
-    atom:
-      &a291
-      category: libs
-      name: gdk-pixbuf
-    version:
-      &a292
-      version: 2.40.0.1
   libs/gettext:
     path: ../repository/builds/libs/gettext,0.20.tar.xz
-    size: 5172976
-    hash: d75dc4eafc0e80e9ef697ece5de13d06a38b6873a1dae1aef3dfbb7eefb40531
+    size: 5190244
+    hash: 5943ef176f59b294ad154d50843cfdc459b73fa216377fb80d8befa6da0c0286
     atom:
-      &a293
+      &a41
       category: libs
       name: gettext
     version:
-      &a294
+      &a42
       version: "0.20"
-  libs/libxml2:
-    path: ../repository/builds/libs/libxml2,2.9.10.tar.xz
-    size: 5432884
-    hash: 4745b6b72fbb1d0bedb38815f3fd9d60c0b6ae9842a446f7db2bcc8d769cb6be
-    atom:
-      &a335
-      category: libs
-      name: libxml2
-    version:
-      &a336
-      version: 2.9.10
   util/util-linux:
     path: ../repository/builds/util/util-linux,2.35.1.tar.xz
-    size: 5470636
-    hash: 0df5919079592917cd85393e8e913a057d74735d155b756e818aba3aa0afc0d1
+    size: 5491568
+    hash: f8b32f0a1826cf3dfa8fe285d3bf4bbe25cc686a256d3c3ca2761a158dac828a
     atom:
-      &a455
+      &a129
       category: util
       name: util-linux
     version:
-      &a456
+      &a130
       version: 2.35.1
   libs/libelf:
     path: ../repository/builds/libs/libelf,0.180.tar.xz
-    size: 5665636
-    hash: 8ad14d074429c8d0e472105a8d23429236c80184ee190484afe7f1df8eb4ac54
+    size: 5686964
+    hash: affa896be333ebcdcc3fb22bdbdc15895baeb854f3fe6125c79ed9300dbae7c3
     atom:
-      &a311
+      &a49
       category: libs
       name: libelf
     version:
-      &a312
+      &a50
       version: "0.180"
   core/grub:
     path: ../repository/builds/core/grub,2.04.tar.xz
-    size: 6024764
-    hash: 92044ee911c7aa4528a59bea13f2ac8d28a4ac8f50c079d3929981d38e98b8e4
+    size: 6039672
+    hash: e4b658ebb510f37ffa35060a6bd39ca75c5818f62827154d3ed8aa8e281b5d51
     atom:
-      &a13
+      &a9
       category: core
       name: grub
     version:
-      &a14
+      &a10
       version: "2.04"
   util/coreutils:
     path: ../repository/builds/util/coreutils,8.32.tar.xz
-    size: 6169060
-    hash: c6b7bd6e1d116c075c0734445a6eab4aa31af37d2974bba36d31abc30f322223
+    size: 6184360
+    hash: 7c603f0b40d6b092394faa50ae291e688b413715ccca11fa50eacee8f26a1d45
     atom:
-      &a385
+      &a77
       category: util
       name: coreutils
     version:
-      &a386
+      &a78
       version: 8.32
-  libs/cairo:
-    path: ../repository/builds/libs/cairo,1.16.0.tar.xz
-    size: 7125352
-    hash: 352fdb07b1ca160f958c903e474dbf144cd413d0c2a758495b72fba2fac821ff
-    atom:
-      &a281
-      category: libs
-      name: cairo
-    version:
-      &a282
-      version: 1.16.0
-  util/cmake:
-    path: ../repository/builds/util/cmake,3.17.3.tar.xz
-    size: 7448560
-    hash: 7e13dd4f3941e676182cc0c6ea2bf5976b0530b5eb72d45bb5c8715358ae0acf
-    atom:
-      &a383
-      category: util
-      name: cmake
-    version:
-      &a384
-      version: 3.17.3
-  gui/libx11:
-    path: ../repository/builds/gui/libx11,1.6.9.tar.xz
-    size: 8734040
-    hash: b6d7e7056703547bbd3de490ca656b4dac15469da856d582028a72e8fa141954
-    atom:
-      &a171
-      category: gui
-      name: libx11
-    version:
-      &a172
-      version: 1.6.9
-  gui/adwaita-icon-theme:
-    path: ../repository/builds/gui/adwaita-icon-theme,3.36.1.tar.xz
-    size: 9119292
-    hash: 77ffff87cd41e446ff42625be9b26cea99ae5174a91c8c127d77a96f78c2b383
-    atom:
-      &a37
-      category: gui
-      name: adwaita-icon-theme
-    version:
-      &a38
-      version: 3.36.1
-  libs/harfbuzz:
-    path: ../repository/builds/libs/harfbuzz,2.6.8.2.tar.xz
-    size: 9693272
-    hash: b8c8e78285e4b110012a0895873e17793cc30c611b369811a73552ae809ddbeb
-    atom:
-      &a303
-      category: libs
-      name: harfbuzz
-    version:
-      &a304
-      version: 2.6.8.2
-  libs/boost:
-    path: ../repository/builds/libs/boost,1.73.0.tar.xz
-    size: 11407460
-    hash: 6a5a7c77aa7e374d9197f2e607839ffe0047a6171395156ddf4068cf21fbfad2
-    atom:
-      &a279
-      category: libs
-      name: boost
-    version:
-      &a280
-      version: 1.73.0
   lang/perl:
     path: ../repository/builds/lang/perl,5.32.0.tar.xz
-    size: 11897628
-    hash: 4cd4f4f4d6c69a08efc43fbc0849b44c30e9537665808875493623519accd76d
+    size: 11926640
+    hash: e0eddde301fbb459e52380897c1fd28d343e0e4244cdd760e1d83d2e26a74880
     atom:
-      &a265
+      &a33
       category: lang
       name: perl
     version:
-      &a266
+      &a34
       version: 5.32.0
-  gui/gtk2:
-    path: ../repository/builds/gui/gtk2,2.24.32.tar.xz
-    size: 13161608
-    hash: 9bd169d80c008b25e5151117806ac9e02791bb54db882d42ca72f180dc453b0e
-    atom:
-      &a49
-      category: gui
-      name: gtk2
-    version:
-      &a50
-      version: 2.24.32
-  gui/xorg-server:
-    path: ../repository/builds/gui/xorg-server,1.20.8.2.tar.xz
-    size: 13770976
-    hash: 0bae79ddc1ad7cb46806bd6556263ddb97d35b390e70fd4a6a796b4e56095e36
-    atom:
-      &a243
-      category: gui
-      name: xorg-server
-    version:
-      &a244
-      version: 1.20.8.2
-  core/docbook-xsl:
-    path: ../repository/builds/core/docbook-xsl,1.79.2.tar.xz
-    size: 20668228
-    hash: eea847fabb113988d915f8702b24913c8080eb157318f3c7e821c7ccb390b03e
-    atom:
-      &a7
-      category: core
-      name: docbook-xsl
-    version:
-      &a8
-      version: 1.79.2
   lang/node:
     path: ../repository/builds/lang/node,14.4.0.tar.xz
-    size: 22260120
-    hash: 7ebecc070129d28ca58ef973289b2d492aca66c838fe55e40a190118f1050448
+    size: 22293988
+    hash: 837b6191e72b9ef6f9d89e7888a307d6d8cfd196a1ca70d83ce1ca8784fd128d
     atom:
-      &a263
+      &a31
       category: lang
       name: node
     version:
-      &a264
+      &a32
       version: 14.4.0
-  gui/mesa:
-    path: ../repository/builds/gui/mesa,20.1.3.tar.xz
-    size: 25000084
-    hash: 8c0aff3e85431b0137defefe482d81e67bd6ff84c29367da424d963c45935b7b
+  libs/glibc:
+    path: ../repository/builds/libs/glibc,2.31.1.tar.xz
+    size: 31505000
+    hash: 63a2ecf0d578e9c73b6e3086c32dec0d04cdb42c611d8e9543335ef7a7e5cd70
     atom:
-      &a209
-      category: gui
-      name: mesa
-    version:
-      &a210
-      version: 20.1.3
-  kernel/linux:
-    path: ../repository/builds/kernel/linux,5.7.5.tar.xz
-    size: 37333644
-    hash: dd498f266213ad661af4e55f0a2b7bc222747515051457e9753a1be2aa57774b
-    atom:
-      &a253
-      category: kernel
-      name: linux
-    version:
-      &a254
-      version: 5.7.5
-  libs/librsvg:
-    path: ../repository/builds/libs/librsvg,2.49.3.tar.xz
-    size: 37532468
-    hash: d73889d2653dc3293cf3a0c66d49f79e070f0d5191b9a7d17fd31efca7767c52
-    atom:
-      &a329
+      &a43
       category: libs
-      name: librsvg
+      name: glibc
     version:
-      &a330
-      version: 2.49.3
+      &a44
+      version: 2.31.1
   lang/python:
     path: ../repository/builds/lang/python,3.8.3.1.tar.xz
-    size: 40817516
-    hash: c8db909c7b9b3e30bec99fa67d3b33fda12cdaf380cb3d294b7a274ae96e3554
+    size: 40836636
+    hash: ffc93a11b9eb6fc2ae3258a97f59b1dee3e482e57999c6cc8869c0ab4c449e81
     atom:
-      &a267
+      &a35
       category: lang
       name: python
     version:
-      &a268
+      &a36
       version: 3.8.3.1
-  util/git:
-    path: ../repository/builds/util/git,2.27.0.tar.xz
-    size: 41397148
-    hash: 15420a4fe963b5887ebe82fa6caa89ed1b2cbd77f545cb506229463fc9f2c023
-    atom:
-      &a405
-      category: util
-      name: git
-    version:
-      &a406
-      version: 2.27.0
-  lang/llvm:
-    path: ../repository/builds/lang/llvm,10.0.0.tar.xz
-    size: 43640516
-    hash: 1834a65e407b82825cee09b41e6629a1094fe6cdaaf0c88159fb81eb83ce69c1
-    atom:
-      &a259
-      category: lang
-      name: llvm
-    version:
-      &a260
-      version: 10.0.0
-  lang/rustc:
-    path: ../repository/builds/lang/rustc,1.44.1.tar.xz
-    size: 53936324
-    hash: 19d634528925c40cc3d87d047c3316abb53b768f73684322cf92faae31990d32
-    atom:
-      &a269
-      category: lang
-      name: rustc
-    version:
-      &a270
-      version: 1.44.1
-  gui/qt5-base:
-    path: ../repository/builds/gui/qt5-base,5.15.0.tar.xz
-    size: 60023784
-    hash: af98f61b02873407f8d08a8813312710bc87de3510de5fd076405a002d16a910
-    atom:
-      &a221
-      category: gui
-      name: qt5-base
-    version:
-      &a222
-      version: 5.15.0
   util/binutils:
     path: ../repository/builds/util/binutils,2.34.tar.xz
-    size: 60357848
-    hash: 7ac4fe5653349830f1d6ef3a64ad7695a304cd18916752e010283fa5271621fc
+    size: 60366844
+    hash: b14c095bf44e03c8ad8117b616c4814301b91c1461ddd6173384dd596ee31e0a
     atom:
-      &a377
+      &a71
       category: util
       name: binutils
     version:
-      &a378
+      &a72
       version: 2.34
-  core/linux-firmware:
-    path: ../repository/builds/core/linux-firmware,20200619.tar.xz
-    size: 142976880
-    hash: 4e0cb4ce05227655f92c39521ce57ab7e9848c99958073b372ada0dc0d1e542e
-    atom:
-      &a15
-      category: core
-      name: linux-firmware
-    version:
-      &a16
-      version: "20200619"
   lang/gcc:
     path: ../repository/builds/lang/gcc,9.3.0.tar.xz
-    size: 195077828
-    hash: a85c7d056787be17342c67df88de5c5408d027463ea97e57b44d8d2e4d0c8b85
+    size: 195159268
+    hash: 7611ab47874ad9b4626b4c214ff60863781e90645ed61e04a62099fb5e11ee4e
     atom:
-      &a257
+      &a29
       category: lang
       name: gcc
     version:
-      &a258
+      &a30
       version: 9.3.0
 packages:
   core/bash:
     path: core/bash.yml
-    size: 247
-    hash: 4b72878e286d9367bf6138c23ce06762e0a72ed9b1ec90a7ab43f17261fde516
+    size: 218
+    hash: d96170717c09d7fcd8424e93069144426315a7de9ac757d411955d66e8d44fb6
     atom: *a1
     version: *a2
   core/dbus:
     path: core/dbus.yml
-    size: 1416
-    hash: 74bfa2ceec9c7cb1c834ca2a78802a635c99a29cd90bc4cf4aacda62b6599c7c
+    size: 1387
+    hash: e569af54e9a3f5fdfea4bcc76b8b7a00b68af73cdedf3953c46d0086e9b30410
     atom: *a3
     version: *a4
   core/docbook-xml:
     path: core/docbook-xml.yml
     size: 3297
     hash: d63396ff5ef89db4d9103b7ed184febb770b6623a81030dd4d3113b37c5aeb52
-    atom: *a5
-    version: *a6
+    atom:
+      category: core
+      name: docbook-xml
+    version:
+      version: "4.5"
   core/docbook-xsl:
     path: core/docbook-xsl.yml
     size: 2558
     hash: 5f40a1cef77fcbfc5fce9f49a610e02459edc3a8fd4a3e0150968334d33feaf1
-    atom: *a7
-    version: *a8
+    atom:
+      category: core
+      name: docbook-xsl
+    version:
+      version: 1.79.2
   core/eudev:
     path: core/eudev.yml
-    size: 1755
-    hash: 47207258798ecbdfa440fcc134317799b8e8f86f07c576be71f42c6d56af54d8
-    atom: *a9
-    version: *a10
+    size: 1726
+    hash: d8651e814007c25a62f5d1267074bebc140bdb494d8575040644e97a3e201149
+    atom: *a5
+    version: *a6
   core/fs-tree:
     path: core/fs-tree.yml
-    size: 2325
-    hash: 6d87fc81efac410d2af6bf334bfd73f770061926fbea1cecf48a9dd60be9fecd
-    atom: *a11
-    version: *a12
+    size: 2295
+    hash: a14b98b201747ec1adc4b90eeababcfacd315e41a879ba4430b27ece0a6cf577
+    atom: *a7
+    version: *a8
   core/grub:
     path: core/grub.yml
-    size: 248
-    hash: b1b93f2651ac98219d0eb5d9a8ed28ace9629256bb19f5b3fcb91ea07a4497ad
-    atom: *a13
-    version: *a14
+    size: 218
+    hash: 8d22bba9c7204dd9dee9f59d385e4d5e83a41ece99afd95a9292597257064b13
+    atom: *a9
+    version: *a10
   core/linux-firmware:
     path: core/linux-firmware.yml
-    size: 529
-    hash: 38630e1c76196588d00b581aa150ffbd366346d6fefdeb3fc95c6d7440797d5e
-    atom: *a15
-    version: *a16
+    size: 499
+    hash: 24eb6c511cb44490266792bf1bce68cc7a2ae06c144ff37c0c4349f745e6de77
+    atom:
+      category: core
+      name: linux-firmware
+    version:
+      version: "20200619"
   core/mkinitcpio-busybox:
     path: core/mkinitcpio-busybox.yml
-    size: 790
-    hash: 694e02a56e12adc3670200b31b4be0a1646f97885d23853249d26bc5d976bb20
-    atom: *a17
-    version: *a18
+    size: 760
+    hash: 2b6f823f6da036b22d5058f5bd018762fbf78fa89578e10887ab2e1a1c26cd30
+    atom:
+      category: core
+      name: mkinitcpio-busybox
+    version:
+      version: 1.31.1
   core/openrc:
     path: core/openrc.yml
-    size: 607
-    hash: 019c0e26e5706236683d84ebe34ba7497574fb65bbe28ae6b833665e8a092d18
-    atom: *a19
-    version: *a20
+    size: 595
+    hash: bc959cbd088771e7a389c9981a483bd262e8dccde3aaa40002fbd26daf0025ef
+    atom: *a11
+    version: *a12
   core/p11-kit:
     path: core/p11-kit.yml
-    size: 1052
-    hash: c604e530dfb8e49046ca4996897d6cc268dc5db1c8158c00f2fb51ffbb4c408d
-    atom: *a21
-    version: *a22
+    size: 1023
+    hash: 40edd0f0df95e0aa266ca0ddce1c81fa497a92b946e537ca36b82a12609bf6c1
+    atom:
+      category: core
+      name: p11-kit
+    version:
+      version: 0.23.20.1
   core/shadow:
     path: core/shadow.yml
     size: 2451
     hash: 89468bc29504aa40793208aeacfc76de21d9bb799c27da265352141f8e7648f4
-    atom: *a23
-    version: *a24
+    atom: *a13
+    version: *a14
   core/shared-mime-info:
     path: core/shared-mime-info.yml
-    size: 728
-    hash: b100a9f84b43399fae83f606e8fc28b28aebfbd22afc56b41abe8a734018563b
-    atom: *a25
-    version: *a26
+    size: 698
+    hash: 628367e79776e23ca5d3356d463a1ec2b003178a48f50198150bd1476562d3cf
+    atom:
+      category: core
+      name: shared-mime-info
+    version:
+      version: "2.0"
   core/tzdata:
     path: core/tzdata.yml
     size: 787
     hash: 83f46751a2f216d2fb385db9b8cb3ce42e133aed499f44c6447932e291976ba6
-    atom: *a27
-    version: *a28
+    atom: *a15
+    version: *a16
   core/udev-init-scripts:
     path: core/udev-init-scripts.yml
     size: 323
     hash: c148e8b41000715a9cda0e4f6bb4ca384f984224d2db3be7b53176739e863731
-    atom: *a29
-    version: *a30
+    atom: *a17
+    version: *a18
   core/zsh:
     path: core/zsh.yml
-    size: 478
-    hash: d317cb3e49d2bd28265359c687b50100211a5e806fcf4fe6281ca79ee54186ef
-    atom: *a31
-    version: *a32
+    size: 438
+    hash: 87a6f6ab3eed9a56e67352f65c308ea968582f5f8ae5f47badbcd249929247a0
+    atom: *a19
+    version: *a20
   doc/man-pages:
     path: doc/man-pages.yml
     size: 290
     hash: 41a9f70b249170d096a9a7a9154cefb5ccab4942343bf4c016b6671f11620668
-    atom: *a33
-    version: *a34
+    atom: *a21
+    version: *a22
   editor/nano:
     path: editor/nano.yml
     size: 314
     hash: f79c1f576be84872283d88ed28934f025a1f31c0ea97ab8b2622232a83043a99
-    atom: *a35
-    version: *a36
+    atom: *a23
+    version: *a24
   gui/adwaita-icon-theme:
     path: gui/adwaita-icon-theme.yml
     size: 144
     hash: 45b79d5c161565f2c3879bea2ea9c4703d8add4c84bdc714107630c1f7f1630f
-    atom: *a37
-    version: *a38
+    atom:
+      category: gui
+      name: adwaita-icon-theme
+    version:
+      version: 3.36.1
   gui/attica:
     path: gui/attica.yml
-    size: 397
-    hash: c9c56c7904a7d4a9fca850f7b0b36c038c274f3eb5e5e49c49f1b6e15b49a541
-    atom: *a39
-    version: *a40
+    size: 367
+    hash: 67f69decbc06f05e314764b9bbd62db2a246ff42da60a2f95b2fd7158705a46d
+    atom:
+      category: gui
+      name: attica
+    version:
+      version: 5.72.0
   gui/baloo:
     path: gui/baloo.yml
-    size: 504
-    hash: c8f071fa959f8839e7bf1d1b842eb4d5a61bfc775e44e5e49a67da593c783a5c
-    atom: *a41
-    version: *a42
+    size: 474
+    hash: 04c57c04e12c2787dcfc75685c6888a293a9d4fd1433fa495de2678145e76a80
+    atom:
+      category: gui
+      name: baloo
+    version:
+      version: 5.72.0
   gui/bluez-qt:
     path: gui/bluez-qt.yml
-    size: 399
-    hash: 0df71726f74277adb78665580c49958dbf8135b5be2624715ed43154aabfa0c8
-    atom: *a43
-    version: *a44
+    size: 369
+    hash: 4d5a6f5ef1f5dc15096c39fa928e6fe28e369b0339de56168793b71f8d0908bf
+    atom:
+      category: gui
+      name: bluez-qt
+    version:
+      version: 5.72.0
   gui/dejavu-fonts-ttf:
     path: gui/dejavu-fonts-ttf.yml
     size: 294
     hash: 40b23e2406e5306bc202634a35cfa98a4e537b414b1071c656a8cff4f3c25109
-    atom: *a45
-    version: *a46
+    atom:
+      category: gui
+      name: dejavu-fonts-ttf
+    version:
+      version: 2.37.2
   gui/frameworkintegration:
     path: gui/frameworkintegration.yml
-    size: 493
-    hash: 153fdff745438e72679be38fbb4ab6e55581fa4281e2a86b6cd3dd788ededfcb
-    atom: *a47
-    version: *a48
+    size: 463
+    hash: 878cdede21d4cbd819d4efd61f0e5c626c9bf70c29144486e02409c060563a8e
+    atom:
+      category: gui
+      name: frameworkintegration
+    version:
+      version: 5.72.0
   gui/gtk2:
     path: gui/gtk2.yml
-    size: 330
-    hash: 327967b0dea86dc366e3cfe9d6e6632f893d8b12d6e8787ab248c4d7bc9f75b3
-    atom: *a49
-    version: *a50
+    size: 301
+    hash: 9ac5c5558c61a5a2154a260cc8c0732da48c409cbf4fd339714028d299317d3b
+    atom:
+      category: gui
+      name: gtk2
+    version:
+      version: 2.24.32
   gui/gtk3:
     path: gui/gtk3.yml
-    size: 417
-    hash: 59c56f48ef462464fbd4dfe763ca277838ea07a48b6b22b07d2b13dd965a88c1
+    size: 388
+    hash: 50228ba5fd96dabc627cfd88205532f717a3c63e8f62a9d5c6616e1b319e2008
     atom:
       category: gui
       name: gtk3
@@ -2702,568 +937,850 @@ packages:
       version: 3.24.21
   gui/kactivities-stats:
     path: gui/kactivities-stats.yml
-    size: 448
-    hash: 87953952a2813cb493afd3f8bc01a50025892257c7b13808f7be8eb4a90f04a3
-    atom: *a51
-    version: *a52
+    size: 418
+    hash: edccd2d0bff68ce6a2fc4cf57644c6f6aa728ad9301295f3e9abdd9e71df94a8
+    atom:
+      category: gui
+      name: kactivities-stats
+    version:
+      version: 5.72.0
   gui/kactivities:
     path: gui/kactivities.yml
-    size: 432
-    hash: 34a8c004126221c013593aaa576b5b2fc1578f3865798d5a52aada997a878e97
-    atom: *a53
-    version: *a54
+    size: 402
+    hash: 806cea4cb1732410d921a2a0522cd97ee5f313c4c53278f945bf552c5e261996
+    atom:
+      category: gui
+      name: kactivities
+    version:
+      version: 5.72.0
   gui/kapidox:
     path: gui/kapidox.yml
-    size: 398
-    hash: 836447762f3e0371c679578e7b0180b57a357e3eed48656d819f5920b2eba1f3
-    atom: *a55
-    version: *a56
+    size: 368
+    hash: d86c43ae44277349f63662635094233b7128af79006d59a299b4312da69c3254
+    atom:
+      category: gui
+      name: kapidox
+    version:
+      version: 5.72.0
   gui/karchive:
     path: gui/karchive.yml
-    size: 399
-    hash: a732411431941b11c0c2f17cf02934786837cfeb0121a4c18a8ab7e43fa51707
-    atom: *a57
-    version: *a58
+    size: 369
+    hash: 28cd4d09d8dad7529fed71d0d88803d87ac1eae26ce7f6b3216113db14529762
+    atom:
+      category: gui
+      name: karchive
+    version:
+      version: 5.72.0
   gui/kauth:
     path: gui/kauth.yml
-    size: 436
-    hash: b1eb8d5344af6ecef2a2c994c46cc6dbc784362898383d471f5eda6834c163c7
-    atom: *a59
-    version: *a60
+    size: 406
+    hash: 2c7817506e9f0b2e532d0cf2e4851da3077e379c686cd7d10802b22d1b8e9031
+    atom:
+      category: gui
+      name: kauth
+    version:
+      version: 5.72.0
   gui/kbookmarks:
     path: gui/kbookmarks.yml
-    size: 433
-    hash: 9a18b43666ae42437216884b7cf04f3ea3ef534c828ca449691af9628daea7e2
-    atom: *a61
-    version: *a62
+    size: 403
+    hash: 6833b52518967809d3683d3e98f2e41cb828855e6510557e2b07805eeb5cb77d
+    atom:
+      category: gui
+      name: kbookmarks
+    version:
+      version: 5.72.0
   gui/kcalendarcore:
     path: gui/kcalendarcore.yml
-    size: 438
-    hash: fb0d1e5793d2f8b47446377a954d26b6df3d4ad27d539d8e501e0f1377fa882b
-    atom: *a63
-    version: *a64
+    size: 408
+    hash: 55299d86f32d6262cb809ac12334abed8cd0468fb08fe8b2949a49e5c7e393c6
+    atom:
+      category: gui
+      name: kcalendarcore
+    version:
+      version: 5.72.0
   gui/kcmutils:
     path: gui/kcmutils.yml
-    size: 441
-    hash: 04df6884fb5d283b1532c18778d32d447b3fab91c3f4f75f5d8c3bc9e68be544
-    atom: *a65
-    version: *a66
+    size: 411
+    hash: a65722b95708a435f9c29d7be46ed886796dc6eacd325250ae4428fe82aacc08
+    atom:
+      category: gui
+      name: kcmutils
+    version:
+      version: 5.72.0
   gui/kcodecs:
     path: gui/kcodecs.yml
-    size: 441
-    hash: 0b2f14b6e384196b2fc4405234898c9ccc6940705bfea9cbbe2c0cecb9502f73
-    atom: *a67
-    version: *a68
+    size: 411
+    hash: 31389270832205e188939eced91de7142ce5b224ebe5836610eb6d448376d4e7
+    atom:
+      category: gui
+      name: kcodecs
+    version:
+      version: 5.72.0
   gui/kcompletion:
     path: gui/kcompletion.yml
-    size: 480
-    hash: 160e5d52d57bc4745dc6293ace726721069af045865a863d03f5a592863d1338
-    atom: *a69
-    version: *a70
+    size: 450
+    hash: ef70689b1d26ac31ea40b81e2ea65899de17407936782b60af7ca51e2bdce4f9
+    atom:
+      category: gui
+      name: kcompletion
+    version:
+      version: 5.72.0
   gui/kconfig:
     path: gui/kconfig.yml
-    size: 452
-    hash: bad402c5989d1bae5a9b7ba322356fa81b4cbb482a23caac637bfe82ad391191
-    atom: *a71
-    version: *a72
+    size: 422
+    hash: 4aea5a4ee17138319f1b6a7083a3c052885ddbc28b342f8172627c0040024686
+    atom:
+      category: gui
+      name: kconfig
+    version:
+      version: 5.72.0
   gui/kconfigwidgets:
     path: gui/kconfigwidgets.yml
-    size: 521
-    hash: 7abf346a4fa3de41a5e2c93068ce8a7c22505e6c256e6ccf2775e9f67627a985
-    atom: *a73
-    version: *a74
+    size: 491
+    hash: d947ec66fb01051992ddd8c0325e457cb90da622a1b41428327201e4287442a9
+    atom:
+      category: gui
+      name: kconfigwidgets
+    version:
+      version: 5.72.0
   gui/kcontacts:
     path: gui/kcontacts.yml
-    size: 532
-    hash: fe096f294f39071b39c9df5c45a85c875be9fdce2001f95bbced125c4b242bf2
-    atom: *a75
-    version: *a76
+    size: 502
+    hash: 7b5659d7c8108202e46355d86d7c879b8f0d06e458ce17b4866f7c9f57040ab0
+    atom:
+      category: gui
+      name: kcontacts
+    version:
+      version: 5.72.0
   gui/kcoreaddons:
     path: gui/kcoreaddons.yml
-    size: 430
-    hash: e32f73d9515785645b505dbda4d5ff5014c10928528ad9b31b3fcea345f529bd
-    atom: *a77
-    version: *a78
+    size: 400
+    hash: d8151794c1f1e315a0dd5dfed384a8743d8de9fbead4732e50f86e37ecdee2c6
+    atom:
+      category: gui
+      name: kcoreaddons
+    version:
+      version: 5.72.0
   gui/kcrash:
     path: gui/kcrash.yml
-    size: 475
-    hash: fbf5c33c35759246a66aa0d6805c91ad38ab75fc3f1ce8fe08e104e86f773345
-    atom: *a79
-    version: *a80
+    size: 445
+    hash: b7a49d46077e3e6d6fb27d9a2334cc794386fe9bd93fe539967e3cb033476a0e
+    atom:
+      category: gui
+      name: kcrash
+    version:
+      version: 5.72.0
   gui/kdbusaddons:
     path: gui/kdbusaddons.yml
-    size: 430
-    hash: c6f5126ce8e05dac188bfeda25afd837693d41fe056636b9a1fcc66c1899450e
-    atom: *a81
-    version: *a82
+    size: 400
+    hash: 97322122d8e2b6c534cc93edfd63f23fe71b896d1e6c831338f0982cd38700f6
+    atom:
+      category: gui
+      name: kdbusaddons
+    version:
+      version: 5.72.0
   gui/kdeclarative:
     path: gui/kdeclarative.yml
-    size: 535
-    hash: ff2975d95781b6fb7e6c4b218307970a942195b6cff97f83b042ca1da26dd940
-    atom: *a83
-    version: *a84
+    size: 505
+    hash: 674150df08638f667582b36f5cde52a81d39a393763f19852f37ab4ca6b16e3c
+    atom:
+      category: gui
+      name: kdeclarative
+    version:
+      version: 5.72.0
   gui/kded:
     path: gui/kded.yml
-    size: 395
-    hash: 6f34656bfe32c9384bf604b0d9ff0a5e4bcf87763d18a3dc33e0a6d149db4d0f
-    atom: *a85
-    version: *a86
+    size: 365
+    hash: 139fd8215bd1f26a31342f12e1793ab9639beec7f2b69357619673bbb693c8d0
+    atom:
+      category: gui
+      name: kded
+    version:
+      version: 5.72.0
   gui/kdesu:
     path: gui/kdesu.yml
-    size: 488
-    hash: 304b48a0aa3cf55fc2125060c2614cb4d5f5ae84a4759368546b9dce9562e4b6
-    atom: *a87
-    version: *a88
+    size: 458
+    hash: 5130f0167419a1e4d89feba7fe4fb2209e4af1c82e3a74d66a025e3bfa1121bb
+    atom:
+      category: gui
+      name: kdesu
+    version:
+      version: 5.72.0
   gui/kdnssd:
     path: gui/kdnssd.yml
-    size: 425
-    hash: ef7117d467e2a6ceafd0599ef65f12197a30c07d63d0b54099b3a9bb66ea7fcf
-    atom: *a89
-    version: *a90
+    size: 395
+    hash: 304496f6b23056f898ff3d9b9757e130adaf466bb59afbb4ad33f115e23fe0cd
+    atom:
+      category: gui
+      name: kdnssd
+    version:
+      version: 5.72.0
   gui/kdoctools:
     path: gui/kdoctools.yml
-    size: 572
-    hash: 58c290c5b2785fc125420a01f459b77632cba73a4a04bc1b74decb815020fa2a
-    atom: *a91
-    version: *a92
+    size: 542
+    hash: 97fb3c2bfee87dc583c23de30b348b3c673b701583a2f7036c9684440c6386e4
+    atom:
+      category: gui
+      name: kdoctools
+    version:
+      version: 5.72.0
   gui/kemoticons:
     path: gui/kemoticons.yml
-    size: 401
-    hash: 0a0bcf5e96329edd39c47f7f6048928fe4e5ff76f24a798ab652e952d4dc7442
-    atom: *a93
-    version: *a94
+    size: 371
+    hash: 17fd29535a905454cbe4e390760bc8a5e3ca15933e74e1159899089fdbf64adb
+    atom:
+      category: gui
+      name: kemoticons
+    version:
+      version: 5.72.0
   gui/kfilemetadata:
     path: gui/kfilemetadata.yml
-    size: 404
-    hash: 9cc1744a2daeee05f2897d693080502c52cadab6f40f4913aed176494b31aeab
-    atom: *a95
-    version: *a96
+    size: 374
+    hash: 584e61e44fd0f2700028b9bd617a5e83778857f19e5a09849c9d24cb1e861e1b
+    atom:
+      category: gui
+      name: kfilemetadata
+    version:
+      version: 5.72.0
   gui/kglobalaccel:
     path: gui/kglobalaccel.yml
-    size: 637
-    hash: cfea70b872b04992d892114136b1117ab4572dc94f22eba7980862fc1498cc2d
-    atom: *a97
-    version: *a98
+    size: 607
+    hash: 60915ade395f53df505a09889bfb2efd5815bd04acf1d66659ba9b8d480dba0f
+    atom:
+      category: gui
+      name: kglobalaccel
+    version:
+      version: 5.72.0
   gui/kguiaddons:
     path: gui/kguiaddons.yml
-    size: 427
-    hash: bd5ba1f2a8a60dda69586eb2531ad63dfb79b3b941f5073c92f68b491f9d4444
-    atom: *a99
-    version: *a100
+    size: 397
+    hash: 8a509e02558d34b6592fe04f8ef17fe9cf99fe451ad39bfc5e88c3bee3cb5f37
+    atom:
+      category: gui
+      name: kguiaddons
+    version:
+      version: 5.72.0
   gui/kholidays:
     path: gui/kholidays.yml
-    size: 400
-    hash: 4965e9ec8f6c5ea8b44c61ecb94a10ff56f845c5cc797dcf64c78421fbba5e95
-    atom: *a101
-    version: *a102
+    size: 370
+    hash: 5235fdbe9a4c0e51603c4b5407424e46b1695947127c0c700d1911a0c7f820c5
+    atom:
+      category: gui
+      name: kholidays
+    version:
+      version: 5.72.0
   gui/ki18n:
     path: gui/ki18n.yml
-    size: 396
-    hash: 0ab5ab7ca53ea572a8852c0d94686655464fe1ae1a55162ecf36b4dc9acc8bc6
-    atom: *a103
-    version: *a104
+    size: 366
+    hash: 7beb343d26b27aa2e2d216fc0dcbbb073f8482ec9f45c77f5f6914cd04914128
+    atom:
+      category: gui
+      name: ki18n
+    version:
+      version: 5.72.0
   gui/kiconthemes:
     path: gui/kiconthemes.yml
-    size: 572
-    hash: cc8c92a06fe9be8ab4e4cad3fe5aa9c0186aad3e9b76725d4b1df5f4e38b232d
-    atom: *a105
-    version: *a106
+    size: 542
+    hash: 0ba74008b5d961264a93ef62ce256022be8a6bb0387ee7e718a02693f0dafd6f
+    atom:
+      category: gui
+      name: kiconthemes
+    version:
+      version: 5.72.0
   gui/kidletime:
     path: gui/kidletime.yml
-    size: 426
-    hash: fd651f16f6f6432735e8c300b96b345f9d193296ffb209b458c2f0b437b9966f
-    atom: *a107
-    version: *a108
+    size: 396
+    hash: 0d385010452f739af43bc0bc58035a086fea0fc8292e622b435f6566c217e00e
+    atom:
+      category: gui
+      name: kidletime
+    version:
+      version: 5.72.0
   gui/kimageformats:
     path: gui/kimageformats.yml
-    size: 430
-    hash: 46a5c42f36e7af2df8439f19bb72f6f3481c0184efd2696a16e249df4277117b
-    atom: *a109
-    version: *a110
+    size: 400
+    hash: 71d8aeefb357f63da25547243e9b99d58db7bf54941ae0210c142706e2eb9c57
+    atom:
+      category: gui
+      name: kimageformats
+    version:
+      version: 5.72.0
   gui/kinit:
     path: gui/kinit.yml
-    size: 631
-    hash: ca84f44a9cd5f0005227b027eb81142b4bbc8b585c4be13ee8d52f01f3374a9e
-    atom: *a111
-    version: *a112
+    size: 601
+    hash: 042968a5a5b0026e5726750663f26a0fcf1dac1dc5364908127ac006a65679e6
+    atom:
+      category: gui
+      name: kinit
+    version:
+      version: 5.72.0
   gui/kio:
     path: gui/kio.yml
-    size: 582
-    hash: b4769ba003546d3613db1e35485858dcb05c166b2985b7928bcf07a7d12442ab
-    atom: *a113
-    version: *a114
+    size: 552
+    hash: f8365447558336fa0e750e8edd41ea7b13626e5a5775fc063215be25e768cabb
+    atom:
+      category: gui
+      name: kio
+    version:
+      version: 5.72.0
   gui/kirigami2:
     path: gui/kirigami2.yml
-    size: 400
-    hash: a87fe929320da1e5d2532004753e5dc94916940847551ff5ab1ba096ca9acc0b
-    atom: *a115
-    version: *a116
+    size: 370
+    hash: 7d6dc81bac62a49000eeac1f2af95beb662b671bf445c30ffe70db5ec282a925
+    atom:
+      category: gui
+      name: kirigami2
+    version:
+      version: 5.72.0
   gui/kitemmodels:
     path: gui/kitemmodels.yml
-    size: 402
-    hash: e13d44eb6ab92f5a41a0762f6d21be53e794b2e6448720c39cafc4a7a035dcb0
-    atom: *a117
-    version: *a118
+    size: 372
+    hash: 128550d2290c1100437943450d1fa10c0b1e59908117678c1c0f6f674a9d2e0f
+    atom:
+      category: gui
+      name: kitemmodels
+    version:
+      version: 5.72.0
   gui/kitemviews:
     path: gui/kitemviews.yml
-    size: 427
-    hash: f62230f6a4166c535dc3ab8c19462d3875d1f34717f1681bc86f641b955947e5
-    atom: *a119
-    version: *a120
+    size: 397
+    hash: b235e269769824ef91c584bd39892fe323fb8eb0fdd9f4352b0a5c3a33a9b223
+    atom:
+      category: gui
+      name: kitemviews
+    version:
+      version: 5.72.0
   gui/kjobwidgets:
     path: gui/kjobwidgets.yml
-    size: 402
-    hash: eb1c5cd7d9328b562189ff04998a9c114d9f8271a7e3ee632f26e714f2197ba2
-    atom: *a121
-    version: *a122
+    size: 372
+    hash: aa38db5892918a1ed7e2c7acc6f9f4b14388052059c21652b3dce5d856006198
+    atom:
+      category: gui
+      name: kjobwidgets
+    version:
+      version: 5.72.0
   gui/knewstuff:
     path: gui/knewstuff.yml
-    size: 400
-    hash: dfaf0103258fecc95240a2183a1843743d316afe128fcfc7251aa5fea634e90c
-    atom: *a123
-    version: *a124
+    size: 370
+    hash: 901d903c31353274b285664b8d3528ac009821d5103c9ca756e6922e90253c2a
+    atom:
+      category: gui
+      name: knewstuff
+    version:
+      version: 5.72.0
   gui/knotifications:
     path: gui/knotifications.yml
-    size: 437
-    hash: d3b18dd93edf5debc94425068f2db3374d9c8bc3cb9811327ab951902d3cdb2a
-    atom: *a125
-    version: *a126
+    size: 407
+    hash: 0667f7f850ee6fbb51c80ce9354914dcda168b9d467c4733a3e3310dca516066
+    atom:
+      category: gui
+      name: knotifications
+    version:
+      version: 5.72.0
   gui/knotifyconfig:
     path: gui/knotifyconfig.yml
-    size: 436
-    hash: 437bbe60d9e33eb4ed13c7c2391ce62bacd4c383cd2c7be2e076ce8835500f7a
-    atom: *a127
-    version: *a128
+    size: 406
+    hash: 0d352223a2322cde91711ffc550666cd84f1c6036113b7e59c4841af21a1eff9
+    atom:
+      category: gui
+      name: knotifyconfig
+    version:
+      version: 5.72.0
   gui/kpackage:
     path: gui/kpackage.yml
-    size: 501
-    hash: 3a27aee04d2fa195fedcd4bab07962ae3a9f17b1da198e044efdc45348d9b8da
-    atom: *a129
-    version: *a130
+    size: 471
+    hash: ba5f0a50a14c9808aa71b34e7aaf5d641fbf979ebd1a7d5021ce26adf475ef5d
+    atom:
+      category: gui
+      name: kpackage
+    version:
+      version: 5.72.0
   gui/kparts:
     path: gui/kparts.yml
-    size: 397
-    hash: 00899a63c6af883707a2c029d8af010365fb4e82e82294ed32869177a568b9af
-    atom: *a131
-    version: *a132
+    size: 367
+    hash: 68d48516a98d60094fc83fdc6f9ad25c6757b1076fd8eae95c190607e72139ae
+    atom:
+      category: gui
+      name: kparts
+    version:
+      version: 5.72.0
   gui/kpeople:
     path: gui/kpeople.yml
-    size: 398
-    hash: cd44774bf392e66348a9a8a45b7051eeb8a8f1fa7ed942ce011868997927cc07
-    atom: *a133
-    version: *a134
+    size: 368
+    hash: 8feb49b5f57f0f8d84f03629c6ca458d4b0ead18226cb8305f0c5b4bd21be960
+    atom:
+      category: gui
+      name: kpeople
+    version:
+      version: 5.72.0
   gui/kplotting:
     path: gui/kplotting.yml
-    size: 400
-    hash: 0b269cd3def3d6dc4d01d4d2a55e32e61725627228715337745bd5569d59d9e1
-    atom: *a135
-    version: *a136
+    size: 370
+    hash: 28c21fa787bebe86613e35b7d40c38b8b05354e2df8d6dacd8f4979495814fbd
+    atom:
+      category: gui
+      name: kplotting
+    version:
+      version: 5.72.0
   gui/kpty:
     path: gui/kpty.yml
-    size: 395
-    hash: 4cf7c07cfaa7d78b1fcc2322ac3375ce9061c55f2383170333a3fa898d1a12a7
-    atom: *a137
-    version: *a138
+    size: 365
+    hash: c3bc5a99e7deca126a4b876c1cea0b26671eb7dbee8e27d95a8600221a671d41
+    atom:
+      category: gui
+      name: kpty
+    version:
+      version: 5.72.0
   gui/kquickcharts:
     path: gui/kquickcharts.yml
-    size: 403
-    hash: f4c904a72492db0c2762565c0e769ef5e23ad5d7ddfa72fa7f233935c3a2db5e
-    atom: *a139
-    version: *a140
+    size: 373
+    hash: 8ef66bbd96b45f956107044da23bf8f0444cbd3daa2cb35e05b35b2062ec3070
+    atom:
+      category: gui
+      name: kquickcharts
+    version:
+      version: 5.72.0
   gui/krunner:
     path: gui/krunner.yml
-    size: 448
-    hash: 6e6aac9eb672a7f95306841680ae2164658a9889155d36644e28706653259a41
-    atom: *a141
-    version: *a142
+    size: 418
+    hash: ad5ad89b98ff7dc8dc9c341c0a9bcb0950a3c43c9a0c1485e0bea89490de8d25
+    atom:
+      category: gui
+      name: krunner
+    version:
+      version: 5.72.0
   gui/kservice:
     path: gui/kservice.yml
-    size: 469
-    hash: ca9ca00e0b5a5f4259e9b5ce5af5c2bd132e2c5cb4a96ffd577ffdb06f99c0c1
-    atom: *a143
-    version: *a144
+    size: 439
+    hash: e040b8da40658e64864b06909ae59cc149c868bfa79289357caf7a855fc37723
+    atom:
+      category: gui
+      name: kservice
+    version:
+      version: 5.72.0
   gui/ktexteditor:
     path: gui/ktexteditor.yml
-    size: 618
-    hash: 0d7366d4e4cfe2fe9948ce57259a102aab378c908d66e6d73799d37302b8485b
-    atom: *a145
-    version: *a146
+    size: 588
+    hash: 3b067b81ed5e6f75884633da41dbe1c1e77c234b0878bff72b75249b1acb355d
+    atom:
+      category: gui
+      name: ktexteditor
+    version:
+      version: 5.72.0
   gui/ktextwidgets:
     path: gui/ktextwidgets.yml
-    size: 473
-    hash: 219dea26381eb22e8514ec7243ea01b17c79aa51537eef620b35ddf525a5fea4
-    atom: *a147
-    version: *a148
+    size: 443
+    hash: 2d023a5da1692b7d17291e7d20feab076b3f7bc998d7369fdd3b945e279937c8
+    atom:
+      category: gui
+      name: ktextwidgets
+    version:
+      version: 5.72.0
   gui/kunitconversion:
     path: gui/kunitconversion.yml
-    size: 406
-    hash: 6e6d08441c08ca950b862bdf213f59be290df2ed632365d02f68ecefcde17edd
-    atom: *a149
-    version: *a150
+    size: 376
+    hash: a28c223a27ac8a59b346905742527a8fe77aa9678cd94db7a36304d7af122e96
+    atom:
+      category: gui
+      name: kunitconversion
+    version:
+      version: 5.72.0
   gui/kwallet:
     path: gui/kwallet.yml
-    size: 792
-    hash: 7a840b7d04f9a9decf7b50ea41bf366362c8a9101b2d53c0a7e7d8458e5785f9
-    atom: *a151
-    version: *a152
+    size: 762
+    hash: 0aaa36eda9f3c9ae5cd67ba008279bceb77a84e616669a99bdded7ad8c626d2d
+    atom:
+      category: gui
+      name: kwallet
+    version:
+      version: 5.72.0
   gui/kwidgetsaddons:
     path: gui/kwidgetsaddons.yml
-    size: 405
-    hash: f0b7f397d57b3d17392a9bde8c57893996dad40cc3b4d002c099c39fad3b3778
-    atom: *a153
-    version: *a154
+    size: 375
+    hash: 7d85079f6a17af4b1052bf815c3ba0c5095a604f1c2387fa5f3195cd7301ae48
+    atom:
+      category: gui
+      name: kwidgetsaddons
+    version:
+      version: 5.72.0
   gui/kwindowsystem:
     path: gui/kwindowsystem.yml
-    size: 497
-    hash: 8f8f73671cc23786423c75f0e8a7932c8b1f164910ba5434479dedc4a68994b4
-    atom: *a155
-    version: *a156
+    size: 467
+    hash: ec19ebe37f67caeaf70155f4246f3bdd5bd716c391a1048d0f3dc41576865fd6
+    atom:
+      category: gui
+      name: kwindowsystem
+    version:
+      version: 5.72.0
   gui/kxmlgui:
     path: gui/kxmlgui.yml
-    size: 510
-    hash: 36e8be9478d67e2e7aa76a39ce3645f4667a08de9d3c76985ca6edc590f8005e
-    atom: *a157
-    version: *a158
+    size: 480
+    hash: 103c80173bb1715af8e3f59b0959d21cc5e902afab9e684b61f0a887adf35e45
+    atom:
+      category: gui
+      name: kxmlgui
+    version:
+      version: 5.72.0
   gui/libdrm:
     path: gui/libdrm.yml
-    size: 686
-    hash: 79e5ab3c1519d45872ae7638dcba2ad93f6d48414be30e5a4f21407796662244
-    atom: *a159
-    version: *a160
+    size: 656
+    hash: 6f40fa780085da548bea79e08d9c911f3dd03367c560fb05fe2283e072235de6
+    atom:
+      category: gui
+      name: libdrm
+    version:
+      version: 2.4.102
   gui/libepoxy:
     path: gui/libepoxy.yml
-    size: 511
-    hash: 6136e9a3017a3f8fce3fccbbd7a085ed91f7432990219dee35d958f22bdd4b1d
-    atom: *a161
-    version: *a162
+    size: 482
+    hash: b744945adf22712e932664b2327442f327bcd301472967e98a59b2016a770cce
+    atom:
+      category: gui
+      name: libepoxy
+    version:
+      version: 1.5.4
   gui/libfontenc:
     path: gui/libfontenc.yml
-    size: 147
-    hash: 8495870456a0b0b11ad70e60818c70dcb7a3fd4e627bc34d8abc6b77c6bdc076
-    atom: *a163
-    version: *a164
+    size: 118
+    hash: 46ecbe1f4c270d021cabf10130d0bd79b2cb6c00be629dee67a4c5c5fe0102cd
+    atom:
+      category: gui
+      name: libfontenc
+    version:
+      version: 1.1.4
   gui/libice:
     path: gui/libice.yml
-    size: 143
-    hash: 86694807ae688bbc6641bf864a0d5140b76b84e3995f481319f5d7f364801cab
-    atom: *a165
-    version: *a166
+    size: 114
+    hash: ae1fb605d32b5f896a5f9a58b37d4e2a8913321784391004a9d3461ab454d6d2
+    atom:
+      category: gui
+      name: libice
+    version:
+      version: 1.0.10
   gui/libpciaccess:
     path: gui/libpciaccess.yml
-    size: 149
-    hash: 41a80fe5d32f96bdf29aed55809e3c5ca976d0f52d3340b0ade235a012674834
-    atom: *a167
-    version: *a168
+    size: 120
+    hash: ebe4ff429de0942ede800c1bd7db605de2eb5819fe18a04620c3bd07bab4753a
+    atom:
+      category: gui
+      name: libpciaccess
+    version:
+      version: "0.16"
   gui/libsm:
     path: gui/libsm.yml
-    size: 204
-    hash: e504c839cc7877a7e5b792d437fc1a71ba20ab8e1551420c175405454129d9fa
-    atom: *a169
-    version: *a170
+    size: 175
+    hash: b3586d6cf81448f571efb68bfc0d1d7909212c79b0d0bfc46a01dc30f88cded6
+    atom:
+      category: gui
+      name: libsm
+    version:
+      version: 1.2.3
   gui/libx11:
     path: gui/libx11.yml
-    size: 224
-    hash: 1a8c21267c762e18c7fda882b49e896ec3b95af392258afbcb12bbbbe2e57a4e
-    atom: *a171
-    version: *a172
+    size: 195
+    hash: 812c6df035c64d12885e320b4fcd07b79d4e232d334fff939beb29ae696354a9
+    atom:
+      category: gui
+      name: libx11
+    version:
+      version: 1.6.9
   gui/libxau:
     path: gui/libxau.yml
-    size: 143
-    hash: f0dce812bcf08b66595c2dd425b11994be40b77b0d8f84daf62af08237839c9c
-    atom: *a173
-    version: *a174
+    size: 114
+    hash: 28b98c239fe38ea2d8983759161cbf8c7f8d3bb9ed8ffb921cfe27bf56bedfaf
+    atom:
+      category: gui
+      name: libxau
+    version:
+      version: 1.0.9
   gui/libxaw:
     path: gui/libxaw.yml
-    size: 329
-    hash: 991e1e30330d8a0347aef4858ac5c3512f54c8a92137f67e3d15576dbaa4ebea
-    atom: *a175
-    version: *a176
+    size: 300
+    hash: b96022f5664a2cc8fdb8207db41516535bbc7f8137e5a8307eab6736b131be05
+    atom:
+      category: gui
+      name: libxaw
+    version:
+      version: 1.0.13
   gui/libxcb:
     path: gui/libxcb.yml
-    size: 194
-    hash: a0aa6b8bff4565d63e051680fddb06fe2cccacd09f8ee1bc955d3780af0cab2b
-    atom: *a177
-    version: *a178
+    size: 165
+    hash: f07549970c6ebd0d1976940ab9fd6a0ae2ec9178a24957a31ea7594e5450fb49
+    atom:
+      category: gui
+      name: libxcb
+    version:
+      version: "1.14"
   gui/libxdamage:
     path: gui/libxdamage.yml
-    size: 218
-    hash: 6b8ca38440b93738550de8d57b928972c068b97bb48cb75bb657ebc9bcd55350
-    atom: *a179
-    version: *a180
+    size: 189
+    hash: 5bf9be6df678ac64b28185b3573c61dd3c6994bed1d61e9b536dae7c7ae84487
+    atom:
+      category: gui
+      name: libxdamage
+    version:
+      version: 1.1.5
   gui/libxext:
     path: gui/libxext.yml
-    size: 209
-    hash: 77d8eedd12a7043d08f30ffb6f67b94e5a6abd5866db6e53327cee7e917b5c61
-    atom: *a181
-    version: *a182
+    size: 180
+    hash: b9cebb25088e0fef4a1e8a4c71df01a31f334378e4096d778f835841121024e8
+    atom:
+      category: gui
+      name: libxext
+    version:
+      version: 1.3.4
   gui/libxfixes:
     path: gui/libxfixes.yml
-    size: 195
-    hash: 91d6d7f99912285abd6b491220b69dc69f09f745b577f4272b2839fdc15405bd
-    atom: *a183
-    version: *a184
+    size: 166
+    hash: d56d9ccf1a9eac51a40ce9ae8ca81c1e232e0d278155a88d151052bc7856b3e4
+    atom:
+      category: gui
+      name: libxfixes
+    version:
+      version: 5.0.3
   gui/libxfont2:
     path: gui/libxfont2.yml
-    size: 271
-    hash: b5a0a6993f3228c3c2b0d4036229e018299a2bf5e888bbd2a10ba877e741a766
-    atom: *a185
-    version: *a186
+    size: 242
+    hash: 37c375caf683fc7fd996f599216645de353f1706ab670b76e9e116619ddd48bf
+    atom:
+      category: gui
+      name: libxfont2
+    version:
+      version: 2.0.4
   gui/libxft:
     path: gui/libxft.yml
-    size: 322
-    hash: 7df88467ff1d33feb0736d9ab1250cc36503c18298c5aaf4d54e8febfa600ca2
-    atom: *a187
-    version: *a188
+    size: 293
+    hash: 4688588c9d2103941aea52cce1b119854453b199a03efd6e6e8086ffdea1f70b
+    atom:
+      category: gui
+      name: libxft
+    version:
+      version: 2.3.3
   gui/libxi:
     path: gui/libxi.yml
-    size: 277
-    hash: c7d8dddb1caabcba3576f41a42ed2c5bccfb8fb6eb170ca2f8748bdda18546bd
-    atom: *a189
-    version: *a190
+    size: 248
+    hash: 828b1a27e7761e85cc945b529d05a2c47a1841771c731c51b092cc0275011a45
+    atom:
+      category: gui
+      name: libxi
+    version:
+      version: 1.7.10
   gui/libxkbfile:
     path: gui/libxkbfile.yml
-    size: 213
-    hash: ea7bfb97b843731c5c9176af3bc57d24a30e682bfa84002733e36d7dcb0e1e58
-    atom: *a191
-    version: *a192
+    size: 184
+    hash: 86d7e96945642fde298af9cd3f6a1d37f9a06d70f742c0c5e231798f71661d0f
+    atom:
+      category: gui
+      name: libxkbfile
+    version:
+      version: 1.1.0
   gui/libxmu:
     path: gui/libxmu.yml
-    size: 268
-    hash: e5af6f9b9010b7898372bb4deaabb4e9f84b7ff40fedcde9b7932e4dc8c630b9
-    atom: *a193
-    version: *a194
+    size: 239
+    hash: eef919cc19535c89f3a9856f8f8e1f25ed2b5adb1f82f01d48d054b2f36e5782
+    atom:
+      category: gui
+      name: libxmu
+    version:
+      version: 1.1.3
   gui/libxpm:
     path: gui/libxpm.yml
-    size: 209
-    hash: d40f4d9bd4936da6a4821c009b5f96860072d23ed56ab4453ffcfc5d9f797efd
-    atom: *a195
-    version: *a196
+    size: 196
+    hash: b5910de8857db1b049ddd0c310b9df09187666c0468c27ac17b27e707b250858
+    atom:
+      category: gui
+      name: libxpm
+    version:
+      version: 3.5.13
   gui/libxrandr:
     path: gui/libxrandr.yml
-    size: 219
-    hash: b4ce3903634309844f441e073f67d663049ed751d081a431ad8f0268601f5311
-    atom: *a197
-    version: *a198
+    size: 190
+    hash: da51a6c8e5c4bc7da8050a786b92e6dd1c8454993e1a690faf9504953488bc67
+    atom:
+      category: gui
+      name: libxrandr
+    version:
+      version: 1.5.2
   gui/libxrender:
     path: gui/libxrender.yml
-    size: 174
-    hash: be54ad5d97a3987e41dd22853750449d94d789861c13e3e85979bdc617f0a87c
-    atom: *a199
-    version: *a200
+    size: 145
+    hash: d1b3c5a86cb5fd3065c81ee34269cf0470404aff1fa17f43228ade0b6b0a2b9e
+    atom:
+      category: gui
+      name: libxrender
+    version:
+      version: 0.9.10
   gui/libxshmfence:
     path: gui/libxshmfence.yml
-    size: 173
-    hash: 082ac12e1520afdbf5821966cbe2218a9ba012f2a28ea1302c96b22923d80add
-    atom: *a201
-    version: *a202
+    size: 144
+    hash: 2e3ac822e5c3b591fee79d7f589921a08316943314f4cde5a09d4b53123b94f2
+    atom:
+      category: gui
+      name: libxshmfence
+    version:
+      version: "1.3"
   gui/libxt:
     path: gui/libxt.yml
-    size: 183
-    hash: 23252f15bc259d68de99956c566c9cc0b25b1a7cc860953d4d5856d58324fa5a
-    atom: *a203
-    version: *a204
+    size: 154
+    hash: 81e786b551fd8b95b892b35b51531d25523b98180712c559e26f65d73e0aa506
+    atom:
+      category: gui
+      name: libxt
+    version:
+      version: 1.2.0
   gui/libxtst:
     path: gui/libxtst.yml
-    size: 270
-    hash: a800deb883854381c51609026fbbfe7e6e69ba0145de35286799cf45daf5751a
-    atom: *a205
-    version: *a206
+    size: 241
+    hash: 04f72e8dba5920e9c41cf852c9cd74de6b9ccff4c3083348ffa0b56ab6b92974
+    atom:
+      category: gui
+      name: libxtst
+    version:
+      version: 1.2.3
   gui/libxxf86vm:
     path: gui/libxxf86vm.yml
-    size: 173
-    hash: 215ded563f6c1ead1d172b46b816e9a2d801c3bccddf637e8a97b93345aad877
-    atom: *a207
-    version: *a208
+    size: 144
+    hash: c8c4db47839be24bf6f829ee95024dadab9ed76a1131c190e0824b83a0e60780
+    atom:
+      category: gui
+      name: libxxf86vm
+    version:
+      version: 1.1.4
   gui/mesa:
     path: gui/mesa.yml
-    size: 894
-    hash: 1321a0685499d41c46c1c463afb57f702b663f68dab02145a283ca74070c1601
-    atom: *a209
-    version: *a210
+    size: 865
+    hash: ec2202c69eb55e7d22f8033ea18eb9b6d18a0a8f73ec4d7c5dfd73b346cfc969
+    atom:
+      category: gui
+      name: mesa
+    version:
+      version: 20.1.3
   gui/openbox:
     path: gui/openbox.yml
-    size: 469
-    hash: 211f224aa593375c9ba0488fbcf0332f9373dc515ffa215db6963879abc437a3
-    atom: *a211
-    version: *a212
+    size: 440
+    hash: ff428c9d5844e55c74be798fe21a148cae3cfce3fef0d4117865ac2e88de9d01
+    atom:
+      category: gui
+      name: openbox
+    version:
+      version: 3.6.1.2
   gui/pixman:
     path: gui/pixman.yml
-    size: 174
-    hash: 46467efbc8ec1fce7f699502f32015a4d9fb5fdb7f8e703ef33e8d2b5c99b4bb
-    atom: *a213
-    version: *a214
+    size: 145
+    hash: dae009dda4d59087ce1d0b8d27b11e00e249a2d989cac31684817389317efde5
+    atom:
+      category: gui
+      name: pixman
+    version:
+      version: 0.40.0
   gui/plasma-framework:
     path: gui/plasma-framework.yml
-    size: 607
-    hash: 64fcaf1cdd82240fd0f13176449101e32bd72a2abf62e64352ba8901d555806d
-    atom: *a215
-    version: *a216
+    size: 577
+    hash: 3b90968182697e9e748fcc3ff78358e7fbcfc74362028880f7bf1bccb838ee91
+    atom:
+      category: gui
+      name: plasma-framework
+    version:
+      version: 5.72.0
   gui/purpose:
     path: gui/purpose.yml
-    size: 398
-    hash: 2f142b433b5ea60235169ca522b53fff82dab1c7472bf7643ad0e57c41d5a068
-    atom: *a217
-    version: *a218
+    size: 368
+    hash: f6eecad4735d05664188b16bf031ef901a0226c96c4208be351eca0bbce1de8b
+    atom:
+      category: gui
+      name: purpose
+    version:
+      version: 5.72.0
   gui/qqc2-desktop-style:
     path: gui/qqc2-desktop-style.yml
-    size: 409
-    hash: d3e31b67fb856dc439f0b5b23002bad10280e574591eb4aa306a2408ce16554c
-    atom: *a219
-    version: *a220
+    size: 379
+    hash: 2270765e8b936e2557931c8541951ffaf21e988d8c97047c824bb4c56caf951c
+    atom:
+      category: gui
+      name: qqc2-desktop-style
+    version:
+      version: 5.72.0
   gui/qt5-base:
     path: gui/qt5-base.yml
-    size: 1548
-    hash: ad1985b4e8c8cfca023921467ce89e162a154d190cab9dcd855925026accaee7
-    atom: *a221
-    version: *a222
+    size: 1519
+    hash: 76dac2beb42abc6bf387b7f297b069e0a93f3c716fa50499b9b8e3d746663aa6
+    atom:
+      category: gui
+      name: qt5-base
+    version:
+      version: 5.15.0
   gui/qt5-x11extras:
     path: gui/qt5-x11extras.yml
-    size: 397
-    hash: f603a212d50bd323f2d5b3d8306b86b650526d12a6344709cf9799df13165beb
-    atom: *a223
-    version: *a224
+    size: 368
+    hash: 0c88267eecb88937976e7891457d78e745bd31b234bbe7e48174dd7f23c0e7e4
+    atom:
+      category: gui
+      name: qt5-x11extras
+    version:
+      version: 5.15.0
   gui/solid:
     path: gui/solid.yml
-    size: 396
-    hash: 6de2f59f6e2c99509098619ce9797c7a31687b79c6b728feb19e05b667183325
-    atom: *a225
-    version: *a226
+    size: 366
+    hash: b26864209d9d0a17d13e89efdc85871258d49155e3f169405e3fc65e393901ca
+    atom:
+      category: gui
+      name: solid
+    version:
+      version: 5.72.0
   gui/sonnet:
     path: gui/sonnet.yml
-    size: 397
-    hash: 9353e63c90c4d9e0c266b3f3326ec9ceb2812417e32cccc8b6db1895bd6bc7dc
-    atom: *a227
-    version: *a228
+    size: 367
+    hash: dd69789137266e67767379699c285b11b8d7cdb183517b2aa03718280acf6d36
+    atom:
+      category: gui
+      name: sonnet
+    version:
+      version: 5.72.0
   gui/syndication:
     path: gui/syndication.yml
-    size: 402
-    hash: c389025e7cac8f4f96715b173242ac2fddba0d724ff18f7766bab8ea432aeba2
-    atom: *a229
-    version: *a230
+    size: 372
+    hash: 5651198a4b2449ded78a094379d8f0acd8caf374176443a3e69620aad8680302
+    atom:
+      category: gui
+      name: syndication
+    version:
+      version: 5.72.0
   gui/syntax-highlighting:
     path: gui/syntax-highlighting.yml
-    size: 410
-    hash: befa35132863cd9b2c159e9a816952fe002fa40725fdb433ab263003d0fe3122
-    atom: *a231
-    version: *a232
+    size: 380
+    hash: ecb09e7f0685943ff2ed5e8de6b06f68baa8efda07dcc46634aa92b1881fee85
+    atom:
+      category: gui
+      name: syntax-highlighting
+    version:
+      version: 5.72.0
   gui/threadweaver:
     path: gui/threadweaver.yml
-    size: 403
-    hash: ab6e20319ec261e32fc5b647c2ccd59cf1350cf06a9bd9408ccbc638bd89e830
-    atom: *a233
-    version: *a234
+    size: 373
+    hash: 6466ef5723171c3912d09f4ce8c7485783c4840e1fe89894e03f0655adab435d
+    atom:
+      category: gui
+      name: threadweaver
+    version:
+      version: 5.72.0
   gui/xcb-proto:
     path: gui/xcb-proto.yml
     size: 102
     hash: ab1b94d4b84e8772acbfd9da7ec3760f5baeff92e24b602fd11e1058adc3040a
-    atom: *a235
-    version: *a236
+    atom:
+      category: gui
+      name: xcb-proto
+    version:
+      version: "1.14"
   gui/xcb-util-keysyms:
     path: gui/xcb-util-keysyms.yml
     size: 190
     hash: c71c1c00c3457dbbbdcf34ae0e6f0e891d7fc7b319362743b220b39dd8930b85
-    atom: *a237
-    version: *a238
+    atom:
+      category: gui
+      name: xcb-util-keysyms
+    version:
+      version: 0.4.0
   gui/xf86-input-libinput:
     path: gui/xf86-input-libinput.yml
     size: 1915
@@ -3277,683 +1794,854 @@ packages:
     path: gui/xkbcomp.yml
     size: 218
     hash: 00d5b5efe9a2b698b5eb4948c0dadf6b77fa2a730a878bafa761ff41575271df
-    atom: *a239
-    version: *a240
+    atom:
+      category: gui
+      name: xkbcomp
+    version:
+      version: 1.4.3
   gui/xkeyboard-config:
     path: gui/xkeyboard-config.yml
     size: 186
     hash: 6e5af01d1dda1a01a304c0984697a4d75acf5ace39f913f3d7dd6e3d122dcd9a
-    atom: *a241
-    version: *a242
+    atom:
+      category: gui
+      name: xkeyboard-config
+    version:
+      version: 2.5.1
   gui/xorg-server:
     path: gui/xorg-server.yml
     size: 382
     hash: d5935201fffa43e41789f81f96a403265f4591be08c12d0b401caad8798a4c00
-    atom: *a243
-    version: *a244
+    atom:
+      category: gui
+      name: xorg-server
+    version:
+      version: 1.20.8.2
   gui/xorgproto:
     path: gui/xorgproto.yml
     size: 119
     hash: 9e551d3cb38d1a73d4932e4cfcaee1c1db5555d478b038ba655ad4d6b491aa7f
-    atom: *a245
-    version: *a246
+    atom:
+      category: gui
+      name: xorgproto
+    version:
+      version: "2020.1"
   gui/xterm:
     path: gui/xterm.yml
     size: 280
     hash: a052eefa7d263e7234aea3ca3f2904b3879ec1a6393e4e24e573f3fa6825c643
-    atom: *a247
-    version: *a248
+    atom:
+      category: gui
+      name: xterm
+    version:
+      version: "358"
   gui/xtrans:
     path: gui/xtrans.yml
-    size: 143
-    hash: c9445335e8109c8b8b4049810750af0ae5426e76cff0d50f0b7ce18e89748b84
-    atom: *a249
-    version: *a250
+    size: 114
+    hash: ecdbecec710a78bcc8d0962e8b3ad4473b5c8913c9f82207974ca1f8fd05096c
+    atom:
+      category: gui
+      name: xtrans
+    version:
+      version: 1.4.0
   kernel/linux-headers:
     path: kernel/linux-headers.yml
     size: 396
     hash: a4cff56c49179e9be97d101d7d2c89cdace7411ce5eea04c97331e23eaf20fae
-    atom: *a251
-    version: *a252
+    atom: *a25
+    version: *a26
   kernel/linux:
     path: kernel/linux.yml
-    size: 1719
-    hash: 01467c4849dc4a09408462e2bfaf98461386f8ced9981057cbf2827da76bbf31
-    atom: *a253
-    version: *a254
+    size: 1688
+    hash: aee5de28604d674f8808197ebe87b53517265116f3f4dc5e4c51f4708173c484
+    atom:
+      category: kernel
+      name: linux
+    version:
+      version: 5.7.5
   lang/gawk:
     path: lang/gawk.yml
-    size: 127
-    hash: 0205c93157cbe1e7b529ac4867d1630fabd72c8fe29f738d8339b9bf820b3416
-    atom: *a255
-    version: *a256
+    size: 145
+    hash: a2cf162e0a8d964b5b2df1a932a519c8d237dc3147893ed21265d174bb3db2e1
+    atom: *a27
+    version: *a28
   lang/gcc:
     path: lang/gcc.yml
-    size: 1139
-    hash: 7a756d92a53637d85b757891039b7b1155f140b86bdf89ce9184314d0782385c
-    atom: *a257
-    version: *a258
+    size: 1124
+    hash: b44189b88c9b76dc49020363ee93327f53aa46358701fa997d578a685f6f0978
+    atom: *a29
+    version: *a30
   lang/llvm:
     path: lang/llvm.yml
-    size: 893
-    hash: 2f17703dd4d8a8cb4a05d20d29b234a7d971b93530595b3ec054b80d1b1b4fdd
-    atom: *a259
-    version: *a260
+    size: 864
+    hash: 6ae7a1e050412d37fb043ca61b7a30d068f21872ab5ef90f5de2f6880404a1ab
+    atom:
+      category: lang
+      name: llvm
+    version:
+      version: 10.0.0
   lang/nasm:
     path: lang/nasm.yml
     size: 119
     hash: 5628cca97700be146c6818480f6fc3a2179fa2771e8b2cea7fc33a7ef21ae45c
-    atom: *a261
-    version: *a262
+    atom:
+      category: lang
+      name: nasm
+    version:
+      version: 2.15.02
   lang/node:
     path: lang/node.yml
-    size: 264
-    hash: 0c69f835a45c504ef89f69c7c872ba699984a90e901f7bc71bceac56f86ec45d
-    atom: *a263
-    version: *a264
+    size: 234
+    hash: 600ad5ce753bd96b623194be446e135d8c500c220a29af3eea32e8c1a9c4acd9
+    atom: *a31
+    version: *a32
   lang/perl:
     path: lang/perl.yml
-    size: 426
-    hash: e6c8fddcbfdbe6374e46db4f20ba683a78ee3492a9b746cd0e6cd0d09fce88c7
-    atom: *a265
-    version: *a266
+    size: 396
+    hash: ed6cf0fa1a837d9ea2a8af5484bc38187b229418c22b575689c41a816174b925
+    atom: *a33
+    version: *a34
   lang/python:
     path: lang/python.yml
-    size: 335
-    hash: 05a0c5adc5fab14cdc74e2066cac9ac9b3ba54f8b05dc032ee6d3f9ef70fa317
-    atom: *a267
-    version: *a268
+    size: 315
+    hash: b26485292ba3ed490f297d06fa52e51626ea5cebda80c5536bb66ea811f2b2ef
+    atom: *a35
+    version: *a36
   lang/rustc:
     path: lang/rustc.yml
-    size: 866
-    hash: c44ec8738a424fdac1e4c8a0c1bb48a7984c6cdfa583d2129071122113e91397
-    atom: *a269
-    version: *a270
+    size: 837
+    hash: da81f71579e291edf43d8384f6f6469c24ad3f9d446163d9b62c8d2548978a38
+    atom:
+      category: lang
+      name: rustc
+    version:
+      version: 1.44.1
   lang/sed:
     path: lang/sed.yml
     size: 209
     hash: 36fbbc33e1527f289b2a382d7d427f9cbb6fcbfc1ab873d024f318633a48dec9
-    atom: *a271
-    version: *a272
+    atom: *a37
+    version: *a38
   libs/at-spi2-atk:
     path: libs/at-spi2-atk.yml
-    size: 566
-    hash: 9fe8535ae91d405d27984303fc8bbef7f2954ee59f4fa09bc1b68aa02eb2009c
-    atom: *a273
-    version: *a274
-  libs/at-spi2-core:
-    path: libs/at-spi2-core.yml
-    size: 767
-    hash: 610d4df264b1deaf59cb0113f07baf2918536edfac0419d5a1c4dcb47ba5a005
-    atom: *a275
-    version: *a276
-  libs/atk:
-    path: libs/atk.yml
-    size: 489
-    hash: 0fd34ce48c8411407a0b2c167821fb0012985a1e92023a31617e14495c2b6200
-    atom: *a277
-    version: *a278
-  libs/boost:
-    path: libs/boost.yml
-    size: 524
-    hash: 73117d1cdcc3e5f26748aba20a3205b4880efc1a5fa6a34921bebc956690b176
-    atom: *a279
-    version: *a280
-  libs/cairo:
-    path: libs/cairo.yml
-    size: 294
-    hash: c97a05b6ce6f722ccfdc38922ad0dd7c7209c83d8e3455a640f1147ae9e546f5
-    atom: *a281
-    version: *a282
-  libs/expat:
-    path: libs/expat.yml
-    size: 130
-    hash: 75296f4518688e1cd4c855d8e49f75da66fc17999a4a719de7363393a102e3aa
-    atom: *a283
-    version: *a284
-  libs/fontconfig:
-    path: libs/fontconfig.yml
-    size: 231
-    hash: 323eb15aaffc28cdee30e7726c3c6a1baf46c405fe6a2437671e9dbe132f9b20
-    atom: *a285
-    version: *a286
-  libs/freetype:
-    path: libs/freetype.yml
-    size: 142
-    hash: e6a83693cba581b0ae85ecbd557f354f4cedde94e6ba34d5237574d3223d0246
-    atom: *a287
-    version: *a288
-  libs/fribidi:
-    path: libs/fribidi.yml
-    size: 168
-    hash: 2061d8aa3aa0ce69a46011093bc769abf8b56fcfa28330fb02068c46d72780fc
-    atom: *a289
-    version: *a290
-  libs/gdk-pixbuf:
-    path: libs/gdk-pixbuf.yml
-    size: 721
-    hash: 7dc6406237ee439e489cab9c6ffe5161383f934b4d35f7920d420c1041124db9
-    atom: *a291
-    version: *a292
-  libs/gettext:
-    path: libs/gettext.yml
-    size: 200
-    hash: b6faf00b8c0d1e0c2868e44b7bafea234266b2cfbb2f42d5320e284a468ed9e3
-    atom: *a293
-    version: *a294
-  libs/giflib:
-    path: libs/giflib.yml
-    size: 441
-    hash: 0f5aa97e49c51e7d4059266b5a1ebe26555f17b3fd9951e6436401d873f5d208
-    atom: *a295
-    version: *a296
-  libs/glib:
-    path: libs/glib.yml
-    size: 603
-    hash: c81266931e80b8ee7c5b5fb77ea6dcac38f255e0a2448e0232715d502481b527
-    atom: *a297
-    version: *a298
-  libs/glibc:
-    path: libs/glibc.yml
-    size: 918
-    hash: f5a86e5b4d121ec68c5a385de469849ab268023dcbe8f39921b4034ef581ec08
+    size: 537
+    hash: 8ea4da8a9ce20846ba9d5ce97612e6317c5f8e27f195013ab6308844619c90ab
     atom:
       category: libs
-      name: glibc
+      name: at-spi2-atk
     version:
-      version: 2.31.1
+      version: 2.34.2
+  libs/at-spi2-core:
+    path: libs/at-spi2-core.yml
+    size: 738
+    hash: 000b048bcc98d7ed21c3d23e7fd1631bd26a16ee74a7a44f3267dca3080aef8b
+    atom:
+      category: libs
+      name: at-spi2-core
+    version:
+      version: 2.36.0
+  libs/atk:
+    path: libs/atk.yml
+    size: 459
+    hash: 0d77b41d192736e744b2f60bd43a7727b4c6d4eb120fb02783eaea6c05eb7abe
+    atom:
+      category: libs
+      name: atk
+    version:
+      version: 2.36.0
+  libs/boost:
+    path: libs/boost.yml
+    size: 495
+    hash: 86d905241c21f401cfce11461782cf6efe932ab89abe98fd0e0b9b3766c395b2
+    atom:
+      category: libs
+      name: boost
+    version:
+      version: 1.73.0
+  libs/cairo:
+    path: libs/cairo.yml
+    size: 265
+    hash: 859ccb367660081a09f49db7ca514c2e52369a016180e92d791ae2e1a2975ffb
+    atom:
+      category: libs
+      name: cairo
+    version:
+      version: 1.16.0
+  libs/expat:
+    path: libs/expat.yml
+    size: 99
+    hash: 76338f7f3e3512c24562038447761a91fe04b3d143eb25e601b3eb90510ed1f1
+    atom: *a39
+    version: *a40
+  libs/fontconfig:
+    path: libs/fontconfig.yml
+    size: 202
+    hash: 6888b039db6463c396a226dac3ea5d06aa331519510cdda0c24c223abbc87eb6
+    atom:
+      category: libs
+      name: fontconfig
+    version:
+      version: 2.13.1
+  libs/freetype:
+    path: libs/freetype.yml
+    size: 113
+    hash: cd982e086e0db7cb9e6cb54e0471d77bfb096bea5345ec7df95f780a30de0656
+    atom:
+      category: libs
+      name: freetype
+    version:
+      version: 2.10.2
+  libs/fribidi:
+    path: libs/fribidi.yml
+    size: 139
+    hash: 88e1fc8744cef3f02111699b95ff92e81e0db7ab72eb274ca7d1fc1da3064cd8
+    atom:
+      category: libs
+      name: fribidi
+    version:
+      version: 1.0.10
+  libs/gdk-pixbuf:
+    path: libs/gdk-pixbuf.yml
+    size: 692
+    hash: 4ed2b0cc86fcabb9ecfb0d3d869fc7c21771f4761e81deb7e945621b54a19300
+    atom:
+      category: libs
+      name: gdk-pixbuf
+    version:
+      version: 2.40.0.1
+  libs/gettext:
+    path: libs/gettext.yml
+    size: 170
+    hash: cd44a0044bf62a5d351b4f893ceff4fb834f4c816524411bc49775801d6492a6
+    atom: *a41
+    version: *a42
+  libs/giflib:
+    path: libs/giflib.yml
+    size: 412
+    hash: 3d88c0d95f3abb8cb64a616da5d599137a5c9fd096cd2b71af8e0e9cf71dbd08
+    atom:
+      category: libs
+      name: giflib
+    version:
+      version: 5.2.1
+  libs/glib:
+    path: libs/glib.yml
+    size: 574
+    hash: bf6c42766f84a543e4eec9ca3aab09ef02a0f7a7ef42a83e37bf90407d662e2b
+    atom:
+      category: libs
+      name: glib
+    version:
+      version: 2.65.0
+  libs/glibc:
+    path: libs/glibc.yml
+    size: 889
+    hash: 888fb03398a86ba40bd1993344fd3b523be555e62fce28aa6eeab2cea9881329
+    atom: *a43
+    version: *a44
   libs/gmp:
     path: libs/gmp.yml
-    size: 421
-    hash: ec5433d5ebe3825f8c01af3e6f7b8197db38a74c65defca7e61a5c77aca1a567
-    atom: *a299
-    version: *a300
+    size: 391
+    hash: 7ee213a6105d62d87e668b765b7e69393d6e6a9f8ebba3fce48343f025732f96
+    atom: *a45
+    version: *a46
   libs/gobject-introspection:
     path: libs/gobject-introspection.yml
-    size: 503
-    hash: c417b03058984725448db720e0dff86e54dd3eb6989a8d76e98da53fd0a18140
-    atom: *a301
-    version: *a302
+    size: 474
+    hash: 3027a2654b503ea95650f035578f8a1f31c49cdfafebffcf38b6221173256e65
+    atom:
+      category: libs
+      name: gobject-introspection
+    version:
+      version: 1.64.1
   libs/harfbuzz:
     path: libs/harfbuzz.yml
-    size: 348
-    hash: 1308259d37d13f5bf29256ab68424ed2d0b9d1246bb58f25477a499da5de4ea3
-    atom: *a303
-    version: *a304
+    size: 319
+    hash: f06e3fc348a00f39ac20f904bc262d74812d1118c7930fe2bff1a2231d995d1d
+    atom:
+      category: libs
+      name: harfbuzz
+    version:
+      version: 2.6.8.2
   libs/libarchive:
     path: libs/libarchive.yml
-    size: 216
-    hash: 9d3e1c73bd5039249d01e3070920612337dcae06f82dccae30d4320b0eae1682
-    atom: *a305
-    version: *a306
+    size: 187
+    hash: 0675446becfb6c6a20201e015523400ebebd3e1583b31903a8d48fdcbb0d7615
+    atom:
+      category: libs
+      name: libarchive
+    version:
+      version: 3.4.3.1
   libs/libattr:
     path: libs/libattr.yml
-    size: 183
-    hash: 40a28617b1a8453cfa5a684bf200ba138ee3771899614e61cceae69a57641786
-    atom: *a307
-    version: *a308
+    size: 201
+    hash: 6257fdd8994698a0d30e3525315c7ba4989e70932e2ba9287fd85b14864ffab9
+    atom: *a47
+    version: *a48
   libs/libcheck:
     path: libs/libcheck.yml
-    size: 172
-    hash: abb647b0135a32db3a7dd9086c65640f156f2876403355bd822e5b25bec96517
-    atom: *a309
-    version: *a310
+    size: 143
+    hash: 803f6d10a30e154b417e8091f8f2d70837f1487749cb748c281e209397d2f832
+    atom:
+      category: libs
+      name: libcheck
+    version:
+      version: 0.15.0
   libs/libelf:
     path: libs/libelf.yml
-    size: 402
-    hash: ab47f75ecf6b6cec2a3a573c8da66396a207556d8038bbb566dbb5d1173bdb47
-    atom: *a311
-    version: *a312
+    size: 373
+    hash: 02153e5ceaa7706954f1989c7aa0c911f4caaff6ff46ee5169c765185bd459f2
+    atom: *a49
+    version: *a50
   libs/libevdev:
     path: libs/libevdev.yml
-    size: 135
-    hash: cb2e622abc7c29b18af2fc0251527aa95ea3a57ef95fec45892fb384d2c7783a
-    atom: *a313
-    version: *a314
+    size: 106
+    hash: 4a2807b76c48fc74aaec78fcc38fb4c7ce4c78aae3af8131375958ec7e365312
+    atom:
+      category: libs
+      name: libevdev
+    version:
+      version: 1.9.0
   libs/libffi:
     path: libs/libffi.yml
-    size: 192
-    hash: f50d659e0b9d057645b80422326c14aa7823ec4ad68b153df579dd217c737cb7
-    atom: *a315
-    version: *a316
+    size: 157
+    hash: aa19ec1dd40fb9fd968b0838448f4e71de41001f7c7a53a03d64c255b146dae5
+    atom: *a51
+    version: *a52
   libs/libgcrypt:
     path: libs/libgcrypt.yml
-    size: 223
-    hash: bf192d42baee7babf9cb42b3020fc22b98fa5eaf61dad1a87d84edceb359c600
-    atom: *a317
-    version: *a318
+    size: 194
+    hash: aac1e032561315d7960a8435534b6864686899ba201b99f2b79ad45e752c1e92
+    atom:
+      category: libs
+      name: libgcrypt
+    version:
+      version: 1.8.6
   libs/libgpg-error:
     path: libs/libgpg-error.yml
-    size: 166
-    hash: 9c07c39f6deeab9d8ae3c5dee8e757d085756c4c8ea5835b524f055180cf3399
-    atom: *a319
-    version: *a320
+    size: 137
+    hash: 58bb289a271ca825ae829722320c5b2a3f670e9d059b1ba63bfe6709c85d68d7
+    atom:
+      category: libs
+      name: libgpg-error
+    version:
+      version: "1.38"
   libs/libical:
     path: libs/libical.yml
-    size: 343
-    hash: 5c1fb3f94ee7139827510595f9487bf970d775986ac10480a55f56d9b4b3f6ad
-    atom: *a321
-    version: *a322
+    size: 314
+    hash: 88d9662da872fd4b75b10fdf9b4715b74ecacd89b047ee681af069542db25c2c
+    atom:
+      category: libs
+      name: libical
+    version:
+      version: 3.0.8
   libs/libinput:
     path: libs/libinput.yml
-    size: 590
-    hash: 282d2e22c2039a43d5961ab1ecd4b2a823c9480d89d54745f69b3d1ee64dbf7f
-    atom: *a323
-    version: *a324
+    size: 561
+    hash: cc8d01a61a06358dc446c2f27d3628a94e6c53045660b0abd14349b530b53a26
+    atom:
+      category: libs
+      name: libinput
+    version:
+      version: 1.15.6
   libs/libjpeg-turbo:
     path: libs/libjpeg-turbo.yml
-    size: 369
-    hash: 7de4ae2ca8727bd96f3d5195d22918249bed683ad95a82261dff81a0536060b0
-    atom: *a325
-    version: *a326
+    size: 339
+    hash: 183d36d8fa1b77c1b2abd7153fe0ae8358d25c091ffb0182f0b7eba23f2279dd
+    atom:
+      category: libs
+      name: libjpeg-turbo
+    version:
+      version: 2.0.5
   libs/libpng:
     path: libs/libpng.yml
-    size: 133
-    hash: ae945e69961fa4f9534a8ce567f4b40b210fa185bd93d24b234241d82889dd67
-    atom: *a327
-    version: *a328
+    size: 104
+    hash: d60f95b07386273904fb5bd258b8d16fd9287d80a7aea64354d6f2537a3202a1
+    atom:
+      category: libs
+      name: libpng
+    version:
+      version: 1.6.37
   libs/librsvg:
     path: libs/librsvg.yml
-    size: 455
-    hash: cf88e6626dbaf042da733e77d0cd02efbb7ed8a61f2ad1761e7dc3918bf5148f
-    atom: *a329
-    version: *a330
+    size: 426
+    hash: 1728218b499d1451384cf9df4df4a9cf7a1a587d02c401970dc256a8a918af2a
+    atom:
+      category: libs
+      name: librsvg
+    version:
+      version: 2.49.3
   libs/libtasn1:
     path: libs/libtasn1.yml
-    size: 150
-    hash: d74d2d1d66d21a55cd9c95dc2be96d143af14ae8a97547ae434a31e3d6978b88
-    atom: *a331
-    version: *a332
+    size: 121
+    hash: fa6f7d0bde78cc982eb25e03f45f9f559ddbfe36f35504410c999b19b504a94c
+    atom:
+      category: libs
+      name: libtasn1
+    version:
+      version: 4.16.0
   libs/libuv:
     path: libs/libuv.yml
-    size: 292
-    hash: d848daebe470ae3e1f897dac9ca95c198ef47b7cf3e427a92c9e7231b4edd8ac
-    atom: *a333
-    version: *a334
+    size: 262
+    hash: ba293fc7568715a72e96c783c59e8e403ef6ba6e2f8bec09397b4ff830a8da7f
+    atom:
+      category: libs
+      name: libuv
+    version:
+      version: 1.38.1
   libs/libxml2:
     path: libs/libxml2.yml
-    size: 128
-    hash: c5983dfff4ecc693ce14906d534f1fa120e635c9eff12f63b55d17bbef39decd
-    atom: *a335
-    version: *a336
+    size: 99
+    hash: f4b5f69046063ebd64410bf50ccffbb6cb06e6fc03f8015a810498f942f09ca9
+    atom:
+      category: libs
+      name: libxml2
+    version:
+      version: 2.9.10
   libs/libxslt:
     path: libs/libxslt.yml
-    size: 180
-    hash: f207f1ff191fa6d3a44124ed967c1820783c0c001b8aeb8cb33d054294bf232a
-    atom: *a337
-    version: *a338
+    size: 151
+    hash: 84e4c491052d8d416f89befe5ce56de8803c5ca2e2c52f29472a8869cb1166d4
+    atom:
+      category: libs
+      name: libxslt
+    version:
+      version: 1.1.34
   libs/lmdb:
     path: libs/lmdb.yml
-    size: 324
-    hash: 72ff8e1f43eefc6f11539c8c553b96f226543cd7ef55cc56f02abd53ebd278e4
-    atom: *a339
-    version: *a340
+    size: 295
+    hash: b44c7ff02cf405cd1f64d32f5c7405f15e5683cf7bba6db9d6d873aa8d8f7a73
+    atom:
+      category: libs
+      name: lmdb
+    version:
+      version: 0.9.24
   libs/mpc:
     path: libs/mpc.yml
-    size: 259
-    hash: b0c77e6648741bf147881468c7468a5c2dff3542382c32e76f603438511548c3
-    atom: *a341
-    version: *a342
+    size: 229
+    hash: b94a636bb09f4f493b5157a34c2a54df69f76480d75e548b93ebd620286cb82a
+    atom: *a53
+    version: *a54
   libs/mpfr:
     path: libs/mpfr.yml
-    size: 282
-    hash: 414352b6add34b49d0d4a13ef38f9902961aaa859ecb6e50ae0c99b55cd24c27
-    atom: *a343
-    version: *a344
+    size: 252
+    hash: 5924ccceee679888a38563869c29235f3e8d101d4ed5391bafcbfa0c5ae7dd60
+    atom: *a55
+    version: *a56
   libs/mtdev:
     path: libs/mtdev.yml
     size: 100
     hash: bf84a636ae7e34a056ba7e88918bebdade31d9eae9121600cd92fff934958623
-    atom: *a345
-    version: *a346
+    atom:
+      category: libs
+      name: mtdev
+    version:
+      version: 1.1.6
   libs/ncurses:
     path: libs/ncurses.yml
-    size: 1010
-    hash: bea8e4ef5344e45f6eb3f9bb28282ed1a7dceaa49ad1196793fbcb604af2495c
-    atom: *a347
-    version: *a348
+    size: 981
+    hash: b8f6e37397d799ac18cdd4beaa8bef9497880a69800ec5362ca0d7afc87f849c
+    atom: *a57
+    version: *a58
   libs/openssl:
     path: libs/openssl.yml
-    size: 429
-    hash: 7903d262694a64c22c7fb7e866ff532827ae811fd5c23c5a24cab02ccc572232
-    atom: *a349
-    version: *a350
+    size: 400
+    hash: 8207b45f9e28cbe0aa513b35f64ef78cde7b3bd6950e632041e690e59c699a45
+    atom: *a59
+    version: *a60
   libs/pango:
     path: libs/pango.yml
-    size: 735
-    hash: c9e14950aade72a67eb9b8e9d19aa2b15acd7f1b0ce44a1131ec2c5a18bff815
-    atom: *a351
-    version: *a352
+    size: 706
+    hash: 7f2b58eadb31122261c813aaba14becdf121f25c2f4f81675a7430e1f2f68558
+    atom:
+      category: libs
+      name: pango
+    version:
+      version: 1.45.3
   libs/phonon:
     path: libs/phonon.yml
-    size: 344
-    hash: ae067e0d661d583e741ea5c19de88e2cb2da7bbfdce4ac8925ba93791520e278
-    atom: *a353
-    version: *a354
+    size: 315
+    hash: a4ce81167d931c80c6467d082adebd401fbc957f4ff233c364085a9a71b23bae
+    atom:
+      category: libs
+      name: phonon
+    version:
+      version: 4.11.1
   libs/readline:
     path: libs/readline.yml
-    size: 378
-    hash: 64bbb816fe707ab6f8698674cae9018b07685efe6476f17cc77391b144dd8152
-    atom: *a355
-    version: *a356
+    size: 349
+    hash: fedbee98c3320a917344d5d57a93dbdd3958c57250c8aae1dd82ac3f65e77e4a
+    atom: *a61
+    version: *a62
   libs/zlib:
     path: libs/zlib.yml
-    size: 239
-    hash: 192e4275f93ae96c7bcaaf39ffa119c0d5e2f335582ec03bca8309590675c596
-    atom: *a357
-    version: *a358
+    size: 209
+    hash: f37bd017bc2d064179435f6238084021f8031085ffa02ce2548a39b978adfe6b
+    atom: *a63
+    version: *a64
   perl/uri:
     path: perl/uri.yml
     size: 159
     hash: e37b414b6bf523d567bdef3959c5ce16e45072e4e2668a4fca458c4d4cd38d8b
-    atom: *a359
-    version: *a360
+    atom:
+      category: perl
+      name: uri
+    version:
+      version: "1.76"
   perl/xml-parser:
     path: perl/xml-parser.yml
     size: 155
     hash: 7c86916af0a1bdbbcb55baa139350a6afb4b779751724cca08a06ef20b2b5331
-    atom: *a361
-    version: *a362
+    atom:
+      category: perl
+      name: xml-parser
+    version:
+      version: "2.46"
   python/mako:
     path: python/mako.yml
     size: 202
     hash: 0ff1ab9a5d7b1fc5e94e87aca05eaaacedd6592850de34506e6589fba4a320c3
-    atom: *a363
-    version: *a364
+    atom:
+      category: python
+      name: mako
+    version:
+      version: 1.1.3
   python/meson:
     path: python/meson.yml
     size: 273
     hash: 7f8e3ae6586226f18c378d254f0e4a94b4d54e835fcf8a24f4ece13e73046fc4
-    atom: *a365
-    version: *a366
+    atom:
+      category: python
+      name: meson
+    version:
+      version: 0.55.0
   python/setuptools:
     path: python/setuptools.yml
     size: 209
     hash: 9e6624637248fdf25ec583a09d3ee9cb9896250c211f496f9191a9b9c6026a23
-    atom: *a367
-    version: *a368
+    atom:
+      category: python
+      name: setuptools
+    version:
+      version: 49.2.0
   util/asciidoc:
     path: util/asciidoc.yml
     size: 390
     hash: f474c5634b4b788789d7c3fb43569b1ccfa9e6ec315c5725b5cd2dfbe51d4fa1
-    atom: *a369
-    version: *a370
+    atom:
+      category: util
+      name: asciidoc
+    version:
+      version: 9.0.1
   util/autoconf:
     path: util/autoconf.yml
-    size: 207
-    hash: caa16519cb2aad4c25733a095ae3f1c5df8c3e3ed400a368ca2b5dc4a7256472
-    atom: *a371
-    version: *a372
+    size: 201
+    hash: 8e64abdc5064514d7f78675b843bc0e3374df1ad4a28907471bb8b63eadf293f
+    atom: *a65
+    version: *a66
   util/automake:
     path: util/automake.yml
     size: 125
     hash: 34e4a00cc4a0755c9b24fa5a59863683bf63d5fefed98f064bf4fbe349cf462e
-    atom: *a373
-    version: *a374
+    atom: *a67
+    version: *a68
   util/bc:
     path: util/bc.yml
     size: 235
     hash: d8b9c90d02fec0aac1cb7388218658ed74d0fa27f0f584d09def0d65f53b5d22
-    atom: *a375
-    version: *a376
+    atom: *a69
+    version: *a70
   util/binutils:
     path: util/binutils.yml
-    size: 474
-    hash: d887e26df3e26f1ffa51a22f133c6f8997d3321f7ef06b42c32b029462da4a95
-    atom: *a377
-    version: *a378
+    size: 444
+    hash: 7a3ec7cce7b1b6b3b669433f61a42dcbccf525b84697cf4db11ee69c9854d4b5
+    atom: *a71
+    version: *a72
   util/bison:
     path: util/bison.yml
-    size: 125
-    hash: 70929c62ab96ff2e7d0a44344449dd92fd6ebd66f0523f6ba18d826647f51ac8
-    atom: *a379
-    version: *a380
+    size: 95
+    hash: 209d62ecfee9641e12bf760df06e849cae6a8c137a70ad56afa124cbc9f0851d
+    atom: *a73
+    version: *a74
   util/bzip2:
     path: util/bzip2.yml
-    size: 726
-    hash: 379f5e7e0d67edbd4ef9e265dc4a8fe922737a4f95035727f511b6d0347ffd86
-    atom: *a381
-    version: *a382
+    size: 697
+    hash: 3fa762d0b813351ec9e2e4d7acec1d73b817e3be38dafbee251db74e50d01da4
+    atom: *a75
+    version: *a76
   util/cmake:
     path: util/cmake.yml
     size: 432
     hash: 307fcabbf6a09a20d52aa2e8dddc97ef80a39727e94b5abaabb81cacf32ad81f
-    atom: *a383
-    version: *a384
+    atom:
+      category: util
+      name: cmake
+    version:
+      version: 3.17.3
   util/coreutils:
     path: util/coreutils.yml
     size: 345
     hash: 68d8ac2dcec6a1c8f2e3a56c96a8db53987cf68f050072501349de141a807755
-    atom: *a385
-    version: *a386
+    atom: *a77
+    version: *a78
   util/cpio:
     path: util/cpio.yml
     size: 110
     hash: 21a9a6879c1860086525af6751f199bfffb998796b883a71a491f4e996d7b904
-    atom: *a387
-    version: *a388
+    atom:
+      category: util
+      name: cpio
+    version:
+      version: "2.13"
   util/curl:
     path: util/curl.yml
-    size: 232
-    hash: 9a69f89aa4b567d088406b6a88966ff3178b2f0fd993092c4377201bc503cb64
-    atom: *a389
-    version: *a390
+    size: 203
+    hash: 4926091063f0fa9b36b40ae0589969439246a9be247dd716b28a2874beee0e0b
+    atom:
+      category: util
+      name: curl
+    version:
+      version: 7.71.1.2
   util/dhcpcd:
     path: util/dhcpcd.yml
-    size: 135
-    hash: de40ac7b720ee0090f9859aa579606898d5f04f60eee3d903cad5733e2f61458
-    atom: *a391
-    version: *a392
+    size: 154
+    hash: 1acfa11b1f888c6c6f9e2264a6786775b5eaeb39cf9b5291daa64fe3bcf2e4e2
+    atom: *a79
+    version: *a80
   util/diffutils:
     path: util/diffutils.yml
     size: 103
     hash: 7fa2e31307b25ad54c44ebe8d15d58e3fe0e4bdc5eec15d46454bb47168328fa
-    atom: *a393
-    version: *a394
+    atom: *a81
+    version: *a82
   util/e2fsprogs:
     path: util/e2fsprogs.yml
-    size: 402
-    hash: fb51d8591b23420605b3799a680143b30bf5085fcea23ee4de6c914bdcbdbe67
-    atom: *a395
-    version: *a396
+    size: 391
+    hash: a027607531814fdae4b5b8d1bae675d68ea8cee076c3748caca46f5f79ef0010
+    atom: *a83
+    version: *a84
   util/extra-cmake-modules:
     path: util/extra-cmake-modules.yml
     size: 536
     hash: 5a2f88cf63a96db33f677321717e612c6b11f81c3c75f710ff165ffa0d383cb0
-    atom: *a397
-    version: *a398
+    atom:
+      category: util
+      name: extra-cmake-modules
+    version:
+      version: 5.72.0
   util/file:
     path: util/file.yml
-    size: 180
-    hash: 8ff7042246c5897183bf4804dd7a2bb68ea579214483457f96b3f52630513040
-    atom: *a399
-    version: *a400
+    size: 156
+    hash: f217d5a492446a2b83308d98692c7d4edb29fbaa3193e53eed519331aaa997e6
+    atom: *a85
+    version: *a86
   util/findutils:
     path: util/findutils.yml
     size: 315
     hash: 29a30414ce2144a348dcfcc9f8515a6f63515f1f6457844761c9adcf59636a6c
-    atom: *a401
-    version: *a402
+    atom: *a87
+    version: *a88
   util/flex:
     path: util/flex.yml
-    size: 253
-    hash: ba695706272fd674524eae15d3d289ad7a4610ab58ca23973a3b1bc1101300d6
-    atom: *a403
-    version: *a404
+    size: 217
+    hash: 123c542c55913d613dea6efc6343f836bef37f9423f16350fdd69cc2592e6281
+    atom: *a89
+    version: *a90
   util/git:
     path: util/git.yml
     size: 255
     hash: 1d46fc2e61950fcd3009e9ef8e91cafde182f4441da794cbbd58b0be05f43085
-    atom: *a405
-    version: *a406
+    atom:
+      category: util
+      name: git
+    version:
+      version: 2.27.0
   util/gperf:
     path: util/gperf.yml
     size: 111
     hash: a8714968d44a52c37af7532d8a3f8de8b66dfaa347c005b9c6dea85f63522aa4
-    atom: *a407
-    version: *a408
+    atom: *a91
+    version: *a92
   util/grep:
     path: util/grep.yml
     size: 139
     hash: f38839e9a63552d344a2a49b675989dc8acf9714ec7429e3e98662720013ebe1
-    atom: *a409
-    version: *a410
+    atom: *a93
+    version: *a94
   util/groff:
     path: util/groff.yml
-    size: 142
-    hash: 7c9fe5e319170a46a7b8c0a1fd3b9b25e134899311ee781b55752687e068cf9a
-    atom: *a411
-    version: *a412
+    size: 113
+    hash: 7059a93d26f05a66d2b0c4b43b23772b125471883e489565d15d72934cb1d050
+    atom: *a95
+    version: *a96
   util/gzip:
     path: util/gzip.yml
     size: 97
     hash: 42a12cfa7e3a2cbaa261d38c3ff4eb5c9d1ea95775f2c6bf9355b9c7e2b31b4c
-    atom: *a413
-    version: *a414
+    atom: *a97
+    version: *a98
   util/inetutils:
     path: util/inetutils.yml
     size: 106
     hash: d38d28b1ee0994cd2d004e0ca9f31eebf5748dfd10f94cff549596e3416f3889
-    atom: *a415
-    version: *a416
+    atom: *a99
+    version: *a100
   util/intltool:
     path: util/intltool.yml
     size: 202
     hash: 7a2b3e10a207ea909e0e351bacca2046ef31fc1442a7113a13a19a1256aaa5a9
-    atom: *a417
-    version: *a418
+    atom:
+      category: util
+      name: intltool
+    version:
+      version: 0.51.0
   util/iproute2:
     path: util/iproute2.yml
-    size: 291
-    hash: 94c5c205d07f2bbdf86cc8f0b6fef3145fcd1ef1d1444e47d309bac72456889b
-    atom: *a419
-    version: *a420
+    size: 261
+    hash: 3c4272bc95e4f388063da4b737a7a970da64d0dabcd88ad1f3c8a698ff4e2573
+    atom: *a101
+    version: *a102
   util/itstool:
     path: util/itstool.yml
     size: 119
     hash: 97fb1cf02163eeea7cbefc5c48dab793612a1838a29785b164c91a69721ec777
-    atom: *a421
-    version: *a422
+    atom:
+      category: util
+      name: itstool
+    version:
+      version: 2.0.6
   util/iwd:
     path: util/iwd.yml
     size: 689
     hash: f89fef784e2ba0ef328959c95d9c127ac0c4c37ff2f8ffcbc4b4ad45aecb9a93
-    atom: *a423
-    version: *a424
+    atom: *a103
+    version: *a104
   util/kmod:
     path: util/kmod.yml
-    size: 519
-    hash: e9429a7653fdcf3cfc7c3de8ab81c3224fb840d063a7a52fc11b9dd406c41e51
-    atom: *a425
-    version: *a426
+    size: 490
+    hash: b0ed50a12279372657754bf425270378db975e58411577d815d18fc81c301fe2
+    atom: *a105
+    version: *a106
   util/less:
     path: util/less.yml
-    size: 113
-    hash: 76b78df4eac7f51ab74d143d1b93205674bf72f92d374921e90753cc0cb00e46
-    atom: *a427
-    version: *a428
+    size: 105
+    hash: 744b26f26e50ddd0b96794d5b8673d13c13db3e404cddb324c523c3dbb984800
+    atom: *a107
+    version: *a108
   util/libtool:
     path: util/libtool.yml
-    size: 129
-    hash: e6ffb30945180052f4fa524e342c4779cb09065f3cff413c2df0a708dda88446
-    atom: *a429
-    version: *a430
+    size: 100
+    hash: 4cbb33834418ac947c72301934eb70e0608f3a5778ddbbe7962e338729bdd377
+    atom: *a109
+    version: *a110
   util/m4:
     path: util/m4.yml
     size: 224
     hash: 4b9069902f789ed7c1b207ae91040e49bb35a4243b833a99069a242443d50972
-    atom: *a431
-    version: *a432
+    atom: *a111
+    version: *a112
   util/make-ca:
     path: util/make-ca.yml
     size: 212
     hash: ea37fc0b1ed6fbe62eb3c3f8d79f35477b03eb361a82982b8ebc5732899a383b
-    atom: *a433
-    version: *a434
+    atom:
+      category: util
+      name: make-ca
+    version:
+      version: 1.7.1
   util/make:
     path: util/make.yml
     size: 107
     hash: 7999d638dce9b68f09808e6fe8bcd624faddd8291720a66fb22f4d2fabfbdc1a
-    atom: *a435
-    version: *a436
+    atom: *a113
+    version: *a114
   util/mkinitcpio:
     path: util/mkinitcpio.yml
-    size: 306
-    hash: b35569fd0441f35cac22766e8c13eea4764ded3c30ef058065fc78519015952a
-    atom: *a437
-    version: *a438
+    size: 275
+    hash: c7b9d7def6566cfc2eaed8abd53b660d9edcf80265393617f2f9feb525aeea98
+    atom:
+      category: util
+      name: mkinitcpio
+    version:
+      version: "27"
   util/ninja:
     path: util/ninja.yml
     size: 261
     hash: d16c93859657395ddf987eebe191d88ff3b0ba4cda08cc97db1e1a16abe5d8ec
-    atom: *a439
-    version: *a440
+    atom:
+      category: util
+      name: ninja
+    version:
+      version: 1.10.0
   util/openssh:
     path: util/openssh.yml
-    size: 270
-    hash: cb41eb3b238bd4955ff4e2f13d7f49c770906af6484d5c396bd444d25c19ffab
-    atom: *a441
-    version: *a442
+    size: 288
+    hash: dcfacd7345c081fc23a45ec087f0b1635d213b299e174111488c54a633c9d71e
+    atom: *a115
+    version: *a116
   util/patch:
     path: util/patch.yml
     size: 100
     hash: ec939a67b965be1e5777155874b72b2abda573733f6c8234639b663ed8173e7d
-    atom: *a443
-    version: *a444
+    atom: *a117
+    version: *a118
   util/pkg-config:
     path: util/pkg-config.yml
     size: 203
     hash: 72f80dc676993cfa6fa99f5fb4319a2b1d30c76546eadd1ce8914c5749855932
-    atom: *a445
-    version: *a446
+    atom: *a119
+    version: *a120
   util/procps-ng:
     path: util/procps-ng.yml
-    size: 311
-    hash: 5bf414fbbec3871e00115321c763554236d5a39abda66738af0c16ebdf8911d9
-    atom: *a447
-    version: *a448
+    size: 282
+    hash: 0d86b1fc3530deb65297d8c1535f75c8a1e533f78b3bd3183a9564dd5ad34148
+    atom: *a121
+    version: *a122
   util/pv:
     path: util/pv.yml
     size: 115
     hash: 8c2806f09eb34a7cabd45e880e3e7b64c89bbf7733f7487f32890d9a0ad34b52
-    atom: *a449
-    version: *a450
+    atom: *a123
+    version: *a124
   util/tar:
     path: util/tar.yml
     size: 225
     hash: 09f3b7d10574b201fa0027132cd6814401fe372a59dbf268d9ea5f176a1ef603
-    atom: *a451
-    version: *a452
+    atom: *a125
+    version: *a126
   util/texinfo:
     path: util/texinfo.yml
-    size: 174
-    hash: 686be21367eedc252d7bf6b51d4829dc5294368071a213ef607cf0ac6507297c
-    atom: *a453
-    version: *a454
+    size: 145
+    hash: 9046e240e8ccbfed10834e8c2861b4bc41280032b744555f3cca49808c0f85e2
+    atom: *a127
+    version: *a128
   util/util-linux:
     path: util/util-linux.yml
-    size: 715
-    hash: 94edfe3715bdb65bcc84245682bf01e195301650515a03273b94f5f82651cbbe
-    atom: *a455
-    version: *a456
+    size: 686
+    hash: efa0363d2c4eacf669e622aac6ceadb840b664390479c460af7e5f6bf5c13de0
+    atom: *a129
+    version: *a130
   util/which:
     path: util/which.yml
     size: 111
     hash: e672d539e917dc453627a3c69d76799c30248f7bd9635634151cce193df81822
-    atom: *a457
-    version: *a458
+    atom: *a131
+    version: *a132
   util/xmlto:
     path: util/xmlto.yml
     size: 187
     hash: c8e93fdafdb04b0fb63bf9c9937d3eeeebb322aa93f0d92b1067accfccc341a5
-    atom: *a459
-    version: *a460
+    atom:
+      category: util
+      name: xmlto
+    version:
+      version: 0.0.28
   util/xz:
     path: util/xz.yml
-    size: 370
-    hash: 0c4fd0a9eb94c441c531bd4144ca25c7d4d5fe8397261d28790764d98338ea79
-    atom: *a461
-    version: *a462
+    size: 344
+    hash: db52fed086ca1361162bbecaf5ad1ee9e18ff04788a55c574127597250431697
+    atom: *a133
+    version: *a134
   virtual/base-system:
     path: virtual/base-system.yml
     size: 786
@@ -3994,4 +2682,4 @@ categories:
   - python
   - util
   - virtual
-serial: 1594906357
+serial: 1594925338

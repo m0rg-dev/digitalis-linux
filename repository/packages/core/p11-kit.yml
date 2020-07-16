@@ -30,5 +30,3 @@ post_install_script: |
   /usr/sbin/make-ca -g
   cp -r /etc/ssl etc/
   cp -r /etc/pki etc/
-queue_hooks:
-  ldconfig: true

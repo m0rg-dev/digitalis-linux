@@ -7,5 +7,3 @@ filename: libxslt
 comp: tar.gz
 upstream: ftp://xmlsoft.org/libxslt/
 license: MIT
-queue_hooks:
-  ldconfig: true

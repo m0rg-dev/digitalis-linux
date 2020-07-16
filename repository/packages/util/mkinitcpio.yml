@@ -12,5 +12,3 @@ license: GPL-2.0-only
 comp: tar.gz
 configure: ~
 upstream: https://git.archlinux.org/mkinitcpio.git/snapshot/
-queue_hooks:
-  ldconfig: false

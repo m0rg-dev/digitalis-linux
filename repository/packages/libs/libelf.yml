@@ -9,5 +9,3 @@ install: |
   mkdir -p /target_root/usr/lib/pkgconfig
   install -vm644 config/libelf.pc /target_root/usr/lib/pkgconfig
   rm /target_root/usr/lib/libelf.a
-queue_hooks:
-  ldconfig: true

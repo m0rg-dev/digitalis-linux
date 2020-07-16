@@ -7,5 +7,3 @@ pre_configure_script: |
   cp -v ../%{unpack_dir}/configfsf.guess ../%{unpack_dir}/config.guess
   cp -v ../%{unpack_dir}/configfsf.sub   ../%{unpack_dir}/config.sub
 use_build_dir: true
-queue_hooks:
-  ldconfig: true

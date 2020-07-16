@@ -1,6 +1,6 @@
 version: "5.2.5"
 filename: xz
-upstream: https://tukaani.org/
+upstream: https://tukaani.org/xz/
 license: GPL-2.0-or-later
 additional_configure_options: --disable-static
 post_install_script: |
@@ -8,5 +8,3 @@ post_install_script: |
   mv -v usr/bin/{lzma,unlzma,lzcat,xz,unxz,xzcat} bin
   mv -v usr/lib/liblzma.so.* lib
   ln -svf ../../lib/$(readlink usr/lib/liblzma.so) usr/lib/liblzma.so
-queue_hooks:
-  ldconfig: true

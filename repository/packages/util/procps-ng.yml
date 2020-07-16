@@ -7,5 +7,3 @@ filename: procps-ng
 additional_configure_options: --exec-prefix= --libdir=/usr/lib --disable-static --disable-kill
 upstream: https://sourceforge.net/projects/procps-ng/files/Production/
 license: GPL-2.0-or-later
-queue_hooks:
-  ldconfig: true

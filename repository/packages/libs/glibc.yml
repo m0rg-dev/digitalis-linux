@@ -26,5 +26,3 @@ post_install_script: |
     /opt/lib
 
     EOF
-queue_hooks:
-  ldconfig: true

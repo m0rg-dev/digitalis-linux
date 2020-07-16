@@ -9,5 +9,3 @@ pre_configure_script: |
   pwd
   ls
   sh autogen.sh
-queue_hooks:
-  ldconfig: true

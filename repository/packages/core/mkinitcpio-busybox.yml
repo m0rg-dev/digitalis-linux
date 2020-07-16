@@ -17,5 +17,3 @@ install: |
   # install -D is *supposed* to do this for me...
   mkdir -p /target_root/usr/lib/initcpio
   install -Dm755 busybox /target_root/usr/lib/initcpio/
-queue_hooks:
-  ldconfig: false

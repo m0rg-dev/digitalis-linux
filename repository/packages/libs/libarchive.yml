@@ -7,5 +7,3 @@ rdepend:
 filename: libarchive
 upstream: http://www.libarchive.org/downloads/
 license: BSD-2-Clause
-queue_hooks:
-  ldconfig: true

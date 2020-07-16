@@ -10,7 +10,7 @@ rdepend:
   - libs/mpfr
   - libs/zlib
 filename: gcc
-upstream: http://ftp.gnu.org/gnu/gcc/
+upstream: http://ftp.gnu.org/gnu/gcc/gcc-%{version}/
 license: GFD-1.2-or-later AND GPL-3.0-or-later AND LGPL-2.1-or-later
 license_location: spdx
 additional_configure_options: --enable-languages=c,c++ --disable-multilib --disable-bootstrap --with-system-zlib
@@ -30,6 +30,4 @@ post_install_script: |
   rm -rf usr/lib/gcc/$(gcc -dumpmachine)/$VERSION/include-fixed/bits/
   mkdir -pv usr/share/gdb/auto-load/usr/lib
   mv -v usr/lib/*gdb.py usr/share/gdb/auto-load/usr/lib
-queue_hooks:
-  ldconfig: true
 use_build_dir: true

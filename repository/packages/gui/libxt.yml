@@ -9,5 +9,3 @@ rdepend:
 filename: libXt
 comp: tar.bz2
 license: MIT
-queue_hooks:
-  ldconfig: true

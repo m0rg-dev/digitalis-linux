@@ -8,7 +8,5 @@ rdepend:
   - libs/gobject-introspection
 additional_configure_options: --with-gobject=yes
 filename: harfbuzz
-upstream: https://github.com/harfbuzz/harfbuzz/releases/download/%{version}/
+upstream: https://github.com/harfbuzz/harfbuzz/releases/download/%{upstream_version}/
 license: MIT
-queue_hooks:
-  ldconfig: true

@@ -15,5 +15,3 @@ filename: gtk+
 upstream: http://ftp.gnome.org/pub/gnome/sources/gtk+/3.24/
 license: LGPL-2.1-or-later
 additional_configure_options: --sysconfdir=/etc --enable-x11-backend
-queue_hooks:
-  ldconfig: true

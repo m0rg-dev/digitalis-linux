@@ -1,6 +1,7 @@
 {
     "dependencies": {
         "@types/minimist": "^1.2.0",
+        "@types/tar-stream": "^2.1.0",
         "byte-size": "^7.0.0",
         "deep-equal": "^2.0.3",
         "minimist": "^1.2.5",

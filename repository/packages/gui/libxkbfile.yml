@@ -8,5 +8,3 @@ filename: libxkbfile
 comp: tar.bz2
 upstream: https://www.x.org/releases/individual/lib/
 license: MIT
-queue_hooks:
-  ldconfig: true

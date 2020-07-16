@@ -12,5 +12,3 @@ additional_configure_options: --openssldir=/etc/ssl --libdir=lib shared zlib-dyn
 install: |
   sed -i '/INSTALL_LIBS/s/libcrypto.a libssl.a//' Makefile
   make DESTDIR=/target_root MANSUFFIX=ssl install
-queue_hooks:
-  ldconfig: true

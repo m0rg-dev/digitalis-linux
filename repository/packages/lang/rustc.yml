@@ -36,5 +36,3 @@ configure: |
 #make: export RUSTFLAGS="$RUSTFLAGS -C link-args=-lffi" && python3 ./x.py build --exclude src/tools/miri %{make_options}
 make: ~
 install: DESTDIR=/target_root RUSTFLAGS="$RUSTFLAGS -C link-args=-lffi" python3 ./x.py install --exclude src/tools/miri
-queue_hooks:
-  ldconfig: true

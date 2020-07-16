@@ -7,5 +7,3 @@ license: OLDAP-2.8
 configure: ~
 make: cd libraries/liblmdb; make %{make_options}
 install: cd libraries/liblmdb; make prefix=/target_root/usr install
-queue_hooks:
-  ldconfig: true

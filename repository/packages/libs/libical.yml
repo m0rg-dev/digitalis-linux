@@ -7,5 +7,3 @@ upstream: https://github.com/libical/libical/releases/download/v%{version}/
 license: LGPL-2.1-or-later
 use_build_dir: true
 configure: cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DENABLE_GTK_DOC=OFF -Wno-dev ../%{unpack_dir}
-queue_hooks:
-  ldconfig: true

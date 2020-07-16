@@ -9,5 +9,3 @@ comp: tar.bz2
 filename: libX11
 upstream: https://www.x.org/releases/individual/lib/
 license: MIT
-queue_hooks:
-  ldconfig: true

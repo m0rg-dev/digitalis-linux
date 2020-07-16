@@ -10,6 +10,7 @@ import { Config } from "./config.js";
 import { Manifest, ManifestPackage } from "./manifest";
 import { Database } from "./db.js";
 import * as byteSize from 'byte-size';
+import * as tar_stream from 'tar-stream';
 
 export class Repository {
     local_packages_path: string;
@@ -191,13 +192,14 @@ export class Repository {
             if (source_url) {
                 console.warn(`Source ${source} is not available locally. Fetching with wget...`);
                 const wget = child_process.spawn('wget', [source_url, '-O', path.join(this.root_path, 'sources', source)], { stdio: 'inherit' });
-                return new Promise((res, rej) => {
+                await new Promise((res, rej) => {
                     wget.on('exit', (code, signal) => {
                         if (signal) rej(`wget killed by signal ${signal}`);
                         if (code != 0) rej(`wget exited with failure status`);
-                        return fs.promises.readFile(path.join(this.root_path, "sources", source));
+                        res();
                     });
                 })
+                return fs.promises.readFile(path.join(this.root_path, "sources", source));
             } else {
                 throw `Source ${source} is not available locally and no upstream URL was given`;
             }
@@ -272,19 +274,122 @@ export class Repository {
         child_process.spawnSync('buildah', ['config', '--workingdir', '/target_root', container_id]);
 
         if (pkgdesc.post_install_script) Repository.run_build_stage(container_id, "post-install script", pkgdesc.post_install_script);
-        // TODO autodetect
-        if (pkgdesc.queue_hooks['ldconfig']) Repository.run_build_stage(container_id, "ldconfig", "ldconfig -N -r .");
+
+        // begin license determination
+
+        const possible_licenses = [];
+        if (pkgdesc.src) {
+            const findsrc = child_process.spawnSync('buildah', ['run', container_id, 'find', path.join("/", pkgdesc.unpack_dir), '-print0'], { stdio: ['ignore', 'pipe', 'inherit'], maxBuffer: 128 * 1024 * 1024 });
+            for (const file of findsrc.stdout.toString().split('\0')) {
+                const basename = path.basename(file);
+                if (/^(LICEN[SC]E(\..*)?|COPYING(.*)?|COPYRIGHT)$/.test(basename)) {
+                    possible_licenses.push(file);
+                }
+            }
+
+            console.log(`Have potential license: ${possible_licenses.join(", ")}`);
+        }
+
+        var license_text = "";
+        if(pkgdesc.license) {
+            license_text += `The package maintainer believes ${atom.format()} ${pkgdesc.version.version} is available under the '${pkgdesc.license}' license.\n\n`;
+        } else {
+            license_text += `The package maintainer has not specified a license for ${atom.format()} ${pkgdesc.version.version}.\n\n`;
+        }
+
+        if (possible_licenses.length) {
+            license_text += "Additionally, license information was found in the package source and is reproduced below.\n\n";
+            for (const file of possible_licenses) {
+                const text = child_process.spawnSync('buildah', ['run', container_id, 'cat', file]);
+                license_text += `${file}:\n${text.stdout.toString()}\n\n`;
+            }
+        } else if (pkgdesc.license_location.startsWith('given')) {
+            license_text += "Additionally, this license information was provided in the build file:\n\n";
+            license_text += pkgdesc.license_location.substr(6) + "\n";
+        } else {
+            license_text += "No licensing information was found in the package source.\n\n";
+        }
+
+        if (pkgdesc.src_url) {
+            license_text += `While this is intended to be an accurate representation of ${atom.format()} ${pkgdesc.version.version}'s licensing, check the package source at ${pkgdesc.src_url} to be sure.\n`;
+        }
+        // end license determination
+
+        // begin file-based hooks
+
+        // Someday, we're going to have an Arch-like system where individual packages (glibc, fontconfig, etc) can register hooks
+        // somewhere in the filesystem that get processed during this step. For now, though, we're just going to look for
+        // shared libraries.
+
+        var need_ldconfig = false;
+
+        const find = child_process.spawnSync('buildah', ['run', container_id, 'find', '/target_root', '-print0'], { stdio: ['ignore', 'pipe', 'inherit'], maxBuffer: 128 * 1024 * 1024 });
+        for (const file of find.stdout.toString().split('\0')) {
+            if (file.endsWith('.so')) {
+                need_ldconfig = true;
+            }
+        }
+
+        if (need_ldconfig) Repository.run_build_stage(container_id, "ldconfig", "ldconfig -N -r .");
+
+        // end file-based hooks
 
         console.log("Compressing...");
-        // TODO these should pipe to each other but I'm lazy
-        const tar = child_process.spawnSync('buildah', ['run', container_id, 'tar', 'cp', '.'], {
-            maxBuffer: 2 * 1024 * 1024 * 1024 // 2 GiB
+        const tar = child_process.spawn('buildah', ['run', container_id, 'tar', 'cp', '.']);
+        tar.on('exit', (status, signal) => {
+            if (signal) throw `tar killed by signal ${signal}`;
+            if (status != 0) throw "tar exited with failure status!";
         });
-        if (tar.signal) throw `tar killed by signal ${tar.signal}`;
-        if (tar.status != 0) throw "tar exited with failure status!";
-        console.log(`  Package is ${byteSize(tar.stdout.length)}.`);
+
+        // begin tarfile manipulation
+
+        var extract = tar_stream.extract();
+        var pack = tar_stream.pack();
+
+        const file_list = [];
+
+        extract.on('entry', function (header, stream, callback) {
+            // Potential packaging issue: packages placed in /usr/etc or /usr/var
+            if (header.name.startsWith('./usr/etc')) {
+                console.error(`Package ${atom.format()} ${pkgdesc.version.version} has attempted to install files to /usr/etc. This is usually the result of a under-informed build - try passing --sysconfdir=/etc to configure.`);
+                throw "Aborting due to packaging issues";
+            }
+            if (header.name.startsWith('./usr/var')) {
+                console.error(`Package ${atom.format()} ${pkgdesc.version.version} has attempted to install files to /usr/var. This is usually the result of a under-informed build - try passing --localstatedir=/var to configure.`);
+                throw "Aborting due to packaging issues";
+            }
+
+            // Potential packaging issue: pkgconfig scripts placed in /usr/lib64/pkgconfig (meson does this sometimes)
+            if (header.name.startsWith('./usr/lib64/pkgconfig')) {
+                console.error(`Package ${atom.format()} ${pkgdesc.version.version} has attempted to install pkg-config data to /usr/lib64/pkgconfig. This is probably meson's fault - stick a 'mv' in the post_install_script.`);
+                throw "Aborting due to packaging issues";
+            }
+
+            file_list.push(header.name);
+
+            stream.pipe(pack.entry(header, callback));
+        });
+
+        extract.on('finish', function () {
+            if (!file_list.some((f) => f == './usr/')) pack.entry({ name: './usr/', mode: 0o755, type: 'directory' });
+            if (!file_list.some((f) => f == './usr/share/')) pack.entry({ name: './usr/share/', mode: 0o755, type: 'directory' });
+            if (!file_list.some((f) => f == './usr/share/licenses/')) pack.entry({ name: './usr/share/licenses/', mode: 0o755, type: 'directory' });
+            if (!file_list.some((f) => f == './usr/share/licenses/' + atom.getCategory())) pack.entry({ name: './usr/share/licenses/' + atom.getCategory(), mode: 0o755, type: 'directory' });
+            pack.entry({ name: `./usr/share/licenses/${atom.getCategory()}/${atom.getName()}` }, license_text);
+            pack.finalize();
+        });
+
+        tar.stdout.pipe(extract);
+
+        // end tarfile manipulation
+
+        const chunks = [];
+        for await (let chunk of pack) {
+            chunks.push(chunk);
+        }
+
         const xz = child_process.spawnSync('xz', ['-T0', '-c'], {
-            input: tar.stdout,
+            input: Buffer.concat(chunks),
             maxBuffer: 2 * 1024 * 1024 * 1024 // 2 GiB
         });
         console.log(`  Compressed package is ${byteSize(xz.stdout.length)}.`);
@@ -322,17 +427,29 @@ export class Repository {
                 });
             }
 
-            const rc = child_process.spawnSync('tar', ['xpJf', build_path], {
+            const rc = child_process.spawnSync('tar', ['xpJvf', build_path], {
                 cwd: target_root,
-                stdio: 'inherit'
+                stdio: ['ignore', 'pipe', 'inherit']
             });
             if (rc.signal) throw `unpack killed by signal ${rc.signal}`;
             if (rc.status != 0) throw `unpack exited with failure status`;
-            // TODO this shouldn't go here
-            if (pkgdesc.queue_hooks['ldconfig']) {
+
+            // begin file-based hooks
+
+            var need_ldconfig = false;
+            for (const file of rc.stdout.toString().split('\n')) {
+                if (file.endsWith('.so')) {
+                    need_ldconfig = true;
+                }
+            }
+
+            if (need_ldconfig) {
                 console.log("Running ldconfig...");
                 child_process.spawnSync('ldconfig', ['-X', '-r', target_root], { stdio: 'inherit' });
             }
+
+            // end file-based hooks
+
         }
         if (pkgdesc.post_unpack_script) {
             console.log(`Running post-unpack script for ${atom.format()}`);
@@ -361,6 +478,7 @@ export class PackageDescription {
     queue_hooks: object;
     version: PackageVersion;
     license: string;
+    license_location: string
 
     // Whether the terms of the license allow distributing the software in
     // source and/or binary forms, with inclusion of their original license
@@ -454,6 +572,7 @@ export class PackageDescription {
         this.queue_hooks = parsed_package.queue_hooks;
         this.version = new PackageVersion(parsed_package.version);
         this.license = parsed_package.license;
+        this.license_location = parsed_package.license_location;
         this.additional_sources = parsed_package.additional_sources;
     }
 }
