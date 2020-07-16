@@ -1,20 +1,25 @@
-version: "2.40.0.1"
-upstream_version: "2.40.0"
+version: "2.36.0"
 bdepend:
   - python/meson
   - util/ninja
-  - core/shared-mime-info
-  - libs/libpng
-  - libs/libjpeg-turbo
+  - util/cmake
+  - core/dbus
+  - libs/glib
   - gui/libx11
   - gui/xorgproto
+  - libs/gobject-introspection
+  - gui/libxtst
 rdepend:
-  - core/shared-mime-info
-  - libs/libpng
-  - libs/libjpeg-turbo
-filename: gdk-pixbuf
-upstream: http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.40/
+  - core/dbus
+  - libs/glib
+  - gui/libx11
+  - gui/xorgproto
+  - libs/gobject-introspection
+  - gui/libxtst
+filename: at-spi2-core
+upstream: http://ftp.gnome.org/pub/gnome/sources/at-spi2-core/2.36/
 license: LGPL-2.1-or-later
+additional_configure_options: --sysconfdir=/etc -Dsystemd_user_dir=/tmp
 configure: |
   mkdir build
   meson -Dbuildtype=release  %{configure_options} build
@@ -23,6 +28,5 @@ install: DESTDIR=/target_root ninja -C build install
 post_install_script: |
   mkdir -p usr/lib
   mv usr/lib64/pkgconfig usr/lib/
-post_unpack_script: chroot . gdk-pixbuf-query-loaders --update-cache
 queue_hooks:
   ldconfig: true

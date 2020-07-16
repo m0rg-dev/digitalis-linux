@@ -183,19 +183,31 @@ export class Repository {
         return fs.promises.writeFile(path.join(self.root_path, "Manifest.yml"), manifest.serialize());
     }
 
-    async getSource(source: string): Promise<Buffer> {
+    async getSource(source: string, source_url?: string): Promise<Buffer> {
         if (fs.existsSync(path.join(this.root_path, "sources", source))) {
             console.log(`Source ${path.join(this.root_path, "sources", source)} is available locally.`);
             return fs.promises.readFile(path.join(this.root_path, "sources", source));
         } else {
-            throw `Source ${source} is not available locally (NYI in rpkg)`;
+            if (source_url) {
+                console.warn(`Source ${source} is not available locally. Fetching with wget...`);
+                const wget = child_process.spawn('wget', [source_url, '-O', path.join(this.root_path, 'sources', source)], { stdio: 'inherit' });
+                return new Promise((res, rej) => {
+                    wget.on('exit', (code, signal) => {
+                        if (signal) rej(`wget killed by signal ${signal}`);
+                        if (code != 0) rej(`wget exited with failure status`);
+                        return fs.promises.readFile(path.join(this.root_path, "sources", source));
+                    });
+                })
+            } else {
+                throw `Source ${source} is not available locally and no upstream URL was given`;
+            }
         }
     }
 
     async getSourceFor(pkg: PackageDescription): Promise<Buffer> {
         //const manifest = await this.maybeUpdateManifest();
         //const src = manifest.getSource(pkg.src);
-        return this.getSource(pkg.src);
+        return this.getSource(pkg.src, pkg.src_url);
     }
 
     static run_build_stage(container_id: string, name: string, script: string) {
@@ -237,7 +249,7 @@ export class Repository {
                     input: src,
                     stdio: ['pipe', 'inherit', 'inherit']
                 });
-            } else if(pkgdesc.comp == 'zip') {
+            } else if (pkgdesc.comp == 'zip') {
                 child_process.spawnSync(
                     'buildah', ['run', container_id, 'sh', '-c', `mkdir -p ${pkgdesc.unpack_dir}; cd ${pkgdesc.unpack_dir}; bsdtar -x -f -`], {
                     input: src,

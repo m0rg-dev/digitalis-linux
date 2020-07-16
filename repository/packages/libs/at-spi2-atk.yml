@@ -1,0 +1,24 @@
+version: "2.34.2"
+bdepend:
+  - libs/at-spi2-core
+  - libs/atk
+  - python/meson
+  - util/ninja
+  - libs/libxml2
+rdepend:
+  - libs/at-spi2-core
+  - libs/atk
+  - libs/libxml2
+filename: at-spi2-atk
+upstream: http://ftp.gnome.org/pub/gnome/sources/at-spi2-atk/2.34/
+license: LGPL-2.1-or-later
+configure: |
+  mkdir build
+  meson -Dbuildtype=release  %{configure_options} build
+make: ninja %{make_options} -C build
+install: DESTDIR=/target_root ninja -C build install
+post_install_script: |
+  mkdir -p usr/lib
+  mv usr/lib64/pkgconfig usr/lib/
+queue_hooks:
+  ldconfig: true

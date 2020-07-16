@@ -1,0 +1,19 @@
+version: "3.24.21"
+bdepend:
+  - libs/at-spi2-atk
+  - libs/fribidi
+  - libs/gdk-pixbuf
+  - gui/libepoxy
+  - libs/pango
+rdepend:
+  - libs/at-spi2-atk
+  - libs/fribidi
+  - libs/gdk-pixbuf
+  - gui/libepoxy
+  - libs/pango
+filename: gtk+
+upstream: http://ftp.gnome.org/pub/gnome/sources/gtk+/3.24/
+license: LGPL-2.1-or-later
+additional_configure_options: --sysconfdir=/etc --enable-x11-backend
+queue_hooks:
+  ldconfig: true

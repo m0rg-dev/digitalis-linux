@@ -180,19 +180,34 @@ class Repository {
         }));
         return fs.promises.writeFile(path.join(self.root_path, "Manifest.yml"), manifest.serialize());
     }
-    async getSource(source) {
+    async getSource(source, source_url) {
         if (fs.existsSync(path.join(this.root_path, "sources", source))) {
             console.log(`Source ${path.join(this.root_path, "sources", source)} is available locally.`);
             return fs.promises.readFile(path.join(this.root_path, "sources", source));
         }
         else {
-            throw `Source ${source} is not available locally (NYI in rpkg)`;
+            if (source_url) {
+                console.warn(`Source ${source} is not available locally. Fetching with wget...`);
+                const wget = child_process.spawn('wget', [source_url, '-O', path.join(this.root_path, 'sources', source)], { stdio: 'inherit' });
+                return new Promise((res, rej) => {
+                    wget.on('exit', (code, signal) => {
+                        if (signal)
+                            rej(`wget killed by signal ${signal}`);
+                        if (code != 0)
+                            rej(`wget exited with failure status`);
+                        return fs.promises.readFile(path.join(this.root_path, "sources", source));
+                    });
+                });
+            }
+            else {
+                throw `Source ${source} is not available locally and no upstream URL was given`;
+            }
         }
     }
     async getSourceFor(pkg) {
         //const manifest = await this.maybeUpdateManifest();
         //const src = manifest.getSource(pkg.src);
-        return this.getSource(pkg.src);
+        return this.getSource(pkg.src, pkg.src_url);
     }
     static run_build_stage(container_id, name, script) {
         console.log(`Running ${name}...`);
