@@ -1,0 +1,13 @@
+version: "1.20.0"
+bdepend:
+  - lang/llvm
+  - libs/libjpeg-turbo
+  - gui/qt5-base
+rdepend:
+  - lang/llvm
+  - libs/libjpeg-turbo
+  - gui/qt5-base
+filename: v4l-utils
+comp: tar.bz2
+upstream: https://www.linuxtv.org/downloads/v4l-utils
+additional_configure_options: --sysconfdir=/etc

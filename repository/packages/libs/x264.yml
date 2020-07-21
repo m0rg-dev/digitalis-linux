@@ -1,0 +1,9 @@
+version: "20200702"
+bdepend:
+  - lang/nasm
+# x264 doesn't do versioned releases
+upstream_version: "cde9a93319bea766a92e306d69059c76de970190"
+filename: x264
+comp: tar.bz2
+upstream: https://code.videolan.org/videolan/x264/-/archive/%{upstream_version}
+additional_configure_options: --enable-shared

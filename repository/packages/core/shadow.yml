@@ -1,6 +1,9 @@
 version: "4.8.1"
 bdepend: 
   - core/fs-tree
+  - core/linux-pam
+rdepend:
+  - core/linux-pam
 filename: shadow
 upstream: https://github.com/shadow-maint/shadow/releases/download/%{version}/
 license: BSD-3-Clause

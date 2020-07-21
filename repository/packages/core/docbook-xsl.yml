@@ -1,6 +1,7 @@
 version: "1.79.2"
 rdepend:
   - core/docbook-xml
+  - libs/libxml2
 comp: tar.bz2
 src: docbook-xsl-nons-%{version}.%{comp}
 unpack_dir: docbook-xsl-nons-%{version}

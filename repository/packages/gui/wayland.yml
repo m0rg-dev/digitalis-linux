@@ -1,0 +1,9 @@
+# TODO wayland support is very incomplete
+version: "1.18.0"
+bdepend:
+  - libs/libxml2
+rdepend:
+  - libs/libxml2
+filename: wayland
+upstream: https://wayland.freedesktop.org/releases
+additional_configure_options: --disable-documentation

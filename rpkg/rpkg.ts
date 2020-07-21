@@ -59,13 +59,19 @@ async function build_packages(argv: any) {
         const plan = await tx.plan();
         Transaction.displayPlan(plan);
 
+        var hostinstalls = [];
+
         for(const step of plan) {
             if(step.type == StepType.Build) {
+                if(hostinstalls.length) {
+                    await repo.installPackages(hostinstalls, hostdb, mountpoint);
+                    hostinstalls = [];
+                }
                 const pkgdesc: PackageDescription = await repo.getPackageDescription(step.what);
                 const build_path = path.join(repo.local_builds_path, step.what.getCategory(), step.what.getName() + "," + pkgdesc.version.version + ".tar.xz");
-                if(!fs.existsSync(build_path)) await repo.buildPackage(step.what, container_id);
+                if(!fs.existsSync(build_path)) await repo.buildPackage(step.what, container_id, mountpoint);
             } else if(step.type == StepType.HostInstall) {
-                await repo.installPackage(step.what, hostdb, mountpoint);
+                hostinstalls.push(step.what);
             }
         }
     } catch (e) {

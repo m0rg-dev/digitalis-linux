@@ -1,4 +1,5 @@
-version: "5.15.0"
+version: "5.15.0.3"
+upstream_version: "5.15.0"
 bdepend:
   - gui/xorgproto
   - gui/libx11
@@ -9,6 +10,17 @@ bdepend:
   - gui/mesa
   - libs/mtdev
   - util/make-ca
+  - gui/wayland
+  - gui/wayland-protocols
+  - gui/xcb-util-image
+  - gui/xcb-util-keysyms
+  - gui/xcb-util-renderutil
+  - gui/xcb-util-wm
+  - gui/gtk3
+  - libs/fontconfig
+  - gui/libxrender
+  - gui/libxi
+  - gui/libxkbcommon
 rdepend:
   - gui/libx11
   - gui/libxcb
@@ -17,8 +29,19 @@ rdepend:
   - libs/libpng
   - libs/mtdev
   - gui/mesa
+  - gui/wayland
+  - gui/wayland-protocols
+  - gui/xcb-util-image
+  - gui/xcb-util-keysyms
+  - gui/xcb-util-renderutil
+  - gui/xcb-util-wm
+  - gui/gtk3
+  - libs/fontconfig
+  - gui/libxrender
+  - gui/libxi
+  - gui/libxkbcommon
 filename: qt-everywhere-src
-upstream: https://download.qt.io/archive/qt/5.15/%{version}/single/
+upstream: https://download.qt.io/archive/qt/5.15/%{upstream_version}/single/
 pre_configure_script: |
   # TODO this is coreutils' problem
   ln -s /usr/bin/pwd /bin/
@@ -26,7 +49,7 @@ pre_configure_script: |
 configure_options: -prefix /usr -sysconfdir /etc/xdg -confirm-license -opensource -dbus-linked -openssl-linked
   -system-harfbuzz -nomake examples -no-rpath -skip qtwebengine -archdatadir /usr/lib/qt5 -bindir /usr/bin -plugindir
   /usr/lib/qt5/plugins -importdir /usr/lib/qt5/imports -headerdir /usr/include/qt5 -datadir /usr/share/qt5 -docdir
-  /usr/share/doc/qt5 -translationdir /usr/share/qt5/translations -examplesdir /usr/share/doc/qt5/examples
+  /usr/share/doc/qt5 -translationdir /usr/share/qt5/translations -examplesdir /usr/share/doc/qt5/example
 install: make INSTALL_ROOT=/target_root install
 post_install_script: |
   mkdir -p etc/profile.d/

@@ -1,0 +1,8 @@
+version: "3.100"
+bdepend:
+  - lang/nasm
+filename: lame
+comp: tar.gz
+upstream: https://downloads.sourceforge.net/lame/
+license: LGPL-2.0-or-later
+additional_configure_options: --enable-mp3rtp

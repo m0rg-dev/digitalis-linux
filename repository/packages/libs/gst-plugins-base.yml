@@ -1,0 +1,25 @@
+version: "1.16.2"
+bdepend:
+  - libs/gstreamer
+  - libs/gobject-introspection
+  - libs/libogg
+  - libs/libtheora
+  - libs/libvorbis
+  - util/ninja
+  - python/meson
+rdepend:
+  - libs/gstreamer
+  - libs/gobject-introspection
+  - libs/libogg
+  - libs/libtheora
+  - libs/libvorbis
+filename: gst-plugins-base
+upstream: https://gstreamer.freedesktop.org/src/gst-plugins-base
+additional_configure_options: -Dgtk_doc=disabled
+pre_configure_script: mkdir build
+configure: meson -Dbuildtype=release %{configure_options} build/
+make: ninja %{make_options} -C build
+install: DESTDIR=/target_root ninja -C build install
+post_install_script: |
+  mkdir -p usr/lib
+  mv usr/lib64/pkgconfig usr/lib/

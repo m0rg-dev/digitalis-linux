@@ -10,6 +10,8 @@ bdepend:
 rdepend:
   - gui/qt5-base
   - gui/qt5-x11extras
+  - gui/libxcb
+  - gui/xcb-util-keysyms
 filename: kwindowsystem
 comp: tar.xz
 upstream: http://download.kde.org/stable/frameworks/5.72/

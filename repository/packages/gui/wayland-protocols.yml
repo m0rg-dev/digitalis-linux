@@ -1,0 +1,7 @@
+version: "1.20"
+bdepend:
+  - gui/wayland
+rdepend:
+  - gui/wayland
+filename: wayland-protocols
+upstream: https://wayland.freedesktop.org/releases

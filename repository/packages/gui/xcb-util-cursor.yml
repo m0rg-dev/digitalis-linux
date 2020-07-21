@@ -1,0 +1,13 @@
+version: "0.1.3"
+bdepend:
+  - gui/xcb-util
+  - gui/xcb-util-renderutil
+  - gui/xcb-util-image
+  - gui/xorgproto
+rdepend:
+  - gui/xcb-util
+  - gui/xcb-util-renderutil
+  - gui/xcb-util-image
+filename: xcb-util-cursor
+comp: tar.bz2
+upstream: https://xcb.freedesktop.org/dist

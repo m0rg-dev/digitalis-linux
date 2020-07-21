@@ -1,0 +1,9 @@
+version: "0.3.9"
+bdepend:
+  - gui/xcb-util
+  - gui/xorgproto
+rdepend:
+  - gui/xcb-util
+filename: xcb-util-renderutil
+comp: tar.bz2
+upstream: https://xcb.freedesktop.org/dist

@@ -18,3 +18,4 @@ filename: xorg-server
 upstream: https://www.x.org/releases/individual/xserver/
 comp: tar.bz2
 license: MIT
+additional_configure_options: --sysconfdir=/etc --localstatedir=/var

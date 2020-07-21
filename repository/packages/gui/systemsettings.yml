@@ -1,0 +1,13 @@
+version: "5.19.3"
+bdepend:
+  - util/cmake
+  - util/extra-cmake-modules
+  - virtual/kde-frameworks
+  - gui/plasma-workspace
+rdepend:
+  - virtual/kde-frameworks
+  - gui/plasma-workspace
+filename: systemsettings
+upstream: https://download.kde.org/stable/plasma/%{version}
+use_build_dir: true
+configure: cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -Wno-dev ../%{unpack_dir}

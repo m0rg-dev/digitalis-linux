@@ -1,0 +1,10 @@
+version: "1.8.2"
+bdepend:
+  - lang/nasm
+  - util/which
+filename: libvpx
+comp: tar.gz
+upstream: https://github.com/webmproject/libvpx/archive/v%{version}
+license: BSD-3-Clause
+use_build_dir: true
+additional_configure_options: --enable-shared

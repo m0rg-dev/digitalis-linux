@@ -1,0 +1,15 @@
+version: "0.14.0"
+bdepend:
+  - libs/freetype
+  - libs/fribidi
+  - lang/nasm
+  - libs/fontconfig
+  - libs/harfbuzz
+rdepend:
+  - libs/freetype
+  - libs/fribidi
+  - libs/fontconfig
+  - libs/harfbuzz
+filename: libass
+upstream: https://github.com/libass/libass/releases/download/%{version}
+license: ISC

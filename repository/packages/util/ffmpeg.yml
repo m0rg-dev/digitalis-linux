@@ -1,0 +1,26 @@
+version: "4.3.1"
+bdepend:
+  - libs/libass
+  - libs/freetype
+  - libs/lame
+  - libs/libtheora
+  - libs/libvorbis
+  - libs/libvpx
+  - libs/opus
+  - libs/x264
+  - lang/nasm
+rdepend:
+  - libs/libass
+  - libs/freetype
+  - libs/lame
+  - libs/libtheora
+  - libs/libvorbis
+  - libs/libvpx
+  - libs/opus
+  - libs/x264
+filename: ffmpeg
+upstream: http://ffmpeg.org/releases/
+pre_configure_script: sed -i 's/-lflite"/-lflite -lasound"/' configure
+additional_configure_options: >
+  --enable-gpl --enable-version3 --enable-nonfree --disable-static --enable-shared --disable-debug --enable-avresample --enable-libass --disable-libfdk-aac --enable-libfreetype --enable-libmp3lame --enable-libopus --enable-libtheora --enable-libvorbis --enable-libvpx --enable-libx264
+configure: TERM=xterm ./configure %{configure_options}

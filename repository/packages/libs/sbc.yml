@@ -1,0 +1,8 @@
+version: "1.4"
+bdepend:
+  - libs/libsndfile
+rdepend:
+  - libs/libsndfile
+filename: sbc
+upstream: https://www.kernel.org/pub/linux/bluetooth/
+additional_configure_options: --disable-tester

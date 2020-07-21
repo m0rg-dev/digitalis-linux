@@ -1,0 +1,12 @@
+version: "2.9.7"
+rdepend:
+  - util/cracklib-words
+filename: cracklib
+comp: tar.bz2
+upstream: https://github.com/cracklib/cracklib/releases/download/v%{version}
+license: LGPL-2.1-only
+pre_configure_script: sed -i '/skipping/d' util/packer.c
+additional_configure_options: --with-default-dict=/lib/cracklib/pw_dict
+post_install_script: install -v -m755 -d lib/cracklib
+post_unpack_script: |
+  create-cracklib-dict /usr/share/dict/cracklib-words

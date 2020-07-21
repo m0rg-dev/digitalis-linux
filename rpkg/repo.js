@@ -211,15 +211,22 @@ class Repository {
         //const src = manifest.getSource(pkg.src);
         return this.getSource(pkg.src, pkg.src_url);
     }
-    static run_build_stage(container_id, name, script) {
+    static run_build_stage(container_id, name, script, bindmount, bindtarget) {
         console.log(`Running ${name}...`);
-        const rc = child_process.spawnSync('buildah', ['run', container_id, 'sh', '-exc', script], { stdio: 'inherit' });
+        var args;
+        if (bindmount) {
+            args = ['run', `--mount=type=bind,source=${bindmount},destination=${bindtarget}`, container_id, 'sh', '-exc', script];
+        }
+        else {
+            args = ['run', container_id, 'sh', '-exc', script];
+        }
+        const rc = child_process.spawnSync('buildah', args, { stdio: 'inherit' });
         if (rc.signal)
             throw `${name} killed by signal ${rc.signal}`;
         if (rc.status != 0)
             throw `${name} exited with failure status!`;
     }
-    async buildPackage(atom, container_id) {
+    async buildPackage(atom, container_id, container_mountpoint) {
         var pkgdesc = await this.getPackageDescription(atom);
         child_process.spawnSync('buildah', ['config', '--workingdir', '/', container_id]);
         child_process.spawnSync('buildah', ['run', container_id, 'mkdir', '/target_root', '/build'], { stdio: 'inherit' });
@@ -231,19 +238,55 @@ class Repository {
                 });
             }
         }
+        var build_dir;
+        var bind_dir;
+        build_dir = `/tmp/rpkg/build-${pkgdesc.unpack_dir}`;
+        fs.mkdirSync(build_dir, { recursive: true });
         if (pkgdesc.src) {
             var src = await this.getSourceFor(pkgdesc);
             console.log(src.length);
             console.log("Unpacking...");
             if (pkgdesc.comp.startsWith('tar')) {
-                const tar_args_by_comp = {
-                    "tar.gz": "xz",
-                    "tar.bz2": "xj",
-                    "tar.xz": "xJ"
+                const program_by_comp = {
+                    "tar.gz": "gzcat",
+                    "tar.bz2": "bzcat",
+                    "tar.xz": "xzcat"
                 };
-                child_process.spawnSync('buildah', ['run', container_id, 'tar', tar_args_by_comp[pkgdesc.comp], '--no-same-owner'], {
-                    input: src,
-                    stdio: ['pipe', 'inherit', 'inherit']
+                const uncomp = child_process.spawn(program_by_comp[pkgdesc.comp]);
+                uncomp.stdin.write(src);
+                uncomp.stdin.end();
+                const untar = (pkgdesc.use_build_dir)
+                    ? child_process.spawn('tar', ['xv', '--no-same-owner'], { cwd: container_mountpoint })
+                    : child_process.spawn('tar', ['xv', '--no-same-owner', '--strip-components=1'], { cwd: build_dir });
+                var s = 0;
+                uncomp.stdout.on('data', (data) => {
+                    untar.stdin.write(data);
+                    s += data.length;
+                    process.stdout.write(`Unpacked: ${byteSize(s)}\x1b[K\r`);
+                });
+                uncomp.stderr.on('data', (data) => {
+                    process.stderr.write(data);
+                });
+                uncomp.stdout.on('close', () => {
+                    untar.stdin.end();
+                });
+                untar.stdout.on('data', (data) => {
+                    //process.stdout.write(data);
+                });
+                untar.stderr.on('data', (data) => {
+                    process.stderr.write(data);
+                });
+                await new Promise((res, rej) => {
+                    untar.on('exit', (code, signal) => {
+                        if (signal)
+                            rej(`untar killed by signal ${signal}`);
+                        if (code != 0)
+                            rej(`untar exited with failure status`);
+                        res();
+                    });
+                    untar.on('error', (err) => {
+                        rej(err);
+                    });
                 });
             }
             else if (pkgdesc.comp == 'zip') {
@@ -252,24 +295,34 @@ class Repository {
                     stdio: ['pipe', 'inherit', 'inherit']
                 });
             }
+            else {
+                console.warn(`Unknown compression type ${pkgdesc.comp}`);
+                // keep going, maybe that's on purpose
+                child_process.spawnSync('buildah', ['run', container_id, 'sh', '-c', `cat > ${pkgdesc.src}`], {
+                    input: src,
+                    stdio: ['pipe', 'inherit', 'inherit']
+                });
+            }
         }
         if (pkgdesc.use_build_dir) {
-            child_process.spawnSync('buildah', ['config', '--workingdir', '/build', container_id], { stdio: 'inherit' });
+            //child_process.spawnSync('buildah', ['config', '--workingdir', '/build', container_id], { stdio: 'inherit' });
+            bind_dir = "/build";
         }
         else {
             child_process.spawnSync('buildah', ['config', '--workingdir', path.join("/", pkgdesc.unpack_dir), container_id], { stdio: 'inherit' });
+            bind_dir = path.join("/", pkgdesc.unpack_dir);
         }
         if (pkgdesc.pre_configure_script)
-            Repository.run_build_stage(container_id, "pre-configure script", pkgdesc.pre_configure_script);
+            Repository.run_build_stage(container_id, "pre-configure script", pkgdesc.pre_configure_script, build_dir, bind_dir);
         if (pkgdesc.configure)
-            Repository.run_build_stage(container_id, "configure", pkgdesc.configure);
+            Repository.run_build_stage(container_id, "configure", pkgdesc.configure, build_dir, bind_dir);
         if (pkgdesc.make)
-            Repository.run_build_stage(container_id, "make", pkgdesc.make);
+            Repository.run_build_stage(container_id, "make", pkgdesc.make, build_dir, bind_dir);
         if (pkgdesc.install)
-            Repository.run_build_stage(container_id, "make install", pkgdesc.install);
+            Repository.run_build_stage(container_id, "make install", pkgdesc.install, build_dir, bind_dir);
         child_process.spawnSync('buildah', ['config', '--workingdir', '/target_root', container_id]);
         if (pkgdesc.post_install_script)
-            Repository.run_build_stage(container_id, "post-install script", pkgdesc.post_install_script);
+            Repository.run_build_stage(container_id, "post-install script", pkgdesc.post_install_script, build_dir, bind_dir);
         // begin license determination
         const possible_licenses = [];
         if (pkgdesc.src) {
@@ -292,8 +345,8 @@ class Repository {
         if (possible_licenses.length) {
             license_text += "Additionally, license information was found in the package source and is reproduced below.\n\n";
             for (const file of possible_licenses) {
-                const text = child_process.spawnSync('buildah', ['run', container_id, 'cat', file]);
-                license_text += `${file}:\n${text.stdout.toString()}\n\n`;
+                const text = fs.readFileSync(path.join(container_mountpoint, file));
+                license_text += `${file}:\n${text.toString()}\n\n`;
             }
         }
         else if (pkgdesc.license_location.startsWith('given')) {
@@ -319,7 +372,7 @@ class Repository {
             }
         }
         if (need_ldconfig)
-            Repository.run_build_stage(container_id, "ldconfig", "ldconfig -N -r .");
+            Repository.run_build_stage(container_id, "ldconfig", "ldconfig -N -r .", null, null);
         // end file-based hooks
         console.log("Compressing...");
         const tar = child_process.spawn('buildah', ['run', container_id, 'tar', 'cp', '.']);
@@ -383,57 +436,68 @@ class Repository {
         child_process.spawnSync('buildah', ['run', container_id, 'rm', '-rf', '/target_root', '/build', pkgdesc.unpack_dir], { stdio: 'inherit' });
     }
     async installPackage(atom, db, target_root) {
-        const pkgdesc = await this.getPackageDescription(atom);
-        console.log(`Installing ${atom.format()} ${pkgdesc.version.version} to ${target_root}`);
-        if (atom.getCategory() != 'virtual') {
-            const build_path = path.join(this.local_builds_path, atom.getCategory(), atom.getName() + "," + pkgdesc.version.version + ".tar.xz");
-            // TODO this is awful
-            if (this.remote_url && !fs.existsSync(build_path)) {
-                await new Promise((resolve, reject) => {
-                    ((this.remote_url.protocol == 'https') ? https : http).get(new url_1.URL(`builds/${atom.getCategory()}/${atom.getName()},${pkgdesc.version.version}.tar.xz`, this.remote_url), async (response) => {
-                        if (response.statusCode == 200) {
-                            await fs.promises.mkdir(path.dirname(build_path), { recursive: true });
-                            const stream = fs.createWriteStream(build_path);
-                            response.pipe(stream);
-                            stream.on('finish', function () {
-                                stream.close();
-                                resolve();
-                            });
-                        }
-                        else {
-                            fs.promises.unlink(build_path);
-                            reject(`Got ${response.statusCode} from repo while looking for ${atom.format()}`);
-                        }
+        return this.installPackages([atom], db, target_root);
+    }
+    async installPackages(atoms, db, target_root) {
+        var need_ldconfig = false;
+        for (const atom of atoms) {
+            const pkgdesc = await this.getPackageDescription(atom);
+            console.log(`Installing ${atom.format()} ${pkgdesc.version.version} to ${target_root}`);
+            if (atom.getCategory() != 'virtual') {
+                const build_path = path.join(this.local_builds_path, atom.getCategory(), atom.getName() + "," + pkgdesc.version.version + ".tar.xz");
+                // TODO this is awful
+                if (this.remote_url && !fs.existsSync(build_path)) {
+                    await new Promise((resolve, reject) => {
+                        ((this.remote_url.protocol == 'https') ? https : http).get(new url_1.URL(`builds/${atom.getCategory()}/${atom.getName()},${pkgdesc.version.version}.tar.xz`, this.remote_url), async (response) => {
+                            if (response.statusCode == 200) {
+                                await fs.promises.mkdir(path.dirname(build_path), { recursive: true });
+                                const stream = fs.createWriteStream(build_path);
+                                response.pipe(stream);
+                                stream.on('finish', function () {
+                                    stream.close();
+                                    resolve();
+                                });
+                            }
+                            else {
+                                fs.promises.unlink(build_path);
+                                reject(`Got ${response.statusCode} from repo while looking for ${atom.format()}`);
+                            }
+                        });
                     });
-                });
-            }
-            const rc = child_process.spawnSync('tar', ['xpJvf', build_path], {
-                cwd: target_root,
-                stdio: ['ignore', 'pipe', 'inherit']
-            });
-            if (rc.signal)
-                throw `unpack killed by signal ${rc.signal}`;
-            if (rc.status != 0)
-                throw `unpack exited with failure status`;
-            // begin file-based hooks
-            var need_ldconfig = false;
-            for (const file of rc.stdout.toString().split('\n')) {
-                if (file.endsWith('.so')) {
-                    need_ldconfig = true;
                 }
+                const rc = child_process.spawnSync('tar', ['xpJvf', build_path], {
+                    cwd: target_root,
+                    stdio: ['ignore', 'pipe', 'inherit']
+                });
+                if (rc.signal)
+                    throw `unpack killed by signal ${rc.signal}`;
+                if (rc.status != 0)
+                    throw `unpack exited with failure status`;
+                // begin file-based hooks
+                for (const file of rc.stdout.toString().split('\n')) {
+                    if (file.endsWith('.so')) {
+                        need_ldconfig = true;
+                    }
+                }
+                // end file-based hooks
             }
-            if (need_ldconfig) {
-                console.log("Running ldconfig...");
-                child_process.spawnSync('ldconfig', ['-X', '-r', target_root], { stdio: 'inherit' });
+            if (pkgdesc.post_unpack_script) {
+                // in case the post-unpack script needs it
+                if (need_ldconfig) {
+                    console.log("Running ldconfig...");
+                    child_process.spawnSync('ldconfig', ['-X', '-r', target_root], { stdio: 'inherit' });
+                    need_ldconfig = false;
+                }
+                console.log(`Running post-unpack script for ${atom.format()}`);
+                child_process.spawnSync('chroot', ['.', 'bash', '-c', pkgdesc.post_unpack_script], { stdio: 'inherit', cwd: target_root });
             }
-            // end file-based hooks
+            db.install(atom, pkgdesc.version);
         }
-        if (pkgdesc.post_unpack_script) {
-            console.log(`Running post-unpack script for ${atom.format()}`);
-            child_process.execSync(pkgdesc.post_unpack_script, { stdio: 'inherit', cwd: target_root });
-        }
-        db.install(atom, pkgdesc.version);
         db.commit();
+        if (need_ldconfig) {
+            console.log("Running ldconfig...");
+            child_process.spawnSync('ldconfig', ['-X', '-r', target_root], { stdio: 'inherit' });
+        }
     }
 }
 exports.Repository = Repository;

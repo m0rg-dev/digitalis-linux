@@ -1,0 +1,10 @@
+version: "3.6.1"
+bdepend:
+  - libs/libsass
+rdepend:
+  - libs/libsass
+filename: sassc
+comp: tar.gz
+upstream: https://github.com/sass/sassc/archive/%{version}
+license: MIT
+pre_configure_script: autoreconf -fi

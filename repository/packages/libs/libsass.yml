@@ -1,0 +1,6 @@
+version: "3.6.4"
+filename: libsass
+comp: tar.gz
+upstream: https://github.com/sass/libsass/archive/%{version}
+license: MIT
+pre_configure_script: autoreconf -fi

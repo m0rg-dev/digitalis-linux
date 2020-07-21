@@ -1,0 +1,12 @@
+version: "1.0.28"
+bdepend:
+  - libs/flac
+  - libs/libogg
+  - libs/libvorbis
+rdepend:
+  - libs/flac
+  - libs/libogg
+  - libs/libvorbis
+filename: libsndfile
+comp: tar.gz
+upstream: http://www.mega-nerd.com/libsndfile/files

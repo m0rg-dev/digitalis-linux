@@ -1,0 +1,38 @@
+version: "0.3.6"
+bdepend:
+  - python/meson
+  - util/ninja
+  - util/cmake
+  - libs/bluez
+  - util/ffmpeg
+  - libs/gstreamer
+  - libs/gst-plugins-base
+  - gui/libva
+  - libs/pulseaudio
+  - libs/sbc
+  - libs/sdl2
+  - util/v4l-utils
+  - libs/alsa-lib
+rdepend:
+  - libs/bluez
+  - util/ffmpeg
+  - libs/gstreamer
+  - libs/gst-plugins-base
+  - gui/libva
+  - libs/pulseaudio
+  - libs/sbc
+  - libs/sdl2
+  - util/v4l-utils
+  - libs/alsa-lib
+filename: pipewire
+comp: tar.gz
+upstream: https://github.com/PipeWire/pipewire/archive/%{version}
+license: MIT
+additional_configure_options: -Djack=false -Dpipewire-jack=false -Dvulkan=false --sysconfdir=/etc
+pre_configure_script: mkdir build
+configure: meson -Dbuildtype=release %{configure_options} build/
+make: ninja %{make_options} -C build
+install: DESTDIR=/target_root ninja -C build install
+post_install_script: |
+  mkdir -p usr/lib
+  mv usr/lib64/pkgconfig usr/lib/

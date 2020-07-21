@@ -1,0 +1,17 @@
+version: "3.36.1"
+bdepend:
+  - libs/glib
+  - libs/gobject-introspection
+  - util/ninja
+  - python/meson
+rdepend:
+  - libs/glib
+  - libs/gobject-introspection
+filename: gsettings-desktop-schemas
+upstream: http://ftp.gnome.org/pub/gnome/sources/gsettings-desktop-schemas/3.36
+pre_configure_script: |
+  sed -i -r 's:"(/system):"/org/gnome\1:g' schemas/*.in
+  mkdir build
+configure: meson -Dbuildtype=release %{configure_options} build/
+make: ninja %{make_options} -C build
+install: DESTDIR=/target_root ninja -C build install

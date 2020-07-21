@@ -1,0 +1,18 @@
+version: "2.3.1"
+bdepend:
+  - util/make-ca
+  - util/cmake
+  - gui/qt5-base
+  - libs/libgcrypt
+  - libs/libgpg-error
+  - core/p11-kit
+rdepend:
+  - gui/qt5-base
+  - libs/libgcrypt
+  - libs/libgpg-error
+  - core/p11-kit 
+filename: qca
+upstream: http://download.kde.org/stable/qca/%{version}
+use_build_dir: true
+pre_configure_script: sed -i 's@cert.pem@certs/ca-bundle.crt@' ../%{unpack_dir}/CMakeLists.txt
+configure: cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DQCA_MAN_INSTALL_DIR:PATH=/usr/share/man ../%{unpack_dir}

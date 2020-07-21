@@ -53,15 +53,20 @@ async function build_packages(argv) {
         }));
         const plan = await tx.plan();
         transaction_1.Transaction.displayPlan(plan);
+        var hostinstalls = [];
         for (const step of plan) {
             if (step.type == transaction_1.StepType.Build) {
+                if (hostinstalls.length) {
+                    await repo.installPackages(hostinstalls, hostdb, mountpoint);
+                    hostinstalls = [];
+                }
                 const pkgdesc = await repo.getPackageDescription(step.what);
                 const build_path = path.join(repo.local_builds_path, step.what.getCategory(), step.what.getName() + "," + pkgdesc.version.version + ".tar.xz");
                 if (!fs.existsSync(build_path))
-                    await repo.buildPackage(step.what, container_id);
+                    await repo.buildPackage(step.what, container_id, mountpoint);
             }
             else if (step.type == transaction_1.StepType.HostInstall) {
-                await repo.installPackage(step.what, hostdb, mountpoint);
+                hostinstalls.push(step.what);
             }
         }
     }

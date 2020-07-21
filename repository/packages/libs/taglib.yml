@@ -1,0 +1,11 @@
+version: "1.11.1"
+bdepend:
+  - util/cmake
+  - libs/boost
+rdepend:
+  - libs/boost
+filename: taglib
+comp: tar.gz
+upstream: https://taglib.github.io/releases
+use_build_dir: true
+configure: cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON ../%{unpack_dir}

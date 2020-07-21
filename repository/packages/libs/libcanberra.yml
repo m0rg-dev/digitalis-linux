@@ -1,0 +1,14 @@
+version: "0.30"
+bdepend:
+  - libs/libvorbis
+  - libs/gstreamer
+  - gui/gtk3
+  - libs/pulseaudio
+rdepend:
+  - libs/libvorbis
+  - libs/gstreamer
+  - gui/gtk3
+  - libs/pulseaudio
+filename: libcanberra
+upstream: http://0pointer.de/lennart/projects/libcanberra
+additional_configure_options: --disable-oss
