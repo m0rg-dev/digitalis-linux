@@ -248,30 +248,22 @@ class Repository {
             console.log("Unpacking...");
             if (pkgdesc.comp.startsWith('tar')) {
                 const program_by_comp = {
-                    "tar.gz": "gzcat",
+                    "tar.gz": "gunzip -c",
                     "tar.bz2": "bzcat",
                     "tar.xz": "xzcat"
                 };
-                const uncomp = child_process.spawn(program_by_comp[pkgdesc.comp]);
+                const uncomp = child_process.spawn('sh', ['-c', program_by_comp[pkgdesc.comp]]);
                 uncomp.stdin.write(src);
                 uncomp.stdin.end();
                 const untar = (pkgdesc.use_build_dir)
-                    ? child_process.spawn('tar', ['xv', '--no-same-owner'], { cwd: container_mountpoint })
-                    : child_process.spawn('tar', ['xv', '--no-same-owner', '--strip-components=1'], { cwd: build_dir });
-                var s = 0;
-                uncomp.stdout.on('data', (data) => {
-                    untar.stdin.write(data);
-                    s += data.length;
-                    process.stdout.write(`Unpacked: ${byteSize(s)}\x1b[K\r`);
-                });
+                    ? child_process.spawn('tar', ['x', '--no-same-owner'], { cwd: container_mountpoint })
+                    : child_process.spawn('tar', ['x', '--no-same-owner', '--strip-components=1'], { cwd: build_dir });
+                uncomp.stdout.pipe(untar.stdin);
                 uncomp.stderr.on('data', (data) => {
                     process.stderr.write(data);
                 });
-                uncomp.stdout.on('close', () => {
-                    untar.stdin.end();
-                });
                 untar.stdout.on('data', (data) => {
-                    //process.stdout.write(data);
+                    process.stdout.write(data);
                 });
                 untar.stderr.on('data', (data) => {
                     process.stderr.write(data);
@@ -288,6 +280,7 @@ class Repository {
                         rej(err);
                     });
                 });
+                console.log("done");
             }
             else if (pkgdesc.comp == 'zip') {
                 child_process.spawnSync('buildah', ['run', container_id, 'sh', '-c', `mkdir -p ${pkgdesc.unpack_dir}; cd ${pkgdesc.unpack_dir}; bsdtar -x -f -`], {
@@ -326,7 +319,14 @@ class Repository {
         // begin license determination
         const possible_licenses = [];
         if (pkgdesc.src) {
-            const findsrc = child_process.spawnSync('buildah', ['run', container_id, 'find', path.join("/", pkgdesc.unpack_dir), '-print0'], { stdio: ['ignore', 'pipe', 'inherit'], maxBuffer: 128 * 1024 * 1024 });
+            var args;
+            if (pkgdesc.use_build_dir) {
+                args = ['run', container_id, 'find', path.join("/", pkgdesc.unpack_dir), '-print0'];
+            }
+            else {
+                args = ['run', `--mount=type=bind,source=${build_dir},destination=${bind_dir}`, container_id, 'find', path.join("/", pkgdesc.unpack_dir), '-print0'];
+            }
+            const findsrc = child_process.spawnSync('buildah', args, { stdio: ['ignore', 'pipe', 'inherit'], maxBuffer: 128 * 1024 * 1024 });
             for (const file of findsrc.stdout.toString().split('\0')) {
                 const basename = path.basename(file);
                 if (/^(LICEN[SC]E(\..*)?|COPYING(.*)?|COPYRIGHT)$/.test(basename)) {
@@ -345,7 +345,7 @@ class Repository {
         if (possible_licenses.length) {
             license_text += "Additionally, license information was found in the package source and is reproduced below.\n\n";
             for (const file of possible_licenses) {
-                const text = fs.readFileSync(path.join(container_mountpoint, file));
+                const text = fs.readFileSync(path.join(pkgdesc.use_build_dir ? container_mountpoint : path.dirname(build_dir), pkgdesc.use_build_dir ? file : "build-" + (file.substr(1))));
                 license_text += `${file}:\n${text.toString()}\n\n`;
             }
         }
