@@ -7,8 +7,9 @@ rdepend:
 filename: docbook-xml
 comp: zip
 upstream: http://www.docbook.org/xml/%{version}
+use_build_dir: true
 # adapted from LFS
-configure: ~
+configure: bsdtar xf ../%{src}
 make: ~
 install: |
   install -v -d -m755 /target_root/usr/share/xml/docbook/xml-dtd-%{version} &&

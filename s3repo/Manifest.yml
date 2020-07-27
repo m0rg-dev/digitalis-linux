@@ -3427,8 +3427,8 @@ packages:
     version: *a134
   virtual/base-system:
     path: virtual/base-system.yml
-    size: 786
-    hash: 49980b708b6fa9bf716af26f9743da631a067359702c8625c897a09668e56e2c
+    size: 785
+    hash: 7d0e9f71c9d8eb359b014792fba01d98dad849bc46f489314ed34ba05e6a7d14
     atom:
       category: virtual
       name: base-system
@@ -3474,4 +3474,4 @@ categories:
   - python
   - util
   - virtual
-serial: 1595822358
+serial: 1595823767

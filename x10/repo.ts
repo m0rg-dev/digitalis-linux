@@ -291,12 +291,6 @@ export class Repository {
                 });
 
                 console.log("done");
-            } else if (pkgdesc.comp == 'zip') {
-                child_process.spawnSync(
-                    'buildah', ['run', container_id, 'sh', '-c', `mkdir -p ${pkgdesc.unpack_dir}; cd ${pkgdesc.unpack_dir}; bsdtar -x -f -`], {
-                    input: src,
-                    stdio: ['pipe', 'inherit', 'inherit']
-                });
             } else {
                 console.warn(`Unknown compression type ${pkgdesc.comp}`);
                 // keep going, maybe that's on purpose
