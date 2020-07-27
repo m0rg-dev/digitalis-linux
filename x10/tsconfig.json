@@ -6,7 +6,5 @@
     },
     "exclude": [
         "node_modules",
-        "rpkg.js",
-        "builder.js"
     ]
 }

@@ -34,7 +34,7 @@ async function build_packages(argv: any) {
         buildah_from.on('error', () => rej());
     });
 
-    const repo = new Repository(argv.repository || '/var/lib/rpkg/repo');
+    const repo = new Repository(argv.repository || '/var/lib/x10/repo');
     const targetdb = Database.empty();
     await buildah_from_p;
     container_id = container_id.trim();
@@ -48,7 +48,7 @@ async function build_packages(argv: any) {
         var mountpoint = mount_rc.stdout.toString().trim();
         console.log(`Container root at ${mountpoint}`);
 
-        const hostdb = (argv.without_hostdb) ? Database.empty() : await Database.construct(path.join(mountpoint, 'var/lib/rpkg/database/'));
+        const hostdb = (argv.without_hostdb) ? Database.empty() : await Database.construct(path.join(mountpoint, 'var/lib/x10/database/'));
         console.log(hostdb);
         const tx = new Transaction(repo, hostdb, targetdb);
 
@@ -89,9 +89,9 @@ async function main() {
 
     if (argv._.length > 0) {
         if (argv._[0] == 'install') {
-            const repo = new Repository(argv.repository || '/var/lib/rpkg/repo', argv.remote_url);
-            const hostdb = await Database.construct((argv.host_root || '') + '/var/lib/rpkg/database/');
-            const targetdb = await Database.construct((argv.target_root || '') + '/var/lib/rpkg/database/');
+            const repo = new Repository(argv.repository || '/var/lib/x10/repo', argv.remote_url);
+            const hostdb = await Database.construct((argv.host_root || '') + '/var/lib/x10/database/');
+            const targetdb = await Database.construct((argv.target_root || '') + '/var/lib/x10/database/');
             const tx = new Transaction(repo, hostdb, targetdb);
 
             await Promise.all(argv._.slice(1).map(async function (shortpkg) {
@@ -128,8 +128,8 @@ async function main() {
                 process.exitCode = rc.status;
             }
         } else if (argv._[0] == 'update') {
-            const repo = new Repository(argv.repository || '/var/lib/rpkg/repo', argv.remote_url);
-            const db = await Database.construct((argv.target_root || '') + '/var/lib/rpkg/database/');
+            const repo = new Repository(argv.repository || '/var/lib/x10/repo', argv.remote_url);
+            const db = await Database.construct((argv.target_root || '') + '/var/lib/x10/database/');
 
             const manifest = await repo.maybeUpdateManifest();
             for (const pkg of manifest.getAllPackages()) {
@@ -139,9 +139,9 @@ async function main() {
             }
 
         } else if (argv._[0] == '_get_builds_for') {
-            const repo = new Repository(argv.repository || '/var/lib/rpkg/repo');
-            const hostdb = await Database.construct((argv.host_root || '') + '/var/lib/rpkg/database/');
-            const targetdb = await Database.construct((argv.target_root || '') + '/var/lib/rpkg/database/');
+            const repo = new Repository(argv.repository || '/var/lib/x10/repo');
+            const hostdb = await Database.construct((argv.host_root || '') + '/var/lib/x10/database/');
+            const targetdb = await Database.construct((argv.target_root || '') + '/var/lib/x10/database/');
             const tx = new Transaction(repo, hostdb, targetdb);
 
             await Promise.all(argv._.slice(1).map(async function (shortpkg) {
@@ -161,7 +161,7 @@ async function main() {
 }
 
 function print_help() {
-    console.log("Usage: rpkg [options] <action> [packages]");
+    console.log("Usage: x10 [options] <action> [packages]");
 }
 
 try {

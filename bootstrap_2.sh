@@ -7,26 +7,26 @@ ulimit -n 65536
 
 IMAGE=alpine-bootstrap
 
-node rpkg/rpkg_repo.js s2repo/
+node x10/x10_repo.js s2repo/
 
 maybe_build() {
     echo $1
-    [ -e s2repo/builds/$1,*.tar.xz ] || node rpkg/rpkg.js --repository=s2repo --without_default_depends build $1 --build_container=$IMAGE --without_hostdb
+    [ -e s2repo/builds/$1,*.tar.xz ] || node x10/x10.js --repository=s2repo --without_default_depends build $1 --build_container=$IMAGE --without_hostdb
 }
 
 commit_with_packages() {
     local ctr=$(buildah from $IMAGE)
-    buildah run "$ctr" --  mkdir -p /var/lib/rpkg/database /tmp
-    buildah run "$ctr" --  mkdir -p /usr/share/rpkg
+    buildah run "$ctr" --  mkdir -p /var/lib/x10/database /tmp
+    buildah run "$ctr" --  mkdir -p /usr/share/x10
     cd s2repo;
         # tar ch follows links
         tar ch . > /tmp/repo.tar
-        buildah add "$ctr" /tmp/repo.tar /var/lib/rpkg/repo
+        buildah add "$ctr" /tmp/repo.tar /var/lib/x10/repo
     cd ..
-    buildah add "$ctr" rpkg/ /usr/share/rpkg
+    buildah add "$ctr" x10/ /usr/share/x10
 
     for package in $2; do
-        buildah run "$ctr" node /usr/share/rpkg/rpkg_install.js $package
+        buildah run "$ctr" node /usr/share/x10/x10_install.js $package
     done
     buildah commit "$ctr" $1
     buildah rm "$ctr"
@@ -100,19 +100,19 @@ for pkg in $pkgs_16; do maybe_build $pkg; done
 
 commit_with_packages digitalis-bootstrap-1.6 "$pkgs_16"
 
-node rpkg/rpkg_repo.js s2repo
+node x10/x10_repo.js s2repo
 
 ctr=$(buildah from $IMAGE)
-buildah run "$ctr" --  mkdir -p /var/lib/rpkg/database /tmp
-buildah run "$ctr" --  mkdir -p /usr/share/rpkg
+buildah run "$ctr" --  mkdir -p /var/lib/x10/database /tmp
+buildah run "$ctr" --  mkdir -p /usr/share/x10
 cd s2repo;
     # tar ch follows links
     tar ch . > /tmp/repo.tar
-    buildah add "$ctr" /tmp/repo.tar /var/lib/rpkg/repo
+    buildah add "$ctr" /tmp/repo.tar /var/lib/x10/repo
 cd ..
-buildah add "$ctr" rpkg/ /usr/share/rpkg
+buildah add "$ctr" x10/ /usr/share/x10
 
-to_build=$(buildah run "$ctr" node --trace-warnings /usr/share/rpkg/rpkg.js _get_builds_for virtual/base-system)
+to_build=$(buildah run "$ctr" node --trace-warnings /usr/share/x10/x10.js _get_builds_for virtual/base-system)
 echo $to_build
 
 buildah rm "$ctr"
@@ -123,25 +123,25 @@ done
 
 commit_with_packages digitalis-bootstrap-1.7 "$to_build"
 
-node rpkg/rpkg_repo.js s2repo
+node x10/x10_repo.js s2repo
 
 ctr=$(buildah from $IMAGE)
 
-buildah run "$ctr" --  mkdir -p /var/lib/rpkg/database /tmp
-buildah run "$ctr" --  mkdir -p /usr/share/rpkg
+buildah run "$ctr" --  mkdir -p /var/lib/x10/database /tmp
+buildah run "$ctr" --  mkdir -p /usr/share/x10
 cd s2repo;
     # tar ch follows links
     tar ch . > /tmp/repo.tar
-    buildah add "$ctr" /tmp/repo.tar /var/lib/rpkg/repo
+    buildah add "$ctr" /tmp/repo.tar /var/lib/x10/repo
 cd ..
-buildah add "$ctr" rpkg/ /usr/share/rpkg
+buildah add "$ctr" x10/ /usr/share/x10
 
-buildah run "$ctr" mkdir -p /target_root/var/lib/rpkg/database
-buildah run "$ctr" node /usr/share/rpkg/rpkg.js --target_root=/target_root install virtual/base-system
-buildah run "$ctr" node /usr/share/rpkg/rpkg.js --target_root=/target_root install virtual/build-tools
+buildah run "$ctr" mkdir -p /target_root/var/lib/x10/database
+buildah run "$ctr" node /usr/share/x10/x10.js --target_root=/target_root install virtual/base-system
+buildah run "$ctr" node /usr/share/x10/x10.js --target_root=/target_root install virtual/build-tools
 
 # Required to build core/eudev. Maybe someday we can handle these in an organized manner
-buildah run "$ctr" node /usr/share/rpkg/rpkg.js --target_root=/target_root install util/gperf
+buildah run "$ctr" node /usr/share/x10/x10.js --target_root=/target_root install util/gperf
 
 buildah run "$ctr" sh -c 'cd /target_root; tar cp .' > /tmp/stage2.tar
 buildah rm "$ctr"

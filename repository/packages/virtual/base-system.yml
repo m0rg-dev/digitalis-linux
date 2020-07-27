@@ -33,7 +33,7 @@ rdepend:
     - util/openssh
     - util/procps-ng
     - util/pv
-    # TODO util/rpkg goes here once I start packaging it
+    # TODO util/x10 goes here once I start packaging it
     - util/tar
     - util/util-linux
     - util/which

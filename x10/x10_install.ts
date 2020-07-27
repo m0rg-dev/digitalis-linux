@@ -1,19 +1,20 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const repo_1 = require("./repo");
-const atom_1 = require("./atom");
-const path = require("path");
-const db_1 = require("./db");
+import { Repository, PackageDescription } from "./repo";
+import { ResolvedAtom, Atom } from "./atom";
+import * as path from 'path';
+import * as child_process from 'child_process';
+import { Database } from "./db";
+
 async function main() {
-    var repo = new repo_1.Repository("/var/lib/rpkg/repo/");
-    var atom = await (new atom_1.Atom(process.argv[2])).resolveUsingRepository(repo);
+    var repo: Repository = new Repository("/var/lib/x10/repo/");
+    var atom: ResolvedAtom = await (new Atom(process.argv[2])).resolveUsingRepository(repo);
     //var pkgdesc: PackageDescription = await repo.getPackageDescription(atom);
-    var target_root = process.argv[3] || '/';
-    var db = await db_1.Database.construct(path.join(target_root, "var/lib/rpkg/database/"));
+    var target_root: string = process.argv[3] || '/';
+    var db: Database = await Database.construct(path.join(target_root, "var/lib/x10/database/"));
+
     repo.installPackage(atom, db, target_root);
     /*
 
-    const build_path = path.join("/var/lib/rpkg/repo/builds/", atom.getCategory(), atom.getName() + "," + pkgdesc.version.version + ".tar.xz");
+    const build_path = path.join("/var/lib/x10/repo/builds/", atom.getCategory(), atom.getName() + "," + pkgdesc.version.version + ".tar.xz");
     const rc = child_process.spawnSync('tar', ['xpJf', build_path], {
         cwd: target_root,
         stdio: 'inherit'
@@ -29,10 +30,10 @@ async function main() {
     await db.commit();
     */
 }
+
 try {
     main();
-}
-catch (e) {
+} catch (e) {
     console.error(`Got error: ${e}`);
     process.exitCode = 1;
 }
