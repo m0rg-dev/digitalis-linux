@@ -15,7 +15,7 @@ byteSize.defaultOptions({
 });
 const argv = minimist(process.argv.slice(2), {
     string: ["host_root", "target_root", "repository", "build_container", "remote_url"],
-    boolean: ["without_default_depends", "skip_confirm", "unshared"]
+    boolean: ["without_default_depends", "skip_confirm", "unshared", "without_hostdb"]
 });
 config_1.Config.setConfigKey('use_default_depends', !argv.without_default_depends);
 async function build_packages(argv) {
@@ -44,7 +44,7 @@ async function build_packages(argv) {
         container_mounted = true;
         var mountpoint = mount_rc.stdout.toString().trim();
         console.log(`Container root at ${mountpoint}`);
-        const hostdb = await db_1.Database.construct(path.join(mountpoint, 'var/lib/rpkg/database/'));
+        const hostdb = (argv.without_hostdb) ? db_1.Database.empty() : await db_1.Database.construct(path.join(mountpoint, 'var/lib/rpkg/database/'));
         console.log(hostdb);
         const tx = new transaction_1.Transaction(repo, hostdb, targetdb);
         await Promise.all(argv._.slice(1).map(async function (shortpkg) {
@@ -119,7 +119,8 @@ async function main() {
                 await build_packages(argv);
             }
             else {
-                child_process.spawnSync('buildah', ['unshare', '--'].concat(process.argv).concat('--unshared'), { stdio: 'inherit' });
+                const rc = child_process.spawnSync('buildah', ['unshare', '--'].concat(process.argv).concat('--unshared'), { stdio: 'inherit' });
+                process.exitCode = rc.status;
             }
         }
         else if (argv._[0] == 'update') {

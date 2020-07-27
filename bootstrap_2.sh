@@ -3,13 +3,15 @@ set -x
 
 ulimit -n 65536
 
-sh download_packages.sh
+#sh download_packages.sh
 
 IMAGE=alpine-bootstrap
 
+node rpkg/rpkg_repo.js s2repo/
+
 maybe_build() {
     echo $1
-    [ -e s2repo/builds/$1,*.tar.xz ] || node rpkg/rpkg_build.js s2repo $1 $IMAGE
+    [ -e s2repo/builds/$1,*.tar.xz ] || node rpkg/rpkg.js --repository=s2repo --without_default_depends build $1 --build_container=$IMAGE --without_hostdb
 }
 
 commit_with_packages() {
@@ -53,8 +55,9 @@ commit_with_packages digitalis-bootstrap-1.3 "libs/mpfr util/texinfo libs/zlib"
 maybe_build util/binutils
 maybe_build libs/mpc
 maybe_build util/autoconf
+maybe_build libs/zlib
 
-commit_with_packages digitalis-bootstrap-1.4 "util/binutils libs/mpc util/autoconf"
+commit_with_packages digitalis-bootstrap-1.4 "util/binutils libs/mpc util/autoconf libs/zlib"
 
 maybe_build libs/ncurses
 maybe_build util/libtool

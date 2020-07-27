@@ -1,13 +1,13 @@
 version: 2020a
-comp: tar.gz
-src: tzdata%{version}.%{comp}
+comp: none
+src: tzdata%{version}.tar.gz
 upstream: https://www.iana.org/time-zones/repository/releases/
 license: public_domain
 use_build_dir: true
+pre_configure_script: tar xzf ../%{src}
 configure: ~
 make: ~
 install: |
-  cd ..
   timezones="africa antarctica asia australasia europe northamerica southamerica pacificnew etcetera backward systemv factory"
   mkdir -p /target_root/usr/share/zoneinfo/{posix,right}
   zic -y ./yearistype -d /target_root/usr/share/zoneinfo ${timezones}

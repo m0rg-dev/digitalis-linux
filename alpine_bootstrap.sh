@@ -42,5 +42,6 @@ buildah rm "$ctr"
 ctr=$(buildah from scratch)
 
 buildah copy "$ctr" new_root/ /
+buildah run "$ctr" ldconfig
 buildah commit "$ctr" alpine-bootstrap
 buildah rm "$ctr"

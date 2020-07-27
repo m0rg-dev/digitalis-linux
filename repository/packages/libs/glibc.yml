@@ -3,10 +3,11 @@ upstream_version: "2.31"
 bdepend:
   - kernel/linux-headers
 filename: glibc
-upstream: http://ftp.gnu.org/gnu/glibc/
+upstream: https://ftp.gnu.org/gnu/glibc/
 license: GPL-2.0-or-later AND LGPL-2.1-or-later
 use_build_dir: true
 additional_configure_options: --disable-werror --enable-kernel=3.2 libc_cb_slibdir=/lib
+#make_options: -j1
 install: |
     make DESTDIR=/target_root install
     cp -v ../%{unpack_dir}/nscd/nscd.conf /target_root/etc/nscd.conf

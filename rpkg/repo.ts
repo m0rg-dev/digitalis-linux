@@ -310,7 +310,7 @@ export class Repository {
 
 
         if (pkgdesc.use_build_dir) {
-            //child_process.spawnSync('buildah', ['config', '--workingdir', '/build', container_id], { stdio: 'inherit' });
+            child_process.spawnSync('buildah', ['config', '--workingdir', '/build', container_id], { stdio: 'inherit' });
             bind_dir = "/build";
         } else {
             child_process.spawnSync('buildah', ['config', '--workingdir', path.join("/", pkgdesc.unpack_dir), container_id], { stdio: 'inherit' });
@@ -455,8 +455,9 @@ export class Repository {
         console.log(`Writing to ${target_path}...`);
         if (!fs.existsSync(path.dirname(target_path))) fs.mkdirSync(path.dirname(target_path), { recursive: true });
         fs.writeFileSync(target_path, xz.stdout);
+
         console.log('Cleaning up (in build container)...');
-        child_process.spawnSync('buildah', ['run', container_id, 'rm', '-rf', '/target_root', '/build', pkgdesc.unpack_dir], { stdio: 'inherit' });
+        Repository.run_build_stage(container_id, "cleanup (in build container)", `rm -rf /target_root /build/* /${pkgdesc.unpack_dir}/*`, build_dir, bind_dir);
     }
 
     async installPackage(atom: ResolvedAtom, db: Database, target_root: string) {
@@ -520,7 +521,7 @@ export class Repository {
             }
             db.install(atom, pkgdesc.version);
         }
-        db.commit();
+        await db.commit();
         if (need_ldconfig) {
             console.log("Running ldconfig...");
             child_process.spawnSync('ldconfig', ['-X', '-r', target_root], { stdio: 'inherit' });

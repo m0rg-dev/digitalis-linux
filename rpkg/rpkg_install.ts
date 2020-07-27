@@ -7,9 +7,12 @@ import { Database } from "./db";
 async function main() {
     var repo: Repository = new Repository("/var/lib/rpkg/repo/");
     var atom: ResolvedAtom = await (new Atom(process.argv[2])).resolveUsingRepository(repo);
-    var pkgdesc: PackageDescription = await repo.getPackageDescription(atom);
+    //var pkgdesc: PackageDescription = await repo.getPackageDescription(atom);
     var target_root: string = process.argv[3] || '/';
     var db: Database = await Database.construct(path.join(target_root, "var/lib/rpkg/database/"));
+
+    repo.installPackage(atom, db, target_root);
+    /*
 
     const build_path = path.join("/var/lib/rpkg/repo/builds/", atom.getCategory(), atom.getName() + "," + pkgdesc.version.version + ".tar.xz");
     const rc = child_process.spawnSync('tar', ['xpJf', build_path], {
@@ -25,6 +28,12 @@ async function main() {
     }
     db.install(atom, pkgdesc.version);
     await db.commit();
+    */
 }
 
-main();
+try {
+    main();
+} catch (e) {
+    console.error(`Got error: ${e}`);
+    process.exitCode = 1;
+}

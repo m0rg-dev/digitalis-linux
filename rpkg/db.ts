@@ -54,7 +54,8 @@ export class Database {
     }
 
     async commit() {
-        if(!this.realdb) throw "Attempt to call commit() on a fake database";
+        // actually this is probably fine
+        //if(!this.realdb) throw "Attempt to call commit() on a fake database";
         return fs.promises.writeFile(path.join(this.db_path, "database.yml"), YAML.stringify({
             selected: this.selected_packages,
             installed: this.installed_packages

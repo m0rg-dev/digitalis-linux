@@ -11,7 +11,7 @@ additional_make_options: >
   SH=/bin/sh
   OS=Linux
   MKSYSVINIT=yes
-make: BRANDING="Digitalis Linux" make %{make_options}
+make: BRANDING="Digitalis" make %{make_options}
 post_install_script: |
   ln -sfv openrc-init sbin/init
   ln -sfv openrc-shutdown sbin/shutdown
