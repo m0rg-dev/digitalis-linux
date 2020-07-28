@@ -1,4 +1,4 @@
-import { Repository } from "./repo.js";
+import { Repository } from "./Repository.js";
 
 export type PackageCategory = string;
 export type PackageName = string;

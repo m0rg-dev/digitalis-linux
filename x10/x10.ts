@@ -1,9 +1,10 @@
 import * as minimist from 'minimist';
-import { Config } from './config';
-import { Repository, PackageDescription } from './repo';
-import { Database } from './db';
-import { Transaction, Location, StepType } from './transaction';
-import { Atom, ResolvedAtom } from './atom';
+import { Config } from './Config';
+import { Repository } from './Repository';
+import { PackageDescription } from "./PackageDescription";
+import { Database } from './Database';
+import { Transaction, Location, StepType } from './Transaction';
+import { Atom, ResolvedAtom } from './Atom';
 import * as child_process from 'child_process';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -76,6 +77,7 @@ async function build_packages(argv: any) {
         }
     } catch (e) {
         console.error(`Got error: ${e}`);
+        console.error(e);
         process.exitCode = 1;
     } finally {
         console.log("Cleaning up...");

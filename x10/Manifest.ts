@@ -1,4 +1,4 @@
-import { ResolvedAtom, PackageVersion } from "./atom.js";
+import { ResolvedAtom, PackageVersion } from "./Atom.js";
 import * as path from 'path';
 import * as YAML from 'yaml';
 import * as crypto from 'crypto';

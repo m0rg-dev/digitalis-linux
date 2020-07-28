@@ -1,6 +1,6 @@
-import { ResolvedAtom } from "./atom";
-import { Repository } from "./repo";
-import { Database } from "./db";
+import { ResolvedAtom } from "./Atom";
+import { Repository } from "./Repository";
+import { Database } from "./Database";
 import * as wrap from 'word-wrap';
 
 export enum Location {

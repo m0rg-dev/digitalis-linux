@@ -1,8 +1,8 @@
-import { Atom } from "./atom.js";
-import { Repository } from "./repo.js";
-import { Transaction, Location } from "./transaction.js";
-import { Config } from "./config.js";
-import { Database } from "./db.js";
+import { Atom } from "./Atom.js";
+import { Repository } from "./Repository.js";
+import { Transaction, Location } from "./Transaction.js";
+import { Config } from "./Config.js";
+import { Database } from "./Database.js";
 
 Config.setConfigKey('use_default_depends', false);
 

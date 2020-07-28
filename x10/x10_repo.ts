@@ -1,4 +1,4 @@
-import { Repository } from "./repo";
+import { Repository } from "./Repository";
 
 async function main() {
     var r = new Repository(process.argv[2]);

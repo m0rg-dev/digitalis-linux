@@ -1,4 +1,4 @@
-import { PackageVersion, ResolvedAtom } from "./atom";
+import { PackageVersion, ResolvedAtom } from "./Atom";
 import * as fs from 'fs';
 import * as path from 'path';
 import * as YAML from 'yaml';

@@ -14,9 +14,9 @@ make: ~
 install: |
   install -v -d -m755 /target_root/usr/share/xml/docbook/xml-dtd-%{version} &&
   install -v -d -m755 /target_root/etc/xml &&
-  chown -R root:root . &&
   cp -v -af docbook.cat *.dtd ent/ *.mod \
       /target_root/usr/share/xml/docbook/xml-dtd-%{version}
+  chown -R root:root /target_root
 post_unpack_script: |
   if [ ! -e etc/xml/docbook ]; then
     xmlcatalog --noout --create etc/xml/docbook

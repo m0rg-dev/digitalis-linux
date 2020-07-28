@@ -16,4 +16,4 @@ make: ninja %{make_options} -C build
 install: DESTDIR=/target_root ninja -C build install
 post_install_script: |
   mkdir -p /target_root/usr/lib
-  mv /target_root/usr/lib64/pkgconfig /target_root/usr/lib/pkgconfig
+  mv -v /target_root/usr/lib64/pkgconfig /target_root/usr/lib/pkgconfig
