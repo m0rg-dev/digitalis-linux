@@ -42,7 +42,7 @@ export class Database {
         const packages = this.db.prepare("SELECT count(*) FROM package WHERE version_installed IS NOT NULL").get();
         const files = this.db.prepare("WITH unique_files AS (SELECT DISTINCT path FROM file) SELECT count(*) FROM unique_files").get();
         console.warn(`${packages['count(*)']} packages are currently installed.`);
-        console.warn(`${files['count(*)']} files are currently installed`);
+        console.warn(`${files['count(*)']} files are currently installed.`);
     }
 
     getInstalledVersion(atom: ResolvedAtom): PackageVersion {
@@ -54,8 +54,13 @@ export class Database {
     // TODO actually go and do the work to make sure all this stuff runs concurrently. it definitely won't yet.
     transaction(callback: any) {
         this.db.prepare('BEGIN').run();
-        callback();
-        this.db.prepare('COMMIT').run();
+        try {
+            callback();
+            this.db.prepare('COMMIT').run();
+        } catch(e) {
+            this.db.prepare('ROLLBACK').run();
+            throw e;
+        }
     }
 
     add_file(atom: ResolvedAtom, path: string, type: string) {
@@ -67,11 +72,11 @@ export class Database {
     }
 
     install(atom: ResolvedAtom, version: PackageVersion) {
-        this.db.prepare('BEGIN').run();
-        this.db.prepare('INSERT INTO package(id, version_installed) VALUES(?, ?) ON CONFLICT(id) DO UPDATE SET version_installed=excluded.version_installed')
-            .run([atom.format(), version.version]);
-        this.db.prepare('DELETE FROM packages_pending WHERE id = ?').run([atom.format()]);
-        this.db.prepare('COMMIT').run();
+        this.transaction(function () {
+            this.db.prepare('INSERT INTO package(id, version_installed) VALUES(?, ?) ON CONFLICT(id) DO UPDATE SET version_installed=excluded.version_installed')
+                .run([atom.format(), version.version]);
+            this.db.prepare('DELETE FROM packages_pending WHERE id = ?').run([atom.format()]);
+        });
     }
 
     select(atom: ResolvedAtom) {
