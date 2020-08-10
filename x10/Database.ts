@@ -13,7 +13,7 @@ export class Database {
         this.db_path = db_path;
     }
 
-    static async construct(db_path: string): Promise<Database> {
+    static construct(db_path: string): Database {
         var self = new Database(db_path);
         self.db = new sqlite3(path.join(self.db_path, "database.sqlite3"));
         self.ensure_tables();
