@@ -9,7 +9,6 @@ import * as child_process from 'child_process';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as byteSize from 'byte-size';
-import { report } from 'process';
 
 byteSize.defaultOptions({
     units: 'iec'
@@ -92,7 +91,7 @@ async function main() {
     if (argv._.length > 0) {
         if (argv._[0] == 'install') {
             const repo = new Repository(argv.repository || '/var/lib/x10/repo', argv.remote_url);
-            const hostdb = await Database.construct((argv.host_root || '') + '/var/lib/x10/database/');
+            const hostdb = (argv.without_hostdb) ? Database.empty() : await Database.construct((argv.host_root || '') + '/var/lib/x10/database/');
             const targetdb = await Database.construct((argv.target_root || '') + '/var/lib/x10/database/');
             const tx = new Transaction(repo, hostdb, targetdb);
 
@@ -112,16 +111,11 @@ async function main() {
                 }
             }
 
-            // in case hostdb == targetdb
-            // TODO this needs to be *way* more formalized
-            await targetdb.reload();
 
             argv._.slice(1).map(async function (shortpkg) {
                 const resolved = await (new Atom(shortpkg)).resolveUsingRepository(repo);
                 targetdb.select(resolved);
             });
-
-            await targetdb.commit();
         } else if (argv._[0] == 'build') {
             if (argv.unshared) {
                 await build_packages(argv);

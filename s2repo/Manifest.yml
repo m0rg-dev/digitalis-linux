@@ -2,7 +2,7 @@ builds:
   core/fs-tree:
     path: s2repo/builds/core/fs-tree,1.0.1.tar.xz
     size: 2004
-    hash: ece584ae2d8400995f3b9ffa5ab2dc743650f85a4dd15661bc1c727a3e6e1b93
+    hash: 0a7fb47745d1912bc9cfd40fcf2a2dd0d8b61ff664cbd49c182eddcc494441e8
     atom:
       &a7
       category: core
@@ -13,7 +13,7 @@ builds:
   core/udev-init-scripts:
     path: s2repo/builds/core/udev-init-scripts,33.tar.xz
     size: 3380
-    hash: 4969062336763c1890a9d8cd0c459bb24fe01e1e4d7981482a9284ced2b0347e
+    hash: 958e7a44386d393482de6d4645f83def1ee610c94f81810c8d1add3bb7a746aa
     atom:
       &a19
       category: core
@@ -23,8 +23,8 @@ builds:
       version: "33"
   libs/libffi:
     path: s2repo/builds/libs/libffi,3.3.tar.xz
-    size: 46996
-    hash: f3358c3962ec5482b92e8a64275d1df843d92f30ea0b8d5d83eb4447bf83d8dd
+    size: 47004
+    hash: 34e2a3cf55127199349ee65da27b542aa41b059cf76e32289ebf7b37af2808a2
     atom:
       &a53
       category: libs
@@ -34,8 +34,8 @@ builds:
       version: "3.3"
   util/pv:
     path: s2repo/builds/util/pv,1.6.6.tar.xz
-    size: 37852
-    hash: 509a54f5de34f75af5ef471fc77780f19979da3d2df779cd4af12fe8c84a7648
+    size: 37888
+    hash: bcf4256960c0d498005dbfeac41dedf0f46d1a28034edf7eb418c2e9e899abbf
     atom:
       &a125
       category: util
@@ -45,8 +45,8 @@ builds:
       version: 1.6.6
   util/which:
     path: s2repo/builds/util/which,2.21.tar.xz
-    size: 44188
-    hash: 4a605aa96b3747aba9a0b1fe3ea033f8f13d8287cb2d10c63cc05f091a6bc194
+    size: 44208
+    hash: 180cdf26e237b6d19a7e5317661a519f65766f9b52545685ae9eebfc528c5a21
     atom:
       &a133
       category: util
@@ -56,8 +56,8 @@ builds:
       version: "2.21"
   util/bc:
     path: s2repo/builds/util/bc,2.5.3.tar.xz
-    size: 77128
-    hash: b1781d51d1edd637665bd0d86fe112bb704d703480fd0389c5cfc9a3884faa82
+    size: 77152
+    hash: b0c94d7a1d9b8cb57b7653503101271845d15ff3fe8af4278383b8f1a2e49ed7
     atom:
       &a71
       category: util
@@ -67,8 +67,8 @@ builds:
       version: 2.5.3
   libs/zlib:
     path: s2repo/builds/libs/zlib,1.2.11.tar.xz
-    size: 94336
-    hash: 06a831b805de5f823b92fec163b8ddbba9af21775c3df8c6204dbf6ee35306d5
+    size: 94276
+    hash: 5aa122cacc5d0db7525a6ca8b2cec3cbf1e16fd67c01c82953fbb522bb7c5459
     atom:
       &a65
       category: libs
@@ -78,8 +78,8 @@ builds:
       version: 1.2.11
   core/tzdata:
     path: s2repo/builds/core/tzdata,2020a.tar.xz
-    size: 118844
-    hash: dd6a526b94bbf3f2cef8f2c73a64c43df4bf568e00fd82f5ea98e6eb51c5bc7c
+    size: 119208
+    hash: b1d14bc6023568acd089662101f090a6a2adf97cd960d5e2f8c4b4ac8313ee53
     atom:
       &a17
       category: core
@@ -89,8 +89,8 @@ builds:
       version: 2020a
   libs/libattr:
     path: s2repo/builds/libs/libattr,2.4.48.tar.xz
-    size: 116824
-    hash: 01e0e22a6b228748a61d8747d9585895127e82e5dddf58068c3df77c13876c47
+    size: 116828
+    hash: 140225c701b65808fee776b2d7ff0aa750cedbd6483de769811ce8a7913a570b
     atom:
       &a49
       category: libs
@@ -98,21 +98,10 @@ builds:
     version:
       &a50
       version: 2.4.48
-  libs/mpc:
-    path: s2repo/builds/libs/mpc,1.1.0.tar.xz
-    size: 153752
-    hash: e2faee82d47a1a025b3b8672c09444a8a1d5f1f4209967302afd9d69c806875c
-    atom:
-      &a55
-      category: libs
-      name: mpc
-    version:
-      &a56
-      version: 1.1.0
   util/gzip:
     path: s2repo/builds/util/gzip,1.10.tar.xz
-    size: 148000
-    hash: c96169749f1abb04f1b5a61cb5760f01368a0324d619fe9919c69932f347a6f7
+    size: 138200
+    hash: 7a910e98fe5d7d7158e1909c17a08fdf8c0197c958907d272fe4e9c2ea7cc261
     atom:
       &a99
       category: util
@@ -120,10 +109,21 @@ builds:
     version:
       &a100
       version: "1.10"
+  libs/mpc:
+    path: s2repo/builds/libs/mpc,1.1.0.tar.xz
+    size: 153732
+    hash: 1b0377b6f23c275f7856e1de98c87a00769e3c8c4422d1d5a6d98ae9caa34bb0
+    atom:
+      &a55
+      category: libs
+      name: mpc
+    version:
+      &a56
+      version: 1.1.0
   util/dhcpcd:
     path: s2repo/builds/util/dhcpcd,9.1.2.tar.xz
-    size: 173896
-    hash: 4ff336055ac387ab82ea9a2a92dc78bbe4e294d3249100ce814990568c833cee
+    size: 173916
+    hash: 6fd9e75a39e983e680965027a13483b327e2fd0722cd8e51a978775ad5bfb44d
     atom:
       &a81
       category: util
@@ -133,8 +133,8 @@ builds:
       version: 9.1.2
   util/gperf:
     path: s2repo/builds/util/gperf,3.1.tar.xz
-    size: 177324
-    hash: f194251a633971b5a1ea0943aa3ea3d22f158527263cce679b552f06a76ac805
+    size: 177332
+    hash: cc9d8bfe0dfc99d4c7219c1f7d7271fe4b8cbcc7dac444502d33cb7312c8232b
     atom:
       &a93
       category: util
@@ -144,8 +144,8 @@ builds:
       version: "3.1"
   util/bzip2:
     path: s2repo/builds/util/bzip2,1.0.8.tar.xz
-    size: 209744
-    hash: 0148e80adfd903544f35c6a91ef87ee7ce4bf7c2249c087589da893a72041a57
+    size: 209928
+    hash: 5076967e7b3f4396cd7f58221454fe522270376b973fc71e30dc238c59bb6571
     atom:
       &a77
       category: util
@@ -155,8 +155,8 @@ builds:
       version: 1.0.8
   util/less:
     path: s2repo/builds/util/less,530.tar.xz
-    size: 249328
-    hash: b83c9c206eb2b085cf79ed65c3291d2b8eb155fcd3066c588377522e3ce6779f
+    size: 249356
+    hash: 74647e3a396b02fbdad5ced39f279a64b5e642d05db6e6f0997ec385653b6b1a
     atom:
       &a109
       category: util
@@ -166,8 +166,8 @@ builds:
       version: "530"
   util/patch:
     path: s2repo/builds/util/patch,2.7.6.tar.xz
-    size: 284708
-    hash: 4e3ba08d451a196af21d8720844d66a1fb6a012a41f3c5733efe93bf7e9b23ce
+    size: 273956
+    hash: 2d016b3a3c38273d110b281965feccedbbd7d4b035c9c6d76b63fedc2c4b41fe
     atom:
       &a119
       category: util
@@ -177,8 +177,8 @@ builds:
       version: 2.7.6
   util/kmod:
     path: s2repo/builds/util/kmod,26.tar.xz
-    size: 321856
-    hash: 51194a85185c8e481c828c8bbdde3febc15be114e4cd5d4fc0e8b3fbc0ad42c3
+    size: 321616
+    hash: 7a238436e835499ead8bea6e67f8835773d618ad09b430af6ef18c80a2a575f0
     atom:
       &a107
       category: util
@@ -188,8 +188,8 @@ builds:
       version: "26"
   util/m4:
     path: s2repo/builds/util/m4,1.4.18.tar.xz
-    size: 323152
-    hash: f6d91c0f8eb7f949fc60856cc828cae03c385710fa421945cd755abf12b492fd
+    size: 320416
+    hash: 3468dd285d0739fc382ba1f62c559a9319520c539196415ab88a4f6b9abcb465
     atom:
       &a113
       category: util
@@ -199,8 +199,8 @@ builds:
       version: 1.4.18
   libs/mpfr:
     path: s2repo/builds/libs/mpfr,4.0.2.tar.xz
-    size: 331580
-    hash: 8cca103b27b838203ee738e877358fa6edbf22c0ee707256c6e3fbee838d3d76
+    size: 331600
+    hash: 4411ba575bcd7fe4647651dc8d9c3250b9498787b512dec78d68404309ffdaa6
     atom:
       &a57
       category: libs
@@ -210,8 +210,8 @@ builds:
       version: 4.0.2
   util/flex:
     path: s2repo/builds/util/flex,2.6.4.tar.xz
-    size: 390836
-    hash: 58808b63ca6b493f160d61f7121d85140f25c8c6f3ccf6851bbc2577fb057f3d
+    size: 390828
+    hash: 6933d417b746e96c70e8739ac9a988fb5049e0ec6bc32eea3c9cb76d7bb2dfdb
     atom:
       &a91
       category: util
@@ -221,8 +221,8 @@ builds:
       version: 2.6.4
   libs/expat:
     path: s2repo/builds/libs/expat,2.2.9.tar.xz
-    size: 396100
-    hash: a6402b5ec0f0edc58c6f29f73d9a43bd4f2560356a4561aad3a50069a251b1fa
+    size: 396656
+    hash: dcfc6cf95d322ca5a2b0015ed59ad16030ca5cfa26286cefa4bc56e5f2be7a93
     atom:
       &a41
       category: libs
@@ -232,8 +232,8 @@ builds:
       version: 2.2.9
   libs/gmp:
     path: s2repo/builds/libs/gmp,6.2.0.tar.xz
-    size: 407488
-    hash: 5b94b1743a559ec72962f9160a71c8e7a5973b1c1fe3f2be4f62801cdefbdef6
+    size: 407584
+    hash: b91035c556ed73a0a0eb09c6cd3fee8fb3ea6b5359a99424fdb06cd9b56b960d
     atom:
       &a47
       category: libs
@@ -243,8 +243,8 @@ builds:
       version: 6.2.0
   core/dbus:
     path: s2repo/builds/core/dbus,1.12.18.3.tar.xz
-    size: 428780
-    hash: 5e2badf76bb4f18597404a856fc96ff9f50ecf5539fd8d2602e894536758595d
+    size: 428636
+    hash: 59b147753870c4999d9f94757971a34f3af18ca5ec8aa9d24e3ee7dfc1e665b8
     atom:
       &a3
       category: core
@@ -252,21 +252,10 @@ builds:
     version:
       &a4
       version: 1.12.18.3
-  libs/readline:
-    path: s2repo/builds/libs/readline,8.0.tar.xz
-    size: 439972
-    hash: e9c314fa3d30ae28afdfaa18ad01b012ce7b22747360a8900bb330dbd9b5ab23
-    atom:
-      &a63
-      category: libs
-      name: readline
-    version:
-      &a64
-      version: "8.0"
   lang/sed:
     path: s2repo/builds/lang/sed,4.8.tar.xz
-    size: 448092
-    hash: da2368e480deb42e2cd8ac3b853aa9184eaf3b297df6c144d449f0c37df9f0f3
+    size: 438148
+    hash: 91fbf2742dcb03450f12a1d18f82a4be5050a1a32fe13f4b8d261248a6aac795
     atom:
       &a39
       category: lang
@@ -274,10 +263,21 @@ builds:
     version:
       &a40
       version: "4.8"
+  libs/readline:
+    path: s2repo/builds/libs/readline,8.0.tar.xz
+    size: 439628
+    hash: add121a5ab6a6cc0f01293cfa9e19abab2992bcb24aaccc16eced29e16cf493e
+    atom:
+      &a63
+      category: libs
+      name: readline
+    version:
+      &a64
+      version: "8.0"
   util/libtool:
     path: s2repo/builds/util/libtool,2.4.tar.xz
-    size: 453648
-    hash: e2d704a7e5592d07269f2be3f296b031e9a68c8c019659f50a3ee6d1d2925b38
+    size: 451564
+    hash: acd9f589776c43b3c0d8287e40e944c69c37bc81b560af8d58b90ab220b6e5b3
     atom:
       &a111
       category: util
@@ -287,8 +287,8 @@ builds:
       version: 2.4
   util/file:
     path: s2repo/builds/util/file,5.39.tar.xz
-    size: 479216
-    hash: 55d7e64ef63e463497df4ed5437b380461bcfa9b7817c273d0eb0ce463bfb457
+    size: 479036
+    hash: cbaa5be7615562b30da87686ff59194df75dfc8f82abbc34f6ea109918373e77
     atom:
       &a87
       category: util
@@ -298,8 +298,8 @@ builds:
       version: "5.39"
   util/grep:
     path: s2repo/builds/util/grep,3.4.tar.xz
-    size: 486472
-    hash: 8dd7baa3914649d2cc7a15407ac901ef5f0e91a909942035cc1c294e16a98b35
+    size: 476484
+    hash: 761b5363e33fc51e73c4c284de72a943eeda35e7460897bc387a5356648199ed
     atom:
       &a95
       category: util
@@ -309,8 +309,8 @@ builds:
       version: "3.4"
   util/iwd:
     path: s2repo/builds/util/iwd,1.8.2.tar.xz
-    size: 505092
-    hash: 532a0cbe46d5b898aeae4fda98660ba00cb1bc2568d11faaf617e7ddd6ebcf33
+    size: 496876
+    hash: 8e1e7e9579113c9ff4f39184dcd41fb17c00a5086b8652100b62f8669056d653
     atom:
       &a105
       category: util
@@ -320,8 +320,8 @@ builds:
       version: 1.8.2
   util/xz:
     path: s2repo/builds/util/xz,5.2.5.tar.xz
-    size: 535680
-    hash: 5141a5cf3a09da26162d37f3c852378d4128b21a83f87b6c66fc7d584728ceab
+    size: 523180
+    hash: a28278efe7a6a352d7dbed61937cabb672eaa8445dce21143ded41ba7f01b540
     atom:
       &a135
       category: util
@@ -329,10 +329,21 @@ builds:
     version:
       &a136
       version: 5.2.5
+  util/autoconf:
+    path: s2repo/builds/util/autoconf,2.69.tar.xz
+    size: 547044
+    hash: 228207ff179fc01e17a3bbc131cebcd7c781236ac372134e6edaae0474e4e4f3
+    atom:
+      &a67
+      category: util
+      name: autoconf
+    version:
+      &a68
+      version: 2.69
   util/automake:
     path: s2repo/builds/util/automake,1.16.1.tar.xz
-    size: 546596
-    hash: 576f86cf7525a10557e0eb2b9e1e41548484147c28487575dea2ee5044e8fb1e
+    size: 543368
+    hash: deba07dea8b2573a75c2a7779e6d02258ce4df83547a0c5c78bde02fef0e9373
     atom:
       &a69
       category: util
@@ -342,8 +353,8 @@ builds:
       version: 1.16.1
   core/openrc:
     path: s2repo/builds/core/openrc,0.42.1.tar.xz
-    size: 562256
-    hash: 5c43ed430682f85fbfe41fad3861de8a5c7b1722926f3dee6fa6750ee37743bc
+    size: 561928
+    hash: 2c87b47213fdcedc3f32503e8aab129f4a1f54915cfc9881021fed17c19ef8d3
     atom:
       &a13
       category: core
@@ -351,21 +362,10 @@ builds:
     version:
       &a14
       version: 0.42.1
-  util/autoconf:
-    path: s2repo/builds/util/autoconf,2.69.tar.xz
-    size: 559880
-    hash: a4c57dcea7105510f1dbbd3995b8702f64a66addf56206859f91353d9bbf13e9
-    atom:
-      &a67
-      category: util
-      name: autoconf
-    version:
-      &a68
-      version: 2.69
   util/make:
     path: s2repo/builds/util/make,4.3.tar.xz
-    size: 628068
-    hash: 4c1ffe1192f55b50d5c55b9b17ea1ec04f845969b14e1ac9cf18c3e0846b1a5b
+    size: 618384
+    hash: 80d3cffd5a834cee10e1b6d2823470563beb9a0e3f8b898f6f8d5658b50f7d40
     atom:
       &a115
       category: util
@@ -373,21 +373,10 @@ builds:
     version:
       &a116
       version: 4.3
-  util/pkg-config:
-    path: s2repo/builds/util/pkg-config,0.29.2.tar.xz
-    size: 632452
-    hash: 47c241d78e75f977879dfcb94d6ed61d8f90df2c842bd209a3ba64e118471f32
-    atom:
-      &a121
-      category: util
-      name: pkg-config
-    version:
-      &a122
-      version: 0.29.2
   util/diffutils:
     path: s2repo/builds/util/diffutils,3.7.tar.xz
-    size: 647548
-    hash: 2b969a62d820dc0e5b5cf46fc799cb8ef4c901325d69641379a74221e8667df7
+    size: 637568
+    hash: 676c42632a8a521355b25bfcb410b20ef81dc50543dedf8faf4db555bb83d45a
     atom:
       &a83
       category: util
@@ -395,21 +384,21 @@ builds:
     version:
       &a84
       version: 3.7
-  util/iproute2:
-    path: s2repo/builds/util/iproute2,5.5.0.tar.xz
-    size: 657784
-    hash: 7d66eaba99eb0c3aca6b19d05eb87e1f58e652c60279a8c8e4b32040d7418f40
+  util/pkg-config:
+    path: s2repo/builds/util/pkg-config,0.29.2.tar.xz
+    size: 631684
+    hash: 0554beeddce4e81a3a3c7aa0071e833c8f7d15309477127c70d8f729c84e87f2
     atom:
-      &a103
+      &a121
       category: util
-      name: iproute2
+      name: pkg-config
     version:
-      &a104
-      version: 5.5.0
+      &a122
+      version: 0.29.2
   util/procps-ng:
     path: s2repo/builds/util/procps-ng,3.3.15.tar.xz
-    size: 662920
-    hash: 84097985e2877e008b58565a93bac940383acf395701d1ad621bc99fc2552aac
+    size: 652984
+    hash: 6d1c300b7069f781d43fce737a917d40b96f5e00b8e0660d4b5a9467fefa71a0
     atom:
       &a123
       category: util
@@ -417,10 +406,21 @@ builds:
     version:
       &a124
       version: 3.3.15
+  util/iproute2:
+    path: s2repo/builds/util/iproute2,5.5.0.tar.xz
+    size: 652828
+    hash: ec1fa153e4d705354aeab71d0633c1260ce9d35da1cd82fbbe8d55d0795f6060
+    atom:
+      &a103
+      category: util
+      name: iproute2
+    version:
+      &a104
+      version: 5.5.0
   core/zsh:
     path: s2repo/builds/core/zsh,5.8.tar.xz
-    size: 675180
-    hash: 38fedb3b335b342d17cff8f66d3430ff2e96f75058ba7be7f19032e31c67ac90
+    size: 674564
+    hash: a812ca1e53d012d364c99bc134f74bc558be3135944291de31eab1cf61154a2a
     atom:
       &a21
       category: core
@@ -430,8 +430,8 @@ builds:
       version: "5.8"
   core/linux-pam:
     path: s2repo/builds/core/linux-pam,1.4.0.tar.xz
-    size: 691832
-    hash: 62f3944860270bf0726451493355cc515828b48881b32032eaf7c4649f0e1c4c
+    size: 691608
+    hash: 13157de212077087e2636663c1e9209a9fdd8c2e16c5bb443a4e52ea260f636c
     atom:
       &a11
       category: core
@@ -441,8 +441,8 @@ builds:
       version: 1.4.0
   editor/nano:
     path: s2repo/builds/editor/nano,4.9.tar.xz
-    size: 756160
-    hash: f8348abad90e428876e0089ba8e42a25d97f0ea2420ad0e9dd6a682bd8d161c5
+    size: 740044
+    hash: 60957239aaff4d402eaaa3c86c4df5e35055a20e2f9a1658d84442343c7cff2c
     atom:
       &a25
       category: editor
@@ -452,8 +452,8 @@ builds:
       version: "4.9"
   util/openssh:
     path: s2repo/builds/util/openssh,8.3p1.tar.xz
-    size: 756532
-    hash: 47b100e9ec58249efe0170ed547a6c12f7d595f18ea22434e4849a28b3b56a80
+    size: 757140
+    hash: 4d58b5aa9a54f3140d384d7a5f3d8b52590293f39c7abac2fd8b2fe95dcdfa31
     atom:
       &a117
       category: util
@@ -463,8 +463,8 @@ builds:
       version: 8.3p1
   util/findutils:
     path: s2repo/builds/util/findutils,4.7.0.tar.xz
-    size: 947280
-    hash: 7c9fcc5349519e05765e6ee0b182675f1081e667ee5b8298910cf693120bdb1c
+    size: 947512
+    hash: 6547493bc70d0334204d9d06cb3d1f78a4f796737ddc0e16eba4eb8431469b91
     atom:
       &a89
       category: util
@@ -474,8 +474,8 @@ builds:
       version: 4.7.0
   util/bison:
     path: s2repo/builds/util/bison,3.6.tar.xz
-    size: 1068628
-    hash: 4ab7635b6524219594db1ef47ebb3770d0cfb72c6c308c7d76a870a55f657799
+    size: 1068304
+    hash: 3a2474535a02487939968a9bade03013ea0336cda46b37d896c9ef69688fa9e4
     atom:
       &a75
       category: util
@@ -485,8 +485,8 @@ builds:
       version: 3.6
   kernel/linux-headers:
     path: s2repo/builds/kernel/linux-headers,5.7.5.tar.xz
-    size: 1083204
-    hash: 0cfaaf1941fe2edcbfac805735df3c68a9646b9edbafad0967de0e858c8d195a
+    size: 1083164
+    hash: eb208c2d61684187ebe14720367f8eef839d51cf6fd414a76c3e60129197cd9a
     atom:
       &a27
       category: kernel
@@ -496,8 +496,8 @@ builds:
       version: 5.7.5
   libs/ncurses:
     path: s2repo/builds/libs/ncurses,6.2.tar.xz
-    size: 1127108
-    hash: ae38d6a8eea5ee86b472c1e3bab87a770a6f0bf57c1af3644b3ca7b582ec2eba
+    size: 1127032
+    hash: 3305189c593f7e4d102b6026134067d33d3b6951d0da9ccee3dc4194e6db17c1
     atom:
       &a59
       category: libs
@@ -505,21 +505,10 @@ builds:
     version:
       &a60
       version: "6.2"
-  util/texinfo:
-    path: s2repo/builds/util/texinfo,6.7.tar.xz
-    size: 1273336
-    hash: 92a9bf2dec5fd4567f60f17fced351185293511a51ce6dab3fce2236a792c2b1
-    atom:
-      &a129
-      category: util
-      name: texinfo
-    version:
-      &a130
-      version: 6.7
   core/shadow:
     path: s2repo/builds/core/shadow,4.8.1.tar.xz
-    size: 1287940
-    hash: 9ca86b74dacc2ca3b267f14ee78916a0488d0e1642bb8aa8bfbfa3a4cd566f23
+    size: 1286572
+    hash: 0bc6768ba60d31d73c8e3f08bd23b72c7b3f7d3c4eba22cbd804bd7b43af3a63
     atom:
       &a15
       category: core
@@ -527,10 +516,21 @@ builds:
     version:
       &a16
       version: 4.8.1
+  util/texinfo:
+    path: s2repo/builds/util/texinfo,6.7.tar.xz
+    size: 1273932
+    hash: 1de0f6fe70ee5a1695de57f209613efc0c9587ddc7aa692bb229b3b8d1a8547b
+    atom:
+      &a129
+      category: util
+      name: texinfo
+    version:
+      &a130
+      version: 6.7
   util/tar:
     path: s2repo/builds/util/tar,1.32.tar.xz
-    size: 1323536
-    hash: 66682040a3fb6661440d60fc0203e8e4466d2d77b1ece48c4bb1d35d00a35d9c
+    size: 1314164
+    hash: cf6d7d306c526df5a1680aaa06fdeffdd3bafeb46459df3e1aade4f49ca64cee
     atom:
       &a127
       category: util
@@ -540,8 +540,8 @@ builds:
       version: "1.32"
   util/inetutils:
     path: s2repo/builds/util/inetutils,1.9.4.tar.xz
-    size: 1355120
-    hash: f78b8e86cda3dfc7041cbf50ee9023597f955016eef4b5891639b18e90c0d2d6
+    size: 1356076
+    hash: 058c20b30f91240929d4b242010c55181a2ec6c2cf5daf45b202cc7f4979f085
     atom:
       &a101
       category: util
@@ -551,8 +551,8 @@ builds:
       version: 1.9.4
   doc/man-pages:
     path: s2repo/builds/doc/man-pages,5.05.tar.xz
-    size: 1401700
-    hash: 185bfd1206808295b182e9585396ad2c162d9bcfc0b5ce9966d61ad55ad69f6f
+    size: 1401976
+    hash: eb50fd21ea6fe17a4c447fb3ceb79829998ef94bf78bc89e4735c4a3bdf3bbb1
     atom:
       &a23
       category: doc
@@ -562,8 +562,8 @@ builds:
       version: "5.05"
   lang/gawk:
     path: s2repo/builds/lang/gawk,5.1.0.tar.xz
-    size: 1726884
-    hash: 60e608d980a8848df8a92a93f57b39758319d0c98977fbca9a90726955ef568f
+    size: 1719640
+    hash: 87105a76a7b358ecb1b061e7a5072c28d8f28042c321b5bbe8314287c3668bc2
     atom:
       &a29
       category: lang
@@ -573,8 +573,8 @@ builds:
       version: 5.1.0
   core/bash:
     path: s2repo/builds/core/bash,5.0.tar.xz
-    size: 2660420
-    hash: f383a4130066d5eb3dc678792bcb00244225ee637c0c57243e02743b3b4312f9
+    size: 2648900
+    hash: d0123dedc14172be3836b0060fc5c49afd93fee7a1f3648767cf44113de3ab87
     atom:
       &a1
       category: core
@@ -584,8 +584,8 @@ builds:
       version: "5.0"
   core/eudev:
     path: s2repo/builds/core/eudev,3.2.9.tar.xz
-    size: 2686924
-    hash: e61c114c50507a349c0ebee75c9ee9a2fb4be21d28d820388ee16743eb934894
+    size: 2675440
+    hash: af3174c473a900f53fb4169cb8a8677f86d56387bbdd263f8df913622ddb5a02
     atom:
       &a5
       category: core
@@ -595,8 +595,8 @@ builds:
       version: 3.2.9
   libs/openssl:
     path: s2repo/builds/libs/openssl,1.1.1d.tar.xz
-    size: 2707620
-    hash: 5e2c13b5c21ec63640982a4c799bcb382288da2992b9f8f3b79f66effc7d14e1
+    size: 2706240
+    hash: 0ba9097f0eddf3dca18103ab8a61912e7492bd44be0df818ef6f090f007615d3
     atom:
       &a61
       category: libs
@@ -606,8 +606,8 @@ builds:
       version: 1.1.1d
   util/e2fsprogs:
     path: s2repo/builds/util/e2fsprogs,1.45.5.tar.xz
-    size: 3591428
-    hash: b821be1e6b48c4340441f89556f5438838eb95a0f42bb7e5a0867a592e28125a
+    size: 3592308
+    hash: 1579548e04fb2fe36607a42a32a3e354478055b11ce759c5d69ab303d9da8ea4
     atom:
       &a85
       category: util
@@ -617,8 +617,8 @@ builds:
       version: 1.45.5
   util/groff:
     path: s2repo/builds/util/groff,1.22.4.tar.xz
-    size: 4717224
-    hash: af692fa79cef1f145cbbbf00c9a9bec436ce5da503f197ed9719aae847a589da
+    size: 4705904
+    hash: 02f9c6984f155e62656cad567df3e4139d61596e77d708e3163c811917f07f97
     atom:
       &a97
       category: util
@@ -628,8 +628,8 @@ builds:
       version: 1.22.4
   libs/gettext:
     path: s2repo/builds/libs/gettext,0.20.tar.xz
-    size: 5201664
-    hash: 854534a508b3bad9726e5511deaba986fdf689558aff7f6f9c9ad60d358a6af5
+    size: 5202736
+    hash: bce7eee646fda0e867fa040435202afbaf02208350d44b98c38cf0916c68ee31
     atom:
       &a43
       category: libs
@@ -639,8 +639,8 @@ builds:
       version: "0.20"
   util/util-linux:
     path: s2repo/builds/util/util-linux,2.35.1.tar.xz
-    size: 5486272
-    hash: efb9b9143b92bdbd4438fcbb374c206a719bd724e90d508bd9529d6048298685
+    size: 5486224
+    hash: aa78d26e40b0de3ce0642670c94c4ebdefbe832366ed3a845ecd0fc93c69fbec
     atom:
       &a131
       category: util
@@ -650,8 +650,8 @@ builds:
       version: 2.35.1
   libs/libelf:
     path: s2repo/builds/libs/libelf,0.180.tar.xz
-    size: 5687600
-    hash: 499cebda8797bd5dcbca2e0d8167153c9d7df4a816481d2d4206dc870f11d9cc
+    size: 5663488
+    hash: 83b1243d2a407c7f2ec185b917828da12bf2ec115ba07ff8d356ba9359f3c70e
     atom:
       &a51
       category: libs
@@ -661,8 +661,8 @@ builds:
       version: "0.180"
   core/grub:
     path: s2repo/builds/core/grub,2.04.tar.xz
-    size: 6045928
-    hash: 171701cf9e173a704adf747d82e11a8739fe1a7d3e4bcc69769cb011666b548b
+    size: 6046352
+    hash: 785d456b0b341b5c76f2e689963ad5b49b1b4b9fd42709972f88dd8a9a4f2fc6
     atom:
       &a9
       category: core
@@ -672,8 +672,8 @@ builds:
       version: "2.04"
   util/coreutils:
     path: s2repo/builds/util/coreutils,8.32.tar.xz
-    size: 6181492
-    hash: 5e44a61769848c95d1edcf76be1de0bf7224ce17d2d1e96402538b988feaa0b1
+    size: 6182120
+    hash: 93fc6f1091f1ba77c67c33dbf6ba367faa858ecd04b3e372c75f7165511fa47a
     atom:
       &a79
       category: util
@@ -683,8 +683,8 @@ builds:
       version: 8.32
   lang/perl:
     path: s2repo/builds/lang/perl,5.32.0.tar.xz
-    size: 11895996
-    hash: b15958dfe81d4f22f93e3bb03eae96987cde8e566f07514ee7e0f23f29af217d
+    size: 11903640
+    hash: b6cb92a0e622698a4cfd6261d7002c4a626e199b8bea7bebb7346212358f5966
     atom:
       &a35
       category: lang
@@ -694,8 +694,8 @@ builds:
       version: 5.32.0
   lang/node:
     path: s2repo/builds/lang/node,14.4.0.tar.xz
-    size: 22298920
-    hash: 3619d8a15262edc5f0b93d2100bd4ed3f5be25cf3dc51b1c8028a4d39c84445b
+    size: 22298448
+    hash: 41aa5c57965e24c896fd059edf932c2acf7e73c0688fdb69fd943f3c00fb2684
     atom:
       &a33
       category: lang
@@ -705,8 +705,8 @@ builds:
       version: 14.4.0
   libs/glibc:
     path: s2repo/builds/libs/glibc,2.31.1.tar.xz
-    size: 31114176
-    hash: 8d0dd50fc9919e004ba2dda0a79f123bb0350b1016190e42b34cac085e7972ea
+    size: 31118692
+    hash: 3248e97db66fecdcc7d01a51ef0656d1aedacec0388d2843c8a02e520e2cd6ef
     atom:
       &a45
       category: libs
@@ -716,8 +716,8 @@ builds:
       version: 2.31.1
   lang/python:
     path: s2repo/builds/lang/python,3.8.3.1.tar.xz
-    size: 40708984
-    hash: 99f92c78f12e43938506e3e15e783753653ad52d1d1dc6961288a2533dc85e2c
+    size: 40702508
+    hash: 36e1d175fd6d8b86e0930a591d0ee389bce17ba95d3464a73e54d8122db72cd2
     atom:
       &a37
       category: lang
@@ -727,8 +727,8 @@ builds:
       version: 3.8.3.1
   util/binutils:
     path: s2repo/builds/util/binutils,2.34.tar.xz
-    size: 60376604
-    hash: 91324171b416095e3ea7f385c9ae23e6a9a231ab2cf96120b19bc2de732081c6
+    size: 60375232
+    hash: 7df07417228edd9f3b7ee711d1cc7e282aa58f60cfce40cbd2fd00f5d7ffdb4c
     atom:
       &a73
       category: util
@@ -738,8 +738,8 @@ builds:
       version: 2.34
   lang/gcc:
     path: s2repo/builds/lang/gcc,9.3.0.tar.xz
-    size: 195954988
-    hash: 961c031928b1ad2a2750bee7428d04887b0212744ae1c4a4a1c184df3910e574
+    size: 195968600
+    hash: 9e7b39cda3c4c7109d4e0dec5a67192c51029e07e10d5f37a7c4620a7966d53b
     atom:
       &a31
       category: lang
@@ -762,8 +762,8 @@ packages:
     version: *a4
   core/docbook-xml:
     path: core/docbook-xml.yml
-    size: 3323
-    hash: 19d6e8a23a1de53cc7cb1904c39c6d27a0f00a4eabacd745d3a8b73525e30ce3
+    size: 3369
+    hash: 49cdb5ea733b761b5737536ed2a1973e2ebc76747754824ad3ed37c422e208f9
     atom:
       category: core
       name: docbook-xml
@@ -852,8 +852,8 @@ packages:
       version: "2.0"
   core/tzdata:
     path: core/tzdata.yml
-    size: 787
-    hash: 83f46751a2f216d2fb385db9b8cb3ce42e133aed499f44c6447932e291976ba6
+    size: 816
+    hash: 5d78d04999e6746418fee27fb25f830ddc4b7d49149ac65c268d9bc508516249
     atom: *a17
     version: *a18
   core/udev-init-scripts:
@@ -864,8 +864,8 @@ packages:
     version: *a20
   core/zsh:
     path: core/zsh.yml
-    size: 438
-    hash: 87a6f6ab3eed9a56e67352f65c308ea968582f5f8ae5f47badbcd249929247a0
+    size: 392
+    hash: 5fe5098c7ff82ce2386d9ec78c4139258fc9e53b6eb4cd9efa45b4c45433c081
     atom: *a21
     version: *a22
   doc/man-pages:
@@ -1692,8 +1692,8 @@ packages:
       version: 5.72.0
   gui/libdrm:
     path: gui/libdrm.yml
-    size: 656
-    hash: 6f40fa780085da548bea79e08d9c911f3dd03367c560fb05fe2283e072235de6
+    size: 659
+    hash: 0eed049f7894e38efb31ee139e0ae119c126cf8354b79d32f06b559c6efa9687
     atom:
       category: gui
       name: libdrm
@@ -3435,8 +3435,8 @@ packages:
     version: *a136
   virtual/base-system:
     path: virtual/base-system.yml
-    size: 786
-    hash: 49980b708b6fa9bf716af26f9743da631a067359702c8625c897a09668e56e2c
+    size: 785
+    hash: 7d0e9f71c9d8eb359b014792fba01d98dad849bc46f489314ed34ba05e6a7d14
     atom:
       category: virtual
       name: base-system
@@ -3482,4 +3482,4 @@ categories:
   - python
   - util
   - virtual
-serial: 1595813856
+serial: 1597076958

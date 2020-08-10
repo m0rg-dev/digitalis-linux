@@ -2,13 +2,12 @@ import { PackageVersion, ResolvedAtom } from "./Atom";
 import * as fs from 'fs';
 import * as path from 'path';
 import * as YAML from 'yaml';
+import * as sqlite3 from 'better-sqlite3';
+import { kMaxLength } from "buffer";
 
 export class Database {
-    private selected_packages: Set<string>;
-    private installed_packages: Map<string, PackageVersion>;
-
     private db_path: string;
-    private realdb: boolean;
+    private db: sqlite3.Database;
 
     private constructor(db_path: string) {
         this.db_path = db_path;
@@ -16,61 +15,51 @@ export class Database {
 
     static async construct(db_path: string): Promise<Database> {
         var self = new Database(db_path);
-        self.realdb = true;
-        await self.reload();
+        self.db = new sqlite3(path.join(self.db_path, "database.sqlite3"));
+        self.ensure_tables();
         return self;
     }
 
     static empty(): Database {
         var self = new Database('');
-        self.realdb = false;
-        self.selected_packages = new Set();
-        self.installed_packages = new Map(); 
+        self.db = new sqlite3(":memory:");
+        self.ensure_tables();
         return self;
     }
 
-    async reload() {
-        if(!this.realdb) throw "Attempt to call reload() on a fake database";
-        var self = this;
-        self.selected_packages = new Set();
-        self.installed_packages = new Map();
-        return fs.promises.access(path.join(self.db_path, "database.yml"), fs.constants.R_OK)
-            .then(async function () {
-                const data = await fs.promises.readFile(path.join(self.db_path, "database.yml"));
-                const obj = YAML.parse(data.toString('utf8'));
-                for (const selected of obj.selected) {
-                    self.selected_packages.add(selected);
-                }
-                for (const installed in obj.installed) {
-                    self.installed_packages.set(installed, PackageVersion.fromYAML(obj.installed[installed]));
-                }
-            })
-            .catch(function (err) {
-                console.warn(`Couldn't read database: ${err}`);
-                // the database might not exist. may want to create it with the
-                // x10 package itself rather than rebuilding it on errors because
-                // that's potentially dangerous
-            });
+    private run_statement(sql: string, params?: any[]) {
+        try {
+            if(!params) params = [];
+            const stmt: sqlite3.Statement = this.db.prepare(sql);
+            return stmt.all(...params);
+        } catch (e) {
+            console.log(e);
+            console.log(`Offending SQL is ${sql}`);
+            console.log(params);
+            throw e;
+        }
     }
 
-    async commit() {
-        // actually this is probably fine
-        //if(!this.realdb) throw "Attempt to call commit() on a fake database";
-        return fs.promises.writeFile(path.join(this.db_path, "database.yml"), YAML.stringify({
-            selected: this.selected_packages,
-            installed: this.installed_packages
-        }));
+    private ensure_tables() {
+        const package_table_exists = this.run_statement("SELECT * FROM sqlite_master WHERE type='table' AND name='package'");
+        if (!(package_table_exists && package_table_exists.length)) {
+            this.db.prepare("CREATE TABLE package (id TEXT PRIMARY KEY, version_installed TEXT, version_available TEXT, selected BOOLEAN)").run();
+        }
     }
 
     getInstalledVersion(atom: ResolvedAtom): PackageVersion {
-        return this.installed_packages.get(atom.format());
+        const installed = this.run_statement('SELECT version_installed FROM package WHERE id = ?', [atom.format()]);
+        if (installed && installed.length) return new PackageVersion(installed[0]);
+        return null;
     }
 
     install(atom: ResolvedAtom, version: PackageVersion) {
-        this.installed_packages.set(atom.format(), version);
+        this.db.prepare('INSERT INTO package(id, version_installed) VALUES(?, ?) ON CONFLICT(id) DO UPDATE SET version_installed=excluded.version_installed')
+            .run([atom.format(), version.version]);
     }
 
     select(atom: ResolvedAtom) {
-        this.selected_packages.add(atom.format());
+        this.db.prepare('INSERT INTO package(id, selected) VALUES(?, TRUE) ON CONFLICT(id) DO UPDATE SET selected=excluded.selected')
+            .run([atom.format()]);
     }
 }

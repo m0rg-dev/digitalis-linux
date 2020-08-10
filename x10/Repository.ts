@@ -292,7 +292,7 @@ export class Repository {
             }
             db.install(atom, pkgdesc.version);
         }
-        await db.commit();
+
         if (need_ldconfig) {
             console.log("Running ldconfig...");
             child_process.spawnSync('ldconfig', ['-X', '-r', target_root], { stdio: 'inherit' });

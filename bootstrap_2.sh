@@ -7,6 +7,10 @@ ulimit -n 65536
 
 IMAGE=alpine-bootstrap
 
+cd x10
+npx pkg x10_install.js --public -t latest-linux-x64
+cd ..
+
 node x10/x10_repo.js s2repo/
 
 maybe_build() {
@@ -18,6 +22,8 @@ commit_with_packages() {
     local ctr=$(buildah from $IMAGE)
     buildah run "$ctr" --  mkdir -p /var/lib/x10/database /tmp
     buildah run "$ctr" --  mkdir -p /usr/share/x10
+    node x10/x10_repo.js s2repo/
+
     cd s2repo;
         # tar ch follows links
         tar ch . > /tmp/repo.tar
@@ -26,7 +32,8 @@ commit_with_packages() {
     buildah add "$ctr" x10/ /usr/share/x10
 
     for package in $2; do
-        buildah run "$ctr" node /usr/share/x10/x10_install.js $package
+        # TODO this line is too long.
+        buildah unshare sh -c "mp=\$(buildah mount $ctr); echo \$mp;ls -ld \$mp/var/lib/x10;node x10/x10.js --without_default_depends --without_hostdb --target_root=\$mp --repository=\$mp/var/lib/x10/repo install $package"
     done
     buildah commit "$ctr" $1
     buildah rm "$ctr"
@@ -55,20 +62,19 @@ commit_with_packages digitalis-bootstrap-1.3 "libs/mpfr util/texinfo libs/zlib"
 maybe_build util/binutils
 maybe_build libs/mpc
 maybe_build util/autoconf
-maybe_build libs/zlib
+maybe_build util/bzip2
 
-commit_with_packages digitalis-bootstrap-1.4 "util/binutils libs/mpc util/autoconf libs/zlib"
+commit_with_packages digitalis-bootstrap-1.4 "util/binutils libs/mpc util/autoconf util/bzip2"
 
 maybe_build libs/ncurses
 maybe_build util/libtool
 maybe_build lang/gcc
 maybe_build libs/gettext
 maybe_build util/automake
-maybe_build util/bzip2
 maybe_build libs/expat
 maybe_build util/pkg-config
 
-commit_with_packages digitalis-bootstrap-1.5 "libs/ncurses util/libtool lang/gcc util/automake libs/gettext util/bzip2 libs/expat util/pkg-config"
+commit_with_packages digitalis-bootstrap-1.5 "libs/ncurses util/libtool lang/gcc util/automake libs/gettext libs/expat util/pkg-config"
 
 # TODO auto-generate this from build-tools
 pkgs_16="
@@ -94,7 +100,7 @@ util/texinfo
 util/xz
 "
 
-pkgs_16="$pkgs_16 util/gperf util/which util/util-linux core/dbus libs/readline util/coreutils libs/openssl libs/libattr"
+pkgs_16="$pkgs_16 util/gperf util/which util/util-linux core/dbus libs/readline util/coreutils libs/openssl libs/libattr lang/node"
 
 for pkg in $pkgs_16; do maybe_build $pkg; done
 

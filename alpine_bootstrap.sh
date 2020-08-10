@@ -31,8 +31,6 @@ buildah run "$ctr" -- sh -ex build_m4.sh
 buildah run "$ctr" -- sh -ex build_bison.sh
 buildah run "$ctr" -- sh -ex build_python.sh
 buildah run "$ctr" -- sh -ex build_xz.sh
-buildah run "$ctr" -- sh -ex build_node.sh
-buildah run "$ctr" -- sh -ex build_pv.sh
 
 rm -rf new_root
 buildah unshare sh -c 'cp -rp $(buildah mount '$ctr')/new_root new_root'
