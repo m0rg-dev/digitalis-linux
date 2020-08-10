@@ -160,17 +160,32 @@ export class BuildContext {
                 throw "Aborting due to packaging issues";
             }
 
-            file_list.push(header.name);
+            file_list.push({name: header.name, type: header.type});
 
             stream.pipe(pack.entry(header, callback));
         });
 
         extract.on('finish', function () {
-            if (!file_list.some((f) => f == './usr/')) pack.entry({ name: './usr/', mode: 0o755, type: 'directory' });
-            if (!file_list.some((f) => f == './usr/share/')) pack.entry({ name: './usr/share/', mode: 0o755, type: 'directory' });
-            if (!file_list.some((f) => f == './usr/share/licenses/')) pack.entry({ name: './usr/share/licenses/', mode: 0o755, type: 'directory' });
-            if (!file_list.some((f) => f == './usr/share/licenses/' + atom.getCategory())) pack.entry({ name: './usr/share/licenses/' + atom.getCategory(), mode: 0o755, type: 'directory' });
+            if (!file_list.some((f) => f.name == './usr/')) {
+                pack.entry({ name: './usr/', mode: 0o755, type: 'directory' });
+                file_list.push({ name: './usr/', type: 'directory' });
+            }
+            if (!file_list.some((f) => f.name == './usr/share/')) {
+                pack.entry({ name: './usr/share/', mode: 0o755, type: 'directory' });
+                file_list.push({ name: './usr/share/', type: 'directory' });
+            }
+            if (!file_list.some((f) => f.name == './usr/share/licenses/')) {
+                pack.entry({ name: './usr/share/licenses/', mode: 0o755, type: 'directory' });
+                file_list.push({ name: './usr/share/licenses/', type: 'directory' });
+            }
+            if (!file_list.some((f) => f.name == './usr/share/licenses/' + atom.getCategory())) {
+                pack.entry({ name: './usr/share/licenses/' + atom.getCategory(), mode: 0o755, type: 'directory' });
+                file_list.push({ name: './usr/share/licenses/' + atom.getCategory(), type: 'directory' });
+            }
             pack.entry({ name: `./usr/share/licenses/${atom.getCategory()}/${atom.getName()}` }, license_text);
+            file_list.push({ name: `./usr/share/licenses/${atom.getCategory()}/${atom.getName()}`, type: 'file' });
+            file_list.push({ name: `./var/lib/x10/database/${atom.getCategory()}/${atom.getName()}.list`, type: 'file' });
+            pack.entry({ name: `./var/lib/x10/database/${atom.getCategory()}/${atom.getName()}.list` }, JSON.stringify(file_list, null, 1));
             pack.finalize();
         });
 

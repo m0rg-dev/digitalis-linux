@@ -240,6 +240,7 @@ export class Repository {
         for (const atom of atoms) {
             const pkgdesc: PackageDescription = await this.getPackageDescription(atom);
             console.log(`Installing ${atom.format()} ${pkgdesc.version.version} to ${target_root}`);
+            db.install_pending(atom);
             if (atom.getCategory() != 'virtual') {
                 const build_path = path.join(this.local_builds_path, atom.getCategory(), atom.getName() + "," + pkgdesc.version.version + ".tar.xz");
 
@@ -262,6 +263,17 @@ export class Repository {
                         });
                     });
                 }
+
+                const flist_rc = child_process.spawnSync('tar', ['xJf', build_path, `./var/lib/x10/database/${atom.getCategory()}/${atom.getName()}.list`, '-O']);
+                const file_list = JSON.parse(flist_rc.stdout.toString());
+
+                // running this in a transaction makes me feel real cool about it
+                // (come back to this!)
+                db.transaction(() => {
+                    for (const file of file_list) {
+                        db.add_file(atom, file.name, file.type);
+                    }
+                });
 
                 const rc = child_process.spawnSync('tar', ['xpJvf', build_path], {
                     cwd: target_root,

@@ -48,7 +48,7 @@ async function build_packages(argv: any) {
         var mountpoint = mount_rc.stdout.toString().trim();
         console.log(`Container root at ${mountpoint}`);
 
-        const hostdb = (argv.without_hostdb) ? Database.empty() : await Database.construct(path.join(mountpoint, 'var/lib/x10/database/'));
+        const hostdb = (argv.without_hostdb) ? Database.empty() : Database.construct(path.join(mountpoint, 'var/lib/x10/database/'));
         console.log(hostdb);
         const tx = new Transaction(repo, hostdb, targetdb);
 
@@ -91,8 +91,8 @@ async function main() {
     if (argv._.length > 0) {
         if (argv._[0] == 'install') {
             const repo = new Repository(argv.repository || '/var/lib/x10/repo', argv.remote_url);
-            const hostdb = (argv.without_hostdb) ? Database.empty() : await Database.construct((argv.host_root || '') + '/var/lib/x10/database/');
-            const targetdb = await Database.construct((argv.target_root || '') + '/var/lib/x10/database/');
+            const hostdb = (argv.without_hostdb) ? Database.empty() : Database.construct((argv.host_root || '') + '/var/lib/x10/database/');
+            const targetdb = Database.construct((argv.target_root || '') + '/var/lib/x10/database/');
             const tx = new Transaction(repo, hostdb, targetdb);
 
             await Promise.all(argv._.slice(1).map(async function (shortpkg) {
@@ -102,20 +102,24 @@ async function main() {
             const plan = await tx.plan();
             Transaction.displayPlan(plan);
 
+            const to_install = [];
+            
             for (const step of plan) {
                 if (step.type == StepType.Build) {
                     console.log("\nThis plan would require packages to be compiled from source.");
                     process.exit(1);
                 } else if (step.type == StepType.TargetInstall) {
-                    await repo.installPackage(step.what, targetdb, (argv.target_root || '/'));
+                    to_install.push(step.what);
                 }
             }
 
+            await repo.installPackages(to_install, targetdb, (argv.target_root || '/'));
 
-            argv._.slice(1).map(async function (shortpkg) {
+            await Promise.all(argv._.slice(1).map(async function (shortpkg) {
                 const resolved = await (new Atom(shortpkg)).resolveUsingRepository(repo);
                 targetdb.select(resolved);
-            });
+            }));
+            targetdb.print_stats();
         } else if (argv._[0] == 'build') {
             if (argv.unshared) {
                 await build_packages(argv);
@@ -125,7 +129,7 @@ async function main() {
             }
         } else if (argv._[0] == 'update') {
             const repo = new Repository(argv.repository || '/var/lib/x10/repo', argv.remote_url);
-            const db = await Database.construct((argv.target_root || '') + '/var/lib/x10/database/');
+            const db = Database.construct((argv.target_root || '') + '/var/lib/x10/database/');
 
             const manifest = await repo.maybeUpdateManifest();
             for (const pkg of manifest.getAllPackages()) {
@@ -136,8 +140,8 @@ async function main() {
 
         } else if (argv._[0] == '_get_builds_for') {
             const repo = new Repository(argv.repository || '/var/lib/x10/repo');
-            const hostdb = await Database.construct((argv.host_root || '') + '/var/lib/x10/database/');
-            const targetdb = await Database.construct((argv.target_root || '') + '/var/lib/x10/database/');
+            const hostdb = Database.construct((argv.host_root || '') + '/var/lib/x10/database/');
+            const targetdb = Database.construct((argv.target_root || '') + '/var/lib/x10/database/');
             const tx = new Transaction(repo, hostdb, targetdb);
 
             await Promise.all(argv._.slice(1).map(async function (shortpkg) {
