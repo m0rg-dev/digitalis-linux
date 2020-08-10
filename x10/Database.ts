@@ -33,9 +33,9 @@ export class Database {
             const stmt: sqlite3.Statement = this.db.prepare(sql);
             return stmt.all(...params);
         } catch (e) {
-            console.log(e);
-            console.log(`Offending SQL is ${sql}`);
-            console.log(params);
+            console.error(e);
+            console.error(`Offending SQL is ${sql}`);
+            console.error(params);
             throw e;
         }
     }
