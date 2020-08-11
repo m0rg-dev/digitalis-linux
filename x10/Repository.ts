@@ -264,7 +264,8 @@ export class Repository {
                     });
                 }
 
-                const flist_rc = child_process.spawnSync('tar', ['xJf', build_path, `./var/lib/x10/database/${atom.getCategory()}/${atom.getName()}.list`, '-O']);
+                const flist_rc = child_process.spawnSync('tar', ['xJf', build_path, `./var/lib/x10/database/${atom.getCategory()}/${atom.getName()}.list`, '-O'],
+                    {maxBuffer: 16 * 1024 * 1024});
                 const file_list = JSON.parse(flist_rc.stdout.toString());
 
                 // running this in a transaction makes me feel real cool about it

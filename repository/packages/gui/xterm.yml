@@ -9,5 +9,5 @@ rdepend:
 filename: xterm
 unpack_dir: xterm-snapshots-xterm-%{version}
 comp: tar.gz
-upstream: https://github.com/ThomasDickey/xterm-snapshots/archive/xterm-358.tar.gz
+upstream: https://github.com/ThomasDickey/xterm-snapshots/archive/
 license: MIT

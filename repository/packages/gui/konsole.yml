@@ -1,0 +1,11 @@
+version: "20.04.1"
+bdepend:
+  - util/cmake
+  - util/extra-cmake-modules
+  - virtual/kde-frameworks
+rdepend:
+  - virtual/kde-frameworks
+filename: konsole
+upstream: http://download.kde.org/stable/release-service/%{version}/src
+use_build_dir: true
+configure: cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -Wno-dev ../%{unpack_dir}

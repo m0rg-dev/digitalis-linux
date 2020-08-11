@@ -68,7 +68,7 @@ export class Database {
     }
 
     install_pending(atom: ResolvedAtom) {
-        this.db.prepare('INSERT INTO packages_pending(id) VALUES(?)').run([atom.format()]);
+        this.db.prepare('INSERT INTO packages_pending(id) VALUES(?) ON CONFLICT DO NOTHING').run([atom.format()]);
     }
 
     install(atom: ResolvedAtom, version: PackageVersion) {
