@@ -25,9 +25,13 @@ buildah unshare sh -exc '
     buildah run "$ctr" node /usr/share/x10/x10.js install kernel/linux
 
     ls $dir
+    rm -r $dir/var/lib/x10/repo
     sh -c "cd $dir; tar cp ." | xz -T 0 > rootfs.tar.xz
     buildah umount $ctr
-    #buildah run "$ctr" -- tar cp --exclude="{./proc,./sys,./dev}" . | xz -T 0 > rootfs.tar.xz
 
     buildah rm $ctr
 '
+
+ctr=$(buildah from scratch)
+buildah add "$ctr" rootfs.tar.xz
+buildah commit "$ctr" digitalis
