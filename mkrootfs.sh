@@ -4,7 +4,7 @@ set -x
 ulimit -n 65536
 
 node x10/x10_repo.js repository
-node x10/x10.js --repository=./repository build virtual/base-system kernel/linux
+node x10/x10.js --repository=./repository build virtual/base-system kernel/linux core/linux-firmware
 buildah unshare sh -exc '
     ctr=$(buildah from scratch)
     dir=$(buildah mount "$ctr")
@@ -14,7 +14,7 @@ buildah unshare sh -exc '
     node x10/x10_repo.js repository
     node x10/x10.js --repository=$(realpath ./repository) --target_root="$dir" --without_default_depends --without_hostdb install core/fs-tree
     node x10/x10.js --repository=$(realpath ./repository) --target_root="$dir" --without_default_depends --without_hostdb install libs/glibc core/bash util/coreutils
-    node x10/x10.js --repository=$(realpath ./repository) --target_root="$dir" --without_default_depends --without_hostdb install virtual/base-system
+    node x10/x10.js --repository=$(realpath ./repository) --target_root="$dir" --without_default_depends --without_hostdb install virtual/base-system core/linux-firmware
 
     mkdir -p $dir/usr/share/x10
     cp -r x10/* $dir/usr/share/x10
