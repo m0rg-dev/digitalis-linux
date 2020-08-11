@@ -38,3 +38,4 @@ rdepend:
     - util/util-linux
     - util/which
     - util/xz
+use_default_depends: false

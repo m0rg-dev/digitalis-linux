@@ -57,6 +57,7 @@ export class Transaction {
             if (!have_build) {
                 for (const bdepend of desc.bdepend) {
                     if (!this.tx.has(Transaction.getKey(bdepend, Location.Host))) {
+                        console.warn(`${atom.format()} is causing a build of ${bdepend.format()}`);
                         await this.addToTransaction(bdepend, Location.Host);
                     }
                 }

@@ -10,6 +10,7 @@ export class PackageDescription {
     unpack_dir: string;
     bdepend: Atom[];
     rdepend: Atom[];
+    use_default_depends: boolean;
     use_build_dir: boolean;
     configure: string;
     make: string;
@@ -52,6 +53,7 @@ export class PackageDescription {
             unpack_dir: '%{filename}-%{upstream_version}',
             bdepend: [],
             rdepend: [],
+            use_default_depends: true,
             use_build_dir: false,
             configure_options: "--prefix=/usr %{additional_configure_options}",
             additional_configure_options: '',
@@ -75,7 +77,7 @@ export class PackageDescription {
         var yaml = YAML.parse(raw_yaml);
 
         const parsed_package = Object.assign(default_package, yaml);
-        if (Config.getConfigKey('use_default_depends')) {
+        if (Config.getConfigKey('use_default_depends') && parsed_package.use_default_depends) {
             parsed_package.bdepend.push('virtual/build-tools');
             parsed_package.rdepend.push('virtual/base-system');
         }
@@ -104,6 +106,7 @@ export class PackageDescription {
         this.unpack_dir = parsed_package.unpack_dir;
         this.bdepend = parsed_package.bdepend.map((depend: string) => ResolvedAtom.parse(depend));
         this.rdepend = parsed_package.rdepend.map((depend: string) => ResolvedAtom.parse(depend));
+        this.use_default_depends = parsed_package.use_default_depends;
         this.use_build_dir = parsed_package.use_build_dir;
         this.configure = parsed_package.configure;
         this.make = parsed_package.make;

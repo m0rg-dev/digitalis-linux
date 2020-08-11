@@ -46,9 +46,9 @@ export class Database {
     }
 
     getInstalledVersion(atom: ResolvedAtom): PackageVersion {
-        const installed = this.db.prepare('SELECT version_installed FROM package WHERE id = ?').all([atom.format()]);
-        if (installed && installed.length) return new PackageVersion(installed[0]);
-        return null;
+        const installed = this.db.prepare('SELECT version_installed FROM package WHERE id = ?').get([atom.format()]);
+        if (installed && installed['version_installed']) return new PackageVersion(installed['version_installed']);
+        return undefined;
     }
 
     // TODO actually go and do the work to make sure all this stuff runs concurrently. it definitely won't yet.
@@ -72,7 +72,7 @@ export class Database {
     }
 
     install(atom: ResolvedAtom, version: PackageVersion) {
-        this.transaction(function () {
+        this.transaction(() => {
             this.db.prepare('INSERT INTO package(id, version_installed) VALUES(?, ?) ON CONFLICT(id) DO UPDATE SET version_installed=excluded.version_installed')
                 .run([atom.format(), version.version]);
             this.db.prepare('DELETE FROM packages_pending WHERE id = ?').run([atom.format()]);

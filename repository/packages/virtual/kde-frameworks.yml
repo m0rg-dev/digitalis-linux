@@ -69,3 +69,4 @@ rdepend:
   - gui/kwayland
   - gui/kdelibs4support
   - gui/kross
+use_default_depends: false
