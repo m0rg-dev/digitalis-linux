@@ -12,3 +12,11 @@ license: GPL-2.0-only
 comp: tar.gz
 configure: ~
 upstream: https://git.archlinux.org/mkinitcpio.git/snapshot/
+post_install_script: |
+  mkdir -p usr/lib/initcpio/install
+  cat >usr/lib/initcpio/install/allmods <<"EOF"
+  #!/bin/bash
+
+  build() {
+    add_all_modules '*'
+  }

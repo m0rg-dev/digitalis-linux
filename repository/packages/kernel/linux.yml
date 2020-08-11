@@ -35,6 +35,27 @@ post_install_script: |
 
   # End /etc/modprobe.d/usb.conf
   EOF
+  mkdir -p etc/mkinitcpio.d/
+  cat > etc/mkinitcpio.d/linux.preset <<"EOF"
+  # mkinitcpio preset file for the '%{version}' package
+
+  ALL_config="/etc/mkinitcpio.conf"
+  ALL_kver="/boot/vmlinuz-%{version}"
+
+  PRESETS=('default' 'fallback' 'huge')
+
+  #default_config="/etc/mkinitcpio.conf"
+  default_image="/boot/initramfs-%{version}.img"
+  #default_options=""
+
+  #fallback_config="/etc/mkinitcpio.conf"
+  fallback_image="/boot/initramfs-%{version}-fallback.img"
+  fallback_options="-S autodetect"
+
+  #huge_config="/etc/mkinitcpio.conf"
+  huge_image="/boot/initramfs-%{version}-huge.img"
+  huge_options="-S autodetect -A allmods"
+  EOF
 # dracut _really does not like_ running outside /. but if you're running this
 # script outside of /, you probably don't need an initramfs just yet
 #post_unpack_script: |
@@ -43,8 +64,7 @@ post_install_script: |
 #  fi
 post_unpack_script: |
   if [[ "$(pwd)" = '/' ]]; then
-    mkinitcpio -g boot/initramfs-%{version}.img -k %{version}
-    mkinitcpio -S autodetect -g boot/initramfs-%{version}-fallback.img -k %{version}
+    mkinitcpio -P -k %{version}
     mkdir /etc/modules-load.d
     mkinitcpio -M | tail -n +2 >/etc/modules-load.d/autodetect.conf
   fi
