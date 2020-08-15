@@ -5,7 +5,7 @@ live/
 stage*.tar
 rootfs.tar.xz
 repository/Manifest.yml
-
+keys.json
 # Files created in these directories are a) large, b) not unique to digitalis, and
 # c) possibly incompatible with the license terms of the general repository. They
 # therefore should not be uploaded to GitHub.
