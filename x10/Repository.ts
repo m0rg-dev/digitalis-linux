@@ -5,12 +5,13 @@ import * as https from 'https';
 import * as http from 'http';
 import * as child_process from 'child_process';
 import { URL } from "url";
-import { Manifest, ManifestPackage } from "./Manifest";
+import { old_Manifest, ManifestPackage, Manifest } from "./Manifest";
 import { Database } from "./Database.js";
 import * as byteSize from 'byte-size';
 import * as tar_stream from 'tar-stream';
 import { BuildContext } from "./BuildContext.js";
 import { PackageDescription } from "./PackageDescription";
+import * as glob from 'glob';
 
 export class Repository {
     local_packages_path: string;
@@ -65,6 +66,18 @@ export class Repository {
         }
     }
 
+    async readPackageDescriptionFromFilesystem(atom: ResolvedAtom): Promise<PackageDescription> {
+        const package_path = path.join(this.local_packages_path, atom.getCategory(), atom.getName() + ".yml");
+        let maybe_package: PackageDescription | null;
+        try {
+            const raw_yml = await fs.promises.readFile(package_path);
+            maybe_package = new PackageDescription(raw_yml.toString('utf8'));
+        } catch (err) {
+            // TODO better error handling rather than "error = doesn't exist"
+        }
+        return maybe_package;
+    }
+
     async getPackageDescription(atom: ResolvedAtom): Promise<PackageDescription> {
         const self = this;
         const manifest = await self.maybeUpdateManifest();
@@ -73,17 +86,9 @@ export class Repository {
             throw `Couldn't find ${atom.format()} in Manifest.yml!`;
         }
 
-        const package_path = path.join(this.local_packages_path, atom.getCategory(), atom.getName() + ".yml");
-        var maybe_package: PackageDescription;
-        try {
-            const raw_yml = await fs.promises.readFile(package_path);
-            const tentative_package = new PackageDescription(raw_yml.toString('utf8'));
-            if (tentative_package.version.version == pkg.version.version) maybe_package = tentative_package;
-        } catch (err) {
-            // this probably means the file doesn't exist so whatever
-        }
+        let maybe_package = await this.readPackageDescriptionFromFilesystem(atom);
 
-        if (maybe_package) return Promise.resolve(maybe_package);
+        if (maybe_package) return maybe_package;
 
         if (self.remote_url) {
             return new Promise<PackageDescription>((resolve, reject) => {
@@ -95,6 +100,7 @@ export class Repository {
                             raw_yml += data.toString('utf8');
                         });
                         response.on('end', async () => {
+                            const package_path = path.join(this.local_packages_path, atom.getCategory(), atom.getName() + ".yml");
                             await fs.promises.mkdir(path.dirname(package_path), { recursive: true });
                             await fs.promises.writeFile(package_path, raw_yml);
                             resolve(new PackageDescription(raw_yml));
@@ -110,13 +116,13 @@ export class Repository {
     }
 
     // TODO this is in desperate need of refactoring
-    async maybeUpdateManifest(): Promise<Manifest> {
+    async maybeUpdateManifest(): Promise<old_Manifest> {
         const self = this;
         const manifest_path = path.join(self.root_path, "Manifest.yml");
         return fs.promises.access(manifest_path, fs.constants.R_OK)
             .then(async (ok) => {
                 return fs.promises.readFile(manifest_path).then((data) => {
-                    const manifest = Manifest.deserialize(data.toString('utf8'));
+                    const manifest = old_Manifest.deserialize(data.toString('utf8'));
                     if (self.remote_url && !self.manifest_fetched_already) {
                         return undefined;
                     }
@@ -126,7 +132,7 @@ export class Repository {
             .then(async (maybe_manifest) => {
                 if (maybe_manifest) return maybe_manifest;
                 if (self.remote_url) {
-                    return new Promise<Manifest>((resolve, reject) => {
+                    return new Promise<old_Manifest>((resolve, reject) => {
                         console.log("Retrieving Manifest.yml from remote server...");
 
                         ((self.remote_url.protocol == 'https') ? https : http).get(new URL('Manifest.yml', self.remote_url), (response) => {
@@ -138,7 +144,7 @@ export class Repository {
                                 response.on('end', async () => {
                                     await fs.promises.writeFile(manifest_path, raw_yml)
                                     self.manifest_fetched_already = true;
-                                    resolve(Manifest.deserialize(raw_yml));
+                                    resolve(old_Manifest.deserialize(raw_yml));
                                 });
                             } else {
                                 reject(`Got ${response.statusCode} from repo while looking for Manifest.yml!`);
@@ -157,9 +163,56 @@ export class Repository {
         })
     }
 
-    async buildManifest(): Promise<void> {
+    async buildManifest() {
+        let manifest = new Manifest();
+        try {
+            await fs.promises.stat('../keys.json')
+            let keys = JSON.parse((await fs.promises.readFile('../keys.json')).toString());
+            manifest.registerPrivateKey(keys.privateKey);
+        } catch (e) {
+            console.warn("Don't have private keys - this will generate a non-signed manifest.");
+        }
+        glob(`${this.root_path}/packages/**/*`, async (err, matches) => {
+            if (err) throw err;
+
+            let atoms: ResolvedAtom[] = [];
+
+            await Promise.all(matches.map(async (file) => {
+                let stat = await fs.promises.stat(file);
+                if (stat.isFile() && path.basename(file) != 'Manifest.yml') {
+                    let description_data = await fs.promises.readFile(file);
+                    manifest.addFile(path.relative(this.root_path, file), description_data);
+
+                    let m = file.match(/([a-z0-9-]+)\/([a-z0-9-]+)\.yml$/);
+                    if (m[1] != 'virtual') {
+                        let atom = new ResolvedAtom(m[1], m[2]);
+                        let desc = new PackageDescription(description_data.toString());
+
+                        atoms.push(atom);
+
+                        try {
+                            let build_path = path.join(this.root_path, 'builds', atom.getCategory(), atom.getName() + ',' + desc.version.version + '.tar.xz');
+                            await fs.promises.stat(build_path);
+                            let build_data = await fs.promises.readFile(build_path);
+                            manifest.addFile(path.relative(this.root_path, build_path), build_data,);
+                        } catch (e) {
+                            console.warn(`Don't have a build for ${atom.format()} ${desc.version.version}.`);
+                        }
+                    }
+
+                    console.log(`${file} ${m[1]} ${m[2]}`);
+                }
+            }));
+
+            manifest.addBlob('package_list', Buffer.from(JSON.stringify(atoms.map(atom => atom.format()))));
+
+            await fs.promises.writeFile(path.join(this.root_path, 'Manifest.yml'), manifest.serialize());
+        });
+    }
+
+    async old_buildManifest(): Promise<void> {
         const self = this;
-        var manifest = new Manifest();
+        var manifest = new old_Manifest();
         const categories = await self.getAllCategories(true);
         const structured_names = await Promise.all(categories.map(async function (category) {
             return self.getAllNames(category, true).then(names => names.map(name => [category, name]))
@@ -265,7 +318,7 @@ export class Repository {
                 }
 
                 const flist_rc = child_process.spawnSync('tar', ['xJf', build_path, `./var/lib/x10/database/${atom.getCategory()}/${atom.getName()}.list`, '-O'],
-                    {maxBuffer: 16 * 1024 * 1024});
+                    { maxBuffer: 16 * 1024 * 1024 });
                 const file_list = JSON.parse(flist_rc.stdout.toString());
 
                 // running this in a transaction makes me feel real cool about it
