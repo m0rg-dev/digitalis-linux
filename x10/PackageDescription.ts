@@ -77,7 +77,7 @@ export class PackageDescription {
         var yaml = YAML.parse(raw_yaml);
 
         const parsed_package = Object.assign(default_package, yaml);
-        if (Config.getConfigKey('use_default_depends') && parsed_package.use_default_depends) {
+        if (Config.use_default_depends && parsed_package.use_default_depends) {
             parsed_package.bdepend.push('virtual/build-tools');
             parsed_package.rdepend.push('virtual/base-system');
         }

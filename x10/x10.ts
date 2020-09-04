@@ -1,14 +1,13 @@
 import * as minimist from 'minimist';
 import { Config } from './Config';
 import { Repository } from './Repository';
-import { PackageDescription } from "./PackageDescription";
 import { Database } from './Database';
 import { Transaction, Location, StepType } from './Transaction';
-import { Atom, ResolvedAtom } from './Atom';
+import { Atom } from './Atom';
 import * as child_process from 'child_process';
 import * as path from 'path';
-import * as fs from 'fs';
 import * as byteSize from 'byte-size';
+import { Commands } from './Commands';
 
 byteSize.defaultOptions({
     units: 'iec'
@@ -19,71 +18,10 @@ const argv = minimist(process.argv.slice(2), {
     boolean: ["without_default_depends", "skip_confirm", "unshared", "without_hostdb"]
 });
 
-Config.setConfigKey('use_default_depends', !argv.without_default_depends);
-
-async function build_packages(argv: any) {
-    // We basically always want to do this because we're not actually installing to a target
-    // so our "targetdb" is going to be entirely bogus.
-    Config.setConfigKey('use_default_depends', false);
-    const buildah_from = child_process.spawn('buildah', ['from', argv.build_container || 'digitalis-builder']);
-    var container_id: string = "";
-    buildah_from.stdout.on('data', (data) => container_id += data.toString('utf8'));
-
-    const buildah_from_p = new Promise((res, rej) => {
-        buildah_from.on('exit', () => res());
-        buildah_from.on('error', () => rej());
-    });
-
-    const repo = new Repository(argv.repository || '/var/lib/x10/repo');
-    const targetdb = Database.empty();
-    await buildah_from_p;
-    container_id = container_id.trim();
-    console.log(`Have working container: ${container_id}`);
-    var container_mounted = false;
-    try {
-        const mount_rc = child_process.spawnSync('buildah', ['mount', container_id]);
-        if (mount_rc.signal) throw `mount killed by signal ${mount_rc.signal}`;
-        if (mount_rc.status != 0) throw `mount exited with failure status`;
-        container_mounted = true;
-        var mountpoint = mount_rc.stdout.toString().trim();
-        console.log(`Container root at ${mountpoint}`);
-
-        const hostdb = (argv.without_hostdb) ? Database.empty() : Database.construct(path.join(mountpoint, 'var/lib/x10/database/'));
-        console.log(hostdb);
-        const tx = new Transaction(repo, hostdb, targetdb);
-
-        await Promise.all(argv._.slice(1).map(async function (shortpkg: string) {
-            const resolved = await (new Atom(shortpkg)).resolveUsingRepository(repo);
-            await tx.addToTransaction(resolved, Location.Target, true);
-        }));
-        const plan = await tx.plan();
-        Transaction.displayPlan(plan);
-
-        var hostinstalls = [];
-
-        for(const step of plan) {
-            if(step.type == StepType.Build) {
-                if(hostinstalls.length) {
-                    await repo.installPackages(hostinstalls, hostdb, mountpoint);
-                    hostinstalls = [];
-                }
-                const pkgdesc: PackageDescription = await repo.getPackageDescription(step.what);
-                const build_path = path.join(repo.local_builds_path, step.what.getCategory(), step.what.getName() + "," + pkgdesc.version.version + ".tar.xz");
-                if(!fs.existsSync(build_path)) await repo.buildPackage(step.what, container_id, mountpoint);
-            } else if(step.type == StepType.HostInstall) {
-                hostinstalls.push(step.what);
-            }
-        }
-    } catch (e) {
-        console.error(`Got error: ${e}`);
-        console.error(e);
-        process.exitCode = 1;
-    } finally {
-        console.log("Cleaning up...");
-        if (container_mounted) child_process.spawnSync('buildah', ['umount', container_id], { stdio: 'inherit' });
-        child_process.spawnSync('buildah', ['rm', container_id], { stdio: 'inherit' });
-    }
-}
+Config.use_default_depends = !argv.without_default_depends;
+Config.without_hostdb = argv.without_hostdb;
+if(argv.build_container) Config.build_container = argv.build_container;
+if(argv.repository) Config.repository = argv.repository;
 
 async function main() {
     if(argv.repository) argv.repository = path.resolve(argv.repository);
@@ -122,7 +60,7 @@ async function main() {
             targetdb.print_stats();
         } else if (argv._[0] == 'build') {
             if (argv.unshared) {
-                await build_packages(argv);
+                await Commands.Build(argv._.slice(1));
             } else {
                 const rc = child_process.spawnSync('buildah', ['unshare', '--'].concat(process.argv).concat('--unshared'), { stdio: 'inherit' });
                 process.exitCode = rc.status;
