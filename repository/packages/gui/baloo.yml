@@ -6,11 +6,21 @@ bdepend:
   - gui/kidletime
   - gui/kfilemetadata
   - libs/lmdb
+  - gui/kconfig
+  - gui/kdbusaddons
+  - gui/solid
+  - gui/kcrash
+  - gui/kio
 rdepend:
   - gui/qt5-base
   - gui/kidletime
   - gui/kfilemetadata
   - libs/lmdb
+  - gui/kconfig
+  - gui/kdbusaddons
+  - gui/solid
+  - gui/kcrash
+  - gui/kio
 filename: baloo
 comp: tar.xz
 upstream: http://download.kde.org/stable/frameworks/5.72/

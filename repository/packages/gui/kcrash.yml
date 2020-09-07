@@ -5,10 +5,12 @@ bdepend:
   - gui/qt5-base
   - gui/kwindowsystem
   - gui/karchive
+  - gui/kcoreaddons
 rdepend:
   - gui/qt5-base
   - gui/kwindowsystem
   - gui/karchive
+  - gui/kcoreaddons
 filename: kcrash
 comp: tar.xz
 upstream: http://download.kde.org/stable/frameworks/5.72/

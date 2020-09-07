@@ -88,6 +88,8 @@ export class PackageVersion {
     }
 
     compare(other: PackageVersion): number {
+        if(!other) return 1;
+
         const parts_1 = this.version.toString().split('.');
         const parts_2 = other.version.toString().split('.');
 

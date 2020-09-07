@@ -11,6 +11,7 @@ filename: mkinitcpio
 license: GPL-2.0-only
 comp: tar.gz
 configure: ~
+make: make -j1
 upstream: https://git.archlinux.org/mkinitcpio.git/snapshot/
 post_install_script: |
   mkdir -p usr/lib/initcpio/install

@@ -12,6 +12,7 @@ rdepend:
     - core/zsh
     - doc/man-pages
     - editor/nano
+    - kernel/linux
     - lang/gawk
     # TODO figure out whether I want to do this or break libstdc++ out
     - lang/gcc

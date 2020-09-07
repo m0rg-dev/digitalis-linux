@@ -3,8 +3,10 @@ bdepend:
   - util/cmake
   - util/extra-cmake-modules
   - gui/qt5-base
+  - gui/kcodecs
 rdepend:
   - gui/qt5-base
+  - gui/kcodecs
 filename: syndication
 comp: tar.xz
 upstream: http://download.kde.org/stable/frameworks/5.72/

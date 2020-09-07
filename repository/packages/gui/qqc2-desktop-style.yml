@@ -3,8 +3,12 @@ bdepend:
   - util/cmake
   - util/extra-cmake-modules
   - gui/qt5-base
+  - gui/kconfig
+  - gui/kirigami2
 rdepend:
   - gui/qt5-base
+  - gui/kconfig
+  - gui/kirigami2
 filename: qqc2-desktop-style
 comp: tar.xz
 upstream: http://download.kde.org/stable/frameworks/5.72/

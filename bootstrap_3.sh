@@ -19,8 +19,8 @@ node x10/x10_repo.js s3repo
 
 ctr=$(buildah from digitalis-bootstrap-2)
 
-buildah run "$ctr" --  mkdir -p /var/lib/x10/database /tmp
-buildah run "$ctr" --  mkdir -p /usr/share/x10
+buildah run --net host "$ctr" --  mkdir -p /var/lib/x10/database /tmp
+buildah run --net host "$ctr" --  mkdir -p /usr/share/x10
 cd s3repo;
     # tar ch follows links
     tar ch . > /tmp/repo.tar
@@ -28,12 +28,12 @@ cd s3repo;
 cd ..
 buildah add "$ctr" x10/ /usr/share/x10
 
-buildah run "$ctr" mkdir -p /target_root/var/lib/x10/database
-buildah run "$ctr" node /usr/share/x10/x10.js --target_root=/target_root --without_default_dependencies install core/fs-tree
-buildah run "$ctr" node /usr/share/x10/x10.js --target_root=/target_root install virtual/base-system
-buildah run "$ctr" node /usr/share/x10/x10.js --target_root=/target_root install virtual/build-tools
+buildah run --net host "$ctr" mkdir -p /target_root/var/lib/x10/database
+buildah run --net host "$ctr" node /usr/share/x10/x10.js --target_root=/target_root --without_default_dependencies install core/fs-tree
+buildah run --net host "$ctr" node /usr/share/x10/x10.js --target_root=/target_root install virtual/base-system
+buildah run --net host "$ctr" node /usr/share/x10/x10.js --target_root=/target_root install virtual/build-tools
 
-buildah run "$ctr" sh -c 'cd /target_root; tar cp .' > /tmp/stage3.tar
+buildah run --net host "$ctr" sh -c 'cd /target_root; tar cp .' > /tmp/stage3.tar
 buildah rm "$ctr"
 
 ctr=$(buildah from scratch)

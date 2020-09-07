@@ -3,8 +3,18 @@ bdepend:
   - util/cmake
   - util/extra-cmake-modules
   - gui/qt5-base
+  - gui/kconfig
+  - gui/kcoreaddons
+  - gui/ki18n
+  - gui/kiconthemes
+  - gui/kio
 rdepend:
   - gui/qt5-base
+  - gui/kconfig
+  - gui/kcoreaddons
+  - gui/ki18n
+  - gui/kiconthemes
+  - gui/kio
 filename: kparts
 comp: tar.xz
 upstream: http://download.kde.org/stable/frameworks/5.72/

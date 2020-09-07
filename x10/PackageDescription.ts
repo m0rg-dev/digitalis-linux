@@ -8,8 +8,8 @@ export class PackageDescription {
     src_url: string;
     additional_sources: string[];
     unpack_dir: string;
-    bdepend: Atom[];
-    rdepend: Atom[];
+    bdepend: ResolvedAtom[];
+    rdepend: ResolvedAtom[];
     use_default_depends: boolean;
     use_build_dir: boolean;
     configure: string;
@@ -57,7 +57,7 @@ export class PackageDescription {
             use_build_dir: false,
             configure_options: "--prefix=/usr %{additional_configure_options}",
             additional_configure_options: '',
-            make_options: "-j56 %{additional_make_options}",
+            make_options: "-j48 %{additional_make_options}",
             additional_make_options: '',
             configure: "../%{unpack_dir}/configure %{configure_options}",
             make: "make %{make_options}",

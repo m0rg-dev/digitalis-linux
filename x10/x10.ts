@@ -15,13 +15,24 @@ byteSize.defaultOptions({
 
 const argv = minimist(process.argv.slice(2), {
     string: ["host_root", "target_root", "repository", "build_container", "remote_url"],
-    boolean: ["without_default_depends", "skip_confirm", "unshared", "without_hostdb"]
+    boolean: ["without_default_depends", "skip_confirm", "unshared", "without_hostdb", "verbose"]
 });
 
 Config.use_default_depends = !argv.without_default_depends;
 Config.without_hostdb = argv.without_hostdb;
+Config.verbose_output = argv.verbose;
+
 if(argv.build_container) Config.build_container = argv.build_container;
 if(argv.repository) Config.repository = argv.repository;
+
+function ensure_unshared(argv: any, callback: Function) {
+    if (argv.unshared) {
+        return callback(argv);
+    } else {
+        const rc = child_process.spawnSync('buildah', ['unshare', '--'].concat(process.argv).concat('--unshared'), { stdio: 'inherit' });
+        process.exitCode = rc.status;
+    }
+}
 
 async function main() {
     if(argv.repository) argv.repository = path.resolve(argv.repository);
@@ -51,7 +62,7 @@ async function main() {
                 }
             }
 
-            await repo.installPackages(to_install, targetdb, (argv.target_root || '/'));
+            await repo.installPackages(new Set(to_install), targetdb, (argv.target_root || '/'));
 
             await Promise.all(argv._.slice(1).map(async function (shortpkg) {
                 const resolved = await (new Atom(shortpkg)).resolveUsingRepository(repo);
@@ -59,12 +70,15 @@ async function main() {
             }));
             targetdb.print_stats();
         } else if (argv._[0] == 'build') {
-            if (argv.unshared) {
-                await Commands.Build(argv._.slice(1));
-            } else {
-                const rc = child_process.spawnSync('buildah', ['unshare', '--'].concat(process.argv).concat('--unshared'), { stdio: 'inherit' });
-                process.exitCode = rc.status;
-            }
+           ensure_unshared(argv, async () => {
+               await Commands.buildPackages(argv._.slice(1));
+           });
+        } else if (argv._[0] == '_build_single') {
+            ensure_unshared(argv, async () => {
+                const repo = new Repository(Config.repository);
+                await Commands.buildSingle(await new Atom(argv._[1]).resolveUsingRepository(repo),
+                    new Set(await Promise.all(argv._.slice(2).map((p) => new Atom(p).resolveUsingRepository(repo)))));
+            })
         } else if (argv._[0] == 'update') {
             const repo = new Repository(argv.repository || '/var/lib/x10/repo', argv.remote_url);
             const db = Database.construct((argv.target_root || '') + '/var/lib/x10/database/');

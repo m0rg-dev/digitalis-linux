@@ -3,8 +3,20 @@ bdepend:
   - util/cmake
   - util/extra-cmake-modules
   - gui/qt5-base
+  - gui/kconfig
+  - gui/kcoreaddons
+  - gui/kcrash
+  - gui/kdbusaddons
+  - gui/kdoctools
+  - gui/kservice
 rdepend:
   - gui/qt5-base
+  - gui/kconfig
+  - gui/kcoreaddons
+  - gui/kcrash
+  - gui/kdbusaddons
+  - gui/kdoctools
+  - gui/kservice
 filename: kded
 comp: tar.xz
 upstream: http://download.kde.org/stable/frameworks/5.72/

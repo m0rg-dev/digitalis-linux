@@ -8,6 +8,7 @@ bdepend:
   - gui/kpackage
   - gui/kirigami2
   - gui/threadweaver
+  - gui/kactivities
 rdepend:
   - gui/qt5-base
   - gui/kdeclarative
@@ -15,6 +16,7 @@ rdepend:
   - gui/kpackage
   - gui/kirigami2
   - gui/threadweaver
+  - gui/kactivities
 filename: plasma-framework
 comp: tar.xz
 upstream: http://download.kde.org/stable/frameworks/5.72/

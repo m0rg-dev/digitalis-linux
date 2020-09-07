@@ -41,4 +41,6 @@ rdepend:
   - gui/plasma-browser-integration
   - gui/kde-cli-tools
   - gui/systemsettings
+  - gui/xorg-server
+  - gui/konsole
 use_default_depends: false

@@ -4,9 +4,15 @@ bdepend:
   - util/extra-cmake-modules
   - gui/qt5-base
   - libs/phonon
+  - gui/kwindowsystem
+  - gui/kconfig
+  - gui/kcoreaddons
 rdepend:
   - gui/qt5-base
   - libs/phonon
+  - gui/kwindowsystem
+  - gui/kconfig
+  - gui/kcoreaddons
 filename: knotifications
 comp: tar.xz
 upstream: http://download.kde.org/stable/frameworks/5.72/

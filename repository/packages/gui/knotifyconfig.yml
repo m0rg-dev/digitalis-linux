@@ -4,9 +4,15 @@ bdepend:
   - util/extra-cmake-modules
   - gui/qt5-base
   - libs/phonon
+  - gui/kcompletion
+  - gui/ki18n
+  - gui/kio
 rdepend:
   - gui/qt5-base
   - libs/phonon
+  - gui/kcompletion
+  - gui/ki18n
+  - gui/kio
 filename: knotifyconfig
 comp: tar.xz
 upstream: http://download.kde.org/stable/frameworks/5.72/

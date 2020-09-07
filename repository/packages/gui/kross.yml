@@ -3,8 +3,20 @@ bdepend:
   - util/cmake
   - util/extra-cmake-modules
   - gui/qt5-base
+  - gui/kcompletion
+  - gui/kcoreaddons
+  - gui/ki18n
+  - gui/kiconthemes
+  - gui/kio
+  - gui/kparts
 rdepend:
   - gui/qt5-base
+  - gui/kcompletion
+  - gui/kcoreaddons
+  - gui/ki18n
+  - gui/kiconthemes
+  - gui/kio
+  - gui/kparts
 filename: kross
 upstream: http://download.kde.org/stable/frameworks/5.72/portingAids/
 license: LGPL-2.1-or-later

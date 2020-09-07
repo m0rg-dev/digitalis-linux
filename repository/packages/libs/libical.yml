@@ -1,6 +1,9 @@
 version: "3.0.8"
 bdepend:
   - util/cmake
+  - libs/gobject-introspection
+rdepend:
+  - libs/gobject-introspection
 filename: libical
 comp: tar.gz
 upstream: https://github.com/libical/libical/releases/download/v%{version}/

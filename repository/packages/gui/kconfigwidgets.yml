@@ -7,11 +7,15 @@ bdepend:
   - gui/kcodecs
   - gui/kdoctools
   - gui/kguiaddons
+  - gui/kconfig
+  - gui/kwidgetsaddons
 rdepend:
   - gui/qt5-base
   - gui/kauth
   - gui/kcodecs
   - gui/kguiaddons
+  - gui/kconfig
+  - gui/kwidgetsaddons
 filename: kconfigwidgets
 comp: tar.xz
 upstream: http://download.kde.org/stable/frameworks/5.72/

@@ -1,7 +1,13 @@
 version: "1.2.0"
 bdepend:
   - gui/xorgproto
-rdepend: []
+  - gui/libxrender
+  - gui/libxfixes
+  - gui/libx11
+rdepend:
+  - gui/libxrender
+  - gui/libxfixes
+  - gui/libx11
 filename: libXcursor
 comp: tar.bz2
 upstream: https://www.x.org/releases/individual/lib/

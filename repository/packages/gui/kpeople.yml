@@ -3,8 +3,16 @@ bdepend:
   - util/cmake
   - util/extra-cmake-modules
   - gui/qt5-base
+  - gui/kcoreaddons
+  - gui/kwidgetsaddons
+  - gui/ki18n
+  - gui/kitemviews
 rdepend:
   - gui/qt5-base
+  - gui/kcoreaddons
+  - gui/kwidgetsaddons
+  - gui/ki18n
+  - gui/kitemviews
 filename: kpeople
 comp: tar.xz
 upstream: http://download.kde.org/stable/frameworks/5.72/

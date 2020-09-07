@@ -7,8 +7,6 @@ import * as child_process from 'child_process';
 import { URL } from "url";
 import { old_Manifest, ManifestPackage, Manifest } from "./Manifest";
 import { Database } from "./Database.js";
-import * as byteSize from 'byte-size';
-import * as tar_stream from 'tar-stream';
 import { BuildContext } from "./BuildContext.js";
 import { PackageDescription } from "./PackageDescription";
 import * as glob from 'glob';
@@ -83,7 +81,7 @@ export class Repository {
         const manifest = await self.maybeUpdateManifest();
         const pkg = manifest.getPackage(atom);
         if (!pkg) {
-            throw `Couldn't find ${atom.format()} in Manifest.yml!`;
+            //throw `Couldn't find ${atom.format()} in Manifest.yml!`;
         }
 
         let maybe_package = await this.readPackageDescriptionFromFilesystem(atom);
@@ -158,16 +156,18 @@ export class Repository {
     }
 
     async buildExists(atom: ResolvedAtom): Promise<boolean> {
-        return this.maybeUpdateManifest().then((manifest) => {
-            return !!(manifest.getBuild(atom));
-        })
+        // Should probably think about doing this in a cleaner way someday...
+        if(atom.getCategory() == 'virtual') return true;
+        const desc = await this.getPackageDescription(atom);
+        const build_path = path.join(this.local_builds_path, atom.getCategory(), `${atom.getName()},${desc.version.version}.tar.xz`);
+        return fs.existsSync(build_path);
     }
 
     async buildManifest() {
         let manifest = new Manifest();
         try {
-            await fs.promises.stat('../keys.json')
-            let keys = JSON.parse((await fs.promises.readFile('../keys.json')).toString());
+            await fs.promises.stat('keys.json')
+            let keys = JSON.parse((await fs.promises.readFile('keys.json')).toString());
             manifest.registerPrivateKey(keys.privateKey);
         } catch (e) {
             console.warn("Don't have private keys - this will generate a non-signed manifest.");
@@ -285,37 +285,34 @@ export class Repository {
     }
 
     async installPackage(atom: ResolvedAtom, db: Database, target_root: string) {
-        return this.installPackages([atom], db, target_root);
+        return this.installPackages(new Set([atom]), db, target_root);
     }
 
-    async installPackages(atoms: ResolvedAtom[], db: Database, target_root: string) {
+    async installPackages(atoms: Set<ResolvedAtom>, db: Database, target_root: string) {
+        const scratch_atoms = new Set(Array.from(atoms.values()).map(a => a.format()));
+        const ordered_atoms: ResolvedAtom[] = [];
+        let descs: Map<string, PackageDescription> = new Map();
+
+        while(scratch_atoms.size) {
+            for (const str of scratch_atoms.values()) {
+                const atom = new ResolvedAtom(str);
+                let desc = descs.get(str);
+                if (!desc) descs.set(str, desc = await this.getPackageDescription(atom));
+
+                if(desc.rdepend.every((a) => !scratch_atoms.has(a.format()))) {
+                    ordered_atoms.push(atom);
+                    scratch_atoms.delete(str);
+                }
+            }
+        }
+
         var need_ldconfig = false;
-        for (const atom of atoms) {
+        for (const atom of ordered_atoms) {
             const pkgdesc: PackageDescription = await this.getPackageDescription(atom);
             console.log(`Installing ${atom.format()} ${pkgdesc.version.version} to ${target_root}`);
             db.install_pending(atom);
             if (atom.getCategory() != 'virtual') {
-                const build_path = path.join(this.local_builds_path, atom.getCategory(), atom.getName() + "," + pkgdesc.version.version + ".tar.xz");
-
-                // TODO this is awful
-                if (this.remote_url && !fs.existsSync(build_path)) {
-                    await new Promise((resolve, reject) => {
-                        ((this.remote_url.protocol == 'https') ? https : http).get(new URL(`builds/${atom.getCategory()}/${atom.getName()},${pkgdesc.version.version}.tar.xz`, this.remote_url), async (response) => {
-                            if (response.statusCode == 200) {
-                                await fs.promises.mkdir(path.dirname(build_path), { recursive: true });
-                                const stream = fs.createWriteStream(build_path);
-                                response.pipe(stream);
-                                stream.on('finish', function () {
-                                    stream.close();
-                                    resolve();
-                                })
-                            } else {
-                                fs.promises.unlink(build_path);
-                                reject(`Got ${response.statusCode} from repo while looking for ${atom.format()}`);
-                            }
-                        });
-                    });
-                }
+                const build_path = await fs.promises.realpath(path.join(this.local_builds_path, atom.getCategory(), atom.getName() + "," + pkgdesc.version.version + ".tar.xz"));
 
                 const flist_rc = child_process.spawnSync('tar', ['xJf', build_path, `./var/lib/x10/database/${atom.getCategory()}/${atom.getName()}.list`, '-O'],
                     { maxBuffer: 16 * 1024 * 1024 });

@@ -5,10 +5,14 @@ bdepend:
   - gui/qt5-base
   - gui/kcrash
   - gui/kdbusaddons
+  - gui/kconfig
+  - gui/ki18n
 rdepend:
   - gui/qt5-base
   - gui/kcrash
   - gui/kdbusaddons
+  - gui/kconfig
+  - gui/ki18n
 filename: kservice
 comp: tar.xz
 upstream: http://download.kde.org/stable/frameworks/5.72/

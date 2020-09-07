@@ -8,6 +8,7 @@ bdepend:
   - perl/uri
   - gui/ki18n
   - libs/libxslt
+  - gui/karchive
 rdepend:
   - gui/qt5-base
   - core/docbook-xml
@@ -15,6 +16,7 @@ rdepend:
   - perl/uri
   - libs/libxslt
   - gui/ki18n
+  - gui/karchive
 filename: kdoctools
 comp: tar.xz
 upstream: http://download.kde.org/stable/frameworks/5.72/

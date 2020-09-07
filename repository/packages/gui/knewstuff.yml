@@ -3,8 +3,22 @@ bdepend:
   - util/cmake
   - util/extra-cmake-modules
   - gui/qt5-base
+  - gui/karchive
+  - gui/kcompletion
+  - gui/kcoreaddons
+  - gui/ki18n
+  - gui/kiconthemes
+  - gui/kio
+  - gui/kpackage
 rdepend:
   - gui/qt5-base
+  - gui/karchive
+  - gui/kcompletion
+  - gui/kcoreaddons
+  - gui/ki18n
+  - gui/kiconthemes
+  - gui/kio
+  - gui/kpackage
 filename: knewstuff
 comp: tar.xz
 upstream: http://download.kde.org/stable/frameworks/5.72/

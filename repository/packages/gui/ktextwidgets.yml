@@ -5,10 +5,12 @@ bdepend:
   - gui/qt5-base
   - gui/kcompletion
   - gui/sonnet
+  - gui/kconfigwidgets
 rdepend:
   - gui/qt5-base
   - gui/kcompletion
   - gui/sonnet
+  - gui/kconfigwidgets
 filename: ktextwidgets
 comp: tar.xz
 upstream: http://download.kde.org/stable/frameworks/5.72/

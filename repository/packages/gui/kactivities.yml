@@ -4,9 +4,15 @@ bdepend:
   - util/extra-cmake-modules
   - gui/qt5-base
   - libs/boost
+  - gui/kconfig
+  - gui/kcoreaddons
+  - gui/kwindowsystem
 rdepend:
   - gui/qt5-base
   - libs/boost
+  - gui/kconfig
+  - gui/kcoreaddons
+  - gui/kwindowsystem
 filename: kactivities
 comp: tar.xz
 upstream: http://download.kde.org/stable/frameworks/5.72/

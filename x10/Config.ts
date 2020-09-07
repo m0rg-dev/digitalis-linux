@@ -3,4 +3,5 @@ export class Config {
     static build_container: string = 'digitalis-builder';
     static repository: string = '/var/lib/x10/repo';
     static without_hostdb: boolean = false;
+    static verbose_output: boolean = false;
 }

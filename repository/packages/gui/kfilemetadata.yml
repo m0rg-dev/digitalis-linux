@@ -3,8 +3,12 @@ bdepend:
   - util/cmake
   - util/extra-cmake-modules
   - gui/qt5-base
+  - gui/ki18n
+  - gui/kcoreaddons
 rdepend:
   - gui/qt5-base
+  - gui/ki18n
+  - gui/kcoreaddons
 filename: kfilemetadata
 comp: tar.xz
 upstream: http://download.kde.org/stable/frameworks/5.72/

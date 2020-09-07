@@ -3,8 +3,18 @@ bdepend:
   - util/cmake
   - util/extra-cmake-modules
   - gui/qt5-base
+  - gui/kcoreaddons
+  - gui/ki18n
+  - gui/kconfig
+  - gui/kirigami2
+  - gui/kio
 rdepend:
   - gui/qt5-base
+  - gui/kcoreaddons
+  - gui/ki18n
+  - gui/kconfig
+  - gui/kirigami2
+  - gui/kio
 filename: purpose
 comp: tar.xz
 upstream: http://download.kde.org/stable/frameworks/5.72/

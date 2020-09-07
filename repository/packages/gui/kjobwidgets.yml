@@ -3,8 +3,12 @@ bdepend:
   - util/cmake
   - util/extra-cmake-modules
   - gui/qt5-base
+  - gui/kcoreaddons
+  - gui/kwidgetsaddons
 rdepend:
   - gui/qt5-base
+  - gui/kcoreaddons
+  - gui/kwidgetsaddons
 filename: kjobwidgets
 comp: tar.xz
 upstream: http://download.kde.org/stable/frameworks/5.72/

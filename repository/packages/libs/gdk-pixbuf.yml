@@ -8,10 +8,14 @@ bdepend:
   - libs/libjpeg-turbo
   - gui/libx11
   - gui/xorgproto
+  - libs/gobject-introspection
+  - libs/glib
 rdepend:
   - core/shared-mime-info
   - libs/libpng
   - libs/libjpeg-turbo
+  - libs/gobject-introspection
+  - libs/glib
 filename: gdk-pixbuf
 upstream: http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.40/
 license: LGPL-2.1-or-later

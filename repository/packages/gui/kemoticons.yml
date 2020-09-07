@@ -3,8 +3,14 @@ bdepend:
   - util/cmake
   - util/extra-cmake-modules
   - gui/qt5-base
+  - gui/karchive
+  - gui/kconfig
+  - gui/kservice
 rdepend:
   - gui/qt5-base
+  - gui/karchive
+  - gui/kconfig
+  - gui/kservice
 filename: kemoticons
 comp: tar.xz
 upstream: http://download.kde.org/stable/frameworks/5.72/

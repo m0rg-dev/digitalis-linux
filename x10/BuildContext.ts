@@ -8,6 +8,7 @@ import * as fs from 'fs';
 import * as tar_stream from 'tar-stream';
 import * as byteSize from 'byte-size';
 import { Readable } from "stream";
+import { Config } from "./Config";
 
 export class BuildContext {
     private container_id: string;
@@ -22,13 +23,13 @@ export class BuildContext {
 
     private runInContainerContext(name: string, command: string, args: string[], save_stdout = false, stdin?: Readable | Buffer): Promise<Buffer> {
         console.warn(`[container] starting ${name}`);
-        var real_args = ['run'];
+        var real_args = ['--net=host', 'run'];
         this.bind_mounts.forEach((value, key) => {
             real_args.push(`--mount=type=bind,source=${key},destination=${value}`)
         });
         Array.prototype.push.apply(real_args, [this.container_id, command, args].flat());
         return new Promise((res, rej) => {
-            const proc = child_process.spawn('buildah', real_args, { stdio: ['pipe', save_stdout ? 'pipe' : 'inherit', 'inherit'] });
+            const proc = child_process.spawn('buildah', real_args, { stdio: ['pipe', (save_stdout || !Config.verbose_output) ? 'pipe' : 'inherit', 'inherit'] });
             if (stdin) {
                 if (stdin instanceof Readable) {
                     stdin.pipe(proc.stdin);
@@ -42,9 +43,13 @@ export class BuildContext {
                 console.warn(`[container] ${name} exited`);
                 if (signal) rej(`${name} killed by signal ${signal}`);
                 if (code != 0) rej(`${name} exited with failure status`);
-                res(Buffer.concat(stdout_chunks));
+                if (save_stdout) {
+                    res(Buffer.concat(stdout_chunks));
+                } else {
+                    res(null);
+                }
             });
-            if (save_stdout) {
+            if (save_stdout || !Config.verbose_output) {
                 proc.stdout.on('data', (data) => {
                     stdout_chunks.push(data);
                 });

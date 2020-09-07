@@ -3,8 +3,10 @@ bdepend:
   - util/cmake
   - util/extra-cmake-modules
   - gui/qt5-base
+  - gui/ki18n
 rdepend:
   - gui/qt5-base
+  - gui/ki18n
 filename: kunitconversion
 comp: tar.xz
 upstream: http://download.kde.org/stable/frameworks/5.72/

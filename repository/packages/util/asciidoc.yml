@@ -2,6 +2,11 @@ version: "9.0.1"
 bdepend:
   - libs/libxml2
   - libs/libxslt
+  - core/docbook-xsl
+rdepend:
+  - libs/libxml2
+  - libs/libxslt
+  - core/docbook-xsl
 filename: asciidoc
 comp: tar.gz
 upstream: https://github.com/asciidoc/asciidoc-py3/releases/download/%{version}/
