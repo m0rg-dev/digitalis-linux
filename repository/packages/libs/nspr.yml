@@ -1,0 +1,10 @@
+version: "4.28"
+filename: nspr
+comp: tar.gz
+upstream: https://archive.mozilla.org/pub/nspr/releases/v%{version}/src
+pre_configure_script: |
+  cd nspr
+  sed -ri 's#^(RELEASE_BINS =).*#\1#' pr/src/misc/Makefile.in
+  sed -i 's#$(LIBRARY) ##'            config/rules.mk
+additional_configure_options: --with-mozilla --with-pthreads --enable-64bit
+configure: nspr/configure %{configure_options}

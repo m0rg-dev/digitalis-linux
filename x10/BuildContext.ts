@@ -91,7 +91,8 @@ export class BuildContext {
             const findsrc = await this.runInHostContext('license_search', 'find', [host_unpack_dir, '-print0'], true);
             for (const file of findsrc.toString().split('\0')) {
                 const basename = path.basename(file);
-                if (/^(LICEN[SC]E(\..*)?|COPYING(.*)?|COPYRIGHT)$/.test(basename)) {
+                if (/^(LICEN[SC]E(\..*)?|COPYING(.*)?|COPYRIGHT)$/.test(basename)
+                    && !/_virtualenv/.test(file)) {
                     possible_licenses.push(file);
                 }
             }

@@ -1,0 +1,11 @@
+version: "0.12"
+bdepend:
+  - gui/xcb-util
+  - gui/xorgproto
+  - gui/libx11
+rdepend:
+  - gui/xcb-util
+  - gui/libx11
+filename: startup-notification
+comp: tar.gz
+upstream: https://www.freedesktop.org/software/startup-notification/releases

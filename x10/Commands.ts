@@ -17,7 +17,7 @@ async function filterAsync<T>(array: T[], callbackfn: (value: T, index: number, 
 }
 
 export class Commands {
-    static async _getRecursiveFilteredDependencies(atom: ResolvedAtom, hostdb: Database, repo: Repository, desc_cache: Map<string, PackageDescription>, already_found?: Set<string>): Promise<ResolvedAtom[]> {
+    private static async _getRecursiveFilteredDependencies(atom: ResolvedAtom, hostdb: Database, repo: Repository, desc_cache: Map<string, PackageDescription>, already_found?: Set<string>): Promise<ResolvedAtom[]> {
         //console.log(atom);
         //console.log(already_found);
         if(!desc_cache.get(atom.format())) desc_cache.set(atom.format(), await repo.getPackageDescription(atom));

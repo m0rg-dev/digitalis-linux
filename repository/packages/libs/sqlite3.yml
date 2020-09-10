@@ -1,0 +1,6 @@
+version: "3.33.0"
+upstream_version: "3330000"
+filename: sqlite-autoconf
+comp: tar.gz
+upstream: https://sqlite.org/2020
+additional_configure_options: --enable-fts5 CFLAGS="-g -O2 -DSQLITE_ENABLE_FTS3=1 -DSQLITE_ENABLE_FTS4=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_FTS3_TOKENIZER=1"

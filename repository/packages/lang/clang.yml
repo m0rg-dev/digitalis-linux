@@ -1,0 +1,20 @@
+version: "10.0.0"
+bdepend:
+  - util/cmake
+  - util/ninja
+  - lang/llvm
+rdepend:
+  - libs/libxml2
+  - lang/llvm
+filename: clang
+src: clang-%{version}.src.%{comp}
+unpack_dir: clang-%{version}.src
+upstream: https://github.com/llvm/llvm-project/releases/download/llvmorg-%{version}/
+use_build_dir: true
+configure: |
+  CC=gcc CXX=g++                                  \
+  cmake -DCMAKE_INSTALL_PREFIX=/usr               \
+        -DCMAKE_BUILD_TYPE=Release                \
+        -Wno-dev -G Ninja ../%{unpack_dir}
+make: ninja %{make_options}
+install: DESTDIR=/target_root ninja install

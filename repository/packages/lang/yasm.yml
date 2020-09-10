@@ -1,0 +1,5 @@
+version: "1.3.0"
+filename: yasm
+comp: tar.gz
+upstream: http://www.tortall.net/projects/yasm/releases
+pre_configure_script: sed -i 's#) ytasm.*#)#' Makefile.in

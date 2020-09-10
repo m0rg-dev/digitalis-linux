@@ -1,0 +1,17 @@
+version: "0.7.9"
+bdepend:
+  - util/ninja
+  - python/meson
+  - gui/gtk3
+rdepend:
+  - gui/gtk3
+filename: libnotify
+upstream: http://ftp.gnome.org/pub/gnome/sources/libnotify/0.7
+pre_configure_script: |
+  mkdir build
+configure: meson -Dbuildtype=release %{configure_options} -Dman=false -Dgtk_doc=false build/
+make: ninja %{make_options} -C build
+install: DESTDIR=/target_root ninja -C build install
+post_install_script: |
+  mkdir -p usr/lib
+  mv usr/lib64/pkgconfig usr/lib/

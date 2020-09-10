@@ -1,9 +1,11 @@
-version: "3.8.3.1"
+version: "3.8.3.2"
 upstream_version: "3.8.3"
 bdepend:
   - libs/libffi
+  - libs/sqlite3
 rdepend:
   - libs/libffi
+  - libs/sqlite3
 filename: Python
 additional_configure_options: --with-ensurepip=yes
 upstream: https://www.python.org/ftp/python/%{upstream_version}/

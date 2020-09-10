@@ -1,4 +1,5 @@
-version: "4.5"
+version: "4.5.2"
+upstream_version: "4.5"
 bdepend:
   - libs/libxml2
   - libs/libarchive
@@ -6,16 +7,16 @@ rdepend:
   - libs/libxml2
 filename: docbook-xml
 comp: zip
-upstream: http://www.docbook.org/xml/%{version}
+upstream: http://www.docbook.org/xml/%{upstream_version}
 use_build_dir: true
 # adapted from LFS
 configure: bsdtar xf ../%{src}
 make: ~
 install: |
-  install -v -d -m755 /target_root/usr/share/xml/docbook/xml-dtd-%{version} &&
+  install -v -d -m755 /target_root/usr/share/xml/docbook/xml-dtd-%{upstream_version} &&
   install -v -d -m755 /target_root/etc/xml &&
   cp -v -af docbook.cat *.dtd ent/ *.mod \
-      /target_root/usr/share/xml/docbook/xml-dtd-%{version}
+      /target_root/usr/share/xml/docbook/xml-dtd-%{upstream_version}
   chown -R root:root /target_root
 post_unpack_script: |
   if [ ! -e etc/xml/docbook ]; then
@@ -84,3 +85,25 @@ post_unpack_script: |
       "http://www.oasis-open.org/docbook/" \
       "file:///etc/xml/docbook" \
       etc/xml/catalog
+  for DTDVERSION in 4.1.2 4.2 4.3 4.4; do
+    xmlcatalog --noout --add "public" \
+        "-//OASIS//DTD DocBook XML V$DTDVERSION//EN" \
+        "http://www.oasis-open.org/docbook/xml/$DTDVERSION/docbookx.dtd" \
+        etc/xml/docbook
+    xmlcatalog --noout --add "rewriteSystem" \
+        "http://www.oasis-open.org/docbook/xml/$DTDVERSION" \
+        "file:///usr/share/xml/docbook/xml-dtd-4.5" \
+        etc/xml/docbook
+    xmlcatalog --noout --add "rewriteURI" \
+        "http://www.oasis-open.org/docbook/xml/$DTDVERSION" \
+        "file:///usr/share/xml/docbook/xml-dtd-4.5" \
+        etc/xml/docbook
+    xmlcatalog --noout --add "delegateSystem" \
+        "http://www.oasis-open.org/docbook/xml/$DTDVERSION/" \
+        "file:///etc/xml/docbook" \
+        etc/xml/catalog
+    xmlcatalog --noout --add "delegateURI" \
+        "http://www.oasis-open.org/docbook/xml/$DTDVERSION/" \
+        "file:///etc/xml/docbook" \
+        etc/xml/catalog
+  done

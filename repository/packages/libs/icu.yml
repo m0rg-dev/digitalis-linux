@@ -1,0 +1,9 @@
+version: "67.1"
+bdepend:
+  - lang/clang
+filename: icu4c
+src: '%{filename}-67_1-src.tgz'
+comp: tar.gz
+unpack_dir: icu
+src_url: http://github.com/unicode-org/icu/releases/download/release-67-1/%{src}
+configure: source/configure %{configure_options}

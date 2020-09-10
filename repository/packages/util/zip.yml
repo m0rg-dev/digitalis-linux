@@ -1,0 +1,8 @@
+version: "3.0"
+upstream_version: "30"
+comp: tar.gz
+src: zip%{upstream_version}.%{comp}
+upstream: https://downloads.sourceforge.net/infozip
+configure: ~
+make: make -f unix/Makefile generic_gcc
+install: make prefix=/target_root/usr MANDIR=/target_root/usr/share/man/man1 -f unix/Makefile install
