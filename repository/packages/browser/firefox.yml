@@ -42,6 +42,7 @@ src: "%{filename}.%{comp}"
 upstream: https://archive.mozilla.org/pub/firefox/releases/%{version}esr/source
 # TODO use system libevent
 # TODO maybe patch libpng to support APNG so we can use it here
+# this mozconfig comes from LFS (as with a lot of this kind of things)
 configure: |
   cat > mozconfig << "EOF"
   # If you have a multicore machine, all cores will be used by default.

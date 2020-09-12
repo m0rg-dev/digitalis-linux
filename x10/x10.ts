@@ -71,13 +71,15 @@ async function main() {
             targetdb.print_stats();
         } else if (argv._[0] == 'build') {
            ensure_unshared(argv, async () => {
-               await Commands.buildPackages(argv._.slice(1));
+               let success = await Commands.buildPackages(argv._.slice(1));
+               if(!success) process.exitCode = 1;
            });
         } else if (argv._[0] == '_build_single') {
             ensure_unshared(argv, async () => {
                 const repo = new Repository(Config.repository);
-                await Commands.buildSingle(await new Atom(argv._[1]).resolveUsingRepository(repo),
+                const success = await Commands.buildSingle(await new Atom(argv._[1]).resolveUsingRepository(repo),
                     new Set(await Promise.all(argv._.slice(2).map((p) => new Atom(p).resolveUsingRepository(repo)))));
+                if(!success) process.exitCode = 1;
             })
         } else if (argv._[0] == 'update') {
             const repo = new Repository(argv.repository || '/var/lib/x10/repo', argv.remote_url);

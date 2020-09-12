@@ -20,12 +20,12 @@ export class Commands {
     private static async _getRecursiveFilteredDependencies(atom: ResolvedAtom, hostdb: Database, repo: Repository, desc_cache: Map<string, PackageDescription>, already_found?: Set<string>): Promise<ResolvedAtom[]> {
         //console.log(atom);
         //console.log(already_found);
-        if(!desc_cache.get(atom.format())) desc_cache.set(atom.format(), await repo.getPackageDescription(atom));
+        if (!desc_cache.get(atom.format())) desc_cache.set(atom.format(), await repo.getPackageDescription(atom));
         const desc = desc_cache.get(atom.format());
         const filtered_bdepend = filterAsync(desc.bdepend, async (depend) => {
             if (already_found.has(depend.format())) return false;
             already_found.add(depend.format());
-            if(!desc_cache.get(depend.format())) desc_cache.set(depend.format(), await repo.getPackageDescription(depend));
+            if (!desc_cache.get(depend.format())) desc_cache.set(depend.format(), await repo.getPackageDescription(depend));
             const depend_desc = desc_cache.get(depend.format());
             if (depend_desc.version.compare(hostdb.getInstalledVersion(depend)) == 0) {
                 return false;
@@ -36,7 +36,7 @@ export class Commands {
         const filtered_rdepend = filterAsync(desc.rdepend, async (depend) => {
             if (already_found.has(depend.format())) return false;
             already_found.add(depend.format());
-            if(!desc_cache.get(depend.format())) desc_cache.set(depend.format(), await repo.getPackageDescription(depend));
+            if (!desc_cache.get(depend.format())) desc_cache.set(depend.format(), await repo.getPackageDescription(depend));
             const depend_desc = desc_cache.get(depend.format());
             if (depend_desc.version.compare(hostdb.getInstalledVersion(depend)) == 0
                 && await repo.buildExists(depend)) {
@@ -48,8 +48,8 @@ export class Commands {
         // please don't aspire to be like me.
         const depends = Array.from(new Set((await filtered_bdepend).concat(await filtered_rdepend).map(a => a.format())).values()).map(s => new ResolvedAtom(s));
         const depends_final: Set<string> = new Set();
-        for(const depend of depends) {
-            if(!desc_cache.get(depend.format())) desc_cache.set(depend.format(), await repo.getPackageDescription(depend));
+        for (const depend of depends) {
+            if (!desc_cache.get(depend.format())) desc_cache.set(depend.format(), await repo.getPackageDescription(depend));
             const subdepends = await Commands._getRecursiveFilteredDependencies(depend, hostdb, repo, desc_cache, already_found);
             subdepends.forEach(d => depends_final.add(d.format()));
             depends_final.add(depend.format());
@@ -61,7 +61,8 @@ export class Commands {
         return Array.from(depends_final.values()).map(s => new ResolvedAtom(s));
     }
 
-    static async buildPackages(package_names: string[]) {
+    static async buildPackages(package_names: string[]): Promise<boolean> {
+        let rc = true;
         const buildah_from = child_process.spawn('buildah', ['from', Config.build_container]);
         let container_id: string = "";
         buildah_from.stdout.on('data', (data) => container_id += data.toString('utf8'));
@@ -204,23 +205,30 @@ export class Commands {
         } catch (e) {
             console.error(`Got error: ${e}`);
             console.error(e);
-            process.exitCode = 1;
+            rc = false;
         } finally {
             console.log("Cleaning up...");
             if (container_mounted) child_process.spawnSync('buildah', ['umount', container_id], { stdio: 'inherit' });
             child_process.spawnSync('buildah', ['rm', container_id], { stdio: 'inherit' });
         }
 
-        for (const step of plan) {
-            if (step.atom.getCategory() == 'virtual') continue;
-            console.log(`Building: ${step.atom.format()}`);
-            await Commands.buildSingle(step.atom, step.depends);
-            // lol
-            if (process.exitCode) break;
+        if (rc) {
+            for (const step of plan) {
+                if (step.atom.getCategory() == 'virtual') continue;
+                console.log(`Building: ${step.atom.format()}`);
+                const success = await Commands.buildSingle(step.atom, step.depends);
+                if (!success) {
+                    rc = false;
+                    break;
+                }
+            }
         }
+        
+        return rc;
     }
 
-    static async buildSingle(atom: ResolvedAtom, host_install: Set<ResolvedAtom>) {
+    static async buildSingle(atom: ResolvedAtom, host_install: Set<ResolvedAtom>): Promise<boolean> {
+        let rc = true;
         const buildah_from = child_process.spawn('buildah', ['from', Config.build_container]);
         let container_id: string = "";
         buildah_from.stdout.on('data', (data) => container_id += data.toString('utf8'));
@@ -249,11 +257,12 @@ export class Commands {
         } catch (e) {
             console.error(`Got error: ${e}`);
             console.error(e);
-            process.exitCode = 1;
+            rc = false;
         } finally {
             console.log("Cleaning up...");
             if (container_mounted) child_process.spawnSync('buildah', ['umount', container_id], { stdio: 'inherit' });
             child_process.spawnSync('buildah', ['rm', container_id], { stdio: 'inherit' });
         }
+        return rc;
     }
 };
