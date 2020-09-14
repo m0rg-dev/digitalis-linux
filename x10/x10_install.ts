@@ -1,13 +1,13 @@
 import { Repository } from "./Repository";
 import { PackageDescription } from "./PackageDescription";
-import { ResolvedAtom, Atom } from "./Atom";
+import { Atom, old_Atom } from "./Atom";
 import * as path from 'path';
 import * as child_process from 'child_process';
 import { Database } from "./Database";
 
 async function main() {
     var repo: Repository = new Repository("/var/lib/x10/repo/");
-    var atom: ResolvedAtom = await (new Atom(process.argv[2])).resolveUsingRepository(repo);
+    var atom: Atom = await (new old_Atom(process.argv[2])).resolveUsingRepository(repo);
     //var pkgdesc: PackageDescription = await repo.getPackageDescription(atom);
     var target_root: string = process.argv[3] || '/';
     var db: Database = await Database.construct(path.join(target_root, "var/lib/x10/database/"));

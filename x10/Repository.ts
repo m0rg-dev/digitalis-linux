@@ -1,4 +1,4 @@
-import { PackageCategory, PackageName, ResolvedAtom } from "./Atom.js";
+import { PackageCategory, PackageName, Atom, AtomUtils } from "./Atom.js";
 import * as fs from 'fs';
 import * as path from 'path';
 import * as https from 'https';
@@ -58,13 +58,13 @@ export class Repository {
         } else {
             const manifest = await this.maybeUpdateManifest()
             return Promise.resolve(manifest.getAllPackages()
-                .filter((pkg) => pkg.atom.getCategory() == c)
-                .map((pkg) => pkg.atom.getName()));
+                .filter((pkg) => AtomUtils.getCategory(pkg.atom) == c)
+                .map((pkg) => AtomUtils.getName(pkg.atom)));
         }
     }
 
-    async readPackageDescriptionFromFilesystem(atom: ResolvedAtom): Promise<PackageDescription> {
-        const package_path = path.join(this.local_packages_path, atom.getCategory(), atom.getName() + ".yml");
+    async readPackageDescriptionFromFilesystem(atom: Atom): Promise<PackageDescription> {
+        const package_path = path.join(this.local_packages_path, atom + ".yml");
         let maybe_package: PackageDescription | null;
         try {
             const raw_yml = await fs.promises.readFile(package_path);
@@ -75,7 +75,7 @@ export class Repository {
         return maybe_package;
     }
 
-    async getPackageDescription(atom: ResolvedAtom): Promise<PackageDescription> {
+    async getPackageDescription(atom: Atom): Promise<PackageDescription> {
         const self = this;
         const manifest = await self.maybeUpdateManifest();
         const pkg = manifest.getPackage(atom);
@@ -89,26 +89,26 @@ export class Repository {
 
         if (self.remote_url) {
             return new Promise<PackageDescription>((resolve, reject) => {
-                console.log(`Retrieving ${atom.format()} from remote server...`);
-                ((self.remote_url.protocol == 'https') ? https : http).get(new URL(`packages/${atom.getCategory()}/${atom.getName()}.yml`, self.remote_url), (response) => {
+                console.log(`Retrieving ${atom} from remote server...`);
+                ((self.remote_url.protocol == 'https') ? https : http).get(new URL(`packages/${atom}.yml`, self.remote_url), (response) => {
                     if (response.statusCode == 200) {
                         var raw_yml: string = "";
                         response.on('data', (data) => {
                             raw_yml += data.toString('utf8');
                         });
                         response.on('end', async () => {
-                            const package_path = path.join(this.local_packages_path, atom.getCategory(), atom.getName() + ".yml");
+                            const package_path = path.join(this.local_packages_path, atom + ".yml");
                             await fs.promises.mkdir(path.dirname(package_path), { recursive: true });
                             await fs.promises.writeFile(package_path, raw_yml);
                             resolve(new PackageDescription(raw_yml));
                         });
                     } else {
-                        reject(`Got ${response.statusCode} from repo while looking for ${atom.format()}`);
+                        reject(`Got ${response.statusCode} from repo while looking for ${atom}`);
                     }
                 });
             });
         } else {
-            throw `Have outdated or missing local ${atom.format()} and no remotes defined`;
+            throw `Have outdated or missing local ${atom} and no remotes defined`;
         }
     }
 
@@ -154,11 +154,11 @@ export class Repository {
             });
     }
 
-    async buildExists(atom: ResolvedAtom): Promise<boolean> {
+    async buildExists(atom: Atom): Promise<boolean> {
         // Should probably think about doing this in a cleaner way someday...
-        if(atom.getCategory() == 'virtual') return true;
+        if(AtomUtils.getCategory(atom) == 'virtual') return true;
         const desc = await this.getPackageDescription(atom);
-        const build_path = path.join(this.local_builds_path, atom.getCategory(), `${atom.getName()},${desc.version.version}.tar.xz`);
+        const build_path = path.join(this.local_builds_path, `${atom},${desc.version.version}.tar.xz`);
         return fs.existsSync(build_path);
     }
 
@@ -174,7 +174,7 @@ export class Repository {
         glob(`${this.root_path}/packages/**/*`, async (err, matches) => {
             if (err) throw err;
 
-            let atoms: ResolvedAtom[] = [];
+            let atoms: Atom[] = [];
 
             await Promise.all(matches.map(async (file) => {
                 let stat = await fs.promises.stat(file);
@@ -184,18 +184,18 @@ export class Repository {
 
                     let m = file.match(/([a-z0-9-]+)\/([a-z0-9-]+)\.yml$/);
                     if (m[1] != 'virtual') {
-                        let atom = new ResolvedAtom(m[1], m[2]);
+                        let atom: Atom = `${m[1]}/${m[2]}`;
                         let desc = new PackageDescription(description_data.toString());
 
                         atoms.push(atom);
 
                         try {
-                            let build_path = path.join(this.root_path, 'builds', atom.getCategory(), atom.getName() + ',' + desc.version.version + '.tar.xz');
+                            let build_path = path.join(this.root_path, 'builds', atom + ',' + desc.version.version + '.tar.xz');
                             await fs.promises.stat(build_path);
                             let build_data = await fs.promises.readFile(build_path);
                             manifest.addFile(path.relative(this.root_path, build_path), build_data,);
                         } catch (e) {
-                            console.warn(`Don't have a build for ${atom.format()} ${desc.version.version}.`);
+                            console.warn(`Don't have a build for ${atom} ${desc.version.version}.`);
                         }
                     }
 
@@ -203,7 +203,7 @@ export class Repository {
                 }
             }));
 
-            manifest.addBlob('package_list', Buffer.from(JSON.stringify(atoms.map(atom => atom.format()))));
+            manifest.addBlob('package_list', Buffer.from(JSON.stringify(atoms)));
 
             await fs.promises.writeFile(path.join(this.root_path, 'Manifest.yml'), manifest.serialize());
         });
@@ -218,7 +218,7 @@ export class Repository {
         }));
         const all_names = structured_names.flat(1);
         const all_packages = await Promise.all(all_names.map(async (name) => {
-            const atom = new ResolvedAtom(name[0], name[1]);
+            const atom: Atom = `${name[0]}/${name[1]}`;
             const raw_data = await fs.promises.readFile(path.join(self.local_packages_path, name[0], name[1] + ".yml"));
             const desc = new PackageDescription(raw_data.toString('utf8'));
             return new ManifestPackage(atom, desc.version, path.join(name[0], name[1] + ".yml"), raw_data);
@@ -226,8 +226,8 @@ export class Repository {
         all_packages.forEach((pkg) => manifest.addPackage(pkg));
         await Promise.all(all_packages.map(async (pkg) => {
             try {
-                const data = await fs.promises.readFile(path.join(self.local_builds_path, pkg.atom.getCategory(), pkg.atom.getName() + "," + pkg.version.version + ".tar.xz"));
-                const build = new ManifestPackage(pkg.atom, pkg.version, path.join(self.local_builds_path, pkg.atom.getCategory(), pkg.atom.getName() + "," + pkg.version.version + ".tar.xz"), data);
+                const data = await fs.promises.readFile(path.join(self.local_builds_path, pkg.atom + "," + pkg.version.version + ".tar.xz"));
+                const build = new ManifestPackage(pkg.atom, pkg.version, path.join(self.local_builds_path, pkg.atom + "," + pkg.version.version + ".tar.xz"), data);
                 manifest.addBuild(build);
             } catch (e) {
                 // if we can't read the build it doesn't exist - this can happen
@@ -277,24 +277,23 @@ export class Repository {
         if (rc.status != 0) throw `${name} exited with failure status!`;
     }
 
-    async installPackage(atom: ResolvedAtom, db: Database, target_root: string) {
+    async installPackage(atom: Atom, db: Database, target_root: string) {
         return this.installPackages(new Set([atom]), db, target_root);
     }
 
-    async installPackages(atoms: Set<ResolvedAtom>, db: Database, target_root: string) {
-        const scratch_atoms = new Set(Array.from(atoms.values()).map(a => a.format()));
-        const ordered_atoms: ResolvedAtom[] = [];
-        let descs: Map<string, PackageDescription> = new Map();
+    async installPackages(atoms: Set<Atom>, db: Database, target_root: string) {
+        const scratch_atoms = new Set(atoms);
+        const ordered_atoms: Atom[] = [];
+        let descs: Map<Atom, PackageDescription> = new Map();
 
         while(scratch_atoms.size) {
-            for (const str of scratch_atoms.values()) {
-                const atom = new ResolvedAtom(str);
-                let desc = descs.get(str);
-                if (!desc) descs.set(str, desc = await this.getPackageDescription(atom));
+            for (const atom of scratch_atoms.values()) {
+                let desc = descs.get(atom);
+                if (!desc) descs.set(atom, desc = await this.getPackageDescription(atom));
 
-                if(desc.rdepend.every((a) => !scratch_atoms.has(a.format()))) {
+                if(desc.rdepend.every((a) => !scratch_atoms.has(a))) {
                     ordered_atoms.push(atom);
-                    scratch_atoms.delete(str);
+                    scratch_atoms.delete(atom);
                 }
             }
         }
@@ -302,12 +301,12 @@ export class Repository {
         var need_ldconfig = false;
         for (const atom of ordered_atoms) {
             const pkgdesc: PackageDescription = await this.getPackageDescription(atom);
-            console.log(`Installing ${atom.format()} ${pkgdesc.version.version} to ${target_root}`);
+            console.log(`Installing ${atom} ${pkgdesc.version.version} to ${target_root}`);
             db.install_pending(atom);
-            if (atom.getCategory() != 'virtual') {
-                const build_path = await fs.promises.realpath(path.join(this.local_builds_path, atom.getCategory(), atom.getName() + "," + pkgdesc.version.version + ".tar.xz"));
+            if (AtomUtils.getCategory(atom) != 'virtual') {
+                const build_path = await fs.promises.realpath(path.join(this.local_builds_path, atom + "," + pkgdesc.version.version + ".tar.xz"));
 
-                const flist_rc = child_process.spawnSync('tar', ['xJf', build_path, `./var/lib/x10/database/${atom.getCategory()}/${atom.getName()}.list`, '-O'],
+                const flist_rc = child_process.spawnSync('tar', ['xJf', build_path, `./var/lib/x10/database/${atom}.list`, '-O'],
                     { maxBuffer: 16 * 1024 * 1024 });
                 const file_list = JSON.parse(flist_rc.stdout.toString());
 
@@ -343,7 +342,7 @@ export class Repository {
                     child_process.spawnSync('ldconfig', ['-X', '-r', target_root], { stdio: 'inherit' });
                     need_ldconfig = false;
                 }
-                console.log(`Running post-unpack script for ${atom.format()}`);
+                console.log(`Running post-unpack script for ${atom}`);
                 child_process.spawnSync('chroot', ['.', 'bash', '-c', pkgdesc.post_unpack_script], { stdio: 'inherit', cwd: target_root });
             }
             db.install(atom, pkgdesc.version);

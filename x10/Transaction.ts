@@ -1,4 +1,4 @@
-import { ResolvedAtom } from "./Atom";
+import { Atom } from "./Atom";
 import { Repository } from "./Repository";
 import { Database } from "./Database";
 import * as wrap from 'word-wrap';
@@ -29,11 +29,11 @@ export class Transaction {
         }
     }
 
-    static getKey(atom: ResolvedAtom, where: Location) {
+    static getKey(atom: Atom, where: Location) {
         return `${where.toString()} ${atom.format()}`
     }
 
-    async addToTransaction(atom: ResolvedAtom, where: Location, with_rdeps?: boolean): Promise<void> {
+    async addToTransaction(atom: Atom, where: Location, with_rdeps?: boolean): Promise<void> {
         if (with_rdeps === undefined) with_rdeps = true;
         if (this.tx.has(Transaction.getKey(atom, where))) {
             return;
@@ -157,9 +157,9 @@ export enum StepType {
 
 export class Step {
     type: StepType;
-    what: ResolvedAtom;
+    what: Atom;
 
-    constructor(type: StepType, what: ResolvedAtom) {
+    constructor(type: StepType, what: Atom) {
         this.type = type;
         this.what = what;
     }

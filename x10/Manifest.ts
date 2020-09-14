@@ -1,4 +1,4 @@
-import { ResolvedAtom, PackageVersion } from "./Atom.js";
+import { Atom, PackageVersion } from "./Atom.js";
 import * as path from 'path';
 import * as YAML from 'yaml';
 import * as crypto from 'crypto';
@@ -146,10 +146,10 @@ export class old_ManifestObject {
 }
 
 export class ManifestPackage extends old_ManifestObject {
-    atom: ResolvedAtom;
+    atom: Atom;
     version: PackageVersion;
 
-    constructor(atom: ResolvedAtom, version: PackageVersion, path?: string, data?: Buffer) {
+    constructor(atom: Atom, version: PackageVersion, path?: string, data?: Buffer) {
         super(path, data);
         this.atom = atom;
         this.version = version;
@@ -192,7 +192,7 @@ export class old_Manifest {
         this.sources[path.basename(source.path)] = source;
     }
 
-    getPackage(key: ResolvedAtom): ManifestPackage {
+    getPackage(key: Atom): ManifestPackage {
         return this.packages[key.format()];
     }
 
@@ -204,7 +204,7 @@ export class old_Manifest {
         return r;
     }
 
-    getBuild(key: ResolvedAtom): ManifestPackage {
+    getBuild(key: Atom): ManifestPackage {
         return this.builds[key.format()];
     }
 

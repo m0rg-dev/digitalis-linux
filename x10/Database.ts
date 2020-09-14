@@ -1,4 +1,4 @@
-import { PackageVersion, ResolvedAtom } from "./Atom";
+import { PackageVersion, Atom } from "./Atom";
 import * as fs from 'fs';
 import * as path from 'path';
 import * as YAML from 'yaml';
@@ -45,7 +45,7 @@ export class Database {
         console.warn(`${files['count(*)']} files are currently installed.`);
     }
 
-    getInstalledVersion(atom: ResolvedAtom): PackageVersion {
+    getInstalledVersion(atom: Atom): PackageVersion {
         const installed = this.db.prepare('SELECT version_installed FROM package WHERE id = ?').get([atom.format()]);
         if (installed && installed['version_installed']) return new PackageVersion(installed['version_installed']);
         return undefined;
@@ -63,15 +63,15 @@ export class Database {
         }
     }
 
-    add_file(atom: ResolvedAtom, path: string, type: string) {
+    add_file(atom: Atom, path: string, type: string) {
         this.db.prepare('INSERT INTO file(path, package_id, type) VALUES (?, ?, ?) ON CONFLICT DO NOTHING').run([path, atom.format(), type])
     }
 
-    install_pending(atom: ResolvedAtom) {
+    install_pending(atom: Atom) {
         this.db.prepare('INSERT INTO packages_pending(id) VALUES(?) ON CONFLICT DO NOTHING').run([atom.format()]);
     }
 
-    install(atom: ResolvedAtom, version: PackageVersion) {
+    install(atom: Atom, version: PackageVersion) {
         this.transaction(() => {
             this.db.prepare('INSERT INTO package(id, version_installed) VALUES(?, ?) ON CONFLICT(id) DO UPDATE SET version_installed=excluded.version_installed')
                 .run([atom.format(), version.version]);
@@ -79,7 +79,7 @@ export class Database {
         });
     }
 
-    select(atom: ResolvedAtom) {
+    select(atom: Atom) {
         this.db.prepare('INSERT INTO package(id, selected) VALUES(?, TRUE) ON CONFLICT(id) DO UPDATE SET selected=excluded.selected')
             .run([atom.format()]);
     }

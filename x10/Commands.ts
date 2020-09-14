@@ -4,7 +4,7 @@ import * as path from 'path';
 import { Config } from './Config';
 import { Repository } from './Repository';
 import { Database } from './Database';
-import { Atom, ResolvedAtom } from './Atom';
+import { old_Atom, Atom, AtomUtils } from './Atom';
 import { PackageDescription } from './PackageDescription';
 import { BuildContext } from './BuildContext';
 
@@ -18,14 +18,14 @@ async function filterAsync<T>(array: T[], callbackfn: (value: T, index: number, 
 }
 
 export class Commands {
-    private static async _getRecursiveFilteredDependencies(atom: ResolvedAtom, hostdb: Database, repo: Repository, desc_cache: Map<string, PackageDescription>, already_found?: Set<string>): Promise<ResolvedAtom[]> {
-        if (!desc_cache.get(atom.format())) desc_cache.set(atom.format(), await repo.getPackageDescription(atom));
-        const desc = desc_cache.get(atom.format());
+    private static async _getRecursiveFilteredDependencies(atom: Atom, hostdb: Database, repo: Repository, desc_cache: Map<Atom, PackageDescription>, already_found?: Set<Atom>): Promise<Atom[]> {
+        if (!desc_cache.get(atom)) desc_cache.set(atom, await repo.getPackageDescription(atom));
+        const desc = desc_cache.get(atom);
         const filtered_bdepend = filterAsync(desc.bdepend, async (depend) => {
-            if (already_found.has(depend.format())) return false;
-            already_found.add(depend.format());
-            if (!desc_cache.get(depend.format())) desc_cache.set(depend.format(), await repo.getPackageDescription(depend));
-            const depend_desc = desc_cache.get(depend.format());
+            if (already_found.has(depend)) return false;
+            already_found.add(depend);
+            if (!desc_cache.get(depend)) desc_cache.set(depend, await repo.getPackageDescription(depend));
+            const depend_desc = desc_cache.get(depend);
             if (depend_desc.version.compare(hostdb.getInstalledVersion(depend)) == 0) {
                 return false;
             }
@@ -33,10 +33,10 @@ export class Commands {
         });
 
         const filtered_rdepend = filterAsync(desc.rdepend, async (depend) => {
-            if (already_found.has(depend.format())) return false;
-            already_found.add(depend.format());
-            if (!desc_cache.get(depend.format())) desc_cache.set(depend.format(), await repo.getPackageDescription(depend));
-            const depend_desc = desc_cache.get(depend.format());
+            if (already_found.has(depend)) return false;
+            already_found.add(depend);
+            if (!desc_cache.get(depend)) desc_cache.set(depend, await repo.getPackageDescription(depend));
+            const depend_desc = desc_cache.get(depend);
             if (depend_desc.version.compare(hostdb.getInstalledVersion(depend)) == 0
                 && await repo.buildExists(depend)) {
                 return false;
@@ -44,17 +44,17 @@ export class Commands {
             return true;
         });
 
-        // please don't aspire to be like me.
-        const depends = Array.from(new Set((await filtered_bdepend).concat(await filtered_rdepend).map(a => a.format())).values()).map(s => new ResolvedAtom(s));
+        // as far as I can tell this is actually the easiest way to deduplicate an array
+        const depends = Array.from(new Set((await filtered_bdepend).concat(await filtered_rdepend)));
         const depends_final: Set<string> = new Set();
         for (const depend of depends) {
-            if (!desc_cache.get(depend.format())) desc_cache.set(depend.format(), await repo.getPackageDescription(depend));
+            if (!desc_cache.get(depend)) desc_cache.set(depend, await repo.getPackageDescription(depend));
             const subdepends = await Commands._getRecursiveFilteredDependencies(depend, hostdb, repo, desc_cache, already_found);
-            subdepends.forEach(d => depends_final.add(d.format()));
-            depends_final.add(depend.format());
+            subdepends.forEach(d => depends_final.add(d));
+            depends_final.add(depend);
         }
 
-        return Array.from(depends_final.values()).map(s => new ResolvedAtom(s));
+        return Array.from(depends_final.values());
     }
 
     static async buildPackages(package_names: string[]): Promise<boolean> {
@@ -69,7 +69,7 @@ export class Commands {
         });
 
         const repo = new Repository(Config.repository);
-        interface step { atom: ResolvedAtom, depends: Set<ResolvedAtom> };
+        interface step { atom: Atom, depends: Set<Atom> };
         let plan: step[] = [];
 
         await buildah_from_p;
@@ -86,45 +86,44 @@ export class Commands {
 
             const hostdb = (Config.without_hostdb) ? Database.empty() : Database.construct(path.join(mountpoint, 'var/lib/x10/database/'));
 
-            const atoms = await Promise.all(package_names.map((p) => new Atom(p).resolveUsingRepository(repo)));
+            const atoms = await Promise.all(package_names.map((p) => new old_Atom(p).resolveUsingRepository(repo)));
 
-            let resolved: Set<string> = new Set();
-            let remaining: Set<string> = new Set();
-            let descs: Map<string, PackageDescription> = new Map();
+            let resolved: Set<Atom> = new Set();
+            let remaining: Set<Atom> = new Set();
+            let descs: Map<Atom, PackageDescription> = new Map();
 
             for (const atom of atoms) {
-                remaining.add(atom.format());
+                remaining.add(atom);
                 const desc = await repo.getPackageDescription(atom);
                 // This is kind of a bodge so that when you `build virtual/base-system` it behaves as expected
                 // not sure if that's how we always want to do it
-                desc.rdepend.forEach(rdepend => remaining.add(rdepend.format()));
+                desc.rdepend.forEach(rdepend => remaining.add(rdepend));
             }
 
             console.log(remaining);
 
-            let last_remaining: Set<string> = new Set(remaining);
+            let last_remaining: Set<Atom> = new Set(remaining);
             let iterations = 0;
             while (remaining.size) {
-                for (const str of remaining.values()) {
-                    const atom = new ResolvedAtom(str);
-                    let desc = descs.get(str);
-                    if (!desc) descs.set(str, desc = await repo.getPackageDescription(atom));
+                for (const atom of remaining.values()) {
+                    let desc = descs.get(atom);
+                    if (!desc) descs.set(atom, desc = await repo.getPackageDescription(atom));
 
                     const depends = await Commands._getRecursiveFilteredDependencies(atom, hostdb, repo, descs, new Set());
 
-                    if (depends.every(a => resolved.has(a.format()))) {
+                    if (depends.every(a => resolved.has(a))) {
                         if (await repo.buildExists(atom)) {
-                            //console.log(`==> Found existing build for ${atom.format()}`);
+                            //console.log(`==> Found existing build for ${atom}`);
                             // don't have to build this!
                         } else {
                             plan.push({ atom: atom, depends: new Set(depends) });
                         }
-                        resolved.add(atom.format());
-                        remaining.delete(atom.format());
+                        resolved.add(atom);
+                        remaining.delete(atom);
                     } else {
                         depends.forEach((depend) => {
-                            if (!resolved.has(depend.format())) {
-                                remaining.add(depend.format());
+                            if (!resolved.has(depend)) {
+                                remaining.add(depend);
                             }
                         });
                     }
@@ -134,20 +133,20 @@ export class Commands {
                 iterations++;
                 if (Array.from(last_remaining.values()).every((a) => remaining.has(a))) {
                     // We have a dependency cycle. Let's go ahead and pick some unlucky package to go first.
-                    let target: ResolvedAtom;
+                    let target: Atom;
                     const candidates = Array.from(last_remaining.values());
 
                     // prefer virtual packages here
                     for (const candidate of candidates) {
-                        if (new ResolvedAtom(candidate).getCategory() == 'virtual') {
-                            target = new ResolvedAtom(candidate);
+                        if (AtomUtils.getCategory(candidate) == 'virtual') {
+                            target = candidate;
                             break;
                         }
                     }
                     if (!target) {
                         for (const candidate of candidates) {
                             let desc = descs.get(candidate);
-                            if (!desc) descs.set(candidate, desc = await repo.getPackageDescription(new ResolvedAtom(candidate)));
+                            if (!desc) descs.set(candidate, desc = await repo.getPackageDescription(candidate));
                         }
 
                         // prefer packages with fewer bdepends
@@ -155,42 +154,42 @@ export class Commands {
                             descs.get(a).bdepend.length - descs.get(b).bdepend.length
                         );
 
-                        target = new ResolvedAtom(candidates_sorted[0]);
+                        target = candidates_sorted[0];
                     }
 
-                    let desc = descs.get(target.format());
-                    if (!desc) descs.set(target.format(), desc = await repo.getPackageDescription(target));
+                    let desc = descs.get(target);
+                    if (!desc) descs.set(target, desc = await repo.getPackageDescription(target));
 
                     const depends = await Commands._getRecursiveFilteredDependencies(target, hostdb, repo, descs, new Set());
 
-                    const depends_in: ResolvedAtom[] = [];
+                    const depends_in: Atom[] = [];
                     const depends_out: string[] = [];
 
                     for (const depend of depends) {
-                        if (resolved.has(depend.format())) {
+                        if (resolved.has(depend)) {
                             depends_in.push(depend);
                         } else {
-                            depends_out.push(depend.format());
+                            depends_out.push(depend);
                         }
                     }
 
                     if (await repo.buildExists(target)) {
-                        //console.log(`==> Found existing build for ${target.format()}`);
+                        //console.log(`==> Found existing build for ${target}`);
                         // don't have to build this!
                     } else {
                         if (depends_out.length) {
-                            console.log(`-!- Package ${target.format()} will be built without its ${depends_out.join(', ')} dependencies.`);
+                            console.log(`-!- Package ${target} will be built without its ${depends_out.join(', ')} dependencies.`);
                         }
                         plan.push({ atom: target, depends: new Set(depends_in) });
                     }
-                    resolved.add(target.format());
-                    remaining.delete(target.format());
+                    resolved.add(target);
+                    remaining.delete(target);
                 }
                 last_remaining = new Set(remaining);
             }
 
             for (const step of plan) {
-                console.log(`${step.atom.format()}\x1b[30G${Array.from(step.depends.values()).map(a => a.format()).join(' ')}`);
+                console.log(`${step.atom}\x1b[30G${Array.from(step.depends.values()).join(' ')}`);
             }
         } catch (e) {
             console.error(`Got error: ${e}`);
@@ -204,8 +203,8 @@ export class Commands {
 
         if (rc) {
             for (const step of plan) {
-                if (step.atom.getCategory() == 'virtual') continue;
-                console.log(`Building: ${step.atom.format()}`);
+                if (AtomUtils.getCategory(step.atom) == 'virtual') continue;
+                console.log(`Building: ${step.atom}`);
                 const success = await Commands.buildSingle(step.atom, step.depends);
                 if (!success) {
                     rc = false;
@@ -217,7 +216,7 @@ export class Commands {
         return rc;
     }
 
-    static async buildSingle(atom: ResolvedAtom, host_install: Set<ResolvedAtom>): Promise<boolean> {
+    static async buildSingle(atom: Atom, host_install: Set<Atom>): Promise<boolean> {
         let rc = true;
         const buildah_from = child_process.spawn('buildah', ['from', Config.build_container]);
         let container_id: string = "";

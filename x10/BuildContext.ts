@@ -1,4 +1,4 @@
-import { ResolvedAtom } from "./Atom";
+import { Atom, AtomUtils } from "./Atom";
 import { Repository } from "./Repository";
 import { PackageDescription } from "./PackageDescription";
 
@@ -85,7 +85,7 @@ export class BuildContext {
         });
     }
 
-    private async searchLicense(atom: ResolvedAtom, pkgdesc: PackageDescription, host_unpack_dir: string): Promise<string> {
+    private async searchLicense(atom: Atom, pkgdesc: PackageDescription, host_unpack_dir: string): Promise<string> {
         const possible_licenses = [];
         if (pkgdesc.src) {
             const findsrc = await this.runInHostContext('license_search', 'find', [host_unpack_dir, '-print0'], true);
@@ -101,9 +101,9 @@ export class BuildContext {
 
         var license_text = "";
         if (pkgdesc.license) {
-            license_text += `The package maintainer believes ${atom.format()} ${pkgdesc.version.version} is available under the '${pkgdesc.license}' license.\n\n`;
+            license_text += `The package maintainer believes ${atom} ${pkgdesc.version.version} is available under the '${pkgdesc.license}' license.\n\n`;
         } else {
-            license_text += `The package maintainer has not specified a license for ${atom.format()} ${pkgdesc.version.version}.\n\n`;
+            license_text += `The package maintainer has not specified a license for ${atom} ${pkgdesc.version.version}.\n\n`;
         }
 
         if (possible_licenses.length) {
@@ -120,7 +120,7 @@ export class BuildContext {
         }
 
         if (pkgdesc.src_url) {
-            license_text += `While this is intended to be an accurate representation of ${atom.format()} ${pkgdesc.version.version}'s licensing, check the package source at ${pkgdesc.src_url} to be sure.\n`;
+            license_text += `While this is intended to be an accurate representation of ${atom} ${pkgdesc.version.version}'s licensing, check the package source at ${pkgdesc.src_url} to be sure.\n`;
         }
 
         return license_text;
@@ -143,7 +143,7 @@ export class BuildContext {
         }
     }
 
-    private async modifyTarfile(atom: ResolvedAtom, pkgdesc: PackageDescription, tarfile: Buffer, license_text: string): Promise<Buffer> {
+    private async modifyTarfile(atom: Atom, pkgdesc: PackageDescription, tarfile: Buffer, license_text: string): Promise<Buffer> {
         const extract = tar_stream.extract();
         const pack = tar_stream.pack();
 
@@ -152,17 +152,17 @@ export class BuildContext {
         extract.on('entry', function (header, stream, callback) {
             // Potential packaging issue: packages placed in /usr/etc or /usr/var
             if (header.name.startsWith('./usr/etc')) {
-                console.error(`Package ${atom.format()} ${pkgdesc.version.version} has attempted to install files to /usr/etc. This is usually the result of a under-informed build - try passing --sysconfdir=/etc to configure.`);
+                console.error(`Package ${atom} ${pkgdesc.version.version} has attempted to install files to /usr/etc. This is usually the result of a under-informed build - try passing --sysconfdir=/etc to configure.`);
                 throw "Aborting due to packaging issues";
             }
             if (header.name.startsWith('./usr/var')) {
-                console.error(`Package ${atom.format()} ${pkgdesc.version.version} has attempted to install files to /usr/var. This is usually the result of a under-informed build - try passing --localstatedir=/var to configure.`);
+                console.error(`Package ${atom} ${pkgdesc.version.version} has attempted to install files to /usr/var. This is usually the result of a under-informed build - try passing --localstatedir=/var to configure.`);
                 throw "Aborting due to packaging issues";
             }
 
             // Potential packaging issue: pkgconfig scripts placed in /usr/lib64/pkgconfig (meson does this sometimes)
             if (header.name.startsWith('./usr/lib64/pkgconfig')) {
-                console.error(`Package ${atom.format()} ${pkgdesc.version.version} has attempted to install pkg-config data to /usr/lib64/pkgconfig. This is probably meson's fault - stick a 'mv' in the post_install_script.`);
+                console.error(`Package ${atom} ${pkgdesc.version.version} has attempted to install pkg-config data to /usr/lib64/pkgconfig. This is probably meson's fault - stick a 'mv' in the post_install_script.`);
                 throw "Aborting due to packaging issues";
             }
 
@@ -184,14 +184,14 @@ export class BuildContext {
                 pack.entry({ name: './usr/share/licenses/', mode: 0o755, type: 'directory' });
                 file_list.push({ name: './usr/share/licenses/', type: 'directory' });
             }
-            if (!file_list.some((f) => f.name == './usr/share/licenses/' + atom.getCategory())) {
-                pack.entry({ name: './usr/share/licenses/' + atom.getCategory(), mode: 0o755, type: 'directory' });
-                file_list.push({ name: './usr/share/licenses/' + atom.getCategory(), type: 'directory' });
+            if (!file_list.some((f) => f.name == './usr/share/licenses/' + AtomUtils.getCategory(atom))) {
+                pack.entry({ name: './usr/share/licenses/' + AtomUtils.getCategory(atom), mode: 0o755, type: 'directory' });
+                file_list.push({ name: './usr/share/licenses/' + AtomUtils.getCategory(atom), type: 'directory' });
             }
-            pack.entry({ name: `./usr/share/licenses/${atom.getCategory()}/${atom.getName()}` }, license_text);
-            file_list.push({ name: `./usr/share/licenses/${atom.getCategory()}/${atom.getName()}`, type: 'file' });
-            file_list.push({ name: `./var/lib/x10/database/${atom.getCategory()}/${atom.getName()}.list`, type: 'file' });
-            pack.entry({ name: `./var/lib/x10/database/${atom.getCategory()}/${atom.getName()}.list` }, JSON.stringify(file_list, null, 1));
+            pack.entry({ name: `./usr/share/licenses/${atom}` }, license_text);
+            file_list.push({ name: `./usr/share/licenses/${atom}`, type: 'file' });
+            file_list.push({ name: `./var/lib/x10/database/${atom}.list`, type: 'file' });
+            pack.entry({ name: `./var/lib/x10/database/${atom}.list` }, JSON.stringify(file_list, null, 1));
             pack.finalize();
         });
 
@@ -206,9 +206,9 @@ export class BuildContext {
         return Buffer.concat(chunks);
     }
 
-    async build(atom: ResolvedAtom, pkgdesc: PackageDescription, repo: Repository) {
-        const host_unpack_dir = `/tmp/x10/unpack_${atom.format().replace('/', '_')}`;
-        const host_build_dir = `/tmp/x10/build_${atom.format().replace('/', '_')}`;
+    async build(atom: Atom, pkgdesc: PackageDescription, repo: Repository) {
+        const host_unpack_dir = `/tmp/x10/unpack_${atom.replace('/', '_')}`;
+        const host_build_dir = `/tmp/x10/build_${atom.replace('/', '_')}`;
 
         try {
             const config_1 = this.runInHostContext('config_1', 'buildah', ['config', '--workingdir', '/', this.container_id]);
@@ -274,7 +274,7 @@ export class BuildContext {
 
             const xzfile = await this.runInHostContext('compress', 'xz', ['-T0', '-c'], true, tarfile);
             console.log(`  Compressed package is ${byteSize(xzfile.length)}.`);
-            const target_path = path.join(repo.local_builds_path, atom.getCategory(), atom.getName() + "," + pkgdesc.version.version + ".tar.xz");
+            const target_path = path.join(repo.local_builds_path, atom + "," + pkgdesc.version.version + ".tar.xz");
             console.log(`Writing to ${target_path}...`);
             try {
                 await fs.promises.stat(path.dirname(target_path));

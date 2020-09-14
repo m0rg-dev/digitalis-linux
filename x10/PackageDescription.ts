@@ -1,4 +1,4 @@
-import { ResolvedAtom, Atom, PackageVersion } from "./Atom.js";
+import { Atom, old_Atom, PackageVersion } from "./Atom.js";
 import * as YAML from 'yaml';
 import { Config } from "./Config.js";
 
@@ -8,8 +8,8 @@ export class PackageDescription {
     src_url: string;
     additional_sources: string[];
     unpack_dir: string;
-    bdepend: ResolvedAtom[];
-    rdepend: ResolvedAtom[];
+    bdepend: Atom[];
+    rdepend: Atom[];
     use_default_depends: boolean;
     use_build_dir: boolean;
     configure: string;

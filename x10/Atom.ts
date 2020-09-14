@@ -2,8 +2,19 @@ import { Repository } from "./Repository.js";
 
 export type PackageCategory = string;
 export type PackageName = string;
+export type Atom = string;
 
-export class Atom {
+export class AtomUtils {
+    static getCategory(atom: Atom): PackageCategory {
+        return atom.split('/')[0];
+    }
+
+    static getName(atom: Atom): PackageName {
+        return atom.split('/')[1];
+    }
+}
+
+export class old_Atom {
     private category: PackageCategory;
     private name: PackageName;
 
@@ -26,7 +37,7 @@ export class Atom {
     getName(): PackageName { return this.name; }
     format(): string { return this.category + "/" + this.name }
 
-    async resolveUsingRepository(repo: Repository): Promise<ResolvedAtom> {
+    async resolveUsingRepository(repo: Repository): Promise<Atom> {
         const our_name = this.name;
 
         var category_p: Promise<PackageCategory>;
@@ -61,22 +72,8 @@ export class Atom {
 
         return Promise.all([category_p, name_p])
             .then((values) => {
-                return new ResolvedAtom(values[0], values[1]);
+                return values[0] + '/' + values[1];
             });
-    }
-};
-
-export class ResolvedAtom extends Atom {
-    static parse(shortpkg: string): ResolvedAtom {
-        const parsed = /^([a-z-]+)\/([a-z0-9-]+)$/.exec(shortpkg);
-        if(!parsed) { throw `Bad shortpkg ${shortpkg}`; }
-        return new ResolvedAtom(parsed[1], parsed[2]);
-    }
-
-    static fromYAML(raw: object): ResolvedAtom {
-        const cat = raw['category'];
-        const name = raw['name'];
-        return new ResolvedAtom(cat, name);
     }
 };
 
