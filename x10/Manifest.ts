@@ -1,4 +1,4 @@
-import { Atom, PackageVersion } from "./Atom.js";
+import { Atom, AtomUtils, PackageVersion } from "./Atom.js";
 import * as path from 'path';
 import * as YAML from 'yaml';
 import * as crypto from 'crypto';
@@ -155,12 +155,11 @@ export class ManifestPackage extends old_ManifestObject {
         this.version = version;
     }
 
-    static fromYAML(raw: object): ManifestPackage {
-        const atom = ResolvedAtom.fromYAML(raw['atom']);
-        const version = PackageVersion.fromYAML(raw['version']);
-        var o = new ManifestPackage(atom, version, raw['path']);
-        o.hash = raw['hash'];
-        o.size = raw['size'];
+    static fromYAML(raw: {atom: Atom, version: object, path: string, hash: string, size: number}): ManifestPackage {
+        const version = PackageVersion.fromYAML(raw.version);
+        var o = new ManifestPackage(raw.atom, version, raw.path);
+        o.hash = raw.hash;
+        o.size = raw.size;
         return o;
     }
 }
@@ -180,12 +179,12 @@ export class old_Manifest {
     }
 
     addPackage(pkg: ManifestPackage) {
-        this.packages[pkg.atom.format()] = pkg;
-        this.categories.add(pkg.atom.getCategory());
+        this.packages[pkg.atom] = pkg;
+        this.categories.add(AtomUtils.getCategory(pkg.atom));
     }
 
     addBuild(build: ManifestPackage) {
-        this.builds[build.atom.format()] = build;
+        this.builds[build.atom] = build;
     }
 
     addSource(source: old_ManifestObject) {
@@ -193,7 +192,7 @@ export class old_Manifest {
     }
 
     getPackage(key: Atom): ManifestPackage {
-        return this.packages[key.format()];
+        return this.packages[key];
     }
 
     getAllPackages(): ManifestPackage[] {
@@ -205,7 +204,7 @@ export class old_Manifest {
     }
 
     getBuild(key: Atom): ManifestPackage {
-        return this.builds[key.format()];
+        return this.builds[key];
     }
 
     getSource(key: string): old_ManifestObject {

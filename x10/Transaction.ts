@@ -1,4 +1,4 @@
-import { Atom } from "./Atom";
+import { Atom, AtomUtils } from "./Atom";
 import { Repository } from "./Repository";
 import { Database } from "./Database";
 import * as wrap from 'word-wrap';
@@ -30,7 +30,7 @@ export class Transaction {
     }
 
     static getKey(atom: Atom, where: Location) {
-        return `${where.toString()} ${atom.format()}`
+        return `${where.toString()} ${atom}`
     }
 
     async addToTransaction(atom: Atom, where: Location, with_rdeps?: boolean): Promise<void> {
@@ -57,7 +57,7 @@ export class Transaction {
             if (!have_build) {
                 for (const bdepend of desc.bdepend) {
                     if (!this.tx.has(Transaction.getKey(bdepend, Location.Host))) {
-                        console.warn(`${atom.format()} is causing a build of ${bdepend.format()}`);
+                        console.warn(`${atom} is causing a build of ${bdepend}`);
                         await this.addToTransaction(bdepend, Location.Host);
                     }
                 }
@@ -89,7 +89,7 @@ export class Transaction {
         for (const pkg of L) {
             const a = pkg.split(' ');
             const where = (a[0] == Location.Host.toString()) ? Location.Host : Location.Target;
-            const atom = ResolvedAtom.parse(a[1]);
+            const atom = a[1];
             if (await this.repo.buildExists(atom)) {
                 if (binfetch.every((item) => item.what != atom)) {
                     binfetch.push(new Step(StepType.FetchBinary, atom));
@@ -105,7 +105,7 @@ export class Transaction {
 
         var p = binfetch.concat(srcfetch, install);
         p = p.filter(p => {
-            if (p.what.getCategory() == 'virtual') {
+            if (AtomUtils.getCategory(p.what) == 'virtual') {
                 if (p.type == StepType.HostInstall || p.type == StepType.TargetInstall) {
                     return 1;
                 }
@@ -136,7 +136,7 @@ export class Transaction {
         var by_type = new Map<StepType, string[]>();
         for (const step of p) {
             if (!by_type.has(step.type)) by_type.set(step.type, []);
-            by_type.get(step.type).push(step.what.format());
+            by_type.get(step.type).push(step.what);
         }
 
         if (by_type.has(StepType.FetchBinary)) console.log(wrap(`Fetching binaries: ${by_type.get(StepType.FetchBinary).join(" ")}`, { width: 132 }).trim());

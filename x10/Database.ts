@@ -1,10 +1,6 @@
 import { PackageVersion, Atom } from "./Atom";
-import * as fs from 'fs';
 import * as path from 'path';
-import * as YAML from 'yaml';
 import * as sqlite3 from 'better-sqlite3';
-import { kMaxLength } from "buffer";
-import { pack } from "tar-stream";
 
 export class Database {
     private db_path: string;
@@ -46,7 +42,7 @@ export class Database {
     }
 
     getInstalledVersion(atom: Atom): PackageVersion {
-        const installed = this.db.prepare('SELECT version_installed FROM package WHERE id = ?').get([atom.format()]);
+        const installed = this.db.prepare('SELECT version_installed FROM package WHERE id = ?').get([atom]);
         if (installed && installed['version_installed']) return new PackageVersion(installed['version_installed']);
         return undefined;
     }
@@ -64,23 +60,23 @@ export class Database {
     }
 
     add_file(atom: Atom, path: string, type: string) {
-        this.db.prepare('INSERT INTO file(path, package_id, type) VALUES (?, ?, ?) ON CONFLICT DO NOTHING').run([path, atom.format(), type])
+        this.db.prepare('INSERT INTO file(path, package_id, type) VALUES (?, ?, ?) ON CONFLICT DO NOTHING').run([path, atom, type])
     }
 
     install_pending(atom: Atom) {
-        this.db.prepare('INSERT INTO packages_pending(id) VALUES(?) ON CONFLICT DO NOTHING').run([atom.format()]);
+        this.db.prepare('INSERT INTO packages_pending(id) VALUES(?) ON CONFLICT DO NOTHING').run([atom]);
     }
 
     install(atom: Atom, version: PackageVersion) {
         this.transaction(() => {
             this.db.prepare('INSERT INTO package(id, version_installed) VALUES(?, ?) ON CONFLICT(id) DO UPDATE SET version_installed=excluded.version_installed')
-                .run([atom.format(), version.version]);
-            this.db.prepare('DELETE FROM packages_pending WHERE id = ?').run([atom.format()]);
+                .run([atom, version.version]);
+            this.db.prepare('DELETE FROM packages_pending WHERE id = ?').run([atom]);
         });
     }
 
     select(atom: Atom) {
         this.db.prepare('INSERT INTO package(id, selected) VALUES(?, TRUE) ON CONFLICT(id) DO UPDATE SET selected=excluded.selected')
-            .run([atom.format()]);
+            .run([atom]);
     }
 }

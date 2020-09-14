@@ -104,8 +104,8 @@ export class PackageDescription {
         this.src = parsed_package.src;
         this.src_url = parsed_package.src_url;
         this.unpack_dir = parsed_package.unpack_dir;
-        this.bdepend = parsed_package.bdepend.map((depend: string) => ResolvedAtom.parse(depend));
-        this.rdepend = parsed_package.rdepend.map((depend: string) => ResolvedAtom.parse(depend));
+        this.bdepend = parsed_package.bdepend;
+        this.rdepend = parsed_package.rdepend;
         this.use_default_depends = parsed_package.use_default_depends;
         this.use_build_dir = parsed_package.use_build_dir;
         this.configure = parsed_package.configure;
