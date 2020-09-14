@@ -3,11 +3,11 @@ import { Config } from './Config';
 import { Repository } from './Repository';
 import { Database } from './Database';
 import { Transaction, Location, StepType } from './Transaction';
-import { old_Atom } from './Atom';
 import * as child_process from 'child_process';
 import * as path from 'path';
 import * as byteSize from 'byte-size';
 import { Commands } from './Commands';
+import { AtomUtils } from './Atom';
 
 byteSize.defaultOptions({
     units: 'iec'
@@ -45,7 +45,7 @@ async function main() {
             const tx = new Transaction(repo, hostdb, targetdb);
 
             await Promise.all(argv._.slice(1).map(async function (shortpkg) {
-                const resolved = await (new old_Atom(shortpkg)).resolveUsingRepository(repo);
+                const resolved = await AtomUtils.resolveUsingRepository(shortpkg, repo);
                 await tx.addToTransaction(resolved, Location.Target);
             }));
             const plan = await tx.plan();
@@ -65,7 +65,7 @@ async function main() {
             await repo.installPackages(new Set(to_install), targetdb, (argv.target_root || '/'));
 
             await Promise.all(argv._.slice(1).map(async function (shortpkg) {
-                const resolved = await (new old_Atom(shortpkg)).resolveUsingRepository(repo);
+                const resolved = await AtomUtils.resolveUsingRepository(shortpkg, repo);
                 targetdb.select(resolved);
             }));
             targetdb.print_stats();
@@ -77,8 +77,8 @@ async function main() {
         } else if (argv._[0] == '_build_single') {
             ensure_unshared(argv, async () => {
                 const repo = new Repository(Config.repository);
-                const success = await Commands.buildSingle(await new old_Atom(argv._[1]).resolveUsingRepository(repo),
-                    new Set(await Promise.all(argv._.slice(2).map((p) => new old_Atom(p).resolveUsingRepository(repo)))));
+                const success = await Commands.buildSingle(await AtomUtils.resolveUsingRepository(argv._[1], repo),
+                    new Set(await Promise.all(argv._.slice(2).map((p) => AtomUtils.resolveUsingRepository(p, repo)))));
                 if(!success) process.exitCode = 1;
             })
         } else if (argv._[0] == 'update') {
@@ -99,7 +99,7 @@ async function main() {
             const tx = new Transaction(repo, hostdb, targetdb);
 
             await Promise.all(argv._.slice(1).map(async function (shortpkg) {
-                const resolved = await (new old_Atom(shortpkg)).resolveUsingRepository(repo);
+                const resolved = await AtomUtils.resolveUsingRepository(shortpkg, repo);
                 await tx.addToTransaction(resolved, Location.Target);
             }));
             const plan = await tx.plan();

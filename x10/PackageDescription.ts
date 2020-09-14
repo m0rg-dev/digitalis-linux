@@ -1,4 +1,4 @@
-import { Atom, old_Atom, PackageVersion } from "./Atom.js";
+import { Atom, PackageVersion } from "./Atom.js";
 import * as YAML from 'yaml';
 import { Config } from "./Config.js";
 

@@ -4,7 +4,7 @@ import * as path from 'path';
 import { Config } from './Config';
 import { Repository } from './Repository';
 import { Database } from './Database';
-import { old_Atom, Atom, AtomUtils } from './Atom';
+import { Atom, AtomUtils } from './Atom';
 import { PackageDescription } from './PackageDescription';
 import { BuildContext } from './BuildContext';
 
@@ -86,7 +86,7 @@ export class Commands {
 
             const hostdb = (Config.without_hostdb) ? Database.empty() : Database.construct(path.join(mountpoint, 'var/lib/x10/database/'));
 
-            const atoms = await Promise.all(package_names.map((p) => new old_Atom(p).resolveUsingRepository(repo)));
+            const atoms = await Promise.all(package_names.map((p) => AtomUtils.resolveUsingRepository(p, repo)));
 
             let resolved: Set<Atom> = new Set();
             let remaining: Set<Atom> = new Set();
