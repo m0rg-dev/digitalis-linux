@@ -7,10 +7,6 @@ ulimit -n 65536
 
 IMAGE=alpine-bootstrap
 
-cd x10
-npx pkg x10_install.js --public -t latest-linux-x64
-cd ..
-
 node x10/x10_repo.js s2repo/
 
 maybe_build() {

@@ -209,33 +209,6 @@ export class Repository {
         });
     }
 
-    async old_buildManifest(): Promise<void> {
-        const self = this;
-        var manifest = new old_Manifest();
-        const categories = await self.getAllCategories(true);
-        const structured_names = await Promise.all(categories.map(async function (category) {
-            return self.getAllNames(category, true).then(names => names.map(name => [category, name]))
-        }));
-        const all_names = structured_names.flat(1);
-        const all_packages = await Promise.all(all_names.map(async (name) => {
-            const atom: Atom = `${name[0]}/${name[1]}`;
-            const raw_data = await fs.promises.readFile(path.join(self.local_packages_path, name[0], name[1] + ".yml"));
-            const desc = new PackageDescription(raw_data.toString('utf8'));
-            return new ManifestPackage(atom, desc.version, path.join(name[0], name[1] + ".yml"), raw_data);
-        }));
-        all_packages.forEach((pkg) => manifest.addPackage(pkg));
-        await Promise.all(all_packages.map(async (pkg) => {
-            try {
-                const data = await fs.promises.readFile(path.join(self.local_builds_path, pkg.atom + "," + pkg.version.version + ".tar.xz"));
-                const build = new ManifestPackage(pkg.atom, pkg.version, path.join(self.local_builds_path, pkg.atom + "," + pkg.version.version + ".tar.xz"), data);
-                manifest.addBuild(build);
-            } catch (e) {
-                // if we can't read the build it doesn't exist - this can happen
-            }
-        }));
-        return fs.promises.writeFile(path.join(self.root_path, "Manifest.yml"), manifest.serialize());
-    }
-
     async getSource(source: string, source_url?: string): Promise<Buffer> {
         if (fs.existsSync(path.join(this.root_path, "sources", source))) {
             console.log(`Source ${path.join(this.root_path, "sources", source)} is available locally.`);
@@ -262,19 +235,6 @@ export class Repository {
         //const manifest = await this.maybeUpdateManifest();
         //const src = manifest.getSource(pkg.src);
         return this.getSource(pkg.src, pkg.src_url);
-    }
-
-    static run_build_stage(container_id: string, name: string, script: string, bindmount: string, bindtarget: string) {
-        console.log(`Running ${name}...`);
-        var args: string[];
-        if (bindmount) {
-            args = ['run', `--mount=type=bind,source=${bindmount},destination=${bindtarget}`, container_id, 'sh', '-exc', script]
-        } else {
-            args = ['run', container_id, 'sh', '-exc', script];
-        }
-        const rc = child_process.spawnSync('buildah', args, { stdio: 'inherit' });
-        if (rc.signal) throw `${name} killed by signal ${rc.signal}`;
-        if (rc.status != 0) throw `${name} exited with failure status!`;
     }
 
     async installPackage(atom: Atom, db: Database, target_root: string) {
