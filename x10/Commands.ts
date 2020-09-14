@@ -6,6 +6,7 @@ import { Repository } from './Repository';
 import { Database } from './Database';
 import { Atom, ResolvedAtom } from './Atom';
 import { PackageDescription } from './PackageDescription';
+import { BuildContext } from './BuildContext';
 
 function mapAsync<T, U>(array: T[], callbackfn: (value: T, index: number, array: T[]) => Promise<U>): Promise<U[]> {
     return Promise.all(array.map(callbackfn));
@@ -18,8 +19,6 @@ async function filterAsync<T>(array: T[], callbackfn: (value: T, index: number, 
 
 export class Commands {
     private static async _getRecursiveFilteredDependencies(atom: ResolvedAtom, hostdb: Database, repo: Repository, desc_cache: Map<string, PackageDescription>, already_found?: Set<string>): Promise<ResolvedAtom[]> {
-        //console.log(atom);
-        //console.log(already_found);
         if (!desc_cache.get(atom.format())) desc_cache.set(atom.format(), await repo.getPackageDescription(atom));
         const desc = desc_cache.get(atom.format());
         const filtered_bdepend = filterAsync(desc.bdepend, async (depend) => {
@@ -54,9 +53,6 @@ export class Commands {
             subdepends.forEach(d => depends_final.add(d.format()));
             depends_final.add(depend.format());
         }
-
-        //console.log(atom);
-        //console.log(depends_final);
 
         return Array.from(depends_final.values()).map(s => new ResolvedAtom(s));
     }
@@ -102,7 +98,6 @@ export class Commands {
                 // This is kind of a bodge so that when you `build virtual/base-system` it behaves as expected
                 // not sure if that's how we always want to do it
                 desc.rdepend.forEach(rdepend => remaining.add(rdepend.format()));
-                //(await Commands._getSecondLevelRdependsPutThisSomewhereElse(atom, repo, descs, true)).forEach(depend => remaining.add(depend.format()));
             }
 
             console.log(remaining);
@@ -117,17 +112,13 @@ export class Commands {
 
                     const depends = await Commands._getRecursiveFilteredDependencies(atom, hostdb, repo, descs, new Set());
 
-                    //console.log(`a: ${atom.format()}\x1b[30G${depends.map(a => a.format()).join(' ')}`);
-
                     if (depends.every(a => resolved.has(a.format()))) {
                         if (await repo.buildExists(atom)) {
                             //console.log(`==> Found existing build for ${atom.format()}`);
                             // don't have to build this!
-
                         } else {
                             plan.push({ atom: atom, depends: new Set(depends) });
                         }
-                        //console.log(`r: ${atom.format()}\x1b[30G${depends.map(a => a.format()).join(' ')}`);
                         resolved.add(atom.format());
                         remaining.delete(atom.format());
                     } else {
@@ -143,7 +134,6 @@ export class Commands {
                 iterations++;
                 if (Array.from(last_remaining.values()).every((a) => remaining.has(a))) {
                     // We have a dependency cycle. Let's go ahead and pick some unlucky package to go first.
-
                     let target: ResolvedAtom;
                     const candidates = Array.from(last_remaining.values());
 
@@ -160,6 +150,7 @@ export class Commands {
                             if (!desc) descs.set(candidate, desc = await repo.getPackageDescription(new ResolvedAtom(candidate)));
                         }
 
+                        // prefer packages with fewer bdepends
                         const candidates_sorted = candidates.sort((a, b) =>
                             descs.get(a).bdepend.length - descs.get(b).bdepend.length
                         );
@@ -192,7 +183,6 @@ export class Commands {
                         }
                         plan.push({ atom: target, depends: new Set(depends_in) });
                     }
-                    //console.log(`r: ${target.format()}\x1b[30G${depends_in.map(a => a.format()).join(' ')}`);
                     resolved.add(target.format());
                     remaining.delete(target.format());
                 }
@@ -223,7 +213,7 @@ export class Commands {
                 }
             }
         }
-        
+
         return rc;
     }
 
@@ -253,7 +243,10 @@ export class Commands {
 
             const hostdb = (Config.without_hostdb) ? Database.empty() : Database.construct(path.join(mountpoint, 'var/lib/x10/database/'));
             await repo.installPackages(host_install, hostdb, mountpoint);
-            await repo.buildPackage(atom, container_id, mountpoint);
+            
+            const pkgdesc: PackageDescription = await repo.getPackageDescription(atom);
+            const ctx = new BuildContext(container_id, mountpoint);
+            await ctx.build(atom, pkgdesc, repo);
         } catch (e) {
             console.error(`Got error: ${e}`);
             console.error(e);

@@ -7,7 +7,6 @@ import * as child_process from 'child_process';
 import { URL } from "url";
 import { old_Manifest, ManifestPackage, Manifest } from "./Manifest";
 import { Database } from "./Database.js";
-import { BuildContext } from "./BuildContext.js";
 import { PackageDescription } from "./PackageDescription";
 import * as glob from 'glob';
 
@@ -276,12 +275,6 @@ export class Repository {
         const rc = child_process.spawnSync('buildah', args, { stdio: 'inherit' });
         if (rc.signal) throw `${name} killed by signal ${rc.signal}`;
         if (rc.status != 0) throw `${name} exited with failure status!`;
-    }
-
-    async buildPackage(atom: ResolvedAtom, container_id: string, container_mountpoint: string) {
-        const pkgdesc: PackageDescription = await this.getPackageDescription(atom);
-        const ctx = new BuildContext(container_id, container_mountpoint);
-        await ctx.build(atom, pkgdesc, this);
     }
 
     async installPackage(atom: ResolvedAtom, db: Database, target_root: string) {

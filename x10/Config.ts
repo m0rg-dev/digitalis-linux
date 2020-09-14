@@ -4,4 +4,5 @@ export class Config {
     static repository: string = '/var/lib/x10/repo';
     static without_hostdb: boolean = false;
     static verbose_output: boolean = false;
+    static logging_config: string = '';
 }
