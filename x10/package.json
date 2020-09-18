@@ -19,5 +19,8 @@
         "@types/tar-stream": "^2.1.0",
         "pkg": "^4.4.9",
         "typescript": "^3.9.6"
+    },
+    "scripts": {
+        "build": "tsc --build"
     }
 }
