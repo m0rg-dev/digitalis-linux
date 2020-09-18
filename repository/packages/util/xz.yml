@@ -1,4 +1,6 @@
 version: "5.2.5"
+bdepend:
+  - core/fs-tree
 filename: xz
 upstream: https://tukaani.org/xz/
 license: GPL-2.0-or-later

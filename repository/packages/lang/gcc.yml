@@ -4,6 +4,7 @@ bdepend:
   - libs/mpc
   - libs/mpfr
   - libs/zlib
+  - util/diffutils
 rdepend:
   - libs/gmp
   - libs/mpc

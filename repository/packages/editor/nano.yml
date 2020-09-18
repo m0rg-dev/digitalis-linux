@@ -1,4 +1,6 @@
 version: "4.9"
+bdepend:
+  - libs/ncurses
 rdepend:
   - util/file
   - util/bzip2

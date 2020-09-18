@@ -1,4 +1,8 @@
 version: "2.27.0"
+bdepend:
+  - util/autoconf
+  - libs/zlib
+  - libs/gettext
 filename: git
 comp: tar.gz
 src_url: https://github.com/git/git/archive/v2.27.0.tar.gz

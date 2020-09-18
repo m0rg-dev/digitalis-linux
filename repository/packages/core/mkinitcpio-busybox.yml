@@ -1,5 +1,9 @@
 # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/mkinitcpio-busybox
 version: "1.31.1"
+bdepend:
+  - util/diffutils
+  - util/bzip2
+  - lang/gcc
 filename: busybox
 comp: tar.bz2
 upstream: https://busybox.net/downloads/

@@ -1,5 +1,6 @@
 version: 4.0.2
 bdepend:
+  - core/fs-tree
   - libs/gmp
 filename: mpfr
 upstream: http://www.mpfr.org/mpfr-%{version}/

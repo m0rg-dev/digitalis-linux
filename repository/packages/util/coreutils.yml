@@ -1,6 +1,7 @@
 version: 8.32
 bdepend:
   - libs/libattr
+  - lang/gcc
 rdepend:
   - libs/gmp
   - libs/libattr

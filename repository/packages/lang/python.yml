@@ -3,6 +3,8 @@ upstream_version: "3.8.3"
 bdepend:
   - libs/libffi
   - libs/sqlite3
+  - libs/zlib
+  - util/bzip2
 rdepend:
   - libs/libffi
   - libs/sqlite3

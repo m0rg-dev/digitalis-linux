@@ -1,4 +1,6 @@
 version: "5.39"
+bdepend:
+  - core/fs-tree
 comp: tar.gz
 filename: file
 upstream: ftp://ftp.astron.com/pub/file/

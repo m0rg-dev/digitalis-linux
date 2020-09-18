@@ -2,6 +2,7 @@ version: "3.4.3.1"
 upstream_version: "3.4.3"
 bdepend:
   - libs/libxml2
+  - libs/zlib
 rdepend:
   - libs/libxml2
 filename: libarchive

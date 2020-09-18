@@ -1,4 +1,6 @@
 version: "2.9.10"
+bdepend:
+  - core/fs-tree
 filename: libxml2
 comp: tar.gz
 upstream: ftp://xmlsoft.org/libxml2/

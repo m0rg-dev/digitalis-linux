@@ -1,4 +1,6 @@
 version: "5.5.0"
+bdepend:
+  - util/flex
 rdepend:
   - libs/libelf
 filename: iproute2

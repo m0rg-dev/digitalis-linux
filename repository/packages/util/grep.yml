@@ -1,4 +1,6 @@
 version: "3.4"
+bdepend:
+  - core/fs-tree
 filename: grep
 upstream: https://ftp.gnu.org/gnu/grep/
 license: GPL-3.0-or-later

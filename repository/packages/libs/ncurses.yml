@@ -1,4 +1,6 @@
 version: "6.2"
+bdepend:
+  - core/fs-tree
 filename: ncurses
 comp: tar.gz
 upstream: https://ftp.gnu.org/gnu/ncurses/

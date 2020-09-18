@@ -1,4 +1,7 @@
 version: "4.7.0"
+bdepend:
+    - core/fs-tree
+    - lang/gcc
 filename: findutils
 use_build_dir: true
 additional_configure_options: --localstatedir=/var/lib/locate

@@ -1,6 +1,7 @@
 version: "1.45.5"
 bdepend:
   - util/util-linux
+  - util/pkg-config
 rdepend:
   - util/util-linux
 filename: e2fsprogs

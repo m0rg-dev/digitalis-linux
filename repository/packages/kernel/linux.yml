@@ -4,6 +4,8 @@ bdepend:
   - libs/openssl
   - util/kmod
   - util/cpio
+  - util/flex
+  - util/bc
 rdepend:
   - util/kmod
   - util/mkinitcpio

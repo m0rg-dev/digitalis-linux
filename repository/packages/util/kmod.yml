@@ -3,6 +3,7 @@ bdepend:
   - util/xz
   - libs/zlib
   - util/pkg-config
+  - lang/gcc
 rdepend:
   - util/xz
   - libs/zlib

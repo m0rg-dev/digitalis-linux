@@ -1,4 +1,6 @@
 version: "530"
+bdepend:
+  - libs/ncurses
 filename: less
 comp: tar.gz
 upstream: https://ftp.gnu.org/gnu/less/

@@ -1,6 +1,7 @@
 version: 2.5.3
 bdepend:
   - libs/glibc
+  - lang/gcc
 filename: bc
 comp: tar.gz
 configure: "CC=gcc PREFIX=/usr ./configure.sh -O3"

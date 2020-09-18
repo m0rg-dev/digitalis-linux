@@ -1,4 +1,8 @@
 version: 1.16.1
+bdepend:
+  - core/fs-tree
+  - lang/perl
+  - util/autoconf
 filename: automake
 upstream: http://ftp.gnu.org/gnu/automake/
 license: GPL-2.0-or-later AND GPL-3.0-or-later

@@ -1,4 +1,7 @@
 version: 0.42.1
+rdepend:
+  - core/bash
+  - lang/gcc
 filename: openrc
 comp: tar.gz
 src_url: https://github.com/OpenRC/openrc/archive/%{version}.%{comp}

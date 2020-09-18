@@ -4,6 +4,9 @@ bdepend:
   - libs/readline
   - core/dbus
   - util/autoconf
+  - util/automake
+  - util/libtool
+  - lang/gcc
 rdepend:
   - libs/readline
   - core/dbus

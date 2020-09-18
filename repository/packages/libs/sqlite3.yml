@@ -1,5 +1,7 @@
 version: "3.33.0"
 upstream_version: "3330000"
+bdepend:
+  - core/fs-tree
 filename: sqlite-autoconf
 comp: tar.gz
 upstream: https://sqlite.org/2020

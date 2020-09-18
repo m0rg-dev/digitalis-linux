@@ -21,3 +21,4 @@ post_install_script: |
   build() {
     add_all_modules '*'
   }
+  EOF

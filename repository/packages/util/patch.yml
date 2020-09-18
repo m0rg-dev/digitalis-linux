@@ -1,4 +1,7 @@
 version: "2.7.6"
+bdepend:
+  - core/fs-tree
+  - lang/gcc
 filename: patch
 upstream: https://ftp.gnu.org/gnu/patch/
 license: GPL-3.0-or-later

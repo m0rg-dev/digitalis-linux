@@ -1,4 +1,7 @@
 version: 1.4.18
+bdepend:
+  - core/fs-tree
+  - lang/gcc
 filename: m4
 upstream: https://ftp.gnu.org/gnu/m4/
 license: GPL-3.0-or-later

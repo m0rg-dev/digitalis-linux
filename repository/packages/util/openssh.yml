@@ -1,6 +1,8 @@
 version: "8.3p1"
 bdepend:
   - libs/openssl
+  - core/fs-tree
+  - lang/gcc
 rdepend:
   - libs/openssl
 filename: openssh

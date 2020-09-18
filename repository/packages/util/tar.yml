@@ -1,4 +1,7 @@
 version: "1.32"
+bdepend:
+  - core/fs-tree
+  - lang/gcc
 filename: tar
 upstream: https://ftp.gnu.org/gnu/tar/
 license: GPL-3.0-or-later
