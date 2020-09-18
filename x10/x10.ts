@@ -2,7 +2,6 @@ import * as minimist from 'minimist';
 import { Config } from './Config';
 import { Repository } from './Repository';
 import { Database } from './Database';
-import { Transaction, Location, StepType } from './Transaction';
 import * as child_process from 'child_process';
 import * as path from 'path';
 import * as byteSize from 'byte-size';
