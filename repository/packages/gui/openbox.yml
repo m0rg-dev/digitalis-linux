@@ -15,6 +15,7 @@ rdepend:
 filename: openbox
 comp: tar.gz
 unpack_dir: openbox-release-%{upstream_version}
-src_url: https://github.com/Mikachu/openbox/archive/release-%{version}.tar.gz
+src_url: https://github.com/Mikachu/openbox/archive/release-%{upstream_version}.tar.gz
 license: GPL-2.0-or-later
 pre_configure_script: ./bootstrap
+additional_configure_options: --sysconfdir=/etc

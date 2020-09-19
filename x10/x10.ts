@@ -51,6 +51,18 @@ async function main() {
                 let success = await Commands.buildPackages(argv._.slice(1));
                 if (!success) process.exitCode = 1;
             });
+        } else if (argv._[0] == '_build_all') {
+            ensure_unshared(argv, async () => {
+                const repo = new Repository(argv.repository || '/var/lib/x10/repo', argv.remote_url);
+                const packages = [];
+                for(const cat of await repo.getAllCategories(true)) {
+                    for(const name of await repo.getAllNames(cat, true)) {
+                        packages.push(cat + '/' + name);
+                    }
+                }
+                let success = await Commands.buildPackages(packages);
+                if (!success) process.exitCode = 1;
+            });
         } else if (argv._[0] == '_build_single') {
             ensure_unshared(argv, async () => {
                 const repo = new Repository(Config.repository);
