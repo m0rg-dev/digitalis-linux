@@ -20,7 +20,7 @@ buildah unshare sh -exc '
     cp -r x10/* $dir/usr/share/x10
     cp -r repository $dir/var/lib/x10/repo
 
-    buildah run --net host "$ctr" node /usr/share/x10/x10.js install kernel/linux core/eudev
+    buildah run --net host "$ctr" node /usr/share/x10/x10.js install kernel/linux
 
     ls $dir
     rm -r $dir/var/lib/x10/repo
@@ -30,6 +30,9 @@ buildah unshare sh -exc '
 
     buildah rm $ctr
 '
+
+qemu-img convert -O qcow2 digitalis_rootfs.img digitalis_rootfs.new.img
+mv digitalis_rootfs.new.img digitalis_rootfs.img
 
 cat > /tmp/99-auto-grub.start <<EOF
 set -x
