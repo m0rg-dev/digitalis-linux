@@ -10,3 +10,4 @@ configure: ~
 post_install_script: |
   mkdir -p etc/runlevels/sysinit/
   ln -s /etc/init.d/udev etc/runlevels/sysinit/udev
+  ln -s /etc/init.d/udev-trigger etc/runlevels/sysinit/udev-trigger

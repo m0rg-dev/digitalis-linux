@@ -2,6 +2,8 @@ version: "3.2.9"
 bdepend:
   - util/gperf
   - util/kmod
+rdepend:
+  - core/openrc
 filename: eudev
 comp: tar.gz
 upstream: https://dev.gentoo.org/~blueness/eudev/

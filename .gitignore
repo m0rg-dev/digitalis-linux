@@ -4,7 +4,7 @@ new_root/
 Makefile
 live/
 stage*.tar
-rootfs.tar.xz
+digitalis_rootfs.img
 repository/Manifest.yml
 keys.json
 # Files created in these directories are a) large, b) not unique to digitalis, and
