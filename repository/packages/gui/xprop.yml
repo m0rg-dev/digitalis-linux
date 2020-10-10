@@ -1,0 +1,10 @@
+version: "1.2.4"
+bdepend:
+    - gui/xorg-server
+    - gui/xorgproto
+rdepend:
+    - gui/xorg-server
+filename: xprop
+comp: tar.bz2
+upstream: https://www.x.org/archive/individual/app
+license: MIT

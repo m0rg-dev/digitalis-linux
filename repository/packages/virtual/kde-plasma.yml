@@ -43,4 +43,6 @@ rdepend:
   - gui/systemsettings
   - gui/xorg-server
   - gui/konsole
+  - gui/xprop
+  - gui/xsetroot
 use_default_depends: false
