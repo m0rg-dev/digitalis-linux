@@ -1,0 +1,64 @@
+Name:           
+Version:        
+Release:        1%{?dist}
+Summary:        
+
+License:        
+URL:            
+%undefine       _disable_source_fetch
+Source0:        
+%define         SHA256SUM0 
+
+BuildRequires:  
+Requires:       
+
+%description
+
+
+%package        devel
+Summary:        Development files for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description    devel
+The %{name}-devel package contains libraries and header files for
+developing applications that use %{name}.
+
+
+%prep
+echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
+%autosetup
+
+%build
+%global optflags %(echo %{optflags} | sed 's/-fstack-clash-protection//')
+export CFLAGS="$CFLAGS -ggdb2"
+
+mkdir build
+cd build
+%define _configure ../configure
+%configure CC=clang CXX=clang++ --disable-static --docdir=/usr/share/doc/%{name}-%{version}
+%make_build
+
+%install
+cd build
+%make_install
+find %{buildroot} -name '*.la' -exec rm -f {} ';'
+
+
+%post -p /sbin/ldconfig
+
+%postun -p /sbin/ldconfig
+
+
+%files
+%license add-license-here
+%doc /usr/share/info/%{name}.info.gz
+%{_libdir}/*.so.*
+
+%files devel
+%doc /usr/share/doc/%{name}-%{version}/
+%{_includedir}/*
+%{_libdir}/*.so
+
+
+%changelog
+
