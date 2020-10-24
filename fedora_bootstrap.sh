@@ -67,7 +67,8 @@ if [ ! -e rpmbuild/SRPMS/x86_64-pc-linux-gnu-kernel-headers-*.rpm ]; then
     build_rpm kernel-headers
 fi
 
-LIBRPMS="glibc libstdc++ ncurses gmp mpfr libmpc zlib"
+LIBRPMS="glibc libstdc++ ncurses gmp mpfr libmpc zlib libgpg-error libgcrypt"
+LIBRPMS="$LIBRPMS file popt libarchive sqlite pkg-config-wrapper lua"
 
 for rpm in $LIBRPMS; do
     if [ ! -n "$(ls -l rpmbuild/SRPMS/x86_64-pc-linux-gnu-$rpm-*.rpm)" ]; then
@@ -79,7 +80,8 @@ RPMDEFS="--define='_build x86_64-redhat-linux-gnu' --define='_host x86_64-pc-lin
 REPOS=''
 
 RPMS="binutils libstdc++ m4 ncurses bash coreutils diffutils file findutils"
-RPMS="$RPMS gawk gzip make patch tar sed xz gmp mpfr libmpc gcc"
+RPMS="$RPMS gawk gzip make patch tar sed xz gmp mpfr libmpc gcc bzip2"
+RPMS="$RPMS rpm"
 
 for rpm in $RPMS; do
     if [ ! -n "$(ls -l rpmbuild/SRPMS/$rpm-*.digi1.*.rpm)" ]; then

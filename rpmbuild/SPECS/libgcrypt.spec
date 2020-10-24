@@ -12,18 +12,20 @@
 %define _prefix /usr/%{_target}/usr
 %endif
 
-%define libname file
+%define libname libgcrypt
 
 Name:           %{?cross}%{libname}
-Version:        5.39
+Version:        1.8.7
 Release:        1%{?dist}
-Summary:        A utility for determining the type of a file.
+Summary:        Libgcrypt is a general purpose cryptographic library originally based on code from GnuPG.
 
-License:        BSD-2-Clause
-URL:            http://astron.com/pub/file/
+License:        LGPLv2+
+URL:            https://gnupg.org/software/libgcrypt/index.html
 %undefine       _disable_source_fetch
-Source0:        http://astron.com/pub/%{libname}/%{libname}-%{version}.tar.gz
-%define         SHA256SUM0 f05d286a76d9556243d0cb05814929c2ecf3a5ba07963f8f70bfaaa70517fad1
+Source0:        https://gnupg.org/ftp/gcrypt/%{libname}/%{libname}-%{version}.tar.bz2
+%define         SHA256SUM0 03b70f028299561b7034b8966d7dd77ef16ed139c43440925fe8782561974748
+
+BuildRequires:  make gcc
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
@@ -35,26 +37,21 @@ Source0:        http://astron.com/pub/%{libname}/%{libname}-%{version}.tar.gz
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
 BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}glibc-devel
-BuildRequires:  gcc make
+BuildRequires: %{?target_tool_prefix}libgpg-error-devel
 
-Requires:       %{?cross}libmagic
+Requires:      %{?target_tool_prefix}libgpg-error
 
 %undefine _annotated_build
+%global debug_package %{nil}
 
 %description
 
-%package     -n %{?cross}libmagic
-Summary:        file(1), but library
-License:        BSD-2-Clause
-URL:            http://astron.com/pub/file/
-
-%description -n %{?cross}libmagic
-
-%package     -n %{?cross}libmagic-devel
-Summary:        Development files for libmagic
+%package        devel
+Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       %{?target_tool_prefix}libgpg-error-devel
 
-%description -n %{?cross}libmagic-devel
+%description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
@@ -64,38 +61,41 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %autosetup -n %{libname}-%{version}
 
 %build
-# local version of file needs to be >= the version we're building here for cross-compiling.
-# easiest way to do that is to build it ourselves.
-%if "%{_build}" != "%{_target}"
+
 mkdir build
 cd build
-../configure
-%{__make} %{?_smp_mflags}
-%{__make} install
-cd ..
+%define _configure ../configure
+%configure \
+%if ! %{isnative}
+    --with-libgpg-error-prefix=%{_prefix} \
+    --disable-asm \
 %endif
-
-%configure --host=%{_target} --libdir=%{_prefix}/lib
+    --host=%{_target} --libdir=%{_prefix}/lib
 %make_build
 
 %install
+cd build
 %make_install
+
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
+%post -p /sbin/ldconfig
+
+%postun -p /sbin/ldconfig
+
+
 %files
-%license COPYING
+%license COPYING COPYING.LIB
 %{_bindir}/*
-%doc %{_mandir}/man1/*
-
-%files -n %{?cross}libmagic
-%{_datadir}/misc/magic.mgc
 %{_prefix}/lib/*.so.*
-%{_prefix}/lib/pkgconfig/libmagic.pc
-%doc %{_mandir}/man4/*
+%doc %{_infodir}/*.info*
+%doc %{_mandir}/man1/hmac256.1
 
-%files -n %{?cross}libmagic-devel
+%files devel
+%{_includedir}/*
 %{_prefix}/lib/*.so
-%{_includedir}/magic.h
-%doc %{_mandir}/man3/*
+%{_datadir}/aclocal/*.m4
+%{_prefix}/lib/pkgconfig/*.pc
 
 %changelog
+

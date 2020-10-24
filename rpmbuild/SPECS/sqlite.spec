@@ -12,18 +12,18 @@
 %define _prefix /usr/%{_target}/usr
 %endif
 
-%define libname 
+%define libname sqlite
 
 Name:           %{?cross}%{libname}
-Version:        
+Version:        3.33.0
 Release:        1%{?dist}
-Summary:        
+Summary:        SQLite is a C-language library that implements a small, fast, self-contained, high-reliability, full-featured, SQL database engine.
 
-License:        
-URL:            
+License:        Public domain
+URL:            https://sqlite.org
 %undefine       _disable_source_fetch
-Source0:        
-%define         SHA256SUM0
+Source0:        https://sqlite.org/2020/sqlite-autoconf-3330000.tar.gz
+%define         SHA256SUM0 106a2c48c7f75a298a7557bcc0d5f4f454e5b43811cc738b7ca294d6956bbb15
 
 BuildRequires:  make
 
@@ -54,14 +54,19 @@ developing applications that use %{name}.
 
 %prep
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
-%autosetup -n %{libname}-%{version}
+%autosetup -n sqlite-autoconf-3330000
 
 %build
 
 mkdir build
 cd build
-%define _configure ../configure
-%configure --host=%{_target} --libdir=%{_prefix}/lib
+export CFLAGS="-g -O2 -DSQLITE_ENABLE_FTS3=1 \
+    -DSQLITE_ENABLE_FTS4=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 \
+    -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1 \
+    -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_FTS3_TOKENIZER=1"
+export LDFLAGS=""
+../configure --host=%{_target} --prefix=%{_prefix} --libdir=%{_prefix}/lib \
+    --enable-fts5 
 %make_build
 
 %install
@@ -76,15 +81,17 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 
 %files
-%license license-goes-here
+# TODO this should be its own package
+%{_bindir}/sqlite3
+
 %{_prefix}/lib/*.so.*
-%doc %{_infodir}/*.info*.gz
-%doc %{_mandir}/man1/*.gz
+%doc %{_mandir}/man1/*
 
 %files devel
 %{_includedir}/*
 %{_prefix}/lib/*.so
 %{_prefix}/lib/*.a
+%{_prefix}/lib/pkgconfig/*.pc
 
 %changelog
 
