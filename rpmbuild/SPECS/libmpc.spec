@@ -12,18 +12,18 @@
 %define _prefix /usr/%{_target}/usr
 %endif
 
-%define libname zlib
+%define libname libmpc
 
 Name:           %{?cross}%{libname}
-Version:        1.2.11
+Version:        1.2.0
 Release:        1%{?dist}
-Summary:        zlib is designed to be a free, general-purpose, legally unencumbered -- that is, not covered by any patents -- lossless data-compression library for use on virtually any computer hardware and operating system.
+Summary:        GNU MPC is a C library for the arithmetic of complex numbers with arbitrarily high precision and correct rounding of the result.
 
-License:        Zlib
-URL:            https://zlib.net/
+License:        LGPLv3+
+URL:            http://www.multiprecision.org/mpc/home.html
 %undefine       _disable_source_fetch
-Source0:        https://zlib.net/zlib-%{version}.tar.xz
-%define         SHA256SUM0 4ff941449631ace0d4d203e3483be9dbc9da454084111f97ea0a2114e19bf066
+Source0:        https://ftp.gnu.org/gnu/mpc/mpc-%{version}.tar.gz
+%define         SHA256SUM0 e90f2d99553a9c19911abdb4305bf8217106a957e3994436428572c8dfe8fda6
 
 BuildRequires:  make
 
@@ -37,9 +37,9 @@ BuildRequires:  make
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
 BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}glibc-devel
+BuildRequires: %{?target_tool_prefix}gmp-devel %{?target_tool_prefix}mpfr-devel
 
 %undefine _annotated_build
-%global debug_package %{nil}
 
 %description
 
@@ -54,14 +54,14 @@ developing applications that use %{name}.
 
 %prep
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
-%autosetup -n %{libname}-%{version}
+%autosetup -n mpc-%{version}
 
 %build
 
 mkdir build
 cd build
 %define _configure ../configure
-CC=%{?target_tool_prefix}gcc %{_configure} --prefix=%{_prefix}
+%configure --host=%{_target} --libdir=%{_prefix}/lib
 %make_build
 
 %install
@@ -76,10 +76,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 
 %files
-%license README
+%license COPYING.LESSER
 %{_prefix}/lib/*.so.*
-%{_prefix}/lib/pkgconfig/zlib.pc
-%doc %{_mandir}/man3/zlib.3
+%doc %{_infodir}/mpc.info*
 
 %files devel
 %{_includedir}/*

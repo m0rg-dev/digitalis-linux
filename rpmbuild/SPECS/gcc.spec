@@ -22,7 +22,7 @@ URL:            https://www.gnu.org/software/gcc/
 Source0:        https://ftp.gnu.org/gnu/gcc/gcc-%{version}/gcc-%{version}.tar.xz
 %define         SHA256SUM0 b8dd4368bb9c7f0b98188317ee0254dd8cc99d1e3a18d0ff146c855fe16c1d8c
 
-BuildRequires:  make zlib-devel mpfr-devel libmpc-devel gmp-devel diffutils
+BuildRequires:  gcc g++ make diffutils
 BuildRequires:  /usr/bin/makeinfo
 Requires:       zlib mpfr libmpc gmp
 
@@ -32,8 +32,9 @@ Requires:       zlib mpfr libmpc gmp
 %define host_tool_prefix %{_host}-
 %endif
 
-# TODO do other libs need to go here?
 BuildRequires:  %{?host_tool_prefix}gcc %{?host_tool_prefix}g++ %{?host_tool_prefix}glibc-devel
+BuildRequires:  %{?host_tool_prefix}mpfr-devel %{?host_tool_prefix}libmpc-devel %{?host_tool_prefix}gmp-devel
+BuildRequires:  %{?host_tool_prefix}libstdc++-devel %{?host_tool_prefix}zlib-devel
 
 # Similarly, we always need target tools. If we're building a cross-compiler, we need
 # target-specific tools; otherwise, we just need the host tools.
@@ -45,6 +46,9 @@ BuildRequires:  %{?host_tool_prefix}gcc %{?host_tool_prefix}g++ %{?host_tool_pre
 
 BuildRequires:  %{?target_tool_prefix}binutils
 Requires:       %{?target_tool_prefix}binutils
+
+# TODO should be its own package
+Provides:       %{?cross}g++
 
 %bcond_without threads
 # general "make it depend on less stuff" option for bootstrapping toolchains
@@ -76,7 +80,7 @@ cd build
     --with-newlib \
     --without-headers \
     --enable-initfini-array \
-    --disable-nls --disable-libstdcxx \
+    --disable-nls \
     --disable-decimal-float \
     --disable-libatomic                            \
     --disable-libgomp                              \
@@ -87,6 +91,7 @@ cd build
     %{?with_threads:--enable-threads} \
     %{!?with_threads:--disable-threads} \
     --enable-linker-build-id \
+    --disable-libstdcxx \
     --disable-bootstrap
 
 %make_build
@@ -103,24 +108,34 @@ cat gcc/limitx.h gcc/glimits.h gcc/limity.h > \
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 # Link prefixed versions of the tools into $PATH.
-%if ! %{isnative}
+%if %{isnative}
+# TODO i think this is actually ! %{with standalone}.
+%find_lang gcc
+%find_lang cpplib
+%else
+touch gcc.lang cpplib.lang
 install -dm644 %{buildroot}/%{_oldprefix}/bin/
 for f in $(ls %{buildroot}/%{_bindir}); do
     ln -s ../../%{_bindir}/$f %{buildroot}/%{_oldprefix}/bin/%{_target}-$f;
 done
 %endif
 
-%files
+%files -f gcc.lang -f cpplib.lang
 %license COPYING COPYING.LIB COPYING.RUNTIME COPYING3 COPYING3.LIB
 %{_bindir}/*
 %{_libdir}/gcc/%{_target}/%{version}/*
-%{_libdir}/libcc*
 %{_libexecdir}/gcc/%{_target}/%{version}/*
 %if %{isnative}
-%doc %{_infodir}/*.info
+%doc %{_infodir}/*.info*
 %doc %{_mandir}/man1/*
 %doc %{_mandir}/man7/*
+# TODO this is horrible for a bunch of reasons (should spin a libgcc package, probably) but i just want it to work
+%{_libdir}/*.so
+%{_libdir}/*.so.*
+%{_libdir}/*.a
+%{_libdir}/*.spec
 %else
+%{_libdir}/libcc*
 /%{_oldprefix}/bin/%{_target}-*
 %exclude %{_infodir}/*.info
 %exclude %{_mandir}/man1/*

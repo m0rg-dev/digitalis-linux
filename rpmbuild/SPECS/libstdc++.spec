@@ -23,7 +23,7 @@ URL:            https://www.gnu.org/software/gcc/
 Source0:        https://ftp.gnu.org/gnu/gcc/gcc-%{version}/gcc-%{version}.tar.xz
 %define         SHA256SUM0 b8dd4368bb9c7f0b98188317ee0254dd8cc99d1e3a18d0ff146c855fe16c1d8c
 
-BuildRequires:  make
+BuildRequires:  make /lib/cpp
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-

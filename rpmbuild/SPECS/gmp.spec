@@ -1,20 +1,47 @@
-Name:           gmp
+# If host == target, we aren't building cross tools.
+# We should install into /usr and package headers.
+%if "%{_host}" == "%{_target}"
+%define isnative 1
+%else
+# Otherwise, we are building a cross tool, to be installed into a sysroot at
+# /usr/arch-vendor-os-abi/.
+%define isnative 0
+%define cross %{_target}-
+%global _oldprefix %{_prefix}
+# TODO unify target/usr and target/... but later
+%define _prefix /usr/%{_target}/usr
+%endif
+
+%define libname gmp
+
+Name:           %{?cross}%{libname}
 Version:        6.2.0
 Release:        1%{?dist}
-Summary:        GMP is a free library for arbitrary precision arithmetic, operating on signed integers, rational numbers, and floating-point numbers. 
+Summary:        GMP is a free library for arbitrary precision arithmetic, operating on signed integers, rational numbers, and floating-point numbers.
 
-License:        GPLv2 and LGPLv3
+License:        GPL-2.0-or-later OR LGPL-3.0-or-later
 URL:            https://www.gnu.org/software/gmp/
 %undefine       _disable_source_fetch
-Source0:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
+Source0:        https://ftp.gnu.org/gnu/%{libname}/%{libname}-%{version}.tar.xz
 %define         SHA256SUM0 258e6cd51b3fbdfc185c716d55f82c08aff57df0c6fbd143cf6ed561267a1526
 
-BuildRequires:  clang m4 make
-BuildRequires:  /usr/bin/makeinfo
-#Requires:       
+BuildRequires:  make m4
+
+%if "%{_build}" != "%{_host}"
+%define host_tool_prefix %{_host}-
+%endif
+
+%if "%{_host}" != "%{_target}"
+%define target_tool_prefix %{_target}-
+%else
+%define target_tool_prefix %{?host_tool_prefix}
+%endif
+BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}glibc-devel
+
+%undefine _annotated_build
+%global debug_package %{nil}
 
 %description
-
 
 %package        devel
 Summary:        Development files for %{name}
@@ -27,29 +54,21 @@ developing applications that use %{name}.
 
 %prep
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
-%autosetup
-cp -v configfsf.guess config.guess
-cp -v configfsf.sub config.sub
+%autosetup -n %{libname}-%{version}
 
 %build
-%global optflags %(echo %{optflags} | sed 's/-fstack-clash-protection//')
-export CFLAGS="$CFLAGS -ggdb2"
 
 mkdir build
 cd build
 %define _configure ../configure
-%configure CC=clang CXX=clang++ --disable-static --enable-fat --enable-cxx --docdir=/usr/share/doc/gmp-%{version}
+%configure --host=%{_target} --libdir=%{_prefix}/lib
 %make_build
-make html
-
 
 %install
-rm -rf $RPM_BUILD_ROOT
 cd build
 %make_install
-make DESTDIR=$RPM_BUILD_ROOT install-html
-find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
 
+find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %post -p /sbin/ldconfig
 
@@ -57,17 +76,15 @@ find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
 
 
 %files
-%license COPYING COPYINGv2 COPYINGv3 COPYING.LESSERv3
-%doc /usr/share/doc/gmp-%{version}
-%doc /usr/share/info/
-%{_libdir}/*.so.*
-%{_libdir}/pkgconfig
+%license COPYING COPYING.LESSERv3 COPYINGv2 COPYINGv3
+%{_prefix}/lib/*.so.*
+%doc %{_infodir}/*.info*
+%{_prefix}/lib/pkgconfig/%{libname}.pc
 
 %files devel
-#%doc add-devel-docs-here
 %{_includedir}/*
-%{_libdir}/*.so
-
+%{_prefix}/lib/*.so
+%{_prefix}/lib/*.a
 
 %changelog
 
