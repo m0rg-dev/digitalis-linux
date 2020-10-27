@@ -12,18 +12,18 @@
 %define _prefix /usr/%{_target}/usr
 %endif
 
-%define libname 
+%define libname libyaml
 
 Name:           %{?cross}%{libname}
-Version:        
+Version:        0.2.5
 Release:        1%{?dist}
-Summary:        
+Summary:        A C library for parsing and emitting YAML.
 
-License:        
-URL:            
+License:        MIT
+URL:            https://pyyaml.org/wiki/LibYAML
 %undefine       _disable_source_fetch
-Source0:        
-%define         SHA256SUM0
+Source0:        http://pyyaml.org/download/%{libname}/yaml-%{version}.tar.gz
+%define         SHA256SUM0 c642ae9b75fee120b2d96c712538bd2cf283228d2337df2cf2988e3c02678ef4
 
 BuildRequires:  make
 
@@ -54,14 +54,14 @@ developing applications that use %{name}.
 
 %prep
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
-%autosetup -n %{libname}-%{version}
+%autosetup -n yaml-%{version}
 
 %build
 
 mkdir build
 cd build
 %define _configure ../configure
-%configure --host=%{_target} --libdir=%{_prefix}/lib
+%configure --host=%{_target} --libdir=%{_prefix}/lib --disable-static
 %make_build
 
 %install
@@ -76,15 +76,13 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 
 %files
-%license license-goes-here
+%license License
 %{_prefix}/lib/*.so.*
-%doc %{_infodir}/*.info*
-%doc %{_mandir}/man1/*
 
 %files devel
 %{_includedir}/*
 %{_prefix}/lib/*.so
-%{_prefix}/lib/*.a
+%{_prefix}/lib/pkgconfig/*.pc
 
 %changelog
 

@@ -12,20 +12,20 @@
 %define _prefix /usr/%{_target}/usr
 %endif
 
-%define libname 
+%define libname zchunk
 
 Name:           %{?cross}%{libname}
-Version:        
+Version:        1.1.7
 Release:        1%{?dist}
-Summary:        
+Summary:        zchunk is a compressed file format that splits the file into independent chunks
 
-License:        
-URL:            
+License:        BSD-2-Clause
+URL:            https://github.com/zchunk/zchunk
 %undefine       _disable_source_fetch
-Source0:        
-%define         SHA256SUM0
+Source0:        https://github.com/zchunk/%{libname}/archive/%{version}.tar.gz#/%{libname}-%{version}.tar.gz
+%define         SHA256SUM0 eb3d531916d6fea399520a2a4663099ddbf2278088599fa09980631067dc9d7b
 
-BuildRequires:  make
+BuildRequires:  meson ninja-build gcc
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
@@ -37,6 +37,9 @@ BuildRequires:  make
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
 BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}glibc-devel
+BuildRequires: %{?target_tool_prefix}meson-toolchain %{?target_tool_prefix}libcurl-devel %{?target_tool_prefix}openssl-devel
+
+Requires: %{?cross}libcurl %{?cross}openssl
 
 %undefine _annotated_build
 %global debug_package %{nil}
@@ -46,6 +49,7 @@ BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}glibc-devel
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       %{?target_tool_prefix}libffi-devel
 
 %description    devel
 The %{name}-devel package contains libraries and header files for
@@ -59,14 +63,15 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %build
 
 mkdir build
-cd build
-%define _configure ../configure
-%configure --host=%{_target} --libdir=%{_prefix}/lib
-%make_build
+meson -Dbuildtype=release --prefix=%{_prefix} \
+%if "%{_build}" != "%{_target}"
+    --cross-file %{_target} \
+%endif
+    build/
+ninja %{?_smp_mflags} -C build
 
 %install
-cd build
-%make_install
+DESTDIR=%{buildroot} ninja -C build install
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
@@ -76,15 +81,15 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 
 %files
-%license license-goes-here
+%license LICENSE
+%{_bindir}/*
 %{_prefix}/lib/*.so.*
-%doc %{_infodir}/*.info*
 %doc %{_mandir}/man1/*
 
 %files devel
 %{_includedir}/*
 %{_prefix}/lib/*.so
-%{_prefix}/lib/*.a
+%{_prefix}/lib/pkgconfig/*.pc
 
 %changelog
 

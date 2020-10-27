@@ -11,7 +11,15 @@
 %define _prefix /usr/%{_target}
 %endif
 
-Name:           %{?cross}gcc
+%bcond_without threads
+# general "make it depend on less stuff" option for bootstrapping toolchains
+%bcond_with    standalone
+
+%if %{with standalone}
+%define standalone_flag standalone-
+%endif
+
+Name:           %{?cross}%{?standalone_flag}gcc
 Version:        10.2.0
 Release:        1%{?dist}
 Summary:        The GNU Compiler Collection includes front ends for C, C++, Objective-C, Fortran, Ada, Go, and D, as well as libraries for these languages (libstdc++,...).
@@ -47,12 +55,12 @@ BuildRequires:  %{?host_tool_prefix}libstdc++-devel %{?host_tool_prefix}zlib-dev
 BuildRequires:  %{?target_tool_prefix}binutils
 Requires:       %{?target_tool_prefix}binutils
 
+%if %{without standalone}
+BuildRequires: %{?target_tool_prefix}glibc-devel
+%endif
+
 # TODO should be its own package
 Provides:       %{?cross}g++
-
-%bcond_without threads
-# general "make it depend on less stuff" option for bootstrapping toolchains
-%bcond_with    standalone
 
 %description
 
@@ -73,14 +81,14 @@ cd build
 %configure --enable-languages=c,c++ --disable-multilib --with-system-zlib \
 %if ! %{isnative}
     --target=%{_target} \
-    --with-sysroot=%{_prefix} \
+    --with-sysroot=%{_prefix}/.. \
+    --libdir=%{_prefix}/lib \
 %endif
 %if %{with standalone}
     --disable-shared \
     --with-newlib \
     --without-headers \
     --enable-initfini-array \
-    --disable-nls \
     --disable-decimal-float \
     --disable-libatomic                            \
     --disable-libgomp                              \
@@ -93,6 +101,10 @@ cd build
     --enable-linker-build-id \
     --disable-libstdcxx \
     --disable-bootstrap
+
+%if ! %{isnative}
+mkdir -pv /usr/%{_target}/usr/include
+%endif
 
 %make_build
 
@@ -107,13 +119,11 @@ cat gcc/limitx.h gcc/glimits.h gcc/limity.h > \
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
-# Link prefixed versions of the tools into $PATH.
-%if %{isnative}
-# TODO i think this is actually ! %{with standalone}.
 %find_lang gcc
 %find_lang cpplib
-%else
-touch gcc.lang cpplib.lang
+
+# Link prefixed versions of the tools into $PATH.
+%if ! %{isnative}
 install -dm644 %{buildroot}/%{_oldprefix}/bin/
 for f in $(ls %{buildroot}/%{_bindir}); do
     ln -s ../../%{_bindir}/$f %{buildroot}/%{_oldprefix}/bin/%{_target}-$f;

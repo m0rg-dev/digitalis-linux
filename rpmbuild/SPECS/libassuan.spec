@@ -12,20 +12,20 @@
 %define _prefix /usr/%{_target}/usr
 %endif
 
-%define libname 
+%define libname libassuan
 
 Name:           %{?cross}%{libname}
-Version:        
+Version:        2.5.4
 Release:        1%{?dist}
-Summary:        
+Summary:        Libassuan is a small library implementing the so-called Assuan protocol. 
 
-License:        
-URL:            
+License:        LGPLv2+
+URL:            https://www.gnupg.org/
 %undefine       _disable_source_fetch
-Source0:        
-%define         SHA256SUM0
+Source0:        https://www.gnupg.org/ftp/gcrypt/%{libname}/%{libname}-%{version}.tar.bz2
+%define         SHA256SUM0 c080ee96b3bd519edd696cfcebdecf19a3952189178db9887be713ccbcb5fbf0
 
-BuildRequires:  make
+BuildRequires:  make gcc
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
@@ -36,7 +36,8 @@ BuildRequires:  make
 %else
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
-BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}glibc-devel
+BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}glibc-devel 
+BuildRequires: %{?target_tool_prefix}libgpg-error-devel %{?target_tool_prefix}pkg-config
 
 %undefine _annotated_build
 %global debug_package %{nil}
@@ -61,7 +62,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 mkdir build
 cd build
 %define _configure ../configure
-%configure --host=%{_target} --libdir=%{_prefix}/lib
+%configure --host=%{_target} --libdir=%{_prefix}/lib --with-libgpg-error-prefix=%{_prefix}
 %make_build
 
 %install
@@ -76,15 +77,16 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 
 %files
-%license license-goes-here
+%license COPYING.LIB
 %{_prefix}/lib/*.so.*
 %doc %{_infodir}/*.info*
-%doc %{_mandir}/man1/*
 
 %files devel
+%{_bindir}/%{libname}-config
 %{_includedir}/*
 %{_prefix}/lib/*.so
-%{_prefix}/lib/*.a
+%{_prefix}/lib/pkgconfig/*.pc
+%{_datadir}/aclocal/*.m4
 
 %changelog
 

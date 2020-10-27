@@ -1,0 +1,63 @@
+--- a/modulemd/meson.build	2020-10-27 11:07:27.237201906 -0700
++++ b/modulemd/meson.build	2020-10-27 11:07:56.770536307 -0700
+@@ -217,17 +217,19 @@
+     )
+ endif
+
+-modulemd_validator = executable(
+-    'modulemd-validator',
+-    sources : modulemd_validator_srcs,
+-    include_directories : include_dirs,
+-    dependencies : [
+-        gobject,
+-        yaml,
+-        modulemd_dep
+-    ],
+-    install : true
+-)
++if not meson.is_cross_build()
++    modulemd_validator = executable(
++        'modulemd-validator',
++        sources : modulemd_validator_srcs,
++        include_directories : include_dirs,
++        dependencies : [
++            gobject,
++            yaml,
++            modulemd_dep
++        ],
++        install : true
++    )
++endif
+
+ header_path = 'modulemd-2.0'
+
+@@ -501,15 +503,17 @@
+     )
+ endif
+
+-help2man_opts = [
+-  '--no-info',
+-  '--section=1',
+-]
+-custom_target(
+-    'modulemd-validator.1',
+-    output: 'modulemd-validator.1',
+-    command: [
+-      help2man, help2man_opts, '--output=@OUTPUT@', modulemd_validator,
+-    ],
+-    install: true,
+-    install_dir: join_paths(get_option('mandir'), 'man1'))
++if not meson.is_cross_build()
++    help2man_opts = [
++    '--no-info',
++    '--section=1',
++    ]
++    custom_target(
++        'modulemd-validator.1',
++        output: 'modulemd-validator.1',
++        command: [
++        help2man, help2man_opts, '--output=@OUTPUT@', modulemd_validator,
++        ],
++        install: true,
++        install_dir: join_paths(get_option('mandir'), 'man1'))
++endif

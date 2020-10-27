@@ -12,18 +12,18 @@
 %define _prefix /usr/%{_target}/usr
 %endif
 
-%define libname 
+%define libname cppunit
 
 Name:           %{?cross}%{libname}
-Version:        
+Version:        1.15.1
 Release:        1%{?dist}
-Summary:        
+Summary:        CppUnit is the C++ port of the famous JUnit framework for unit testing.
 
-License:        
-URL:            
+License:        LGPLv2
+URL:            https://www.freedesktop.org/wiki/Software/cppunit/
 %undefine       _disable_source_fetch
-Source0:        
-%define         SHA256SUM0
+Source0:        http://dev-www.libreoffice.org/src/%{libname}-%{version}.tar.gz
+%define         SHA256SUM0 89c5c6665337f56fd2db36bc3805a5619709d51fb136e51937072f63fcc717a7
 
 BuildRequires:  make
 
@@ -36,7 +36,7 @@ BuildRequires:  make
 %else
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
-BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}glibc-devel
+BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}glibc-devel %{?target_tool_prefix}libstdc++-devel
 
 %undefine _annotated_build
 %global debug_package %{nil}
@@ -76,15 +76,16 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 
 %files
-%license license-goes-here
+%license COPYING
+%exclude %{_bindir}/*
 %{_prefix}/lib/*.so.*
-%doc %{_infodir}/*.info*
-%doc %{_mandir}/man1/*
+%doc %{_datadir}/doc/%{libname}
 
 %files devel
 %{_includedir}/*
 %{_prefix}/lib/*.so
 %{_prefix}/lib/*.a
+%{_prefix}/lib/pkgconfig/*.pc
 
 %changelog
 

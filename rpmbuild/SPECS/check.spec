@@ -12,20 +12,20 @@
 %define _prefix /usr/%{_target}/usr
 %endif
 
-%define libname 
+%define libname check
 
 Name:           %{?cross}%{libname}
-Version:        
+Version:        0.15.2
 Release:        1%{?dist}
-Summary:        
+Summary:        Check is a unit testing framework for C.
 
-License:        
-URL:            
+License:        LGPLv2
+URL:            https://libcheck.github.io/check/
 %undefine       _disable_source_fetch
-Source0:        
-%define         SHA256SUM0
+Source0:        https://github.com/libcheck/%{libname}/releases/download/%{version}/%{libname}-%{version}.tar.gz
+%define         SHA256SUM0 a8de4e0bacfb4d76dd1c618ded263523b53b85d92a146d8835eb1a52932fa20a
 
-BuildRequires:  make
+BuildRequires:  make autoconf automake libtool
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
@@ -55,6 +55,7 @@ developing applications that use %{name}.
 %prep
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %autosetup -n %{libname}-%{version}
+autoreconf --install
 
 %build
 
@@ -76,15 +77,19 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 
 %files
-%license license-goes-here
+%license COPYING.LESSER
 %{_prefix}/lib/*.so.*
-%doc %{_infodir}/*.info*
 %doc %{_mandir}/man1/*
+%doc %{_infodir}/*.info*
 
 %files devel
 %{_includedir}/*
 %{_prefix}/lib/*.so
 %{_prefix}/lib/*.a
+%{_datadir}/aclocal/*.m4
+%{_prefix}/lib/pkgconfig/*.pc
+%doc %{_datadir}/doc/check
+%{_bindir}/checkmk
 
 %changelog
 

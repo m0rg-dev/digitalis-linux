@@ -12,18 +12,18 @@
 %define _prefix /usr/%{_target}/usr
 %endif
 
-%define libname 
+%define libname libxml2
 
 Name:           %{?cross}%{libname}
-Version:        
+Version:        2.9.10
 Release:        1%{?dist}
-Summary:        
+Summary:        Libxml2 is the XML C parser and toolkit developed for the Gnome project 
 
-License:        
-URL:            
+License:        MIT
+URL:            http://xmlsoft.org/
 %undefine       _disable_source_fetch
-Source0:        
-%define         SHA256SUM0
+Source0:        ftp://xmlsoft.org/%{libname}/%{libname}-%{version}.tar.gz
+%define         SHA256SUM0 aafee193ffb8fe0c82d4afef6ef91972cbaf5feea100edc2f262750611b4be1f
 
 BuildRequires:  make
 
@@ -76,15 +76,23 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 
 %files
-%license license-goes-here
+%license COPYING
+%{_bindir}/*
 %{_prefix}/lib/*.so.*
-%doc %{_infodir}/*.info*
+%doc %{_datadir}/gtk-doc/html/libxml2
+%doc %{_datadir}/doc/libxml2-%{version}
 %doc %{_mandir}/man1/*
 
 %files devel
-%{_includedir}/*
+%{_includedir}/libxml2
 %{_prefix}/lib/*.so
 %{_prefix}/lib/*.a
+# was this supposed to go in libexec or something?
+%{_prefix}/lib/xml2Conf.sh
+%{_prefix}/lib/pkgconfig/*.pc
+%{_prefix}/lib/cmake/libxml2
+%{_datadir}/aclocal/*.m4
+%doc %{_mandir}/man3/*
 
 %changelog
 

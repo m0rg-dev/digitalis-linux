@@ -50,7 +50,7 @@ build_rpm() {
     podman run --net host $VOLUMES --rm -it \
         fedora-with-rpm sh -exc \
         "dnf makecache --repo=local-bootstrap; \
-         dnf makecache --repo=digitalis-stage1
+         dnf makecache --repo=digitalis-stage1; \
          dnf install -y --best --allowerasing $REPOS \$(rpmspec $RPMDEFS $2 -q --buildrequires /rpmbuild/SPECS/$1.spec); \
          rpmbuild $RPMDEFS $2 -ba /rpmbuild/SPECS/$1.spec"
 }
@@ -59,7 +59,9 @@ if [ ! -e rpmbuild/SRPMS/x86_64-pc-linux-gnu-binutils-*.rpm ]; then
     build_rpm binutils
 fi
 
-if [ ! -e rpmbuild/SRPMS/x86_64-pc-linux-gnu-gcc-*.rpm ]; then
+false
+
+if [ ! -e rpmbuild/SRPMS/x86_64-pc-linux-gnu-standalone-gcc-*.rpm ]; then
     build_rpm gcc "--without threads --with standalone"
 fi
 
@@ -67,8 +69,12 @@ if [ ! -e rpmbuild/SRPMS/x86_64-pc-linux-gnu-kernel-headers-*.rpm ]; then
     build_rpm kernel-headers
 fi
 
-LIBRPMS="glibc libstdc++ ncurses gmp mpfr libmpc zlib libgpg-error libgcrypt"
+LIBRPMS="glibc gcc libstdc++ ncurses gmp mpfr libmpc zlib libgpg-error libgcrypt"
 LIBRPMS="$LIBRPMS file popt libarchive sqlite pkg-config-wrapper lua"
+LIBRPMS="$LIBRPMS cmake-toolchain expat libsolv meson-toolchain libffi glib2 util-linux"
+LIBRPMS="$LIBRPMS check openssl libxml2 curl zchunk python libassuan gpgme"
+LIBRPMS="$LIBRPMS librepo libyaml rpm gtk-doc gobject-introspection libmodulemd"
+LIBRPMS="$LIBRPMS cppunit json-c libdnf"
 
 for rpm in $LIBRPMS; do
     if [ ! -n "$(ls -l rpmbuild/SRPMS/x86_64-pc-linux-gnu-$rpm-*.rpm)" ]; then

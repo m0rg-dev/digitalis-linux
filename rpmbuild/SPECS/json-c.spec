@@ -12,27 +12,30 @@
 %define _prefix /usr/%{_target}/usr
 %endif
 
-%define libname 
+%define libname json-c
+%define silly_version -20200726
 
 Name:           %{?cross}%{libname}
-Version:        
+Version:        0.15
 Release:        1%{?dist}
-Summary:        
+Summary:        json-c is a library for creating and reading JSON objects in C.
 
-License:        
-URL:            
+License:        MIT
+URL:            https://github.com/json-c/json-c
 %undefine       _disable_source_fetch
-Source0:        
-%define         SHA256SUM0
+Source0:        https://github.com/json-c/%{libname}/archive/%{libname}-%{version}%{silly_version}.tar.gz
+%define         SHA256SUM0 4ba9a090a42cf1e12b84c64e4464bb6fb893666841d5843cc5bef90774028882
 
-BuildRequires:  make
+BuildRequires:  cmake
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
+BuildRequires: %{?host_tool_prefix}cmake-toolchain
 %endif
 
 %if "%{_host}" != "%{_target}"
 %define target_tool_prefix %{_target}-
+BuildRequires: %{?target_tool_prefix}cmake-toolchain
 %else
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
@@ -54,14 +57,20 @@ developing applications that use %{name}.
 
 %prep
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
-%autosetup -n %{libname}-%{version}
+%autosetup -n %{libname}-%{libname}-%{version}%{silly_version}
 
 %build
 
 mkdir build
 cd build
-%define _configure ../configure
-%configure --host=%{_target} --libdir=%{_prefix}/lib
+
+cmake \
+%if "%{_build}" != "%{_target}"
+    -DCMAKE_TOOLCHAIN_FILE=/usr/%{_target}/cmake_toolchain \
+%endif
+    -DBUILD_STATIC_LIBS=OFF \
+    -DCMAKE_INSTALL_PREFIX=%{_prefix} ..
+
 %make_build
 
 %install
@@ -70,21 +79,21 @@ cd build
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
+
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
 
 
 %files
-%license license-goes-here
+%license COPYING
 %{_prefix}/lib/*.so.*
-%doc %{_infodir}/*.info*
-%doc %{_mandir}/man1/*
 
 %files devel
 %{_includedir}/*
 %{_prefix}/lib/*.so
-%{_prefix}/lib/*.a
+%{_prefix}/lib/pkgconfig/*.pc
+%{_prefix}/lib/cmake/json-c
 
 %changelog
 

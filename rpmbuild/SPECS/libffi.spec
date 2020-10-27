@@ -12,20 +12,20 @@
 %define _prefix /usr/%{_target}/usr
 %endif
 
-%define libname 
+%define libname libffi
 
 Name:           %{?cross}%{libname}
-Version:        
+Version:        3.3
 Release:        1%{?dist}
-Summary:        
+Summary:        The libffi library provides a portable, high level programming interface to various calling conventions.
 
-License:        
-URL:            
+License:        MIT
+URL:            https://github.com/libffi/libffi/
 %undefine       _disable_source_fetch
-Source0:        
-%define         SHA256SUM0
+Source0:        https://github.com/libffi/%{libname}/archive/v%{version}.tar.gz#/libffi-%{version}.tar.gz
+%define         SHA256SUM0 3f2f86094f5cf4c36cfe850d2fe029d01f5c2c2296619407c8ba0d8207da9a6b
 
-BuildRequires:  make
+BuildRequires:  make autoconf automake libtool texinfo
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
@@ -55,6 +55,7 @@ developing applications that use %{name}.
 %prep
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %autosetup -n %{libname}-%{version}
+./autogen.sh
 
 %build
 
@@ -76,15 +77,16 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 
 %files
-%license license-goes-here
+%license LICENSE
 %{_prefix}/lib/*.so.*
 %doc %{_infodir}/*.info*
-%doc %{_mandir}/man1/*
+%doc %{_mandir}/man3/*
 
 %files devel
 %{_includedir}/*
 %{_prefix}/lib/*.so
 %{_prefix}/lib/*.a
+%{_prefix}/lib/pkgconfig/*.pc
 
 %changelog
 

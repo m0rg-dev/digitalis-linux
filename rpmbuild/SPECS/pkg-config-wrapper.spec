@@ -31,7 +31,7 @@ cat >%{buildroot}/%{_bindir}/%{_target}-pkg-config <<EOF
 SYSROOT=/usr/%{_target}/
 
 export PKG_CONFIG_PATH=
-export PKG_CONFIG_LIBDIR=\${SYSROOT}/usr/lib/pkgconfig:\${SYSROOT}/usr/share/pkgconfig
+export PKG_CONFIG_LIBDIR=\${SYSROOT}/usr/lib/pkgconfig:\${SYSROOT}/usr/share/pkgconfig:\${SYSROOT}/share/pkgconfig
 export PKG_CONFIG_SYSROOT_DIR=\${SYSROOT}
 
 exec pkg-config "\$@"

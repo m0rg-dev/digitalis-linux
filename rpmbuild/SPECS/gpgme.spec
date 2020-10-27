@@ -12,20 +12,20 @@
 %define _prefix /usr/%{_target}/usr
 %endif
 
-%define libname 
+%define libname gpgme
 
 Name:           %{?cross}%{libname}
-Version:        
+Version:        1.14.0
 Release:        1%{?dist}
-Summary:        
+Summary:        GPGME is the standard library to access GnuPG functions from programming languages. 
 
-License:        
-URL:            
+License:        LGPLv2+, GPLv2+
+URL:            https://www.gnupg.org/
 %undefine       _disable_source_fetch
-Source0:        
-%define         SHA256SUM0
+Source0:        https://www.gnupg.org/ftp/gcrypt/%{libname}/%{libname}-%{version}.tar.bz2
+%define         SHA256SUM0 cef1f710a6b0d28f5b44242713ad373702d1466dcbe512eb4e754d7f35cd4307
 
-BuildRequires:  make
+BuildRequires:  make gcc /usr/bin/gpgsm
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
@@ -36,16 +36,19 @@ BuildRequires:  make
 %else
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
-BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}glibc-devel
-
+BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}glibc-devel %{?target_tool_prefix}libgpg-error-devel
+BuildRequires: %{?target_tool_prefix}pkg-config %{?target_tool_prefix}libassuan-devel %{?target_tool_prefix}libstdc++-devel
 %undefine _annotated_build
 %global debug_package %{nil}
+
+Requires: %{?cross}libassuan %{?cross}libgpg-error
 
 %description
 
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       %{?cross}libassuan-devel %{?cross}libgpg-error-devel
 
 %description    devel
 The %{name}-devel package contains libraries and header files for
@@ -61,7 +64,8 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 mkdir build
 cd build
 %define _configure ../configure
-%configure --host=%{_target} --libdir=%{_prefix}/lib
+# apparently it can't get these out of pkg-config??
+%configure --host=%{_target} --libdir=%{_prefix}/lib --with-libgpg-error-prefix=%{_prefix} --with-libassuan-prefix=%{_prefix}
 %make_build
 
 %install
@@ -76,15 +80,20 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 
 %files
-%license license-goes-here
+%license COPYING COPYING.LESSER
+%{_bindir}/gpgme-tool
+%{_bindir}/gpgme-json
 %{_prefix}/lib/*.so.*
 %doc %{_infodir}/*.info*
-%doc %{_mandir}/man1/*
 
 %files devel
+%{_bindir}/gpgme-config
 %{_includedir}/*
 %{_prefix}/lib/*.so
-%{_prefix}/lib/*.a
+%{_prefix}/lib/pkgconfig/*.pc
+%{_prefix}/lib/cmake/*
+%{_datadir}/aclocal/*.m4
+%{_datadir}/common-lisp
 
 %changelog
 

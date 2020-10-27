@@ -12,18 +12,18 @@
 %define _prefix /usr/%{_target}/usr
 %endif
 
-%define libname 
+%define libname expat
 
 Name:           %{?cross}%{libname}
-Version:        
+Version:        2.2.10
 Release:        1%{?dist}
-Summary:        
+Summary:        Expat is a stream-oriented XML parser.
 
-License:        
-URL:            
+License:        MIT
+URL:            https://github.com/libexpat/libexpat
 %undefine       _disable_source_fetch
-Source0:        
-%define         SHA256SUM0
+Source0:        https://github.com/libexpat/libexpat/releases/download/R_%(echo %{version} | tr . _)/%{libname}-%{version}.tar.xz
+%define         SHA256SUM0 5dfe538f8b5b63f03e98edac520d7d9a6a4d22e482e5c96d4d06fcc5485c25f2
 
 BuildRequires:  make
 
@@ -76,15 +76,16 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 
 %files
-%license license-goes-here
+%license COPYING
+%{_bindir}/*
 %{_prefix}/lib/*.so.*
-%doc %{_infodir}/*.info*
-%doc %{_mandir}/man1/*
 
 %files devel
 %{_includedir}/*
 %{_prefix}/lib/*.so
 %{_prefix}/lib/*.a
+%{_prefix}/lib/pkgconfig/*.pc
+%doc %{_datadir}/doc/expat
 
 %changelog
 
