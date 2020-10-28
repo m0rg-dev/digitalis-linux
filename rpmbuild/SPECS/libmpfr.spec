@@ -7,14 +7,12 @@
 # /usr/arch-vendor-os-abi/.
 %define isnative 0
 %define cross %{_target}-
-%global _oldprefix %{_prefix}
-# TODO unify target/usr and target/... but later
 %define _prefix /usr/%{_target}/usr
 %endif
 
 %define libname mpfr
 
-Name:           %{?cross}%{libname}
+Name:           %{?cross}lib%{libname}
 Version:        4.1.0
 Release:        1%{?dist}
 Summary:        The MPFR library is a C library for multiple-precision floating-point computations with correct rounding. 
@@ -36,8 +34,8 @@ BuildRequires:  make
 %else
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
-BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}glibc-devel
-BuildRequires: %{?target_tool_prefix}gmp-devel
+BuildRequires: %{?target_tool_prefix}gcc
+BuildRequires: %{?target_tool_prefix}libgmp-devel
 
 %undefine _annotated_build
 %global debug_package %{nil}
@@ -62,7 +60,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 mkdir build
 cd build
 %define _configure ../configure
-%configure --host=%{_target} --libdir=%{_prefix}/lib
+%configure --host=%{_target} --libdir=%{_prefix}/lib --disable-static
 %make_build
 
 %install
@@ -71,22 +69,16 @@ cd build
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
-
-
 %files
 %license COPYING COPYING.LESSER
 %{_prefix}/lib/*.so.*
 %doc %{_datadir}/doc/mpfr
 %doc %{_infodir}/mpfr.info*
-%{_prefix}/lib/pkgconfig/mpfr.pc
 
 %files devel
 %{_includedir}/*
 %{_prefix}/lib/*.so
-%{_prefix}/lib/*.a
+%{_prefix}/lib/pkgconfig/mpfr.pc
 
 %changelog
 

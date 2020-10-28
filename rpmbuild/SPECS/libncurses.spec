@@ -97,11 +97,6 @@ mv %{buildroot}/usr/share/pkgconfig/*.pc %{buildroot}/%{_datadir}/pkgconfig
 rmdir -v %{buildroot}/usr/share/pkgconfig
 %endif
 
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
-
-
 %files
 %license COPYING
 %{_prefix}/lib/*.so.*

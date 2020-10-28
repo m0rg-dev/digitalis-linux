@@ -8,13 +8,12 @@
 %define isnative 0
 %define cross %{_target}-
 %global _oldprefix %{_prefix}
-# TODO unify target/usr and target/... but later
 %define _prefix /usr/%{_target}/usr
 %endif
 
 %define libname gmp
 
-Name:           %{?cross}%{libname}
+Name:           %{?cross}lib%{libname}
 Version:        6.2.0
 Release:        1%{?dist}
 Summary:        GMP is a free library for arbitrary precision arithmetic, operating on signed integers, rational numbers, and floating-point numbers.
@@ -36,7 +35,7 @@ BuildRequires:  make m4
 %else
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
-BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}glibc-devel
+BuildRequires: %{?target_tool_prefix}gcc
 
 %undefine _annotated_build
 %global debug_package %{nil}
@@ -61,7 +60,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 mkdir build
 cd build
 %define _configure ../configure
-%configure --host=%{_target} --libdir=%{_prefix}/lib
+%configure --host=%{_target} --libdir=%{_prefix}/lib --disable-static
 %make_build
 
 %install
@@ -70,21 +69,15 @@ cd build
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
-
-
 %files
 %license COPYING COPYING.LESSERv3 COPYINGv2 COPYINGv3
 %{_prefix}/lib/*.so.*
 %doc %{_infodir}/*.info*
-%{_prefix}/lib/pkgconfig/%{libname}.pc
 
 %files devel
 %{_includedir}/*
 %{_prefix}/lib/*.so
-%{_prefix}/lib/*.a
+%{_prefix}/lib/pkgconfig/%{libname}.pc
 
 %changelog
 

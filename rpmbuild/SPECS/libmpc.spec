@@ -7,8 +7,6 @@
 # /usr/arch-vendor-os-abi/.
 %define isnative 0
 %define cross %{_target}-
-%global _oldprefix %{_prefix}
-# TODO unify target/usr and target/... but later
 %define _prefix /usr/%{_target}/usr
 %endif
 
@@ -36,8 +34,8 @@ BuildRequires:  make
 %else
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
-BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}glibc-devel
-BuildRequires: %{?target_tool_prefix}gmp-devel %{?target_tool_prefix}mpfr-devel
+BuildRequires: %{?target_tool_prefix}gcc
+BuildRequires: %{?target_tool_prefix}libgmp-devel %{?target_tool_prefix}libmpfr-devel
 
 %undefine _annotated_build
 
@@ -61,7 +59,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 mkdir build
 cd build
 %define _configure ../configure
-%configure --host=%{_target} --libdir=%{_prefix}/lib
+%configure --host=%{_target} --libdir=%{_prefix}/lib --disable-static
 %make_build
 
 %install
@@ -69,11 +67,6 @@ cd build
 %make_install
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
-
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
-
 
 %files
 %license COPYING.LESSER
@@ -83,7 +76,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %files devel
 %{_includedir}/*
 %{_prefix}/lib/*.so
-%{_prefix}/lib/*.a
 
 %changelog
 
