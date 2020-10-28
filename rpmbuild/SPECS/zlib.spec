@@ -7,8 +7,6 @@
 # /usr/arch-vendor-os-abi/.
 %define isnative 0
 %define cross %{_target}-
-%global _oldprefix %{_prefix}
-# TODO unify target/usr and target/... but later
 %define _prefix /usr/%{_target}/usr
 %endif
 
@@ -17,7 +15,7 @@
 Name:           %{?cross}%{libname}
 Version:        1.2.11
 Release:        1%{?dist}
-Summary:        zlib is designed to be a free, general-purpose, legally unencumbered -- that is, not covered by any patents -- lossless data-compression library for use on virtually any computer hardware and operating system.
+Summary:        A lossless data compression library
 
 License:        Zlib
 URL:            https://zlib.net/
@@ -42,6 +40,7 @@ BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}glibc-devel
 %global debug_package %{nil}
 
 %description
+zlib is designed to be a free, general-purpose, legally unencumbered -- that is, not covered by any patents -- lossless data-compression library for use on virtually any computer hardware and operating system.
 
 %package        devel
 Summary:        Development files for %{name}
@@ -61,7 +60,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 mkdir build
 cd build
 %define _configure ../configure
-CC=%{?target_tool_prefix}gcc %{_configure} --prefix=%{_prefix}
+CC=%{?target_tool_prefix}gcc %{_configure} --prefix=%{_prefix} --enable-shared
 %make_build
 
 %install
@@ -69,22 +68,17 @@ cd build
 %make_install
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
-
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
-
+rm -v %{buildroot}/%{_prefix}/lib/libz.a
 
 %files
 %license README
 %{_prefix}/lib/*.so.*
 %{_prefix}/lib/pkgconfig/zlib.pc
-%doc %{_mandir}/man3/zlib.3
 
 %files devel
 %{_includedir}/*
 %{_prefix}/lib/*.so
-%{_prefix}/lib/*.a
+%doc %{_mandir}/man3/zlib.*
 
 %changelog
 

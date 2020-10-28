@@ -8,6 +8,8 @@ This is currently just stream-of-consciousness stuff about toolchain layout and 
 - Packages that install libraries MUST contain `lib` in their names.
     - Packages that install libraries SHOULD begin with `lib`.
 - Packages that do not install libraries SHOULD NOT begin with `lib`.
+- Packages SHOULD be buildable for architectures other than that of the build machine with the `%{_host}` RPM variable.
+    - Packages MUST NOT build if `%{_host}` is set to anything other than `%{_build}` if they cannot cross-compile.
 
 Cross toolchain layout stuff:
 
