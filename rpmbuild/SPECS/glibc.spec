@@ -8,7 +8,7 @@
 %define isnative 0
 %define cross %{_target}-
 %global _oldprefix %{_prefix}
-%define _prefix /usr/%{_target}/
+%define _prefix /usr/%{_target}/%{_oldprefix}
 %endif
 
 Name:           %{?cross}glibc
@@ -24,7 +24,7 @@ Source0:        https://ftp.gnu.org/gnu/glibc/glibc-%{version}.tar.xz
 Source1:        nscd.conf
 Source2:        nsswitch.conf
 
-BuildRequires:  make kernel-headers bison
+BuildRequires:  make bison
 #Requires:       
 Provides:       rtld(GNU_HASH)
 
@@ -40,7 +40,9 @@ Provides:       rtld(GNU_HASH)
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
 
-BuildRequires: %{?target_tool_prefix}standalone-gcc %{?target_tool_prefix}binutils
+BuildRequires: %{?target_tool_prefix}standalone-gcc
+BuildRequires: %{?target_tool_prefix}binutils
+BuildRequires: %{?target_tool_prefix}kernel-headers
 
 %undefine _annotated_build
 %global debug_package %{nil}
@@ -74,14 +76,14 @@ cd build
 
 %{_configure} \
     --host=%{_target} \
-    --prefix= \
-%if %{isnative}
-    --includedir=/usr/include \
-%else
-    --includedir=/include \
-%endif
+    --prefix=%{_oldprefix} \
+    --libdir=/lib \
     --enable-kernel=3.2 \
+%if %{isnative}
     --with-headers=/usr/include \
+%else
+    --with-headers=/usr/%{_target}/usr/include \
+%endif
     --disable-werror \
     --enable-shared \
     libc_cv_slibdir=/lib \
@@ -95,7 +97,7 @@ cd build
 %if %{isnative}
 %make_install
 %else
-%{__make} install DESTDIR=%{buildroot}/%{_prefix} INSTALL="%{__install} -p"
+%{__make} install DESTDIR=%{buildroot}/usr/%{_target}/ INSTALL="%{__install} -p"
 %endif
 
 %if %{isnative}
@@ -113,10 +115,14 @@ install -d -m644 %{buildroot}/var/cache/nscd
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
-%post -p /sbin/ldconfig
+%if %{isnative}
+%transfiletriggerin -- /usr/lib /lib
+/sbin/ldconfig -X
 
-%postun -p /sbin/ldconfig
+%transfiletriggerun -- /usr/lib /lib
+/sbin/ldconfig -X
 
+%endif
 
 %files
 %license COPYING COPYING.LIB LICENSES
@@ -124,13 +130,13 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_prefix}/libexec/*
 %{_prefix}/share/*
 # can't use _libdir reliably from fedora
-%{_prefix}/lib/gconv
-%{_prefix}/lib/audit
-%{_prefix}/lib/*.so.*
 
 %if %{isnative}
+/lib/*.so.*
 %{_bindir}/*
 %{_sbindir}/*
+/lib/gconv
+/lib/audit
 /sbin/ldconfig
 /sbin/sln
 /var/db
@@ -140,10 +146,14 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %config(noreplace) /etc/nscd.conf
 %config(noreplace) /etc/nsswitch.conf
 %else
-%exclude %{_prefix}/etc
-%exclude %{_prefix}/var
+/usr/%{_target}/lib/*.so.*
+%exclude /usr/%{_target}/{etc,var}
 %exclude %{_bindir}
 %exclude %{_sbindir}
+%exclude /usr/%{_target}/sbin/*
+
+/usr/%{_target}/lib/gconv
+/usr/%{_target}/lib/audit
 %endif
 
 #%doc add-main-docs-here
@@ -151,8 +161,14 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %files devel
 #%doc add-devel-docs-here
 %{_includedir}/*
-%{_prefix}/lib/*.so
-%{_prefix}/lib/*.a
-%{_prefix}/lib/*.o
+%if %{isnative}
+/lib/*.so
+/lib/*.a
+/lib/*.o
+%else
+/usr/%{_target}/lib/*.so
+/usr/%{_target}/lib/*.a
+/usr/%{_target}/lib/*.o
+%endif
 
 %changelog

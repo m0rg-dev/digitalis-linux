@@ -11,7 +11,7 @@
 # /usr/arch-vendor-os-abi/.
 %define isnative 0
 %define cross %{_target}-
-%define _prefix /usr/%{_target}/
+%define _prefix /usr/%{_target}/usr
 %endif
 
 Name:           %{?cross}kernel-headers
@@ -40,8 +40,8 @@ make headers
 %install
 find usr/include -name '.*' -delete
 rm usr/include/Makefile
-mkdir -p %{buildroot}/%{_prefix}
-cp -rv usr/include %{buildroot}/%{_prefix}
+install -dm755 %{buildroot}/%{_prefix}/
+cp -rv usr/include %{buildroot}/%{_prefix}/
 
 %files
 %license COPYING

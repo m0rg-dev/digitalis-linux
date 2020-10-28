@@ -7,12 +7,10 @@
 # /usr/arch-vendor-os-abi/.
 %define isnative 0
 %define cross %{_target}-
-%global _oldprefix %{_prefix}
-# TODO unify target/usr and target/... but later
 %define _prefix /usr/%{_target}/usr
 %endif
 
-Name:           %{?cross}ncurses
+Name:           %{?cross}libncurses
 Version:        6.2
 Release:        1%{?dist}
 Summary:        The ncurses (new curses) library is a free software emulation of curses in System V Release 4.0 (SVr4), and more.
@@ -28,14 +26,14 @@ BuildRequires:  make
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif
-BuildRequires:  %{?host_tool_prefix}gcc %{?host_tool_prefix}glibc-devel %{?host_tool_prefix}libstdc++-devel
+BuildRequires:  %{?host_tool_prefix}gcc %{?host_tool_prefix}g++
 
 %if "%{_host}" != "%{_target}"
 %define target_tool_prefix %{_target}-
 %else
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
-BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}glibc-devel %{?target_tool_prefix}libstdc++-devel
+BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}g++
 
 # we're going to build some transitory build-side tools
 BuildRequires:  gcc
@@ -53,6 +51,11 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
+%package     -n %{?cross}ncurses
+Summary:        Binary tools distributed with the ncurses library.
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+%description -n %{?cross}ncurses
+
 %prep
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %autosetup -n ncurses-%{version}
@@ -69,12 +72,13 @@ make -C progs tic
 cd ..
 
 %configure \
-    --libdir=%{_prefix}/lib            \
+    --libdir=%{_prefix}/lib      \
     --with-manpage-format=normal \
     --with-shared                \
     --without-debug              \
     --without-ada                \
     --without-normal             \
+    --enable-pc-files            \
     --enable-widec
 %make_build
 
@@ -85,7 +89,13 @@ cd ..
 echo "INPUT(-lncursesw)" >%{buildroot}/%{_prefix}/lib/libncurses.so
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
+rm -v %{buildroot}/%{_prefix}/lib/libncurses++w.a
 
+%if ! %{isnative}
+%{__install} -dm755 %{buildroot}/%{_datadir}/pkgconfig
+mv %{buildroot}/usr/share/pkgconfig/*.pc %{buildroot}/%{_datadir}/pkgconfig
+rmdir -v %{buildroot}/usr/share/pkgconfig
+%endif
 
 %post -p /sbin/ldconfig
 
@@ -94,7 +104,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %files
 %license COPYING
-%{_bindir}/*
 %{_prefix}/lib/*.so.*
 # should terminfo be its own package?
 # do we need terminfo on cross builds? (does it matter?)
@@ -108,10 +117,11 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %files devel
 %{_includedir}/*
 %{_prefix}/lib/*.so
-%if %{isnative}
-%{_prefix}/lib/*.a
-%endif
+%{_datadir}/pkgconfig/*.pc
 %doc %{_mandir}/man3/*
+
+%files -n %{?cross}ncurses
+%{_bindir}/*
 
 %changelog
 

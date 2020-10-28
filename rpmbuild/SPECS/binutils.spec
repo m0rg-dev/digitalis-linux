@@ -39,6 +39,53 @@ BuildRequires:  gcc
 
 %description
 
+%if %{isnative}
+
+%package     -n libbfd
+Summary:        A library for object file manipulation
+License:        LGPLv3+
+
+%description -n libbfd
+
+%package     -n libbfd-devel
+Summary:        Development files for libbfd
+Requires:       libbfd%{?_isa} = %{version}-%{release}
+
+%description -n libbfd-devel
+The libbfd-devel package contains libraries and header files for
+developing applications that use libbfd.
+
+%package     -n libctf
+Summary:        The Compat ANSI-C Type Format debugging support library
+License:        LGPLv3+
+
+%description -n libctf
+
+%package     -n libctf-devel
+Summary:        Development files for libctf
+Requires:       libctf%{?_isa} = %{version}-%{release}
+
+%description -n libctf-devel
+The libctf-devel package contains libraries and header files for
+developing applications that use libctf.
+
+%package     -n libopcodes
+Summary:        A library for dealing with opcodes
+License:        LGPLv3+
+
+%description -n libopcodes
+
+%package     -n libopcodes-devel
+Summary:        Development files for libopcodes
+Requires:       libopcodes%{?_isa} = %{version}-%{release}
+Requires:       libbfd-devel
+
+%description -n libopcodes-devel
+The libopcodes-devel package contains libraries and header files for
+developing applications that use libopcodes.
+
+%endif
+
 %prep
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %autosetup -n binutils-%{version}
@@ -47,12 +94,15 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 
 %configure \
     --disable-werror \
-%if ! %{isnative}
+    --libdir=%{_prefix}/lib \
+%if %{isnative}
+    --enable-shared \
+%else
     --target=%{_target} \
     --with-sysroot=/usr/%{_prefix} \
-    --program-prefix=%{_target}- \
+    --program-prefix=%{_target}- 
 %endif
-    --disable-static
+
 %make_build
 
 %install
@@ -66,6 +116,8 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %find_lang opcodes
 %find_lang gas
 
+ldconfig -Nr %{buildroot}
+
 %files -f binutils.lang -f gprof.lang -f ld.lang -f bfd.lang -f opcodes.lang -f gas.lang
 %license COPYING COPYING3 COPYING3.LIB COPYING.LIB
 %{_bindir}/*
@@ -73,5 +125,40 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/man1/*
 %{_prefix}/%{_target}/bin/*
 %{_prefix}/%{_target}/lib/ldscripts
+
+%if %{isnative}
+
+%files -n libbfd
+%license COPYING3.LIB COPYING.LIB
+%{_prefix}/lib/libbfd-%{version}.so
+%{_prefix}/lib/libbfd.so
+
+%files -n libbfd-devel
+%{_prefix}/lib/libbfd.a
+%{_includedir}/bfd*
+%{_includedir}/ansidecl.h
+%{_includedir}/diagnostics.h
+%{_includedir}/symcat.h
+%{_includedir}/plugin-api.h
+
+%files -n libctf
+%license COPYING3.LIB COPYING.LIB
+%{_prefix}/lib/libctf{,-nobfd}.so.*
+
+%files -n libctf-devel
+%{_prefix}/lib/libctf{,-nobfd}.so
+%{_prefix}/lib/libctf{,-nobfd}.a
+%{_includedir}/ctf*
+
+%files -n libopcodes
+%license COPYING3.LIB COPYING.LIB
+%{_prefix}/lib/libopcodes-%{version}.so
+%{_prefix}/lib/libopcodes.so
+
+%files -n libopcodes-devel
+%{_prefix}/lib/libopcodes.a
+%{_includedir}/dis-asm.h
+
+%endif
 
 %changelog
