@@ -8,7 +8,7 @@
 %define isnative 0
 %define cross %{_target}-
 %global _oldprefix %{_prefix}
-%define _prefix /usr/%{_target}
+%define _prefix /usr/
 %endif
 
 Name:           %{?cross}binutils
@@ -41,32 +41,18 @@ BuildRequires:  gcc
 
 %description
 
-%if %{isnative}
-%package        devel
-Summary:        Development files for libbfd
-Requires:       %{name}%{?_isa} = %{version}-%{release}
-
-%description    devel
-%endif
-
 %prep
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %autosetup -n binutils-%{version}
 
 %build
 
-# %if %{with clang}
-# %global optflags %(echo %{optflags} | sed 's/-fstack-clash-protection//')
-# export CFLAGS="$CFLAGS -ggdb2"
-# export CC=clang
-# export CXX=clang++
-# %endif
-
 %configure \
-    --disable-nls --disable-werror \
+    --disable-werror \
 %if ! %{isnative}
     --target=%{_target} \
     --with-sysroot=%{_prefix} \
+    --program-prefix=%{_target}- \
 %endif
     --disable-static
 %make_build
@@ -75,33 +61,19 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %make_install
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
-# Link prefixed versions of the tools into $PATH.
-%if ! %{isnative}
-install -dm644 %{buildroot}/%{_oldprefix}/bin/
-for f in $(ls %{buildroot}/%{_bindir}); do
-    ln -s ../../%{_bindir}/$f %{buildroot}/%{_oldprefix}/bin/%{_target}-$f;
-done
-%endif
+%find_lang binutils
+%find_lang gprof
+%find_lang ld
+%find_lang bfd
+%find_lang opcodes
+%find_lang gas
 
-%files
+%files -f binutils.lang -f gprof.lang -f ld.lang -f bfd.lang -f opcodes.lang -f gas.lang
 %license COPYING COPYING3 COPYING3.LIB COPYING.LIB
 %{_bindir}/*
-%{_datadir}/*
-%if %{isnative}
+%doc %{_infodir}/*.info*
+%doc %{_mandir}/man1/*
 %{_prefix}/%{_target}/bin/*
-%{_prefix}/%{_target}/lib/ldscripts/*
-%else
-/%{_oldprefix}/bin/%{_target}-*
-# apparently this is a thing? and you need them?
-%{_prefix}/%{_target}/*
-%endif
-
-%if %{isnative}
-%files devel
-%{_includedir}/*
-%{_libdir}/*.a
-%else
-%exclude %{_includedir}/*
-%endif
+%{_prefix}/%{_target}/lib/ldscripts
 
 %changelog
