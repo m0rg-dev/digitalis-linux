@@ -59,8 +59,6 @@ if [ ! -e rpmbuild/SRPMS/x86_64-pc-linux-gnu-binutils-*.rpm ]; then
     build_rpm binutils
 fi
 
-false
-
 if [ ! -e rpmbuild/SRPMS/x86_64-pc-linux-gnu-standalone-gcc-*.rpm ]; then
     build_rpm gcc "--without threads --with standalone"
 fi
@@ -68,6 +66,8 @@ fi
 if [ ! -e rpmbuild/SRPMS/x86_64-pc-linux-gnu-kernel-headers-*.rpm ]; then
     build_rpm kernel-headers
 fi
+
+false
 
 LIBRPMS="glibc gcc libstdc++ ncurses gmp mpfr libmpc zlib libgpg-error libgcrypt"
 LIBRPMS="$LIBRPMS file popt libarchive sqlite pkg-config-wrapper lua"

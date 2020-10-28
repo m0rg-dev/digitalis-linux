@@ -7,8 +7,6 @@
 # /usr/arch-vendor-os-abi/.
 %define isnative 0
 %define cross %{_target}-
-%global _oldprefix %{_prefix}
-%define _prefix /usr/
 %endif
 
 Name:           %{?cross}binutils
@@ -51,7 +49,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
     --disable-werror \
 %if ! %{isnative}
     --target=%{_target} \
-    --with-sysroot=%{_prefix} \
+    --with-sysroot=/usr/%{_prefix} \
     --program-prefix=%{_target}- \
 %endif
     --disable-static

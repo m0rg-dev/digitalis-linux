@@ -11,9 +11,7 @@
 # /usr/arch-vendor-os-abi/.
 %define isnative 0
 %define cross %{_target}-
-%global _oldprefix %{_prefix}
-# TODO unify target/usr and target/... but later
-%define _prefix /usr/%{_target}/usr
+%define _prefix /usr/%{_target}/
 %endif
 
 Name:           %{?cross}kernel-headers
@@ -27,17 +25,17 @@ Source0:        https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-%{version}.ta
 %define         SHA256SUM0 8ea27e1ed38981f772cc6d5f16ab8dbb8052c3800ba0494bd798fbb95dcc1779
 BuildArch:      noarch
 
-BuildRequires:  make clang
+BuildRequires:  make gcc
 
 %description
 
 %prep
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %autosetup -n linux-%{version}
-make HOSTCC=clang mrproper
+make mrproper
 
 %build
-make HOSTCC=clang headers
+make headers
 
 %install
 find usr/include -name '.*' -delete

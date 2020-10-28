@@ -7,8 +7,6 @@
 # /usr/arch-vendor-os-abi/.
 %define isnative 0
 %define cross %{_target}-
-%global _oldprefix %{_prefix}
-%define _prefix /usr/%{_target}
 %endif
 
 %bcond_without threads
@@ -81,7 +79,8 @@ cd build
 %configure --enable-languages=c,c++ --disable-multilib --with-system-zlib \
 %if ! %{isnative}
     --target=%{_target} \
-    --with-sysroot=%{_prefix}/.. \
+    --with-sysroot=/usr/%{_target}/ \
+    --program-prefix=%{_target}- \
     --libdir=%{_prefix}/lib \
 %endif
 %if %{with standalone}
@@ -102,10 +101,6 @@ cd build
     --disable-libstdcxx \
     --disable-bootstrap
 
-%if ! %{isnative}
-mkdir -pv /usr/%{_target}/usr/include
-%endif
-
 %make_build
 
 %install
@@ -115,41 +110,22 @@ cd ..
 
 # TODO figure out if we need to do this all the time
 cat gcc/limitx.h gcc/glimits.h gcc/limity.h > \
-  %{buildroot}/%{_prefix}/lib64/gcc/%{_target}/%{version}/include-fixed/limits.h
+  %{buildroot}/%{_prefix}/lib/gcc/%{_target}/%{version}/include-fixed/limits.h
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
+
+# should we link into /usr/_target/bin?
 
 %find_lang gcc
 %find_lang cpplib
 
-# Link prefixed versions of the tools into $PATH.
-%if ! %{isnative}
-install -dm644 %{buildroot}/%{_oldprefix}/bin/
-for f in $(ls %{buildroot}/%{_bindir}); do
-    ln -s ../../%{_bindir}/$f %{buildroot}/%{_oldprefix}/bin/%{_target}-$f;
-done
-%endif
-
 %files -f gcc.lang -f cpplib.lang
 %license COPYING COPYING.LIB COPYING.RUNTIME COPYING3 COPYING3.LIB
 %{_bindir}/*
-%{_libdir}/gcc/%{_target}/%{version}/*
-%{_libexecdir}/gcc/%{_target}/%{version}/*
-%if %{isnative}
+%{_prefix}/lib/gcc/%{_target}/%{version}
+%{_libexecdir}/gcc/%{_target}/%{version}
 %doc %{_infodir}/*.info*
-%doc %{_mandir}/man1/*
-%doc %{_mandir}/man7/*
-# TODO this is horrible for a bunch of reasons (should spin a libgcc package, probably) but i just want it to work
-%{_libdir}/*.so
-%{_libdir}/*.so.*
-%{_libdir}/*.a
-%{_libdir}/*.spec
-%else
-%{_libdir}/libcc*
-/%{_oldprefix}/bin/%{_target}-*
-%exclude %{_infodir}/*.info
-%exclude %{_mandir}/man1/*
-%exclude %{_mandir}/man7/*
-%endif
+%doc %{_mandir}/man{1,7}/*
+/usr/lib64/libcc1.so*
 
 %changelog
