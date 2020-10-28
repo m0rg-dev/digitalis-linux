@@ -2,6 +2,8 @@ This is currently just stream-of-consciousness stuff about toolchain layout and 
 
 - Packages other than glibc MUST NOT specify ldconfig in their scripts.
 - Packages that install libraries MUST NOT also install programs.
+    - Packages that install libraries MAY install programs whose sole function
+      is to provide library configuration information.
 - Packages MUST NOT have build-time dependencies on glibc-devel or libstdc++-devel.
     - Compilers SHOULD have runtime dependencies on glibc-devel and/or libstdc++-devel, as appropriate.
 - Libraries SHOULD install pkg-config files.

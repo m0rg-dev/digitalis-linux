@@ -1,5 +1,6 @@
 # If host == target, we aren't building cross tools.
 # We should install into /usr and package headers.
+%global _oldprefix %{_prefix}
 %if "%{_host}" == "%{_target}"
 %define isnative 1
 %else
@@ -34,7 +35,7 @@ BuildRequires:  make gcc
 %else
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
-BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}glibc-devel
+BuildRequires: %{?target_tool_prefix}gcc
 
 %undefine _annotated_build
 %global debug_package %{nil}
@@ -49,6 +50,12 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
+%package     -n %{?cross}gpg-error
+Summary:        Utility programs for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description -n %{?cross}gpg-error
+
 
 %prep
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
@@ -59,7 +66,11 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 mkdir build
 cd build
 %define _configure ../configure
-%configure --host=%{_target} --libdir=%{_prefix}/lib
+%configure --host=%{_target} \
+    --libdir=%{_prefix}/lib \
+    --program-prefix=%{?cross} \
+    --bindir=%{_oldprefix}/bin
+
 %make_build
 
 %install
@@ -69,26 +80,26 @@ cd build
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
-
-
 %files -f build/%{libname}.lang
 %license COPYING COPYING.LIB
 %{_prefix}/lib/*.so.*
-%{_prefix}/bin/*
 
-%doc %{_infodir}/*.info
+%doc %{_infodir}/*.info*
 %doc %{_mandir}/man1/*
 %doc %{_datadir}/%{libname}/errorref.txt
 
 %files devel
 %{_includedir}/*
+%{_oldprefix}/bin/%{?cross}gpg-error-config
+%{_oldprefix}/bin/%{?cross}gpgrt-config
 %{_prefix}/lib/*.so
 %{_prefix}/lib/pkgconfig/*.pc
 %{_datadir}/aclocal/*.m4
 %{_datadir}/common-lisp/source/gpg-error
+
+%files -n %{?cross}gpg-error
+%{_oldprefix}/bin/%{?cross}gpg-error
+%{_oldprefix}/bin/%{?cross}yat2m
 
 %changelog
 

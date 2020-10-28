@@ -74,7 +74,7 @@ fi
 # LIBRPMS="$LIBRPMS librepo libyaml rpm gtk-doc gobject-introspection libmodulemd"
 # LIBRPMS="$LIBRPMS cppunit json-c libdnf"
 
-LIBRPMS="glibc gcc libncurses libgmp libmpfr libmpc zlib"
+LIBRPMS="glibc gcc libncurses libgmp libmpfr libmpc zlib libgpg-error"
 
 for rpm in $LIBRPMS; do
     if [ ! -n "$(ls -l rpmbuild/SRPMS/x86_64-pc-linux-gnu-$rpm-*.rpm)" ]; then
@@ -89,7 +89,7 @@ REPOS=''
 # RPMS="$RPMS gawk gzip make patch tar sed xz gmp mpfr libmpc gcc bzip2"
 # RPMS="$RPMS rpm"
 
-RPMS="binutils libncurses libgmp libmpfr libmpc zlib"
+RPMS="binutils libncurses libgmp libmpfr libmpc zlib libgpg-error"
 
 for rpm in $RPMS; do
     if [ ! -n "$(ls -l rpmbuild/SRPMS/$rpm-*.digi1.*.rpm)" ]; then
