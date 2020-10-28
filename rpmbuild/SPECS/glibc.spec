@@ -8,7 +8,6 @@
 %define isnative 0
 %define cross %{_target}-
 %global _oldprefix %{_prefix}
-# TODO unify target/usr and target/... but later
 %define _prefix /usr/%{_target}/
 %endif
 
@@ -76,11 +75,15 @@ cd build
 %{_configure} \
     --host=%{_target} \
     --prefix= \
+%if %{isnative}
     --includedir=/usr/include \
+%else
+    --includedir=/include \
+%endif
     --enable-kernel=3.2 \
     --with-headers=/usr/include \
     --disable-werror \
-    --enable-static-pie \
+    --enable-shared \
     libc_cv_slibdir=/lib \
     libc_cv_ctors_header=yes
 
@@ -118,8 +121,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %files
 %license COPYING COPYING.LIB LICENSES
 
-%{_bindir}/*
-%{_sbindir}/*
 %{_prefix}/libexec/*
 %{_prefix}/share/*
 # can't use _libdir reliably from fedora
@@ -128,6 +129,8 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_prefix}/lib/*.so.*
 
 %if %{isnative}
+%{_bindir}/*
+%{_sbindir}/*
 /sbin/ldconfig
 /sbin/sln
 /var/db
@@ -139,13 +142,15 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %else
 %exclude %{_prefix}/etc
 %exclude %{_prefix}/var
+%exclude %{_bindir}
+%exclude %{_sbindir}
 %endif
 
 #%doc add-main-docs-here
 
 %files devel
 #%doc add-devel-docs-here
-%{_prefix}/usr/include*
+%{_includedir}/*
 %{_prefix}/lib/*.so
 %{_prefix}/lib/*.a
 %{_prefix}/lib/*.o

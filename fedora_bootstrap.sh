@@ -67,20 +67,22 @@ if [ ! -e rpmbuild/SRPMS/x86_64-pc-linux-gnu-kernel-headers-*.rpm ]; then
     build_rpm kernel-headers
 fi
 
-false
+# LIBRPMS="glibc gcc libstdc++ ncurses gmp mpfr libmpc zlib libgpg-error libgcrypt"
+# LIBRPMS="$LIBRPMS file popt libarchive sqlite pkg-config-wrapper lua"
+# LIBRPMS="$LIBRPMS cmake-toolchain expat libsolv meson-toolchain libffi glib2 util-linux"
+# LIBRPMS="$LIBRPMS check openssl libxml2 curl zchunk python libassuan gpgme"
+# LIBRPMS="$LIBRPMS librepo libyaml rpm gtk-doc gobject-introspection libmodulemd"
+# LIBRPMS="$LIBRPMS cppunit json-c libdnf"
 
-LIBRPMS="glibc gcc libstdc++ ncurses gmp mpfr libmpc zlib libgpg-error libgcrypt"
-LIBRPMS="$LIBRPMS file popt libarchive sqlite pkg-config-wrapper lua"
-LIBRPMS="$LIBRPMS cmake-toolchain expat libsolv meson-toolchain libffi glib2 util-linux"
-LIBRPMS="$LIBRPMS check openssl libxml2 curl zchunk python libassuan gpgme"
-LIBRPMS="$LIBRPMS librepo libyaml rpm gtk-doc gobject-introspection libmodulemd"
-LIBRPMS="$LIBRPMS cppunit json-c libdnf"
+LIBRPMS="glibc"
 
 for rpm in $LIBRPMS; do
     if [ ! -n "$(ls -l rpmbuild/SRPMS/x86_64-pc-linux-gnu-$rpm-*.rpm)" ]; then
         build_rpm $rpm
     fi
 done
+
+false
 
 RPMDEFS="--define='_build x86_64-redhat-linux-gnu' --define='_host x86_64-pc-linux-gnu' --define='_target x86_64-pc-linux-gnu' --define='dist .digi1'"
 REPOS=''
