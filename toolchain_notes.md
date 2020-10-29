@@ -16,10 +16,7 @@ This is currently just stream-of-consciousness stuff about toolchain layout and 
 Cross toolchain layout stuff:
 
 - Programs intended to be run on the %{_host} system SHOULD be installed as `/usr/bin/%{_target}-`.
-- Packages SHOULD NOT install programs into `/usr/%{_target}/bin`.
-    - If a package does install programs into `/usr/%{_target}/bin`, they MUST be runnable by the %{_host} system.
-    - As an exception, packages MAY install programs into `/usr/%{_target}/{,usr/}bin` if no other package would
-      depend on them. This is to simplify packages such as `libncurses` / `ncurses`.
+    - These programs SHOULD also be symlinked under `/usr/%{_target}/bin/` without the prefixes.
 - Packages MUST install headers into `/usr/%{_target}/usr/include` (for a cross build).
 - Packages MAY install files of any sort into host directories if they include a `%{_target}` component.
     - such as gcc installing into `/usr/lib/gcc/%{_target}/%{version}`

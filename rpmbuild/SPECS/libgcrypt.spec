@@ -1,5 +1,6 @@
 # If host == target, we aren't building cross tools.
 # We should install into /usr and package headers.
+%global _oldprefix %{_prefix}
 %if "%{_host}" == "%{_target}"
 %define isnative 1
 %else
@@ -7,8 +8,6 @@
 # /usr/arch-vendor-os-abi/.
 %define isnative 0
 %define cross %{_target}-
-%global _oldprefix %{_prefix}
-# TODO unify target/usr and target/... but later
 %define _prefix /usr/%{_target}/usr
 %endif
 
@@ -36,8 +35,9 @@ BuildRequires:  make gcc
 %else
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
-BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}glibc-devel
+BuildRequires: %{?target_tool_prefix}gcc
 BuildRequires: %{?target_tool_prefix}libgpg-error-devel
+BuildRequires: %{?target_tool_prefix}pkg-config
 
 Requires:      %{?target_tool_prefix}libgpg-error
 
@@ -55,6 +55,11 @@ Requires:       %{?target_tool_prefix}libgpg-error-devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
+%package     -n %{?cross}gcrypt
+Summary:        Utility programs for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description -n %{?cross}gcrypt
 
 %prep
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
@@ -65,10 +70,13 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 mkdir build
 cd build
 %define _configure ../configure
+export SYSROOT=%(%{?target_tool_prefix}gcc --print-sysroot)
+# --enable-asm doesn't work consistently in cross-compiled environments
 %configure \
-%if ! %{isnative}
-    --with-libgpg-error-prefix=%{_prefix} \
     --disable-asm \
+%if ! %{isnative}
+    --program-prefix=%{?cross} \
+    --bindir=%{_oldprefix}/bin \
 %endif
     --host=%{_target} --libdir=%{_prefix}/lib
 %make_build
@@ -79,23 +87,31 @@ cd build
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
-
+%if ! %{isnative}
+install -dm755 %{buildroot}/%{_prefix}/../bin
+ln -sv %{_oldprefix}/bin/%{?cross}libgcrypt-config %{buildroot}/%{_prefix}/../bin/libgcrypt-config
+%endif
 
 %files
 %license COPYING COPYING.LIB
-%{_bindir}/*
 %{_prefix}/lib/*.so.*
-%doc %{_infodir}/*.info*
-%doc %{_mandir}/man1/hmac256.1
 
 %files devel
 %{_includedir}/*
 %{_prefix}/lib/*.so
 %{_datadir}/aclocal/*.m4
 %{_prefix}/lib/pkgconfig/*.pc
+%if ! %{isnative}
+%{_prefix}/../bin/libgcrypt-config
+%endif
+%{_oldprefix}/bin/%{?cross}libgcrypt-config
+%doc %{_infodir}/*.info*
+
+%files -n %{?cross}gcrypt
+%{_oldprefix}/bin/%{?cross}dumpsexp
+%{_oldprefix}/bin/%{?cross}hmac256
+%{_oldprefix}/bin/%{?cross}mpicalc
+%doc %{_mandir}/man1/%{?cross}hmac256.1*
 
 %changelog
 
