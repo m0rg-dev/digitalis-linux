@@ -1,0 +1,99 @@
+# If host == target, we aren't building cross tools.
+# We should install into /usr and package headers.
+%if "%{_host}" == "%{_target}"
+%define isnative 1
+%else
+# Otherwise, we are building a cross tool, to be installed into a sysroot at
+# /usr/arch-vendor-os-abi/.
+%define isnative 0
+%define cross %{_target}-
+%global _oldprefix %{_prefix}
+# TODO unify target/usr and target/... but later
+%define _prefix /usr/%{_target}/usr
+%endif
+
+%define libname gobject-introspection
+
+Name:           %{?cross}%{libname}
+Version:        1.64.1
+Release:        1%{?dist}
+Summary:        C Library for manipulating module metadata files
+
+License:        LGPLv2+, GPLv2+, MIT
+URL:            https://gi.readthedocs.io/en/latest/
+%undefine       _disable_source_fetch
+Source0:        https://download.gnome.org/sources/%{libname}/1.64/%{libname}-%{version}.tar.xz
+%define         SHA256SUM0 80beae6728c134521926affff9b2e97125749b38d38744dc901f4010ee3e7fa7
+
+BuildRequires:  meson ninja-build gcc glib2-devel flex bison gobject-introspection-devel
+
+%if "%{_build}" != "%{_host}"
+%define host_tool_prefix %{_host}-
+%endif
+
+%if "%{_host}" != "%{_target}"
+%define target_tool_prefix %{_target}-
+%else
+%define target_tool_prefix %{?host_tool_prefix}
+%endif
+BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}glibc-devel
+BuildRequires: %{?target_tool_prefix}meson-toolchain %{?target_tool_prefix}glib2-devel
+BuildRequires: %{?target_tool_prefix}libpython-devel
+
+%undefine _annotated_build
+%global debug_package %{nil}
+
+%description
+
+%package        devel
+Summary:        Development files for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description    devel
+The %{name}-devel package contains libraries and header files for
+developing applications that use %{name}.
+
+
+%prep
+echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
+%autosetup -n %{libname}-%{version}
+
+%build
+
+mkdir build
+
+meson -Dbuildtype=release -Dgi_cross_use_prebuilt_gi=true -Dbuild_introspection_data=false --prefix=%{_prefix} \
+%if "%{_build}" != "%{_target}"
+    --cross-file %{_target} \
+%endif
+    build/
+ninja %{?_smp_mflags} -C build
+
+%install
+DESTDIR=%{buildroot} ninja -C build install
+
+find %{buildroot} -name '*.la' -exec rm -f {} ';'
+
+%post -p /sbin/ldconfig
+
+%postun -p /sbin/ldconfig
+
+
+%files
+%license COPYING.GPL COPYING.LGPL
+%{_prefix}/lib/*.so.*
+
+%files devel
+%{_bindir}/*
+%{_includedir}/*
+%{_prefix}/lib/*.so
+%{_prefix}/lib/pkgconfig/*.pc
+%{_prefix}/lib/gobject-introspection
+
+%doc %{_mandir}/man1/*.1
+%{_datadir}/aclocal/*.m4
+%{_datadir}/gobject-introspection-1.0
+%{_datadir}/gir-1.0
+
+%changelog
+
