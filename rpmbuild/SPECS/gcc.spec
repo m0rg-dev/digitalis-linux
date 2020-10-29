@@ -170,7 +170,6 @@ cd build
     --disable-shared \
     --with-newlib \
     --without-headers \
-    --enable-initfini-array \
     --disable-decimal-float \
     --disable-libatomic                            \
     --disable-libgomp                              \
@@ -181,6 +180,7 @@ cd build
 %endif
     %{?with_threads:--enable-threads} \
     %{!?with_threads:--disable-threads} \
+    --enable-initfini-array \
     --enable-linker-build-id \
     --disable-bootstrap
 
@@ -222,7 +222,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_prefix}/lib/gcc/%{_target}/%{version}/include-fixed
 %{_prefix}/lib/gcc/%{_target}/%{version}/*.o
 %{_prefix}/lib/gcc/%{_target}/%{version}/libgcc.a
+%if %{without standalone}
 %{_prefix}/lib/gcc/%{_target}/%{version}/libgcc_eh.a
+%endif
 %{_prefix}/lib/gcc/%{_target}/%{version}/libgcov.a
 %{_prefix}/lib/gcc/%{_target}/%{version}/plugin
 

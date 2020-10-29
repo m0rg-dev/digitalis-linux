@@ -91,9 +91,36 @@ REPOS=''
 # RPMS="$RPMS rpm"
 
 RPMS="binutils libncurses libgmp libmpfr libmpc zlib libgpg-error libgcrypt"
+RPMS="$RPMS glibc bash fs-tree coreutils kernel-headers base-system"
 
 for rpm in $RPMS; do
     if [ ! -n "$(ls -l rpmbuild/SRPMS/$rpm-*.digi1.*.rpm)" ]; then
         build_rpm $rpm
     fi
 done
+
+find rpmbuild/RPMS -name '*.digi1.*' -exec cp {} /tmp/repo_digi1 ';'
+podman run --net host $VOLUMES --rm fedora-with-rpm createrepo_c /repo_digi1
+
+ctr=$(buildah from fedora-with-rpm)
+buildah run --net host $VOLUMES "$ctr" -- mkdir /new_root
+buildah run --net host $VOLUMES "$ctr" -- dnf install -y \
+    --verbose --repo=digitalis-stage1 --installroot=/new_root --releasever=digi1 \
+    fs-tree
+buildah run --net host $VOLUMES "$ctr" -- dnf install -y \
+    --verbose --repo=digitalis-stage1 --installroot=/new_root --releasever=digi1 \
+    bash
+buildah run --net host $VOLUMES "$ctr" -- dnf install -y \
+    --verbose --repo=digitalis-stage1 --installroot=/new_root --releasever=digi1 \
+    base-system glibc-devel
+
+rm -rf new_root
+buildah unshare sh -c 'cp -rp $(buildah mount '$ctr')/new_root new_root'
+buildah umount "$ctr"
+buildah rm "$ctr"
+
+ctr=$(buildah from scratch)
+
+buildah copy "$ctr" $(realpath new_root)/ /
+buildah commit "$ctr" digitalis-stage1
+buildah rm "$ctr"

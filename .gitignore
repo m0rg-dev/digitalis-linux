@@ -6,6 +6,7 @@ digitalis_rootfs.img
 repository/Manifest.yml
 keys.json
 repository/sources
+new_root/
 
 rpmbuild/*
 !rpmbuild/SPECS

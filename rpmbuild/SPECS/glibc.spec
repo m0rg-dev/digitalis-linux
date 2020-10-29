@@ -1,5 +1,6 @@
 # If host == target, we aren't building cross tools.
 # We should install into /usr and package headers.
+%global _oldprefix %{_prefix}
 %if "%{_host}" == "%{_target}"
 %define isnative 1
 %else
@@ -7,7 +8,6 @@
 # /usr/arch-vendor-os-abi/.
 %define isnative 0
 %define cross %{_target}-
-%global _oldprefix %{_prefix}
 %define _prefix /usr/%{_target}/%{_oldprefix}
 %endif
 
@@ -45,7 +45,9 @@ BuildRequires: %{?target_tool_prefix}binutils
 BuildRequires: %{?target_tool_prefix}kernel-headers
 
 %undefine _annotated_build
+%if ! %{isnative}
 %global debug_package %{nil}
+%endif
 
 %description
 
@@ -54,7 +56,7 @@ BuildRequires: %{?target_tool_prefix}kernel-headers
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 # stdlib.h depends on linux/errno.h
-Requires:       %{?target_tool_prefix}kernel-headers
+Requires:       %{?cross}kernel-headers
 
 %description    devel
 The %{name}-devel package contains libraries and header files for
@@ -79,15 +81,10 @@ cd build
     --prefix=%{_oldprefix} \
     --libdir=/lib \
     --enable-kernel=3.2 \
-%if %{isnative}
-    --with-headers=/usr/include \
-%else
     --with-headers=/usr/%{_target}/usr/include \
-%endif
     --disable-werror \
     --enable-shared \
-    libc_cv_slibdir=/lib \
-    libc_cv_ctors_header=yes
+    libc_cv_slibdir=/lib
 
 %make_build
 
@@ -111,6 +108,7 @@ install -m 644 %{SOURCE1} %{buildroot}/etc
 # nsswitch.conf
 install -m 644 %{SOURCE2} %{buildroot}/etc
 install -d -m644 %{buildroot}/var/cache/nscd
+
 %endif
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
@@ -132,7 +130,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 # can't use _libdir reliably from fedora
 
 %if %{isnative}
-/lib/*.so.*
+/lib/*.so*
 %{_bindir}/*
 %{_sbindir}/*
 /lib/gconv
@@ -162,7 +160,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 #%doc add-devel-docs-here
 %{_includedir}/*
 %if %{isnative}
-/lib/*.so
 /lib/*.a
 /lib/*.o
 %else

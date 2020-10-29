@@ -13,9 +13,10 @@ BuildRequires:  coreutils
 %build
 
 %install
-cd $RPM_BUILD_ROOT
-mkdir -pv {bin,boot,etc/{opt,sysconfig},home,lib/firmware,mnt,opt}
-mkdir -pv {media/{floppy,cdrom},sbin,srv,var}
+cd %{buildroot}
+
+mkdir -pv {boot,etc/{opt,sysconfig},home,mnt,opt}
+mkdir -pv {media/{floppy,cdrom},srv,var}
 install -dv -m 0750 root
 install -dv -m 1777 tmp var/tmp
 mkdir -pv usr/{,local/}{bin,include,lib,sbin,src}
@@ -29,6 +30,15 @@ ln -sv run/lock /var/lock
 mkdir -pv var/{opt,cache,lib/{color,misc,locate},local}
 
 ln -sv /proc/self/mounts etc/mtab
+
+# usrmerge
+ln -sv usr/bin bin
+ln -sv usr/sbin sbin
+ln -sv usr/lib lib
+
+# no multilib
+ln -sv lib lib64
+ln -sv lib usr/lib64
 
 # root pw is 'digitalis'
 cat > etc/passwd << "EOF"
