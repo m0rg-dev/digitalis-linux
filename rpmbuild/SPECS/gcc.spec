@@ -30,7 +30,6 @@ Source0:        https://ftp.gnu.org/gnu/gcc/gcc-%{version}/gcc-%{version}.tar.xz
 
 BuildRequires:  gcc g++ make diffutils
 BuildRequires:  /usr/bin/makeinfo
-Requires:       zlib mpfr libmpc gmp
 
 # We need some host tools. If build == host, we can use non-prefixed versions; otherwise,
 # we need prefixed host tools.
@@ -39,19 +38,28 @@ Requires:       zlib mpfr libmpc gmp
 %endif
 
 BuildRequires:  %{?host_tool_prefix}gcc %{?host_tool_prefix}g++
-BuildRequires:  %{?host_tool_prefix}mpfr-devel %{?host_tool_prefix}libmpc-devel %{?host_tool_prefix}gmp-devel
+%if %{defined _fedora_dependencies}
+BuildRequires:  %{?host_tool_prefix}mpfr-devel
+BuildRequires:  %{?host_tool_prefix}gmp-devel
+%else
+BuildRequires: %{?host_tool_prefix}libmpfr-devel
+BuildRequires: %{?host_tool_prefix}libgmp-devel
+%endif
+BuildRequires:  %{?host_tool_prefix}libmpc-devel
 BuildRequires:  %{?host_tool_prefix}zlib-devel
+
+Requires:       libmpc
 
 # Similarly, we always need target tools. If we're building a cross-compiler, we need
 # target-specific tools; otherwise, we just need the host tools.
 %if "%{_host}" != "%{_target}"
 %define target_tool_prefix %{_target}-
-%elif 0%{!?host_tool_prefix:1}
+%elif %{defined host_tool_prefix}
 %define target_tool_prefix %{host_tool_prefix}
 %endif
 
 BuildRequires:  %{?target_tool_prefix}binutils
-Requires:       %{?target_tool_prefix}binutils
+Requires:       %{?cross}binutils
 
 %if %{without standalone}
 Requires:       %{?cross}libatomic %{?cross}libgcc_s %{?cross}libgomp %{?cross}libquadmath %{?cross}libssp
@@ -157,12 +165,14 @@ cd build
 # this is apparently a known upstream issue
 %global optflags %(echo %{optflags} | sed 's/-Werror=format-security//')
 %configure --enable-languages=c,c++ --disable-multilib --with-system-zlib \
+    --libdir=%{_prefix}/lib \
+    CC_FOR_TARGET=%{?target_tool_prefix}gcc \
+    CXX_FOR_TARGET=%{?target_tool_prefix}g++ \
 %if ! %{isnative}
     --target=%{_target} \
     --with-sysroot=/usr/%{_target}/ \
     --with-build-sysroot=/usr/%{_target}/ \
     --program-prefix=%{_target}- \
-    --libdir=%{_prefix}/lib \
     --with-includedir=/usr/%{_target}/usr/include \
     --with-gxx-include-dir=/usr/%{_target}/usr/include/c++ \
 %endif
@@ -182,6 +192,7 @@ cd build
     %{!?with_threads:--disable-threads} \
     --enable-initfini-array \
     --enable-linker-build-id \
+    --enable-static-libgcc \
     --disable-bootstrap
 
 %make_build
@@ -191,9 +202,20 @@ cd build
 %make_install
 cd ..
 
-# TODO figure out if we need to do this all the time
+%if ! %{isnative}
 cat gcc/limitx.h gcc/glimits.h gcc/limity.h > \
   %{buildroot}/%{_prefix}/lib/gcc/%{_target}/%{version}/include-fixed/limits.h
+%endif
+
+# otherwise libgcc_s doesn't get picked up by find-debuginfo and autoreqs
+# and everything goes awful when you try to install
+%if %{without standalone}
+%if %{isnative}
+chmod 755 %{buildroot}/%{_prefix}/lib/libgcc_s.so.1
+%else
+chmod 755 %{buildroot}/usr/%{_target}/lib/libgcc_s.so.1
+%endif
+%endif
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
@@ -206,16 +228,24 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %license COPYING COPYING.LIB COPYING.RUNTIME COPYING3 COPYING3.LIB
 
 %{_bindir}/%{?cross}cpp
-%{_bindir}/%{?cross}gcc
-%{_bindir}/%{?cross}gcc-%{version}
-%{_bindir}/%{?cross}gcc-ar
-%{_bindir}/%{?cross}gcc-nm
-%{_bindir}/%{?cross}gcc-ranlib
 %{_bindir}/%{?cross}gcov
 %{_bindir}/%{?cross}gcov-dump
 %{_bindir}/%{?cross}gcov-tool
 %{_bindir}/%{?cross}lto-dump
+%{_bindir}/%{?cross}gcc
+%{_bindir}/%{?cross}gcc-ar
+%{_bindir}/%{?cross}gcc-nm
+%{_bindir}/%{?cross}gcc-ranlib
 
+%{_bindir}/%{?_target}-gcc
+%{_bindir}/%{?_target}-gcc-%{version}
+%{_bindir}/%{?_target}-gcc-ar
+%{_bindir}/%{?_target}-gcc-nm
+%{_bindir}/%{?_target}-gcc-ranlib
+
+%if ! %{isnative}
+
+%endif
 
 %{_prefix}/lib/gcc/%{_target}/%{version}/install-tools
 %{_prefix}/lib/gcc/%{_target}/%{version}/include
@@ -249,15 +279,17 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/man1/%{?cross}gcov.*
 %doc %{_mandir}/man1/%{?cross}lto-dump.*
 
-%if %{isnative}
-/usr/lib64/libcc1.so*
-%else
+%if ! %{isnative}
 %exclude /usr/lib64/libcc1.so*
 %endif
 
 %files -n %{?cross}g++
-%{_bindir}/%{?cross}g++
-%{_bindir}/%{?cross}c++
+%if %{isnative}
+%{_bindir}/g++
+%{_bindir}/c++
+%endif
+%{_bindir}/%{_target}-g++
+%{_bindir}/%{_target}-c++
 %{_libexecdir}/gcc/%{_target}/%{version}/cc1plus
 
 %doc %{_mandir}/man1/%{?cross}g++.*
@@ -265,7 +297,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %if %{without standalone}
 
 %if %{isnative}
-%define rootlib /lib
+%define rootlib /usr/lib
 %define inc /usr/include
 %else
 %define rootlib /usr/%{_target}/lib

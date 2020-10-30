@@ -9,7 +9,8 @@ This is currently just stream-of-consciousness stuff about toolchain layout and 
 - Libraries SHOULD install pkg-config files.
 - Packages that install libraries MUST contain `lib` in their names.
     - Packages that install libraries SHOULD begin with `lib`.
-- Packages that do not install libraries SHOULD NOT begin with `lib`.
+- Packages that do not install libraries MUST NOT begin with `lib`.
+    - Packages that do not install libraries SHOULD NOT contain `lib` anywhere in their names.
 - Packages SHOULD be buildable for architectures other than that of the build machine with the `%{_host}` RPM variable.
     - Packages MUST NOT build if `%{_host}` is set to anything other than `%{_build}` if they cannot cross-compile.
 - Packages MUST NOT install files into `/bin`, `/sbin`, or `/lib`.
@@ -26,4 +27,4 @@ Normal toolchain layout stuff:
 
 - Packages MUST install headers into `/usr/include`.
 - Packages SHOULD NOT install static libraries.
-- Packages MUST NOT install anything into `/lib64` except where required by LSB.
+- Packages MUST NOT install anything into `/lib64`.

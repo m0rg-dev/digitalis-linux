@@ -38,7 +38,7 @@ podman images | grep fedora-with-rpm >/dev/null || build_base_image
 VOLUMES="--volume $(realpath rpmbuild):/rpmbuild --volume /tmp/dnfcache:/var/cache/dnf"
 VOLUMES="$VOLUMES --volume /tmp/repo_host:/repo_host --volume /tmp/repo_digi1:/repo_digi1"
 
-RPMDEFS="--define='_host x86_64-redhat-linux-gnu' --define='_target x86_64-pc-linux-gnu'"
+RPMDEFS="--define='_host x86_64-redhat-linux-gnu' --define='_target x86_64-pc-linux-gnu' --define='_fedora_dependencies 1'"
 
 REPOS='--disablerepo=digitalis-stage1'
 
@@ -76,6 +76,7 @@ fi
 
 LIBRPMS="glibc gcc pkg-config-wrapper cmake-toolchain meson-toolchain"
 LIBRPMS="$LIBRPMS libncurses libgmp libmpfr libmpc zlib libgpg-error libgcrypt"
+LIBRPMS="$LIBRPMS file"
 
 for rpm in $LIBRPMS; do
     if [ ! -n "$(ls -l rpmbuild/SRPMS/x86_64-pc-linux-gnu-$rpm-*.rpm)" ]; then
@@ -84,14 +85,15 @@ for rpm in $LIBRPMS; do
 done
 
 RPMDEFS="--define='_build x86_64-redhat-linux-gnu' --define='_host x86_64-pc-linux-gnu' --define='_target x86_64-pc-linux-gnu' --define='dist .digi1'"
-REPOS=''
 
 # RPMS="binutils libstdc++ m4 ncurses bash coreutils diffutils file findutils"
 # RPMS="$RPMS gawk gzip make patch tar sed xz gmp mpfr libmpc gcc bzip2"
 # RPMS="$RPMS rpm"
 
 RPMS="binutils libncurses libgmp libmpfr libmpc zlib libgpg-error libgcrypt"
-RPMS="$RPMS glibc bash fs-tree coreutils kernel-headers base-system"
+RPMS="$RPMS glibc"
+
+RPMS="gcc bash fs-tree coreutils kernel-headers base-system"
 
 for rpm in $RPMS; do
     if [ ! -n "$(ls -l rpmbuild/SRPMS/$rpm-*.digi1.*.rpm)" ]; then
@@ -109,10 +111,7 @@ buildah run --net host $VOLUMES "$ctr" -- dnf install -y \
     fs-tree
 buildah run --net host $VOLUMES "$ctr" -- dnf install -y \
     --verbose --repo=digitalis-stage1 --installroot=/new_root --releasever=digi1 \
-    bash
-buildah run --net host $VOLUMES "$ctr" -- dnf install -y \
-    --verbose --repo=digitalis-stage1 --installroot=/new_root --releasever=digi1 \
-    base-system glibc-devel
+    base-system gcc
 
 rm -rf new_root
 buildah unshare sh -c 'cp -rp $(buildah mount '$ctr')/new_root new_root'
