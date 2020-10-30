@@ -68,10 +68,6 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
-
 %files
 %license LICENSE
 %if %{isnative}

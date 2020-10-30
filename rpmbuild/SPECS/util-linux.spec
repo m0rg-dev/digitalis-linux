@@ -139,11 +139,6 @@ cd build
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
-
-
 %files -f build/util-linux.lang
 %license COPYING README.licensing
 %{_bindir}/*

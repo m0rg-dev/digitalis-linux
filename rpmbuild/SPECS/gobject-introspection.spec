@@ -74,11 +74,6 @@ DESTDIR=%{buildroot} ninja -C build install
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
-
-
 %files
 %license COPYING.GPL COPYING.LGPL
 %{_prefix}/lib/*.so.*

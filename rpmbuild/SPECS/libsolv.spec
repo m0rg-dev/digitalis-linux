@@ -85,11 +85,6 @@ mv -v %{buildroot}/%{_datadir}/cmake/Modules/*.cmake %{buildroot}/usr/share/cmak
 %endif
 
 
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
-
-
 %files
 %license LICENSE.BSD
 %{_prefix}/bin/*

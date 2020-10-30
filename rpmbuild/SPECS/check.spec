@@ -71,11 +71,6 @@ cd build
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
-
-
 %files
 %license COPYING.LESSER
 %{_prefix}/lib/*.so.*
