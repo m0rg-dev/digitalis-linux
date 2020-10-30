@@ -7,23 +7,21 @@
 # /usr/arch-vendor-os-abi/.
 %define isnative 0
 %define cross %{_target}-
-%global _oldprefix %{_prefix}
-# TODO unify target/usr and target/... but later
 %define _prefix /usr/%{_target}/usr
 %endif
 
-%define libname expat
+%define libname sqlite
 
-Name:           %{?cross}%{libname}
-Version:        2.2.10
+Name:           %{?cross}lib%{libname}
+Version:        3.33.0
 Release:        1%{?dist}
-Summary:        Expat is a stream-oriented XML parser.
+Summary:        SQLite is a C-language library that implements a small, fast, self-contained, high-reliability, full-featured, SQL database engine.
 
-License:        MIT
-URL:            https://github.com/libexpat/libexpat
+License:        Public domain
+URL:            https://sqlite.org
 %undefine       _disable_source_fetch
-Source0:        https://github.com/libexpat/libexpat/releases/download/R_%(echo %{version} | tr . _)/%{libname}-%{version}.tar.xz
-%define         SHA256SUM0 5dfe538f8b5b63f03e98edac520d7d9a6a4d22e482e5c96d4d06fcc5485c25f2
+Source0:        https://sqlite.org/2020/sqlite-autoconf-3330000.tar.gz
+%define         SHA256SUM0 106a2c48c7f75a298a7557bcc0d5f4f454e5b43811cc738b7ca294d6956bbb15
 
 BuildRequires:  make
 
@@ -51,17 +49,26 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
+%package -n     %{?cross}sqlite
+Summary:        sqlite command line interface
+
+%description -n %{?cross}sqlite
 
 %prep
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
-%autosetup -n %{libname}-%{version}
+%autosetup -n sqlite-autoconf-3330000
 
 %build
 
 mkdir build
 cd build
-%define _configure ../configure
-%configure --host=%{_target} --libdir=%{_prefix}/lib
+export CFLAGS="-g -O2 -DSQLITE_ENABLE_FTS3=1 \
+    -DSQLITE_ENABLE_FTS4=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 \
+    -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1 \
+    -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_FTS3_TOKENIZER=1"
+export LDFLAGS=""
+../configure --host=%{_target} --prefix=%{_prefix} --libdir=%{_prefix}/lib \
+    --enable-fts5  --disable-static
 %make_build
 
 %install
@@ -70,22 +77,17 @@ cd build
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
-
-
 %files
-%license COPYING
-%{_bindir}/*
 %{_prefix}/lib/*.so.*
 
 %files devel
 %{_includedir}/*
 %{_prefix}/lib/*.so
-%{_prefix}/lib/*.a
 %{_prefix}/lib/pkgconfig/*.pc
-%doc %{_datadir}/doc/expat
+
+%files -n %{?cross}sqlite
+%{_bindir}/sqlite3
+%doc %{_mandir}/man1/*
 
 %changelog
 

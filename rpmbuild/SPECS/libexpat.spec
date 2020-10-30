@@ -7,23 +7,21 @@
 # /usr/arch-vendor-os-abi/.
 %define isnative 0
 %define cross %{_target}-
-%global _oldprefix %{_prefix}
-# TODO unify target/usr and target/... but later
 %define _prefix /usr/%{_target}/usr
 %endif
 
-%define libname sqlite
+%define libname expat
 
-Name:           %{?cross}%{libname}
-Version:        3.33.0
+Name:           %{?cross}lib%{libname}
+Version:        2.2.10
 Release:        1%{?dist}
-Summary:        SQLite is a C-language library that implements a small, fast, self-contained, high-reliability, full-featured, SQL database engine.
+Summary:        Expat is a stream-oriented XML parser.
 
-License:        Public domain
-URL:            https://sqlite.org
+License:        MIT
+URL:            https://github.com/libexpat/libexpat
 %undefine       _disable_source_fetch
-Source0:        https://sqlite.org/2020/sqlite-autoconf-3330000.tar.gz
-%define         SHA256SUM0 106a2c48c7f75a298a7557bcc0d5f4f454e5b43811cc738b7ca294d6956bbb15
+Source0:        https://github.com/libexpat/libexpat/releases/download/R_%(echo %{version} | tr . _)/%{libname}-%{version}.tar.xz
+%define         SHA256SUM0 5dfe538f8b5b63f03e98edac520d7d9a6a4d22e482e5c96d4d06fcc5485c25f2
 
 BuildRequires:  make
 
@@ -39,7 +37,6 @@ BuildRequires:  make
 BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}glibc-devel
 
 %undefine _annotated_build
-%global debug_package %{nil}
 
 %description
 
@@ -51,22 +48,21 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
+%package     -n %{?cross}expat
+Summary:        Command-line utilities for libexpat
+
+%description -n %{?cross}expat
 
 %prep
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
-%autosetup -n sqlite-autoconf-3330000
+%autosetup -n %{libname}-%{version}
 
 %build
 
 mkdir build
 cd build
-export CFLAGS="-g -O2 -DSQLITE_ENABLE_FTS3=1 \
-    -DSQLITE_ENABLE_FTS4=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 \
-    -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1 \
-    -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_FTS3_TOKENIZER=1"
-export LDFLAGS=""
-../configure --host=%{_target} --prefix=%{_prefix} --libdir=%{_prefix}/lib \
-    --enable-fts5 
+%define _configure ../configure
+%configure --host=%{_target} --libdir=%{_prefix}/lib --disable-static
 %make_build
 
 %install
@@ -81,17 +77,17 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 
 %files
-# TODO this should be its own package
-%{_bindir}/sqlite3
-
+%license COPYING
 %{_prefix}/lib/*.so.*
-%doc %{_mandir}/man1/*
 
 %files devel
 %{_includedir}/*
 %{_prefix}/lib/*.so
-%{_prefix}/lib/*.a
 %{_prefix}/lib/pkgconfig/*.pc
+%doc %{_datadir}/doc/expat
+
+%files -n %{?cross}expat
+%{_bindir}/*
 
 %changelog
 

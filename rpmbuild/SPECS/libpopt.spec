@@ -7,14 +7,11 @@
 # /usr/arch-vendor-os-abi/.
 %define isnative 0
 %define cross %{_target}-
-%global _oldprefix %{_prefix}
-# TODO unify target/usr and target/... but later
-%define _prefix /usr/%{_target}/usr
 %endif
 
 %define libname popt
 
-Name:           %{?cross}%{libname}
+Name:           %{?cross}lib%{libname}
 Version:        1.18
 Release:        1%{?dist}
 Summary:        This is the popt(3) command line option parsing library.
@@ -61,7 +58,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 mkdir build
 cd build
 %define _configure ../configure
-%configure --host=%{_target} --libdir=%{_prefix}/lib
+%configure --host=%{_target} --libdir=%{_prefix}/lib --disable-static
 %make_build
 
 %install
@@ -71,21 +68,15 @@ cd build
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
-
-
 %files -f build/popt.lang
 %license COPYING
 %{_prefix}/lib/*.so.*
-%doc %{_mandir}/man3/*
 
 %files devel
 %{_includedir}/*
 %{_prefix}/lib/*.so
-%{_prefix}/lib/*.a
 %{_prefix}/lib/pkgconfig/*.pc
+%doc %{_mandir}/man3/*
 
 %changelog
 

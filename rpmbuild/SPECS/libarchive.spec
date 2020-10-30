@@ -7,8 +7,6 @@
 # /usr/arch-vendor-os-abi/.
 %define isnative 0
 %define cross %{_target}-
-%global _oldprefix %{_prefix}
-# TODO unify target/usr and target/... but later
 %define _prefix /usr/%{_target}/usr
 %endif
 
@@ -51,13 +49,17 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
+%package     -n %{?cross}archive
+Summary:        Programs from libarchive(3) - bsdtar, mostly
+
+%description -n %{?cross}archive
 
 %prep
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %autosetup -n %{libname}-%{version}
 
 %build
-%configure --host=%{_target} --libdir=%{_prefix}/lib
+%configure --host=%{_target} --libdir=%{_prefix}/lib --disable-static
 %make_build
 
 %install
@@ -65,25 +67,19 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
-
-
 %files
 %license COPYING
-# TODO should these be their own package / not built with cross tools
-%{_bindir}/bsd{cat,cpio,tar}
-
 %{_prefix}/lib/*.so.*
-%doc %{_mandir}/man{1,3,5}/*
 
 %files devel
 %{_includedir}/*
 %{_prefix}/lib/*.so
-%{_prefix}/lib/*.a
 %{_prefix}/lib/pkgconfig/*.pc
+%doc %{_mandir}/man{3,5}/*
 
+%files -n %{?cross}archive
+%{_bindir}/bsd{cat,cpio,tar}
+%doc %{_mandir}/man1/*
 
 %changelog
 

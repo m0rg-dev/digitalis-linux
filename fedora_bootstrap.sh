@@ -76,7 +76,7 @@ fi
 
 LIBRPMS="glibc gcc pkg-config-wrapper cmake-toolchain meson-toolchain"
 LIBRPMS="$LIBRPMS libncurses libgmp libmpfr libmpc zlib libgpg-error libgcrypt"
-LIBRPMS="$LIBRPMS file"
+LIBRPMS="$LIBRPMS file libpopt libarchive libsqlite lua libexpat"
 
 for rpm in $LIBRPMS; do
     if [ ! -n "$(ls -l rpmbuild/SRPMS/x86_64-pc-linux-gnu-$rpm-*.rpm)" ]; then
@@ -91,9 +91,9 @@ RPMDEFS="--define='_build x86_64-redhat-linux-gnu' --define='_host x86_64-pc-lin
 # RPMS="$RPMS rpm"
 
 RPMS="binutils libncurses libgmp libmpfr libmpc zlib libgpg-error libgcrypt"
-RPMS="$RPMS glibc"
+RPMS="$RPMS glibc file libpopt libarchive libsqlite lua libexpat"
 
-RPMS="gcc bash fs-tree coreutils kernel-headers base-system"
+RPMS="$RPMS gcc bash fs-tree coreutils kernel-headers base-system"
 
 for rpm in $RPMS; do
     if [ ! -n "$(ls -l rpmbuild/SRPMS/$rpm-*.digi1.*.rpm)" ]; then
@@ -111,7 +111,7 @@ buildah run --net host $VOLUMES "$ctr" -- dnf install -y \
     fs-tree
 buildah run --net host $VOLUMES "$ctr" -- dnf install -y \
     --verbose --repo=digitalis-stage1 --installroot=/new_root --releasever=digi1 \
-    base-system gcc
+    base-system
 
 rm -rf new_root
 buildah unshare sh -c 'cp -rp $(buildah mount '$ctr')/new_root new_root'
