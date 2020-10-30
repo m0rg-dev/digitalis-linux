@@ -25,7 +25,7 @@ Source0:        http://ftp.gnome.org/pub/gnome/sources/gtk-doc/1.33/gtk-doc-%{ve
 %define host_tool_prefix %{_host}-
 %endif
 
-BuildRequires:  %{?host_tool_prefix}gcc
+BuildRequires:  %{?host_tool_prefix}gcc %{?host_tool_prefix}pkg-config
 BuildRequires:  make automake autoconf which libtool libxslt docbook-dtds docbook-style-xsl
 
 %undefine _annotated_build

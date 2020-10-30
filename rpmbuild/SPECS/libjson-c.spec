@@ -7,15 +7,13 @@
 # /usr/arch-vendor-os-abi/.
 %define isnative 0
 %define cross %{_target}-
-%global _oldprefix %{_prefix}
-# TODO unify target/usr and target/... but later
 %define _prefix /usr/%{_target}/usr
 %endif
 
 %define libname json-c
 %define silly_version -20200726
 
-Name:           %{?cross}%{libname}
+Name:           %{?cross}lib%{libname}
 Version:        0.15
 Release:        1%{?dist}
 Summary:        json-c is a library for creating and reading JSON objects in C.

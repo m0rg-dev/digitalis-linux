@@ -7,8 +7,6 @@
 # /usr/arch-vendor-os-abi/.
 %define isnative 0
 %define cross %{_target}-
-%global _oldprefix %{_prefix}
-# TODO unify target/usr and target/... but later
 %define _prefix /usr/%{_target}/usr
 %endif
 
@@ -25,8 +23,6 @@ URL:            https://github.com/fedora-modularity/libmodulemd
 Source0:        https://github.com/fedora-modularity/libmodulemd/releases/download/%{libname}-%{version}/modulemd-%{version}.tar.xz
 %define         SHA256SUM0 1767fa7aa43421451383794c947d013a93f75a47f00b231ab33e9358976b12d8
 
-#Patch0:         libmodulemd-0001-no-cross-validator.patch
-
 BuildRequires:  meson ninja-build gcc gtk-doc
 
 %if "%{_build}" != "%{_host}"
@@ -39,7 +35,7 @@ BuildRequires:  meson ninja-build gcc gtk-doc
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
 BuildRequires: %{?target_tool_prefix}gcc
-BuildRequires: %{?target_tool_prefix}meson-toolchain %{?target_tool_prefix}glib-devel %{?target_tool_prefix}libyaml-devel
+BuildRequires: %{?target_tool_prefix}meson-toolchain %{?target_tool_prefix}glib2-devel %{?target_tool_prefix}libyaml-devel
 BuildRequires: %{?target_tool_prefix}librpm-devel %{?target_tool_prefix}libmagic-devel %{?target_tool_prefix}gtk-doc
 # for mkenums
 BuildRequires: glib2-devel
@@ -69,12 +65,10 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %build
 
 mkdir build
-%if ! %{isnative}
 # this is really stupid. libmodulemd depends on having the glib docs installed
 # for some unknowable reason, but you can't cross-compile those...
 mkdir -p /usr/%{_target}/usr/share/gtk-doc/html/{glib,gobject}
 touch /usr/%{_target}/usr/share/gtk-doc/html/{glib,gobject}/index.html
-%endif
 
 # no idea if that overrides dir is at all correct (or important)
 

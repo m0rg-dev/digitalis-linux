@@ -7,8 +7,6 @@
 # /usr/arch-vendor-os-abi/.
 %define isnative 0
 %define cross %{_target}-
-%global _oldprefix %{_prefix}
-# TODO unify target/usr and target/... but later
 %define _prefix /usr/%{_target}/usr
 %endif
 

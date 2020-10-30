@@ -25,6 +25,12 @@ URL:            https://github.com/rpm-software-management/libdnf
 Source0:        https://github.com/rpm-software-management/%{libname}/archive/%{version}.tar.gz#/%{libname}-%{version}.tar.gz
 %define         SHA256SUM0 33e943d3054ed3e727bc9fc0079d02b10f2108bd6918cf1b22149bedce1470a4
 
+# Fix some missing includes. This is either C++11 incompat or our stdlibc++-devel being broken, not sure.
+Patch0:         libdnf-0001-include-stdexcept.patch
+Patch1:         libdnf-0002-include-string.patch
+# Fix a poorly written test that breaks with -fpermissive.
+Patch2:         libdnf-0003-test-condition.patch
+
 BuildRequires:  cmake swig gettext gtk-doc
 
 %if "%{_build}" != "%{_host}"
@@ -39,10 +45,12 @@ BuildRequires: %{?target_tool_prefix}cmake-toolchain
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
 BuildRequires: %{?target_tool_prefix}gcc
+BuildRequires: %{?target_tool_prefix}g++
 BuildRequires: %{?target_tool_prefix}zlib-devel %{?target_tool_prefix}glib2-devel %{?target_tool_prefix}libsmartcols-devel
-BuildRequires: %{?target_tool_prefix}libsolv-devel %{?target_tool_prefix}check-devel %{?target_tool_prefix}librepo-devel
-BuildRequires: %{?target_tool_prefix}libmodulemd-devel %{?target_tool_prefix}libpython-devel %{?target_tool_prefix}cppunit-devel
-BuildRequires: %{?target_tool_prefix}gtk-doc %{?target_tool_prefix}json-c-devel
+BuildRequires: %{?target_tool_prefix}libsolv-devel %{?target_tool_prefix}libcheck-devel %{?target_tool_prefix}librepo-devel
+BuildRequires: %{?target_tool_prefix}libmodulemd-devel %{?target_tool_prefix}libpython-devel %{?target_tool_prefix}libcppunit-devel
+BuildRequires: %{?target_tool_prefix}gtk-doc %{?target_tool_prefix}libjson-c-devel
+BuildRequires: %{?target_tool_prefix}libgpgme-devel
 
 %undefine _annotated_build
 %global debug_package %{nil}
@@ -60,19 +68,21 @@ developing applications that use %{name}.
 
 %prep
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
-%autosetup -n %{libname}-%{version}
+%autosetup -n %{libname}-%{version} -p1
 
 %build
 
 mkdir build
 cd build
 
+# WITH_MAN requires sphinx
+
 cmake -Wno-dev \
 %if "%{_build}" != "%{_target}"
     -DCMAKE_TOOLCHAIN_FILE=/usr/%{_target}/cmake_toolchain \
 %endif
     -DGTKDOC_SCANGOBJ_WRAPPER=/usr/bin/gtkdoc-scangobj \
-    -DCMAKE_INSTALL_PREFIX=%{_prefix} -DPYTHON_DESIRED=3 ..
+    -DCMAKE_INSTALL_PREFIX=%{_prefix} -DPYTHON_DESIRED=3 -DWITH_MAN=OFF ..
 
 %make_build -j1
 
@@ -83,16 +93,19 @@ cd build
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %files
-%license LICENSE.BSD
-%{_prefix}/bin/*
+%license COPYING
 %{_prefix}/lib/*.so.*
-%doc %{_mandir}/man{1,3}/*
+%{_prefix}/lib/libdnf
+%{_prefix}/lib64/python3.8/site-packages/hawkey
+%{_prefix}/lib64/python3.8/site-packages/libdnf
+# find_lang doesn't like this one for some reason
+%{_datadir}/locale/*/LC_MESSAGES/libdnf.mo
 
 %files devel
-%{_includedir}/*
+%{_includedir}/libdnf
 %{_prefix}/lib/*.so
-%{_prefix}/lib/*.a
 %{_prefix}/lib/pkgconfig/*.pc
+%doc %{_datadir}/gtk-doc/html/libdnf
 
 %changelog
 

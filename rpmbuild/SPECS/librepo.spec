@@ -34,13 +34,14 @@ BuildRequires:  make cmake doxygen
 %else
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
-BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}cmake-toolchain
+BuildRequires: %{?target_tool_prefix}gcc
+BuildRequires: %{?target_tool_prefix}cmake-toolchain
 BuildRequires: %{?target_tool_prefix}glib2-devel %{?target_tool_prefix}libopenssl-devel %{?target_tool_prefix}libxml2-devel
 BuildRequires: %{?target_tool_prefix}libcurl-devel %{?target_tool_prefix}libzchunk-devel %{?target_tool_prefix}libpython-devel
 BuildRequires: %{?target_tool_prefix}libcheck-devel %{?target_tool_prefix}zlib-devel %{?target_tool_prefix}libgpgme-devel
 
-Requires: %{?cross}glib2 %{?cross}openssl %{?cross}libxml2 %{?cross}libcurl %{?cross}zchunk %{?cross}libpython
-Requires: %{?cross}zlib %{?cross}gpgme
+Requires: %{?cross}glib2 %{?cross}libopenssl %{?cross}libxml2 %{?cross}libcurl %{?cross}libzchunk %{?cross}libpython
+Requires: %{?cross}zlib %{?cross}libgpgme
 
 %undefine _annotated_build
 %global debug_package %{nil}
@@ -50,7 +51,7 @@ Requires: %{?cross}zlib %{?cross}gpgme
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-Requires:       %{?cross}libcurl-devel %{?cross}openssl-devel %{?cross}libxml2-devel
+Requires:       %{?cross}libcurl-devel %{?cross}libopenssl-devel %{?cross}libxml2-devel
 
 %description    devel
 The %{name}-devel package contains libraries and header files for

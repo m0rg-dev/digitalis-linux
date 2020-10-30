@@ -28,3 +28,8 @@ Normal toolchain layout stuff:
 - Packages MUST install headers into `/usr/include`.
 - Packages SHOULD NOT install static libraries.
 - Packages MUST NOT install anything into `/lib64`.
+
+Various TODOs:
+- Make some kind of `%{_target}-cross-fs` that packages a `/usr/%{_target}/`
+  hierarchy (usrmerge layout) and the various `-toolchain` packages, have
+  `%{_target}-gcc` require it

@@ -1,0 +1,32 @@
+--- a/libdnf/module/ModulePackageContainer.hpp
++++ b/libdnf/module/ModulePackageContainer.hpp
+@@ -26,6 +26,7 @@
+ #include <string>
+ #include <vector>
+ #include <set>
++#include <stdexcept>
+
+ #include "ModulePackage.hpp"
+ #include "libdnf/nsvcap.hpp"
+
+--- a/libdnf/goal/Goal.hpp
++++ b/libdnf/goal/Goal.hpp
+@@ -22,6 +22,7 @@
+ #define __GOAL_HPP
+
+ #include <memory>
++#include <stdexcept>
+
+ #include "../dnf-types.h"
+ #include "../hy-goal.h"
+
+--- a/libdnf/repo/solvable/Dependency.hpp
+--- b/libdnf/repo/solvable/Dependency.hpp
+@@ -24,6 +24,7 @@
+ #include <memory>
+ #include <string>
+ #include <vector>
++#include <stdexcept>
+ #include <solv/knownid.h>
+
+ #include "libdnf/dnf-sack.h"

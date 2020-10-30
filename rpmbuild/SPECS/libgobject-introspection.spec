@@ -1,5 +1,6 @@
 # If host == target, we aren't building cross tools.
 # We should install into /usr and package headers.
+%global _oldprefix %{_prefix}
 %if "%{_host}" == "%{_target}"
 %define isnative 1
 %else
@@ -7,14 +8,12 @@
 # /usr/arch-vendor-os-abi/.
 %define isnative 0
 %define cross %{_target}-
-%global _oldprefix %{_prefix}
-# TODO unify target/usr and target/... but later
 %define _prefix /usr/%{_target}/usr
 %endif
 
 %define libname gobject-introspection
 
-Name:           %{?cross}%{libname}
+Name:           %{?cross}lib%{libname}
 Version:        1.64.1
 Release:        1%{?dist}
 Summary:        C Library for manipulating module metadata files
@@ -53,6 +52,11 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
+%package     -n %{?cross}gobject-introspection
+Summary:        Command-line utilities for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description -n %{?cross}gobject-introspection
 
 %prep
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
@@ -79,16 +83,24 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_prefix}/lib/*.so.*
 
 %files devel
-%{_bindir}/*
 %{_includedir}/*
 %{_prefix}/lib/*.so
 %{_prefix}/lib/pkgconfig/*.pc
 %{_prefix}/lib/gobject-introspection
 
-%doc %{_mandir}/man1/*.1
 %{_datadir}/aclocal/*.m4
 %{_datadir}/gobject-introspection-1.0
 %{_datadir}/gir-1.0
+
+%files -n %{?cross}gobject-introspection
+%{_bindir}/g-ir-annotation-tool
+%{_bindir}/g-ir-compiler
+%{_bindir}/g-ir-generate
+%{_bindir}/g-ir-inspect
+%{_bindir}/g-ir-scanner
+%doc %{_mandir}/man1/g-ir-compiler.*
+%doc %{_mandir}/man1/g-ir-generate.*
+%doc %{_mandir}/man1/g-ir-scanner.*
 
 %changelog
 

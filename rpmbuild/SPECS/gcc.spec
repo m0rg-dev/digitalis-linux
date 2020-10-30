@@ -187,6 +187,8 @@ cd build
     --disable-libssp                               \
     --disable-libvtv                               \
     --disable-libstdcxx                            \
+%else
+    --enable-libstdcxx-dual-abi \
 %endif
     %{?with_threads:--enable-threads} \
     %{!?with_threads:--disable-threads} \

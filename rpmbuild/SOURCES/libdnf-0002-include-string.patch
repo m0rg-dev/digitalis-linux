@@ -1,0 +1,20 @@
+--- a/libdnf/sack/changelog.hpp	2020-10-30 13:12:12.540688554 -0700
++++ b/libdnf/sack/changelog.hpp	2020-10-30 13:12:26.227355731 -0700
+@@ -23,6 +23,7 @@
+ #define __CHANGELOG_HPP
+
+ #include <ctime>
++#include <string>
+
+ namespace libdnf {
+
+--- a/libdnf/module/modulemd/ModuleProfile.hpp
++++ b/libdnf/module/modulemd/ModuleProfile.hpp
+@@ -24,6 +24,7 @@
+ 
+ #include <memory>
+ #include <vector>
++#include <string>
+
+ #include <modulemd/modulemd.h>
+
