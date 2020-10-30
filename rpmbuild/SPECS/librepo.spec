@@ -36,11 +36,10 @@ BuildRequires:  make cmake doxygen
 %else
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
-BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}glibc-devel %{?target_tool_prefix}cmake-toolchain
+BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}cmake-toolchain
 BuildRequires: %{?target_tool_prefix}glib2-devel %{?target_tool_prefix}openssl-devel %{?target_tool_prefix}libxml2-devel
 BuildRequires: %{?target_tool_prefix}libcurl-devel %{?target_tool_prefix}zchunk-devel %{?target_tool_prefix}libpython-devel
 BuildRequires: %{?target_tool_prefix}check-devel %{?target_tool_prefix}zlib-devel %{?target_tool_prefix}gpgme-devel
-BuildRequires: %{?target_tool_prefix}libstdc++-devel
 
 Requires: %{?cross}glib2 %{?cross}openssl %{?cross}libxml2 %{?cross}libcurl %{?cross}zchunk %{?cross}libpython
 Requires: %{?cross}zlib %{?cross}gpgme

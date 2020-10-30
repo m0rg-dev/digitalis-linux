@@ -33,7 +33,7 @@ Source0:        http://ftp.rpm.org/releases/rpm-4.16.x/rpm-%{version}.tar.bz2
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
 
-BuildRequires:  %{?target_tool_prefix}gcc %{?target_tool_prefix}glibc-devel %{?target_tool_prefix}zlib-devel
+BuildRequires:  %{?target_tool_prefix}gcc %{?target_tool_prefix}zlib-devel
 BuildRequires:  %{?target_tool_prefix}libgcrypt-devel %{?target_tool_prefix}libmagic-devel %{?target_tool_prefix}popt-devel
 BuildRequires:  %{?target_tool_prefix}libarchive-devel %{?target_tool_prefix}sqlite-devel %{?target_tool_prefix}pkg-config
 BuildRequires:  %{?target_tool_prefix}liblua-devel

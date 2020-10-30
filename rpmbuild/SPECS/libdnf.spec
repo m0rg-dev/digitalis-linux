@@ -38,7 +38,7 @@ BuildRequires: %{?target_tool_prefix}cmake-toolchain
 %else
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
-BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}glibc-devel %{?target_tool_prefix}libstdc++-devel
+BuildRequires: %{?target_tool_prefix}gcc
 BuildRequires: %{?target_tool_prefix}zlib-devel %{?target_tool_prefix}glib2-devel %{?target_tool_prefix}libsmartcols-devel
 BuildRequires: %{?target_tool_prefix}libsolv-devel %{?target_tool_prefix}check-devel %{?target_tool_prefix}librepo-devel
 BuildRequires: %{?target_tool_prefix}libmodulemd-devel %{?target_tool_prefix}libpython-devel %{?target_tool_prefix}cppunit-devel

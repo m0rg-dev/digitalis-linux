@@ -36,7 +36,7 @@ BuildRequires:  meson ninja-build gcc
 %else
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
-BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}glibc-devel
+BuildRequires: %{?target_tool_prefix}gcc
 BuildRequires: %{?target_tool_prefix}meson-toolchain %{?target_tool_prefix}libcurl-devel %{?target_tool_prefix}openssl-devel
 
 Requires: %{?cross}libcurl %{?cross}openssl

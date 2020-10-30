@@ -32,7 +32,7 @@ Source0:        https://www.lua.org/ftp/%{libname}-%{version}.tar.gz
 %else
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
-BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}glibc-devel
+BuildRequires: %{?target_tool_prefix}gcc
 BuildRequires:  gcc make
 
 Requires:       %{?cross}liblua

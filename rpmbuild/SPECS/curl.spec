@@ -29,7 +29,7 @@ Source0:        https://curl.haxx.se/download/%{libname}-%{version}.tar.xz
 %define host_tool_prefix %{_host}-
 %endif
 
-BuildRequires:  %{?host_tool_prefix}gcc %{?host_tool_prefix}glibc-devel
+BuildRequires:  %{?host_tool_prefix}gcc
 BuildRequires:  make
 
 Requires:       %{?cross}libcurl = %{version}-%{release}

@@ -34,7 +34,7 @@ Source0:        https://www.python.org/ftp/python/%{version}/Python-%{version}.t
 %else
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
-BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}glibc-devel %{?target_tool_prefix}libffi-devel
+BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}libffi-devel
 BuildRequires: %{?target_tool_prefix}sqlite-devel %{?target_tool_prefix}zlib-devel
 BuildRequires: make python gcc zlib-devel
 

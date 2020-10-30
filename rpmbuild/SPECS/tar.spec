@@ -12,7 +12,7 @@ Source0:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
 %define host_tool_prefix %{_host}-
 %endif
 
-BuildRequires:  %{?host_tool_prefix}gcc %{?host_tool_prefix}glibc-devel
+BuildRequires:  %{?host_tool_prefix}gcc
 BuildRequires:  make
 
 %undefine _annotated_build

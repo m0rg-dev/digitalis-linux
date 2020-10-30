@@ -13,7 +13,7 @@ Source0:        https://git.yzena.com/gavin/bc/archive/%{version}.tar.gz#/%{name
 %define host_tool_prefix %{_host}-
 %endif
 
-BuildRequires:  %{?host_tool_prefix}gcc %{?host_tool_prefix}glibc-devel
+BuildRequires:  %{?host_tool_prefix}gcc
 BuildRequires:  make
 
 %undefine _annotated_build

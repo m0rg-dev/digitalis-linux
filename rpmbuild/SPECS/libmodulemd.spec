@@ -38,7 +38,7 @@ BuildRequires:  meson ninja-build gcc gtk-doc
 %else
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
-BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}glibc-devel
+BuildRequires: %{?target_tool_prefix}gcc
 BuildRequires: %{?target_tool_prefix}meson-toolchain %{?target_tool_prefix}glib-devel %{?target_tool_prefix}libyaml-devel
 BuildRequires: %{?target_tool_prefix}librpm-devel %{?target_tool_prefix}libmagic-devel %{?target_tool_prefix}gtk-doc
 # for mkenums

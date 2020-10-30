@@ -36,7 +36,7 @@ BuildRequires: %{?target_tool_prefix}cmake-toolchain
 %else
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
-BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}glibc-devel %{?target_tool_prefix}libstdc++-devel
+BuildRequires: %{?target_tool_prefix}gcc
 BuildRequires: %{?target_tool_prefix}zlib-devel %{?target_tool_prefix}librpm-devel %{?target_tool_prefix}expat-devel
 
 %undefine _annotated_build

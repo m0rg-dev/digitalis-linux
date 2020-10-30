@@ -29,7 +29,7 @@ BuildRequires:  /usr/bin/pod2man /usr/bin/makeinfo
 %define host_tool_prefix %{_host}-
 %endif
 
-BuildRequires:  %{?host_tool_prefix}gcc %{?host_tool_prefix}glibc-devel
+BuildRequires:  %{?host_tool_prefix}gcc
 
 # We also need some build machine tools! Those will always be non-prefixed.
 BuildRequires:  gcc

@@ -36,7 +36,7 @@ BuildRequires:  make gcc
 %else
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
-BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}glibc-devel 
+BuildRequires: %{?target_tool_prefix}gcc 
 BuildRequires: %{?target_tool_prefix}libgpg-error-devel %{?target_tool_prefix}pkg-config
 
 %undefine _annotated_build

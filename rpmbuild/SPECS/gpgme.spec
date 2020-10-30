@@ -36,8 +36,8 @@ BuildRequires:  make gcc /usr/bin/gpgsm
 %else
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
-BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}glibc-devel %{?target_tool_prefix}libgpg-error-devel
-BuildRequires: %{?target_tool_prefix}pkg-config %{?target_tool_prefix}libassuan-devel %{?target_tool_prefix}libstdc++-devel
+BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}libgpg-error-devel
+BuildRequires: %{?target_tool_prefix}pkg-config %{?target_tool_prefix}libassuan-devel
 %undefine _annotated_build
 %global debug_package %{nil}
 
