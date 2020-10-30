@@ -7,8 +7,6 @@
 # /usr/arch-vendor-os-abi/.
 %define isnative 0
 %define cross %{_target}-
-%global _oldprefix %{_prefix}
-# TODO unify target/usr and target/... but later
 %define _prefix /usr/%{_target}/usr
 %endif
 
@@ -34,8 +32,8 @@ Source0:        http://ftp.rpm.org/releases/rpm-4.16.x/rpm-%{version}.tar.bz2
 %endif
 
 BuildRequires:  %{?target_tool_prefix}gcc %{?target_tool_prefix}zlib-devel
-BuildRequires:  %{?target_tool_prefix}libgcrypt-devel %{?target_tool_prefix}libmagic-devel %{?target_tool_prefix}popt-devel
-BuildRequires:  %{?target_tool_prefix}libarchive-devel %{?target_tool_prefix}sqlite-devel %{?target_tool_prefix}pkg-config
+BuildRequires:  %{?target_tool_prefix}libgcrypt-devel %{?target_tool_prefix}libmagic-devel %{?target_tool_prefix}libpopt-devel
+BuildRequires:  %{?target_tool_prefix}libarchive-devel %{?target_tool_prefix}libsqlite-devel %{?target_tool_prefix}pkg-config
 BuildRequires:  %{?target_tool_prefix}liblua-devel
 BuildRequires:  make
 
@@ -55,7 +53,7 @@ URL:            https://rpm.org/
 %package     -n %{?cross}librpm-devel
 Summary:        Development files for librpm
 Requires:       %{?cross}librpm%{?_isa} = %{version}-%{release}
-Requires:       %{?cross}libgcrypt-devel %{?cross}zlib-devel %{?cross}popt-devel %{?cross}sqlite-devel
+Requires:       %{?cross}libgcrypt-devel %{?cross}zlib-devel %{?cross}libpopt-devel %{?cross}libsqlite-devel
 
 %description -n %{?cross}librpm-devel
 The librpm-devel package contains libraries and header files for

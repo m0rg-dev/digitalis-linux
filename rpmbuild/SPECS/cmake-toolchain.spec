@@ -35,8 +35,8 @@ set(ENV{PKG_CONFIG_LIBDIR} "\${CMAKE_SYSROOT}/usr/lib/pkgconfig:\${CMAKE_SYSROOT
 set(ENV{PKG_CONFIG_SYSROOT_DIR} \${CMAKE_SYSROOT})
 
 set(tools /usr/%{_target})
-set(CMAKE_C_COMPILER \${tools}/bin/gcc)
-set(CMAKE_CXX_COMPILER \${tools}/bin/g++)
+set(CMAKE_C_COMPILER /usr/bin/%{_target}-gcc)
+set(CMAKE_CXX_COMPILER /usr/bin/%{_target}-g++)
 
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
 set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)

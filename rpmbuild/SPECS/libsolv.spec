@@ -37,7 +37,8 @@ BuildRequires: %{?target_tool_prefix}cmake-toolchain
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
 BuildRequires: %{?target_tool_prefix}gcc
-BuildRequires: %{?target_tool_prefix}zlib-devel %{?target_tool_prefix}librpm-devel %{?target_tool_prefix}expat-devel
+BuildRequires: %{?target_tool_prefix}g++
+BuildRequires: %{?target_tool_prefix}zlib-devel %{?target_tool_prefix}librpm-devel %{?target_tool_prefix}libexpat-devel
 
 %undefine _annotated_build
 %global debug_package %{nil}
@@ -89,13 +90,14 @@ mv -v %{buildroot}/%{_datadir}/cmake/Modules/*.cmake %{buildroot}/usr/share/cmak
 %license LICENSE.BSD
 %{_prefix}/bin/*
 %{_prefix}/lib/*.so.*
-%doc %{_mandir}/man{1,3}/*
+%doc %{_mandir}/man1/*
 
 %files devel
 %{_includedir}/solv
 %{_prefix}/lib/*.so
 %{_prefix}/lib/pkgconfig/*.pc
 /usr/share/cmake/Modules/*.cmake
+%doc %{_mandir}/man3/*
 
 %changelog
 

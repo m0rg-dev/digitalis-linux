@@ -7,8 +7,6 @@
 # /usr/arch-vendor-os-abi/.
 %define isnative 0
 %define cross %{_target}-
-%global _oldprefix %{_prefix}
-# TODO unify target/usr and target/... but later
 %define _prefix /usr/%{_target}/usr
 %endif
 
@@ -192,7 +190,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_prefix}/lib/libblkid.so
 %{_prefix}/lib/pkgconfig/blkid.pc
 %{_includedir}/blkid
-%{_mandir}/man3/libblkid.3
+%{_mandir}/man3/libblkid*
 
 %changelog
 

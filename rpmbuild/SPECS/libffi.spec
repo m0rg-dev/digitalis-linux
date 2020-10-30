@@ -7,8 +7,6 @@
 # /usr/arch-vendor-os-abi/.
 %define isnative 0
 %define cross %{_target}-
-%global _oldprefix %{_prefix}
-# TODO unify target/usr and target/... but later
 %define _prefix /usr/%{_target}/usr
 %endif
 
@@ -62,7 +60,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 mkdir build
 cd build
 %define _configure ../configure
-%configure --host=%{_target} --libdir=%{_prefix}/lib
+%configure --host=%{_target} --libdir=%{_prefix}/lib --disable-static
 %make_build
 
 %install
@@ -74,14 +72,13 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %files
 %license LICENSE
 %{_prefix}/lib/*.so.*
-%doc %{_infodir}/*.info*
-%doc %{_mandir}/man3/*
 
 %files devel
 %{_includedir}/*
 %{_prefix}/lib/*.so
-%{_prefix}/lib/*.a
 %{_prefix}/lib/pkgconfig/*.pc
+%doc %{_mandir}/man3/*
+%doc %{_infodir}/*.info*
 
 %changelog
 

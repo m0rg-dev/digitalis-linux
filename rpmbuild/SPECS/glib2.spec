@@ -7,8 +7,6 @@
 # /usr/arch-vendor-os-abi/.
 %define isnative 0
 %define cross %{_target}-
-%global _oldprefix %{_prefix}
-# TODO unify target/usr and target/... but later
 %define _prefix /usr/%{_target}/usr
 %endif
 
@@ -37,6 +35,7 @@ BuildRequires:  meson ninja-build gcc g++ git
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
 BuildRequires: %{?target_tool_prefix}gcc
+BuildRequires: %{?target_tool_prefix}g++
 BuildRequires: %{?target_tool_prefix}meson-toolchain %{?target_tool_prefix}libffi-devel
 BuildRequires: %{?target_tool_prefix}zlib-devel
 
@@ -55,6 +54,11 @@ Requires:       %{?target_tool_prefix}libffi-devel %{?target_tool_prefix}zlib-de
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
+%package        utils
+Summary:        Command-line utilites for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description    utils
 
 %prep
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
@@ -77,9 +81,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %files
 %license COPYING
-%{_bindir}/*
 %{_prefix}/lib/*.so.*
-%{_datadir}/bash-completion/completions/*
 
 %files devel
 %{_includedir}/*
@@ -90,6 +92,10 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_datadir}/glib-2.0
 %{_datadir}/aclocal/*.m4
 %{_datadir}/gettext/its/gschema.*
+
+%files utils
+%{_bindir}/*
+%{_datadir}/bash-completion/completions/*
 
 %changelog
 

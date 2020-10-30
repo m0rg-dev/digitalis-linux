@@ -56,6 +56,12 @@ developing applications that use %{name}.
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %autosetup -n %{libname}-%{version}
 
+%package        utils
+Summary:        Command-line utilities for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description    utils
+
 %build
 
 mkdir build
@@ -72,11 +78,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %files
 %license COPYING
-%{_bindir}/*
 %{_prefix}/lib/*.so.*
 %doc %{_datadir}/gtk-doc/html/libxml2
 %doc %{_datadir}/doc/libxml2-%{version}
-%doc %{_mandir}/man1/*
 
 %files devel
 %{_includedir}/libxml2
@@ -88,6 +92,10 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_prefix}/lib/cmake/libxml2
 %{_datadir}/aclocal/*.m4
 %doc %{_mandir}/man3/*
+
+%files utils
+%{_bindir}/*
+%doc %{_mandir}/man1/*
 
 %changelog
 

@@ -81,9 +81,9 @@ cd build
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %if ! %{isnative}
-install -dm755 %{buildroot}/%{_prefix}/../bin
-ln -sv %{_oldprefix}/bin/%{?cross}gpg-error-config %{buildroot}/%{_prefix}/../bin/gpg-error-config
-ln -sv %{_oldprefix}/bin/%{?cross}gpgrt-config %{buildroot}/%{_prefix}/../bin/gpgrt-config
+install -dm755 %{buildroot}/%{_prefix}/bin
+ln -sv %{_oldprefix}/bin/%{?cross}gpg-error-config %{buildroot}/%{_prefix}/bin/gpg-error-config
+ln -sv %{_oldprefix}/bin/%{?cross}gpgrt-config %{buildroot}/%{_prefix}/bin/gpgrt-config
 %endif
 
 %files -f build/%{libname}.lang
@@ -99,8 +99,8 @@ ln -sv %{_oldprefix}/bin/%{?cross}gpgrt-config %{buildroot}/%{_prefix}/../bin/gp
 %{_oldprefix}/bin/%{?cross}gpg-error-config
 %{_oldprefix}/bin/%{?cross}gpgrt-config
 %if ! %{isnative}
-%{_prefix}/../bin/gpg-error-config
-%{_prefix}/../bin/gpgrt-config
+%{_prefix}/bin/gpg-error-config
+%{_prefix}/bin/gpgrt-config
 %endif
 %{_prefix}/lib/*.so
 %{_prefix}/lib/pkgconfig/*.pc

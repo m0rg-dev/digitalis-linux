@@ -7,14 +7,12 @@
 # /usr/arch-vendor-os-abi/.
 %define isnative 0
 %define cross %{_target}-
-%global _oldprefix %{_prefix}
-# TODO unify target/usr and target/... but later
 %define _prefix /usr/%{_target}/usr
 %endif
 
 %define libname gpgme
 
-Name:           %{?cross}%{libname}
+Name:           %{?cross}lib%{libname}
 Version:        1.14.0
 Release:        1%{?dist}
 Summary:        GPGME is the standard library to access GnuPG functions from programming languages. 
@@ -54,18 +52,27 @@ Requires:       %{?cross}libassuan-devel %{?cross}libgpg-error-devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
+%package     -n gpgme
+Summary:        Command-line utilities for libgpgme
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description -n gpgme
 
 %prep
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %autosetup -n %{libname}-%{version}
-
 %build
 
 mkdir build
 cd build
 %define _configure ../configure
-# apparently it can't get these out of pkg-config??
-%configure --host=%{_target} --libdir=%{_prefix}/lib --with-libgpg-error-prefix=%{_prefix} --with-libassuan-prefix=%{_prefix}
+export SYSROOT=%(%{?target_tool_prefix}gcc -print-sysroot)/usr # needed for libgpg-error config??? someday I'll figure that out
+%configure --host=%{_target} --libdir=%{_prefix}/lib \
+%if "%{_build}" != "%{_target}"
+    --with-libassuan-prefix=/usr/%{_target}/usr
+%endif
+
+
 %make_build
 
 %install
@@ -76,8 +83,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %files
 %license COPYING COPYING.LESSER
-%{_bindir}/gpgme-tool
-%{_bindir}/gpgme-json
 %{_prefix}/lib/*.so.*
 %doc %{_infodir}/*.info*
 
@@ -86,9 +91,12 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_includedir}/*
 %{_prefix}/lib/*.so
 %{_prefix}/lib/pkgconfig/*.pc
-%{_prefix}/lib/cmake/*
 %{_datadir}/aclocal/*.m4
 %{_datadir}/common-lisp
+
+%files -n gpgme
+%{_bindir}/gpgme-tool
+%{_bindir}/gpgme-json
 
 %changelog
 

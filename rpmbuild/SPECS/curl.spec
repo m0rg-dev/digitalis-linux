@@ -60,7 +60,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %autosetup -n %{libname}-%{version}
 
 %build
-%configure --libdir=%{_prefix}/lib --with-ca-path=/etc/ssl/certs
+%configure --libdir=%{_prefix}/lib --with-ca-path=/etc/ssl/certs --disable-static
 %make_build
 
 %install
@@ -78,7 +78,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %files -n %{?cross}libcurl-devel
 %{_includedir}/curl
 %{_prefix}/lib/*.so
-%{_prefix}/lib/*.a
 %{_prefix}/lib/pkgconfig/*.pc
 %{_datadir}/aclocal/*.m4
 %doc %{_mandir}/man3/*

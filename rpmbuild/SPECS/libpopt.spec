@@ -7,6 +7,7 @@
 # /usr/arch-vendor-os-abi/.
 %define isnative 0
 %define cross %{_target}-
+%define _prefix /usr/%{_target}/usr
 %endif
 
 %define libname popt

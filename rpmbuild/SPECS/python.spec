@@ -7,8 +7,6 @@
 # /usr/arch-vendor-os-abi/.
 %define isnative 0
 %define cross %{_target}-
-%global _oldprefix %{_prefix}
-# TODO unify target/usr and target/... but later
 %define _prefix /usr/%{_target}/usr
 %endif
 
@@ -17,7 +15,7 @@
 Name:           %{?cross}%{?libname}
 Version:        3.8.3
 Release:        1%{?dist}
-Summary:        Python is a programming language that lets you work quickly and integrate systems more effectively.
+Summary:        The Python programming language
 
 License:        Python-2.0
 URL:            https://www.python.org/
@@ -35,7 +33,7 @@ Source0:        https://www.python.org/ftp/python/%{version}/Python-%{version}.t
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
 BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}libffi-devel
-BuildRequires: %{?target_tool_prefix}sqlite-devel %{?target_tool_prefix}zlib-devel
+BuildRequires: %{?target_tool_prefix}libsqlite-devel %{?target_tool_prefix}zlib-devel
 BuildRequires: make python gcc zlib-devel
 
 Requires:       %{?cross}libpython = %{version}-%{release}

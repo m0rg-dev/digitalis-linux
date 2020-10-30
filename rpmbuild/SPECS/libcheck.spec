@@ -7,25 +7,23 @@
 # /usr/arch-vendor-os-abi/.
 %define isnative 0
 %define cross %{_target}-
-%global _oldprefix %{_prefix}
-# TODO unify target/usr and target/... but later
 %define _prefix /usr/%{_target}/usr
 %endif
 
-%define libname zchunk
+%define libname check
 
-Name:           %{?cross}%{libname}
-Version:        1.1.7
+Name:           %{?cross}lib%{libname}
+Version:        0.15.2
 Release:        1%{?dist}
-Summary:        zchunk is a compressed file format that splits the file into independent chunks
+Summary:        Check is a unit testing framework for C.
 
-License:        BSD-2-Clause
-URL:            https://github.com/zchunk/zchunk
+License:        LGPLv2
+URL:            https://libcheck.github.io/check/
 %undefine       _disable_source_fetch
-Source0:        https://github.com/zchunk/%{libname}/archive/%{version}.tar.gz#/%{libname}-%{version}.tar.gz
-%define         SHA256SUM0 eb3d531916d6fea399520a2a4663099ddbf2278088599fa09980631067dc9d7b
+Source0:        https://github.com/libcheck/%{libname}/releases/download/%{version}/%{libname}-%{version}.tar.gz
+%define         SHA256SUM0 a8de4e0bacfb4d76dd1c618ded263523b53b85d92a146d8835eb1a52932fa20a
 
-BuildRequires:  meson ninja-build gcc
+BuildRequires:  make autoconf automake libtool
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
@@ -37,9 +35,6 @@ BuildRequires:  meson ninja-build gcc
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
 BuildRequires: %{?target_tool_prefix}gcc
-BuildRequires: %{?target_tool_prefix}meson-toolchain %{?target_tool_prefix}libcurl-devel %{?target_tool_prefix}openssl-devel
-
-Requires: %{?cross}libcurl %{?cross}openssl
 
 %undefine _annotated_build
 %global debug_package %{nil}
@@ -49,42 +44,52 @@ Requires: %{?cross}libcurl %{?cross}openssl
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-Requires:       %{?target_tool_prefix}libffi-devel
 
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 
+%package     -n checkmk
+Summary:        Script for generating unit tests for use with libcheck
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description -n checkmk
+
 %prep
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %autosetup -n %{libname}-%{version}
+autoreconf --install
 
 %build
 
 mkdir build
-meson -Dbuildtype=release --prefix=%{_prefix} \
-%if "%{_build}" != "%{_target}"
-    --cross-file %{_target} \
-%endif
-    build/
-ninja %{?_smp_mflags} -C build
+cd build
+%define _configure ../configure
+%configure --host=%{_target} --libdir=%{_prefix}/lib --disable-static
+%make_build
 
 %install
-DESTDIR=%{buildroot} ninja -C build install
+cd build
+%make_install
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %files
-%license LICENSE
-%{_bindir}/*
+%license COPYING.LESSER
 %{_prefix}/lib/*.so.*
-%doc %{_mandir}/man1/*
+%doc %{_infodir}/*.info*
 
 %files devel
 %{_includedir}/*
 %{_prefix}/lib/*.so
+%{_datadir}/aclocal/*.m4
 %{_prefix}/lib/pkgconfig/*.pc
+%doc %{_datadir}/doc/check
+
+%files -n checkmk
+%{_bindir}/checkmk
+%doc %{_mandir}/man1/*
 
 %changelog
 

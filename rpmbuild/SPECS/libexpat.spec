@@ -50,6 +50,7 @@ developing applications that use %{name}.
 
 %package     -n %{?cross}expat
 Summary:        Command-line utilities for libexpat
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description -n %{?cross}expat
 

@@ -76,7 +76,9 @@ fi
 
 LIBRPMS="glibc gcc pkg-config-wrapper cmake-toolchain meson-toolchain"
 LIBRPMS="$LIBRPMS libncurses libgmp libmpfr libmpc zlib libgpg-error libgcrypt"
-LIBRPMS="$LIBRPMS file libpopt libarchive libsqlite lua libexpat"
+LIBRPMS="$LIBRPMS file libpopt libarchive libsqlite lua libexpat rpm"
+LIBRPMS="$LIBRPMS libsolv libffi glib2 util-linux libcheck curl libopenssl"
+LIBRPMS="$LIBRPMS libzchunk python libassuan libgpgme libxml2 librepo"
 
 for rpm in $LIBRPMS; do
     if [ ! -n "$(ls -l rpmbuild/SRPMS/x86_64-pc-linux-gnu-$rpm-*.rpm)" ]; then
@@ -91,7 +93,9 @@ RPMDEFS="--define='_build x86_64-redhat-linux-gnu' --define='_host x86_64-pc-lin
 # RPMS="$RPMS rpm"
 
 RPMS="binutils libncurses libgmp libmpfr libmpc zlib libgpg-error libgcrypt"
-RPMS="$RPMS glibc file libpopt libarchive libsqlite lua libexpat"
+RPMS="$RPMS glibc file libpopt libarchive libsqlite lua libexpat rpm"
+RPMS="$RPMS libsolv libffi glib2 util-linux libcheck curl libopenssl"
+RPMS="$RPMS libzchunk python libassuan libgpgme libxml2 librepo"
 
 RPMS="$RPMS gcc bash fs-tree coreutils kernel-headers base-system"
 

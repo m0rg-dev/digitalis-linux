@@ -14,7 +14,7 @@
 
 %define libname openssl
 
-Name:           %{?cross}%{libname}
+Name:           %{?cross}lib%{libname}
 Version:        1.1.1h
 Release:        1%{?dist}
 Summary:        OpenSSL is a robust, commercial-grade, and full-featured toolkit for the Transport Layer Security (TLS) and Secure Sockets Layer (SSL) protocols.
@@ -36,7 +36,8 @@ BuildRequires:  make perl
 %else
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
-BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}zlib-devel
+BuildRequires: %{?target_tool_prefix}gcc
+BuildRequires: %{?target_tool_prefix}zlib-devel
 
 %undefine _annotated_build
 %global debug_package %{nil}
@@ -52,6 +53,12 @@ The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 
+%package     -n openssl
+Summary:        Command-line utilities for libopenssl
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description -n openssl
+
 %prep
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %autosetup -n %{libname}-%{version}
@@ -60,7 +67,8 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 
 ./config \
     --prefix=%{_prefix} --libdir=lib \
-    --cross-compile-prefix=%{?cross} --openssldir=/etc/ssl shared zlib-dynamic
+    --cross-compile-prefix=%{?_target}- \
+    --openssldir=/etc/ssl shared zlib-dynamic
 %make_build
 
 %install
@@ -75,20 +83,23 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %else
 %exclude %{_sysconfdir}/ssl
 %endif
-%{_bindir}/*
 %{_prefix}/lib/*.so.*
 %{_prefix}/lib/engines-1.1
-%doc %{_mandir}/man{1,5,7}/*
+%doc %{_mandir}/man{5,7}/*
 
 %files devel
 %{_includedir}/openssl
 %{_prefix}/lib/*.so
-%{_prefix}/lib/*.a
+%exclude %{_prefix}/lib/*.a
 %{_prefix}/lib/pkgconfig/*.pc
 %doc %{_mandir}/man3/*
 # TODO this probably should get split too - have one package
 # own the dir
 %doc %{_datadir}/doc/openssl
+
+%files -n openssl
+%{_bindir}/*
+%doc %{_mandir}/man1/*
 
 %changelog
 

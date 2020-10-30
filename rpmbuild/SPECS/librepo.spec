@@ -7,8 +7,6 @@
 # /usr/arch-vendor-os-abi/.
 %define isnative 0
 %define cross %{_target}-
-%global _oldprefix %{_prefix}
-# TODO unify target/usr and target/... but later
 %define _prefix /usr/%{_target}/usr
 %endif
 
@@ -37,9 +35,9 @@ BuildRequires:  make cmake doxygen
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
 BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}cmake-toolchain
-BuildRequires: %{?target_tool_prefix}glib2-devel %{?target_tool_prefix}openssl-devel %{?target_tool_prefix}libxml2-devel
-BuildRequires: %{?target_tool_prefix}libcurl-devel %{?target_tool_prefix}zchunk-devel %{?target_tool_prefix}libpython-devel
-BuildRequires: %{?target_tool_prefix}check-devel %{?target_tool_prefix}zlib-devel %{?target_tool_prefix}gpgme-devel
+BuildRequires: %{?target_tool_prefix}glib2-devel %{?target_tool_prefix}libopenssl-devel %{?target_tool_prefix}libxml2-devel
+BuildRequires: %{?target_tool_prefix}libcurl-devel %{?target_tool_prefix}libzchunk-devel %{?target_tool_prefix}libpython-devel
+BuildRequires: %{?target_tool_prefix}libcheck-devel %{?target_tool_prefix}zlib-devel %{?target_tool_prefix}libgpgme-devel
 
 Requires: %{?cross}glib2 %{?cross}openssl %{?cross}libxml2 %{?cross}libcurl %{?cross}zchunk %{?cross}libpython
 Requires: %{?cross}zlib %{?cross}gpgme
@@ -71,7 +69,7 @@ cmake \
 %if "%{_build}" != "%{_target}"
     -DCMAKE_TOOLCHAIN_FILE=/usr/%{_target}/cmake_toolchain \
 %endif
-    -DCMAKE_INSTALL_PREFIX=%{_prefix} -DPYTHON_DESIRED=3 ..
+    -DCMAKE_INSTALL_PREFIX=%{_prefix} -DPYTHON_DESIRED=3 -DENABLE_TESTS=0 ..
 %make_build
 
 %install
