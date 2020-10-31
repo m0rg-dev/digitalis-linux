@@ -95,6 +95,9 @@ rm -v %{buildroot}/%{_prefix}/lib/libncurses++w.a
 %{__install} -dm755 %{buildroot}/%{_datadir}/pkgconfig
 mv %{buildroot}/usr/share/pkgconfig/*.pc %{buildroot}/%{_datadir}/pkgconfig
 rmdir -v %{buildroot}/usr/share/pkgconfig
+for f in $(ls %{buildroot}/%{_includedir}/ncursesw); do
+    ln -s ncursesw/$f %{buildroot}/%{_includedir}/$f
+done
 %endif
 
 %files

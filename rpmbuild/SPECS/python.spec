@@ -34,6 +34,7 @@ Source0:        https://www.python.org/ftp/python/%{version}/Python-%{version}.t
 %endif
 BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}libffi-devel
 BuildRequires: %{?target_tool_prefix}libsqlite-devel %{?target_tool_prefix}zlib-devel
+BuildRequires: %{?target_tool_prefix}libncurses-devel
 BuildRequires: make python gcc zlib-devel
 
 Requires:       %{?cross}libpython = %{version}-%{release}
@@ -89,10 +90,10 @@ rm %{buildroot}/%{_prefix}/lib/python3.8/cgi.py
 %license LICENSE
 %{_bindir}/*
 %doc %{_mandir}/man1/*
+%{_prefix}/lib/python3.8
 
 %files -n %{?cross}libpython
 # TODO break this all out
-%{_prefix}/lib/python3.8
 %{_prefix}/lib/*.so.*
 
 %files -n %{?cross}libpython-devel

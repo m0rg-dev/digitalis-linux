@@ -39,7 +39,7 @@ BuildRequires: %{?target_tool_prefix}gcc
 BuildRequires: %{?target_tool_prefix}libgpg-error-devel
 BuildRequires: %{?target_tool_prefix}pkg-config
 
-Requires:      %{?target_tool_prefix}libgpg-error
+Requires:      %{?cross}libgpg-error
 
 %undefine _annotated_build
 %global debug_package %{nil}
@@ -77,6 +77,9 @@ export SYSROOT=%(%{?target_tool_prefix}gcc --print-sysroot)
 %if ! %{isnative}
     --program-prefix=%{?cross} \
     --bindir=%{_oldprefix}/bin \
+%endif
+%if "%{_build}" != "%{_target}"
+    --with-libgpg-error-prefix=/usr/%{_target}/usr \
 %endif
     --host=%{_target} --libdir=%{_prefix}/lib
 %make_build

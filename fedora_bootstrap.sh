@@ -76,11 +76,11 @@ fi
 
 LIBRPMS="glibc gcc pkg-config-wrapper cmake-toolchain meson-toolchain"
 LIBRPMS="$LIBRPMS libncurses libgmp libmpfr libmpc zlib libgpg-error libgcrypt"
-LIBRPMS="$LIBRPMS file libpopt libarchive libsqlite lua libexpat rpm"
+LIBRPMS="$LIBRPMS file libpopt libarchive libsqlite lua libexpat libzstd rpm"
 LIBRPMS="$LIBRPMS libsolv libffi glib2 util-linux libcheck curl libopenssl"
 LIBRPMS="$LIBRPMS libzchunk python libassuan libgpgme libxml2 librepo libyaml"
 LIBRPMS="$LIBRPMS gtk-doc libgobject-introspection libmodulemd libcppunit"
-LIBRPMS="$LIBRPMS libjson-c libdnf"
+LIBRPMS="$LIBRPMS libjson-c libdnf libcomps"
 
 for rpm in $LIBRPMS; do
     if [ ! -n "$(ls -l rpmbuild/SRPMS/x86_64-pc-linux-gnu-$rpm-*.rpm)" ]; then
@@ -95,13 +95,16 @@ RPMDEFS="--define='_build x86_64-redhat-linux-gnu' --define='_host x86_64-pc-lin
 # RPMS="$RPMS rpm"
 
 RPMS="binutils libncurses libgmp libmpfr libmpc zlib libgpg-error libgcrypt"
-RPMS="$RPMS glibc file libpopt libarchive libsqlite lua libexpat rpm"
+RPMS="$RPMS glibc file libpopt libarchive libsqlite lua libexpat libzstd rpm"
 RPMS="$RPMS libsolv libffi glib2 util-linux libcheck curl libopenssl"
 RPMS="$RPMS libzchunk python libassuan libgpgme libxml2 librepo libyaml"
 RPMS="$RPMS gtk-doc libgobject-introspection libmodulemd libcppunit"
-RPMS="$RPMS libjson-c"
+RPMS="$RPMS libjson-c libdnf libcomps"
 
-RPMS="$RPMS gcc bash fs-tree coreutils kernel-headers base-system"
+RPMS="$RPMS gcc bash fs-tree coreutils kernel-headers perl dnf"
+RPMS="$RPMS digitalis-bootstrap-repository"
+
+RPMS="$RPMS base-system"
 
 for rpm in $RPMS; do
     if [ ! -n "$(ls -l rpmbuild/SRPMS/$rpm-*.digi1.*.rpm)" ]; then
@@ -119,7 +122,7 @@ buildah run --net host $VOLUMES "$ctr" -- dnf install -y \
     fs-tree
 buildah run --net host $VOLUMES "$ctr" -- dnf install -y \
     --verbose --repo=digitalis-stage1 --installroot=/new_root --releasever=digi1 \
-    base-system
+    digitalis-bootstrap-repository base-system
 
 rm -rf new_root
 buildah unshare sh -c 'cp -rp $(buildah mount '$ctr')/new_root new_root'

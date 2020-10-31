@@ -9,6 +9,8 @@ License:  None
 Requires: fs-tree
 Requires: bash
 Requires: coreutils
+Requires: dnf
+Requires: digitalis-repository
 
 BuildRequires: /usr/bin/true
 

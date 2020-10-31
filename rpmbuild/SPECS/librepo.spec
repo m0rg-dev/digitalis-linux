@@ -62,11 +62,16 @@ developing applications that use %{name}.
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %autosetup -n %{libname}-%{version}
 
+%if "%{_build}" != "%{_target}"
+# terrible, terrible hack
+sed -i 's/NAMES gpgme-config/NAMES %{_target}-gpgme-config/' cmake/Modules/FindGpgme.cmake
+%endif
+
 %build
 
 mkdir build
 cd build
-cmake \
+cmake --debug-find \
 %if "%{_build}" != "%{_target}"
     -DCMAKE_TOOLCHAIN_FILE=/usr/%{_target}/cmake_toolchain \
 %endif
@@ -82,7 +87,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %files
 %license COPYING
 %{_prefix}/lib/*.so.*
-%exclude %{_prefix}/lib64
+%{_prefix}/lib64/python3.8/site-packages/librepo
 
 %files devel
 %{_prefix}/include/librepo

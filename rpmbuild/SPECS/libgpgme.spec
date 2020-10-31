@@ -1,5 +1,6 @@
 # If host == target, we aren't building cross tools.
 # We should install into /usr and package headers.
+%global _oldprefix %{_prefix}
 %if "%{_host}" == "%{_target}"
 %define isnative 1
 %else
@@ -24,6 +25,9 @@ Source0:        https://www.gnupg.org/ftp/gcrypt/%{libname}/%{libname}-%{version
 %define         SHA256SUM0 cef1f710a6b0d28f5b44242713ad373702d1466dcbe512eb4e754d7f35cd4307
 
 BuildRequires:  make gcc /usr/bin/gpgsm
+BuildRequires:  swig
+BuildRequires:  python
+BuildRequires:  libgpg-error-devel
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
@@ -36,6 +40,8 @@ BuildRequires:  make gcc /usr/bin/gpgsm
 %endif
 BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}libgpg-error-devel
 BuildRequires: %{?target_tool_prefix}pkg-config %{?target_tool_prefix}libassuan-devel
+BuildRequires: %{?target_tool_prefix}libpython-devel
+
 %undefine _annotated_build
 %global debug_package %{nil}
 
@@ -52,11 +58,11 @@ Requires:       %{?cross}libassuan-devel %{?cross}libgpg-error-devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-%package     -n gpgme
+%package     -n %{?cross}gpgme
 Summary:        Command-line utilities for libgpgme
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 
-%description -n gpgme
+%description -n %{?cross}gpgme
 
 %prep
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
@@ -69,9 +75,13 @@ cd build
 export SYSROOT=%(%{?target_tool_prefix}gcc -print-sysroot)/usr # needed for libgpg-error config??? someday I'll figure that out
 %configure --host=%{_target} --libdir=%{_prefix}/lib \
 %if "%{_build}" != "%{_target}"
-    --with-libassuan-prefix=/usr/%{_target}/usr
+    --with-libassuan-prefix=/usr/%{_target}/usr \
 %endif
-
+    --program-prefix=%{?cross} \
+    --bindir=%{_oldprefix}/bin \
+    --enable-languages=python \
+    LDFLAGS="-L/usr/%{_target}/usr/lib" \
+    CFLAGS="%{optflags} -I/usr/%{_target}/usr/include/python3.8"
 
 %make_build
 
@@ -79,24 +89,32 @@ export SYSROOT=%(%{?target_tool_prefix}gcc -print-sysroot)/usr # needed for libg
 cd build
 %make_install
 
+%if ! %{isnative}
+install -dm755 %{buildroot}/%{_prefix}/bin
+ln -sv %{_oldprefix}/bin/%{?cross}gpgme-config %{buildroot}/%{_prefix}/bin/gpgme-config
+%endif
+
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %files
 %license COPYING COPYING.LESSER
 %{_prefix}/lib/*.so.*
+%{_prefix}/lib*/python3.*/site-packages/gpg*
 %doc %{_infodir}/*.info*
 
 %files devel
-%{_bindir}/gpgme-config
+%{_oldprefix}/bin/%{?cross}gpgme-config
+%if ! %{isnative}
+%{_prefix}/bin/gpgme-config
+%endif
 %{_includedir}/*
 %{_prefix}/lib/*.so
 %{_prefix}/lib/pkgconfig/*.pc
 %{_datadir}/aclocal/*.m4
-%{_datadir}/common-lisp
 
-%files -n gpgme
-%{_bindir}/gpgme-tool
-%{_bindir}/gpgme-json
+%files -n %{?cross}gpgme
+%{_oldprefix}/bin/%{?cross}gpgme-tool
+%{_oldprefix}/bin/%{?cross}gpgme-json
 
 %changelog
 

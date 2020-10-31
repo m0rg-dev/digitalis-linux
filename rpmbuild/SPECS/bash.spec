@@ -19,6 +19,7 @@ BuildRequires:  gcc make
 Requires:       ncurses
 
 Provides:       /bin/sh
+Provides:       /bin/bash
 
 %undefine _annotated_build
 

@@ -15,7 +15,7 @@
 %define libname libdnf
 
 Name:           %{?cross}%{libname}
-Version:        0.22.4
+Version:        0.54.2
 Release:        1%{?dist}
 Summary:        This library provides a high level package-manager.
 
@@ -23,13 +23,7 @@ License:        LGPLv2+
 URL:            https://github.com/rpm-software-management/libdnf
 %undefine       _disable_source_fetch
 Source0:        https://github.com/rpm-software-management/%{libname}/archive/%{version}.tar.gz#/%{libname}-%{version}.tar.gz
-%define         SHA256SUM0 33e943d3054ed3e727bc9fc0079d02b10f2108bd6918cf1b22149bedce1470a4
-
-# Fix some missing includes. This is either C++11 incompat or our stdlibc++-devel being broken, not sure.
-Patch0:         libdnf-0001-include-stdexcept.patch
-Patch1:         libdnf-0002-include-string.patch
-# Fix a poorly written test that breaks with -fpermissive.
-Patch2:         libdnf-0003-test-condition.patch
+%define         SHA256SUM0 090a417e1d620f3fc196bc5de36c03d7f0d6ebe2bb87346eba89560101280c01
 
 BuildRequires:  cmake swig gettext gtk-doc
 
@@ -51,6 +45,8 @@ BuildRequires: %{?target_tool_prefix}libsolv-devel %{?target_tool_prefix}libchec
 BuildRequires: %{?target_tool_prefix}libmodulemd-devel %{?target_tool_prefix}libpython-devel %{?target_tool_prefix}libcppunit-devel
 BuildRequires: %{?target_tool_prefix}gtk-doc %{?target_tool_prefix}libjson-c-devel
 BuildRequires: %{?target_tool_prefix}libgpgme-devel
+BuildRequires: %{?target_tool_prefix}libzchunk-devel
+BuildRequires: python-sphinx
 
 %undefine _annotated_build
 %global debug_package %{nil}
@@ -75,14 +71,12 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 mkdir build
 cd build
 
-# WITH_MAN requires sphinx
-
 cmake -Wno-dev \
 %if "%{_build}" != "%{_target}"
     -DCMAKE_TOOLCHAIN_FILE=/usr/%{_target}/cmake_toolchain \
 %endif
     -DGTKDOC_SCANGOBJ_WRAPPER=/usr/bin/gtkdoc-scangobj \
-    -DCMAKE_INSTALL_PREFIX=%{_prefix} -DPYTHON_DESIRED=3 -DWITH_MAN=OFF ..
+    -DCMAKE_INSTALL_PREFIX=%{_prefix} -DPYTHON_DESIRED=3 -DWITH_MAN=0 ..
 
 %make_build -j1
 
@@ -91,14 +85,14 @@ cd build
 %make_install
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
+%find_lang libdnf
 
-%files
+%files -f build/libdnf.lang
 %license COPYING
 %{_prefix}/lib/*.so.*
 %{_prefix}/lib/libdnf
 %{_prefix}/lib64/python3.8/site-packages/hawkey
 %{_prefix}/lib64/python3.8/site-packages/libdnf
-# find_lang doesn't like this one for some reason
 %{_datadir}/locale/*/LC_MESSAGES/libdnf.mo
 
 %files devel

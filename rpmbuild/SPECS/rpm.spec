@@ -21,6 +21,8 @@ URL:            https://rpm.org/
 Source0:        http://ftp.rpm.org/releases/rpm-4.16.x/rpm-%{version}.tar.bz2
 %define         SHA256SUM0 ca5974e9da2939afb422598818ef187385061889ba766166c4a3829c5ef8d411
 
+Patch0:         rpm-0001-use-sqlite.patch
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif
@@ -35,6 +37,8 @@ BuildRequires:  %{?target_tool_prefix}gcc %{?target_tool_prefix}zlib-devel
 BuildRequires:  %{?target_tool_prefix}libgcrypt-devel %{?target_tool_prefix}libmagic-devel %{?target_tool_prefix}libpopt-devel
 BuildRequires:  %{?target_tool_prefix}libarchive-devel %{?target_tool_prefix}libsqlite-devel %{?target_tool_prefix}pkg-config
 BuildRequires:  %{?target_tool_prefix}liblua-devel
+BuildRequires:  %{?target_tool_prefix}libpython-devel
+BuildRequires:  %{?target_tool_prefix}libzstd-devel
 BuildRequires:  make
 
 Requires:       %{?cross}librpm = %{version}-%{release}
@@ -54,6 +58,7 @@ URL:            https://rpm.org/
 Summary:        Development files for librpm
 Requires:       %{?cross}librpm%{?_isa} = %{version}-%{release}
 Requires:       %{?cross}libgcrypt-devel %{?cross}zlib-devel %{?cross}libpopt-devel %{?cross}libsqlite-devel
+Requires:       %{?cross}libzstd-devel
 
 %description -n %{?cross}librpm-devel
 The librpm-devel package contains libraries and header files for
@@ -62,11 +67,11 @@ developing applications that use librpm.
 
 %prep
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
-%autosetup -n rpm-%{version}
+%autosetup -p1 -n rpm-%{version}
 sed -i '1s/python/python3/' scripts/pythondistdeps.py
 
 %build
-%configure --libdir=%{_prefix}/lib --host=%{_target} --enable-bdb=no --enable-sqlite=yes --disable-openmp
+%configure --libdir=%{_prefix}/lib --host=%{_target} --enable-bdb=no --enable-sqlite=yes --disable-openmp --enable-python
 %make_build
 
 %install
@@ -85,6 +90,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_prefix}/lib/*.so.*
 %{_prefix}/lib/rpm-plugins
 %{_prefix}/lib/rpm
+%{_prefix}/lib64/python3.8/site-packages/rpm
 
 %files -n %{?cross}librpm-devel
 %{_prefix}/lib/*.so

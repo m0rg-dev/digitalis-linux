@@ -13,7 +13,7 @@
 %define libname libmodulemd
 
 Name:           %{?cross}%{libname}
-Version:        1.8.16
+Version:        2.9.4
 Release:        1%{?dist}
 Summary:        C Library for manipulating module metadata files
 
@@ -21,7 +21,9 @@ License:        MIT
 URL:            https://github.com/fedora-modularity/libmodulemd
 %undefine       _disable_source_fetch
 Source0:        https://github.com/fedora-modularity/libmodulemd/releases/download/%{libname}-%{version}/modulemd-%{version}.tar.xz
-%define         SHA256SUM0 1767fa7aa43421451383794c947d013a93f75a47f00b231ab33e9358976b12d8
+%define         SHA256SUM0 cb86b1dad4f1578895225ba4ee435dbb7d75262898f69a08507b01759bfc81ab
+
+Patch0:         libmodulemd-0001-no-cross-validator.patch
 
 BuildRequires:  meson ninja-build gcc gtk-doc
 
@@ -42,6 +44,8 @@ BuildRequires: glib2-devel
 BuildRequires: gobject-introspection-devel
 BuildRequires: help2man
 BuildRequires: libmodulemd-devel
+
+Requires:      %{?cross}libmagic
 
 %undefine _annotated_build
 %global debug_package %{nil}
@@ -89,14 +93,14 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %files
 %license COPYING
-%exclude %{_bindir}/*
 %{_prefix}/lib/*.so.*
+%exclude /usr/lib/python3.8/site-packages/gi/overrides/*
 
 %files devel
 %{_includedir}/*
 %{_prefix}/lib/pkgconfig/*.pc
 %{_prefix}/lib/*.so
-%doc %{_datadir}/gtk-doc/html/modulemd-1.0
+%doc %{_datadir}/gtk-doc/html/modulemd-2.0
 
 %changelog
 
