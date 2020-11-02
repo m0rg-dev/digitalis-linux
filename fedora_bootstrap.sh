@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+#TODO this is an awful mess
+
 set -e
 set -x
 
@@ -107,9 +109,9 @@ RPMS="$LIBRPMS"
 RPMS="$RPMS binutils gcc bash fs-tree coreutils kernel-headers perl dnf"
 RPMS="$RPMS createrepo_c make sed bison tar grep gawk m4 gzip findutils"
 RPMS="$RPMS diffutils texinfo pkgconf cmake patch autoconf automake"
-RPMS="$RPMS libtool setuptools meson ninja-build gnupg swig which"
+RPMS="$RPMS libtool setuptools meson asciidoc ninja-build gnupg swig which"
 RPMS="$RPMS xml-common docbook-dtds libxslt docbook-style-xsl flex"
-RPMS="$RPMS gdb help2man"
+RPMS="$RPMS gdb help2man gettext python-sphinx"
 RPMS="$RPMS digitalis-bootstrap-repository"
 
 RPMS="$RPMS base-system"
@@ -174,3 +176,30 @@ for rpm in $RPMS; do
         build_rpm $rpm
     fi
 done
+VOLUMES='--volume /tmp/repo_digi2:/repo_digi2'
+refresh_repo
+
+VOLUMES='--volume /tmp/repo_digi2:/repo'
+
+ctr=$(buildah from digitalis-stage1)
+buildah run --net host $VOLUMES "$ctr" -- mkdir /new_root
+buildah run --net host $VOLUMES "$ctr" -- dnf install -y \
+    --verbose --repo=digitalis --installroot=/new_root --releasever=digi2 \
+    fs-tree
+buildah run --net host $VOLUMES "$ctr" -- dnf install -y \
+    --verbose --repo=digitalis --installroot=/new_root --releasever=digi2 \
+    digitalis-bootstrap-repository base-system
+
+rm -rf new_root
+buildah unshare sh -c 'cp -rp $(buildah mount '$ctr')/new_root new_root'
+buildah umount "$ctr"
+buildah rm "$ctr"
+
+ctr=$(buildah from scratch)
+
+buildah copy "$ctr" $(realpath new_root)/ /
+buildah run --net host $VOLUMES "$ctr" -- dnf install -y --releasever=digi2 \
+    fs-tree digitalis-bootstrap-repository base-system
+buildah run --net host "$ctr" sh -c 'echo "%_topdir /rpmbuild" >>~/.rpmmacros'
+buildah commit "$ctr" digitalis
+buildah rm "$ctr"

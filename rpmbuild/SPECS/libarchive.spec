@@ -35,6 +35,9 @@ BuildRequires:  make
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
 BuildRequires: %{?target_tool_prefix}gcc
+BuildRequires: %{?target_tool_prefix}zlib-devel
+BuildRequires: %{?target_tool_prefix}libbzip2-devel
+BuildRequires: %{?target_tool_prefix}liblzma-devel
 
 %undefine _annotated_build
 %global debug_package %{nil}

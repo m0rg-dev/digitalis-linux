@@ -25,7 +25,7 @@ URL:            https://github.com/rpm-software-management/libdnf
 Source0:        https://github.com/rpm-software-management/%{libname}/archive/%{version}.tar.gz#/%{libname}-%{version}.tar.gz
 %define         SHA256SUM0 090a417e1d620f3fc196bc5de36c03d7f0d6ebe2bb87346eba89560101280c01
 
-BuildRequires:  cmake swig gettext gtk-doc
+BuildRequires:  cmake make swig gettext gtk-doc
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
@@ -78,7 +78,7 @@ cmake -Wno-dev \
     -DGTKDOC_SCANGOBJ_WRAPPER=/usr/bin/gtkdoc-scangobj \
     -DCMAKE_INSTALL_PREFIX=%{_prefix} -DPYTHON_DESIRED=3 -DWITH_MAN=0 ..
 
-%make_build -j1
+%make_build
 
 %install
 cd build
@@ -91,8 +91,8 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %license COPYING
 %{_prefix}/lib/*.so.*
 %{_prefix}/lib/libdnf
-%{_prefix}/lib64/python3.8/site-packages/hawkey
-%{_prefix}/lib64/python3.8/site-packages/libdnf
+%{_prefix}/lib*/python3.8/site-packages/hawkey
+%{_prefix}/lib*/python3.8/site-packages/libdnf
 %{_datadir}/locale/*/LC_MESSAGES/libdnf.mo
 
 %files devel

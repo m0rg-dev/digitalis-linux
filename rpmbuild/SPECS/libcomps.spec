@@ -24,6 +24,7 @@ Source0:        https://github.com/rpm-software-management/libcomps/archive/%{li
 %define         SHA256SUM0 3304bf7b178fd719fff6fe67f365b63e486f2f5e3e6e0ff1780f42723776cb61
 
 BuildRequires:  cmake
+BuildRequires:  make
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
@@ -86,9 +87,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %license COPYING
 %{_prefix}/lib/*.so.*
 %if %{isnative}
-/usr/lib64/python3.8/site-packages/libcomps*
+/usr/lib*/python3.8/site-packages/libcomps*
 %else
-%exclude /usr/lib64/python3.8/site-packages/libcomps*
+%exclude /usr/lib*/python3.8/site-packages/libcomps*
 %endif
 
 %files devel

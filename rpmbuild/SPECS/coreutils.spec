@@ -25,6 +25,8 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %autosetup
 
 %build
+# coreutils' ./configure is too clever for its own good
+export FORCE_UNSAFE_CONFIGURE=1
 %configure --enable-install-program=hostname --enable-no-install-program=kill,uptime
 %make_build
 

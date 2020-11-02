@@ -108,6 +108,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %install
 %make_install
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
+rm -f %{buildroot}%{_infodir}/dir
 
 %find_lang binutils
 %find_lang gprof

@@ -36,6 +36,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 find %{buildroot} -name '*.a' -exec rm -f {} ';'
+rm -f %{buildroot}%{_infodir}/dir
 
 %files
 # TODO this sucks

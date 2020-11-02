@@ -85,8 +85,10 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %if ! %{isnative}
 install -dm755 %{buildroot}/usr/share/cmake/Modules
 mv -v %{buildroot}/%{_datadir}/cmake/Modules/*.cmake %{buildroot}/usr/share/cmake/Modules/
+%else
+# TODO this might be even worse
+mv -v %{buildroot}%{_datadir}/cmake %{buildroot}%{_datadir}/cmake-3.18
 %endif
-
 
 %files
 %license LICENSE.BSD
@@ -98,7 +100,12 @@ mv -v %{buildroot}/%{_datadir}/cmake/Modules/*.cmake %{buildroot}/usr/share/cmak
 %{_includedir}/solv
 %{_prefix}/lib/*.so
 %{_prefix}/lib/pkgconfig/*.pc
-/usr/share/cmake/Modules/*.cmake
+%if %{isnative}
+%{_prefix}/share/cmake-3.18/Modules/*.cmake
+%else
+/usr/share/cmake-3.18/Modules/*.cmake
+%endif
+
 %doc %{_mandir}/man3/*
 
 %changelog

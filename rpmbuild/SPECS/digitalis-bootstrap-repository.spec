@@ -5,7 +5,7 @@ Summary:        dnf repo for digitalis bootstrap process
 License:        None
 BuildArch:      noarch
 
-BuildRequires:  /bin/cat
+BuildRequires:  /usr/bin/cat
 
 Requires:       dnf
 

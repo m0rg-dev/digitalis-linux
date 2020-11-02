@@ -24,6 +24,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %autosetup
 
 %build
+export FORCE_UNSAFE_CONFIGURE=1
 %configure
 %make_build
 

@@ -38,6 +38,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %if "%{_build}" != "%{_target}"
     --with-pcre-prefix=/usr/%{_target}/usr
 %endif
+
 %make_build
 
 %install

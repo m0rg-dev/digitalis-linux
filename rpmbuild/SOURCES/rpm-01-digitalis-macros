@@ -10,3 +10,6 @@
 %%install\
 %{nil}
 
+# Python configuration (lol)
+
+%__python3 /usr/bin/python3

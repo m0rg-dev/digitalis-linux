@@ -74,7 +74,7 @@ cd build
 %files
 %license COPYING
 %{_bindir}/*
-%{_prefix}/lib64/python3.8/site-packages/*
+%{_prefix}/lib*/python3.8/site-packages/*
 %doc %{_mandir}/man8/*
 
 %files -n libcreaterepo_c

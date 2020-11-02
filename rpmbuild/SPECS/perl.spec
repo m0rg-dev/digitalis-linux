@@ -17,6 +17,11 @@ BuildRequires:  %{?host_tool_prefix}gcc
 BuildRequires:  make
 BuildRequires:  gcc
 
+# TODO these should happen automatically
+Provides:       perl = 5.032000
+Provides:       perl = 1:5.032000
+Provides:       perl = 1:%{version}
+
 %undefine _annotated_build
 %global debug_package %{nil}
 
@@ -29,7 +34,9 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %build
 sh Configure -des -Dprefix=/usr \
     -Dlibs="-lm -lpthread" \
+%if "%{_build}" != "%{_target}"
     -Dsysroot=/usr/%{_target} \
+%endif
     -Dvendorprefix=/usr \
     -Dman1dir=/usr/share/man/man1 \
     -Dman3dir=/usr/share/man/man3 \

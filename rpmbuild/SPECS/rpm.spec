@@ -92,6 +92,9 @@ install -m644 %{SOURCE1} %{buildroot}/%{_prefix}/lib/rpm/macros.d/macros.digital
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
+# TODO... just TODO
+rm %{buildroot}%{_prefix}/lib/rpm/fileattrs/perl*.attr
+
 %files -f rpm.lang
 %license COPYING
 # TODO split rpmbuild out
