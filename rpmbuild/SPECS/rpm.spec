@@ -20,8 +20,10 @@ URL:            https://rpm.org/
 %undefine       _disable_source_fetch
 Source0:        http://ftp.rpm.org/releases/rpm-4.16.x/rpm-%{version}.tar.bz2
 %define         SHA256SUM0 ca5974e9da2939afb422598818ef187385061889ba766166c4a3829c5ef8d411
+Source1:        rpm-01-digitalis-macros
 
 Patch0:         rpm-0001-use-sqlite.patch
+Patch1:         rpm-0002-enable-debugpkgs.patch
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
@@ -39,7 +41,15 @@ BuildRequires:  %{?target_tool_prefix}libarchive-devel %{?target_tool_prefix}lib
 BuildRequires:  %{?target_tool_prefix}liblua-devel
 BuildRequires:  %{?target_tool_prefix}libpython-devel
 BuildRequires:  %{?target_tool_prefix}libzstd-devel
+BuildRequires:  %{?target_tool_prefix}libelf-devel
+
 BuildRequires:  make
+
+Requires:       xz
+Requires:       tar
+Requires:       bzip2
+Requires:       elfutils
+Requires:       patch
 
 Requires:       %{?cross}librpm = %{version}-%{release}
 
@@ -77,6 +87,9 @@ sed -i '1s/python/python3/' scripts/pythondistdeps.py
 %install
 %make_install
 %find_lang rpm
+
+install -m644 %{SOURCE1} %{buildroot}/%{_prefix}/lib/rpm/macros.d/macros.digitalis
+
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %files -f rpm.lang
@@ -90,7 +103,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_prefix}/lib/*.so.*
 %{_prefix}/lib/rpm-plugins
 %{_prefix}/lib/rpm
-%{_prefix}/lib64/python3.8/site-packages/rpm
+%{_prefix}/lib*/python3.8/site-packages/rpm
 
 %files -n %{?cross}librpm-devel
 %{_prefix}/lib/*.so

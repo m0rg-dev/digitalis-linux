@@ -1,20 +1,25 @@
-Name:           patch
-Version:        2.7.6
+Name:           autoconf
+Version:        2.69
 Release:        1%{?dist}
-Summary:        apply a diff file to an original
+Summary:        makes all those configure scripts
 
 License:        GPLv3+
-URL:            https://www.gnu.org/software/patch
+URL:            https://gnu.org/software/autoconf
 %undefine       _disable_source_fetch
 Source0:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
-%define         SHA256SUM0 ac610bda97abe0d9f6b7c963255a11dcb196c25e337c61f94e4778d632f1d8fd
+%define         SHA256SUM0 64ebcec9f8ac5b2487125a86a7760d2591ac9e1d3dbd59489633f9de62a57684
+
+BuildArch:      noarch
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif
 
-BuildRequires:  %{?host_tool_prefix}gcc
 BuildRequires:  make
+BuildRequires:  m4
+BuildRequires:  perl
+
+Requires:       m4
 
 %undefine _annotated_build
 
@@ -34,6 +39,8 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %files
 %license COPYING
 %{_bindir}/*
+%{_datadir}/autoconf
+%doc %{_infodir}/*.info*
 %doc %{_mandir}/man1/*
 
 %changelog

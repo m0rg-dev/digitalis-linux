@@ -1,7 +1,7 @@
 Name:           gawk
 Version:        5.1.0
 Release:        1%{?dist}
-Summary:         The awk utility interprets a special-purpose programming language that makes it possible to handle simple data-reformatting jobs with just a few lines of code. 
+Summary:        A text processing language
 
 License:        GPLv3+
 URL:            https://www.gnu.org/software/gawk

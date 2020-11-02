@@ -37,6 +37,9 @@ BuildRequires:  make
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
 BuildRequires: %{?target_tool_prefix}gcc
+BuildRequires: %{?target_tool_prefix}zlib-devel
+BuildRequires: %{?target_tool_prefix}liblzma-devel
+BuildRequires: %{?target_tool_prefix}libpython-devel 
 
 %undefine _annotated_build
 %global debug_package %{nil}
@@ -79,8 +82,10 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %files
 %license COPYING
 %{_prefix}/lib/*.so.*
+%{_prefix}/lib/python3.8/site-packages/*
 %doc %{_datadir}/gtk-doc/html/libxml2
 %doc %{_datadir}/doc/libxml2-%{version}
+%doc %{_datadir}/doc/libxml2-python-%{version}
 
 %files devel
 %{_includedir}/libxml2

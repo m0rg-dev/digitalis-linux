@@ -1,13 +1,13 @@
-Name:           findutils
-Version:        4.7.0
+Name:           grep
+Version:        3.5
 Release:        1%{?dist}
-Summary:        The GNU Find Utilities are the basic directory searching utilities of the GNU operating system.
+Summary:        Search by line for a regular expression
 
 License:        GPLv3+
-URL:            https://www.gnu.org/software/findutils
+URL:            https://www.gnu.org/software/grep/
 %undefine       _disable_source_fetch
 Source0:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
-%define         SHA256SUM0 c5fefbdf9858f7e4feb86f036e1247a54c79fc2d8e4b7064d5aaa1f47dfa789a
+%define         SHA256SUM0 b82ac77707c2ab945520c8404c9fa9f890f7791a62cf2103cf6238acad87a44a
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
@@ -30,17 +30,12 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 
 %install
 %make_install
-
-sed -i 's|find:=\${BINDIR}|find:=/bin|' %{buildroot}/%{_bindir}/updatedb
-
 %find_lang %{name}
 
 %files -f %{name}.lang
 %license COPYING
 %{_bindir}/*
-%{_libexecdir}/frcode
-%doc %{_infodir}/*.info*.gz
-%doc %{_mandir}/man1/*.gz
-%doc %{_mandir}/man5/*.gz
+%doc %{_infodir}/*.info*
+%doc %{_mandir}/man1/*
 
 %changelog

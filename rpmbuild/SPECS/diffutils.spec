@@ -35,7 +35,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %files -f %{name}.lang
 %license COPYING
 %{_bindir}/*
-%doc %{_infodir}/*.info*.gz
-%doc %{_mandir}/man1/*.gz
+%doc %{_infodir}/*.info*
+%doc %{_mandir}/man1/*
 
 %changelog

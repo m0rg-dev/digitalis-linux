@@ -23,6 +23,7 @@ URL:            https://github.com/openSUSE/libsolv
 Source0:        https://github.com/openSUSE/%{libname}/archive/%{version}.tar.gz#/%{libname}-%{version}.tar.gz
 %define         SHA256SUM0 ed1753255792e9ae0582a1904c4baba5801036ef3efd559b65027e14ee1ea282
 
+BuildRequires:  make
 BuildRequires:  cmake
 
 %if "%{_build}" != "%{_host}"

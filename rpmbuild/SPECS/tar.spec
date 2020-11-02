@@ -16,7 +16,6 @@ BuildRequires:  %{?host_tool_prefix}gcc
 BuildRequires:  make
 
 %undefine _annotated_build
-%global _bindir %{_prefix}/../bin
 
 %description
 

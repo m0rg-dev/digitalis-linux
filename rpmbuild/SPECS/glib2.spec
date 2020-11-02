@@ -23,20 +23,23 @@ URL:            http://www.gtk.org/
 Source0:        http://ftp.gnome.org/pub/gnome/sources/glib/2.66/glib-%{version}.tar.xz
 %define         SHA256SUM0 ec390bed4e8dd0f89e918f385e8d4cfd7470b1ef7c1ce93ec5c4fc6e3c6a17c4
 
-BuildRequires:  meson ninja-build gcc g++ git
+BuildRequires:  meson ninja-build gcc g++
+#BuildRequires:  git
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
+BuildRequires: %{?host_tool_prefix}meson-toolchain
 %endif
 
 %if "%{_host}" != "%{_target}"
 %define target_tool_prefix %{_target}-
+BuildRequires: %{?target_tool_prefix}meson-toolchain
 %else
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
 BuildRequires: %{?target_tool_prefix}gcc
 BuildRequires: %{?target_tool_prefix}g++
-BuildRequires: %{?target_tool_prefix}meson-toolchain %{?target_tool_prefix}libffi-devel
+BuildRequires: %{?target_tool_prefix}libffi-devel
 BuildRequires: %{?target_tool_prefix}zlib-devel
 
 
@@ -48,7 +51,7 @@ BuildRequires: %{?target_tool_prefix}zlib-devel
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-Requires:       %{?target_tool_prefix}libffi-devel %{?target_tool_prefix}zlib-devel
+Requires:       %{?cross}libffi-devel %{?cross}zlib-devel
 
 %description    devel
 The %{name}-devel package contains libraries and header files for

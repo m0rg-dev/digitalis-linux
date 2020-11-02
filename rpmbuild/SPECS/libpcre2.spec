@@ -10,37 +10,31 @@
 %define _prefix /usr/%{_target}/usr
 %endif
 
-%define libname zchunk
+%define libname pcre2
 
 Name:           %{?cross}lib%{libname}
-Version:        1.1.7
+Version:        10.35
 Release:        1%{?dist}
-Summary:        zchunk is a compressed file format that splits the file into independent chunks
+Summary:        Perl Compatible Regular Expressions
 
-License:        BSD-2-Clause
-URL:            https://github.com/zchunk/zchunk
+License:        BSD
+URL:            https://pcre.org
 %undefine       _disable_source_fetch
-Source0:        https://github.com/zchunk/%{libname}/archive/%{version}.tar.gz#/%{libname}-%{version}.tar.gz
-%define         SHA256SUM0 eb3d531916d6fea399520a2a4663099ddbf2278088599fa09980631067dc9d7b
+Source0:        https://ftp.pcre.org/pub/pcre/%{libname}-%{version}.tar.bz2
+%define         SHA256SUM0 9ccba8e02b0ce78046cdfb52e5c177f0f445e421059e43becca4359c669d4613
 
-BuildRequires:  meson ninja-build gcc
+BuildRequires:  make
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
-BuildRequires: %{?host_tool_prefix}meson-toolchain
 %endif
 
 %if "%{_host}" != "%{_target}"
 %define target_tool_prefix %{_target}-
-BuildRequires: %{?target_tool_prefix}meson-toolchain
 %else
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
 BuildRequires: %{?target_tool_prefix}gcc
-BuildRequires: %{?target_tool_prefix}libcurl-devel
-BuildRequires: %{?target_tool_prefix}libopenssl-devel
-
-Requires: %{?cross}libcurl %{?cross}libopenssl
 
 %undefine _annotated_build
 %global debug_package %{nil}
@@ -50,17 +44,16 @@ Requires: %{?cross}libcurl %{?cross}libopenssl
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-Requires:       %{?cross}libffi-devel
 
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-%package     -n zchunk
-Summary:        Command-line utilities for libzchunk
+%package     -n %{?cross}pcre2
+Summary:        Command-line utilities for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 
-%description -n zchunk
+%description -n %{?cross}pcre2
 
 %prep
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
@@ -69,30 +62,35 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %build
 
 mkdir build
-meson -Dbuildtype=release --prefix=%{_prefix} \
-%if "%{_build}" != "%{_target}"
-    --cross-file %{_target} \
-%endif
-    build/
-ninja %{?_smp_mflags} -C build
+cd build
+%define _configure ../configure
+%configure --host=%{_target} --libdir=%{_prefix}/lib --disable-static
+%make_build
 
 %install
-DESTDIR=%{buildroot} ninja -C build install
+cd build
+%make_install
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %files
-%license LICENSE
+%license LICENCE
 %{_prefix}/lib/*.so.*
 
 %files devel
+%{_bindir}/pcre2-config
 %{_includedir}/*
 %{_prefix}/lib/*.so
 %{_prefix}/lib/pkgconfig/*.pc
+%doc %{_datadir}/doc/pcre2
+%doc %{_mandir}/man3/*
+%doc %{_mandir}/man1/pcre2-config.1*
 
-%files -n zchunk
-%{_bindir}/*
-%doc %{_mandir}/man1/*
+%files -n %{?cross}pcre2
+%{_bindir}/pcre2test
+%{_bindir}/pcre2grep
+%doc %{_mandir}/man1/pcre2grep.1*
+%doc %{_mandir}/man1/pcre2test.1*
 
 %changelog
 

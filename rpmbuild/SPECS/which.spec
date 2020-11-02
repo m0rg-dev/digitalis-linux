@@ -1,13 +1,13 @@
-Name:           patch
-Version:        2.7.6
+Name:           which
+Version:        2.21
 Release:        1%{?dist}
-Summary:        apply a diff file to an original
+Summary:        Shows the full path of shell commands
 
-License:        GPLv3+
-URL:            https://www.gnu.org/software/patch
+License:        GPLv3
+URL:            https://carlowood.github.io/which/
 %undefine       _disable_source_fetch
-Source0:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
-%define         SHA256SUM0 ac610bda97abe0d9f6b7c963255a11dcb196c25e337c61f94e4778d632f1d8fd
+Source0:        https://carlowood.github.io/%{name}/%{name}-%{version}.tar.gz
+%define         SHA256SUM0 f4a245b94124b377d8b49646bf421f9155d36aa7614b6ebf83705d3ffc76eaad
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
@@ -34,6 +34,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %files
 %license COPYING
 %{_bindir}/*
+%doc %{_infodir}/*.info*
 %doc %{_mandir}/man1/*
 
 %changelog

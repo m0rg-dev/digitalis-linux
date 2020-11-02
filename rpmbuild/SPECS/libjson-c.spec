@@ -25,6 +25,7 @@ Source0:        https://github.com/json-c/%{libname}/archive/%{libname}-%{versio
 %define         SHA256SUM0 4ba9a090a42cf1e12b84c64e4464bb6fb893666841d5843cc5bef90774028882
 
 BuildRequires:  cmake
+BuildRequires:  make
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-

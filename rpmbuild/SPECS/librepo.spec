@@ -23,19 +23,20 @@ URL:            http://rpm-software-management.github.io/librepo/
 Source0:        https://github.com/rpm-software-management/%{libname}/archive/%{version}.tar.gz#/%{libname}-%{version}.tar.gz
 %define         SHA256SUM0 b78113f3aeb0d562b034dbeb926609019b7bed27e05c9ab5a584a9938de8da9f
 
-BuildRequires:  make cmake doxygen
+BuildRequires:  make cmake
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
+BuildRequires: %{?host_tool_prefix}cmake-toolchain
 %endif
 
 %if "%{_host}" != "%{_target}"
 %define target_tool_prefix %{_target}-
+BuildRequires: %{?target_tool_prefix}cmake-toolchain
 %else
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
 BuildRequires: %{?target_tool_prefix}gcc
-BuildRequires: %{?target_tool_prefix}cmake-toolchain
 BuildRequires: %{?target_tool_prefix}glib2-devel %{?target_tool_prefix}libopenssl-devel %{?target_tool_prefix}libxml2-devel
 BuildRequires: %{?target_tool_prefix}libcurl-devel %{?target_tool_prefix}libzchunk-devel %{?target_tool_prefix}libpython-devel
 BuildRequires: %{?target_tool_prefix}libcheck-devel %{?target_tool_prefix}zlib-devel %{?target_tool_prefix}libgpgme-devel
@@ -87,7 +88,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %files
 %license COPYING
 %{_prefix}/lib/*.so.*
-%{_prefix}/lib64/python3.8/site-packages/librepo
+%{_prefix}/lib*/python3.8/site-packages/librepo
 
 %files devel
 %{_prefix}/include/librepo

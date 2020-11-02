@@ -71,7 +71,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 
 %build
 
-%configure --host=%{_target} --libdir=%{_prefix}/lib \
+./configure --prefix=%{_prefix} --build=%{_build} --host=%{_target} --libdir=%{_prefix}/lib \
     --disable-ipv6 --without-ensurepip \
     --enable-shared \
     ac_cv_file__dev_ptmx=yes \

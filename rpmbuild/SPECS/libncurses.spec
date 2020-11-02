@@ -71,6 +71,10 @@ make -C include
 make -C progs tic
 cd ..
 
+# for consistency - libncurses configure checks here before /usr/lib/pkgconfig
+# and sometimes it's there and sometimes it isn't
+mkdir -pv /usr/share/pkgconfig
+
 %configure \
     --libdir=%{_prefix}/lib      \
     --with-manpage-format=normal \

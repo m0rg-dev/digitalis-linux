@@ -24,6 +24,9 @@ Source0:        https://github.com/libcheck/%{libname}/releases/download/%{versi
 %define         SHA256SUM0 a8de4e0bacfb4d76dd1c618ded263523b53b85d92a146d8835eb1a52932fa20a
 
 BuildRequires:  make autoconf automake libtool
+%if ! %{defined _fedora_dependencies}
+BuildRequires:  libpkgconf-devel
+%endif
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-

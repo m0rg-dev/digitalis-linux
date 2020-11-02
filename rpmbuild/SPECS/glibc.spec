@@ -40,7 +40,12 @@ Provides:       rtld(GNU_HASH)
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
 
+# If we are doing a fully native build, we can use the "full" gcc.
+%if "%{_build}" == "%{_target}"
+BuildRequires: gcc
+%else
 BuildRequires: %{?target_tool_prefix}standalone-gcc
+%endif
 BuildRequires: %{?target_tool_prefix}binutils
 BuildRequires: %{?target_tool_prefix}kernel-headers
 
@@ -81,7 +86,9 @@ cd build
     --prefix=%{_oldprefix} \
     --libdir=/lib \
     --enable-kernel=3.2 \
+%if "%{_build}" != "%{_target}"
     --with-headers=/usr/%{_target}/usr/include \
+%endif
     --disable-werror \
     --enable-shared \
     libc_cv_slibdir=/lib

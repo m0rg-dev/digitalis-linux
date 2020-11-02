@@ -5,7 +5,7 @@ set -x
 
 ulimit -n 65536
 
-mkdir -p /tmp/dnfcache /tmp/repo_host/ /tmp/repo_digi1/
+mkdir -p /tmp/dnfcache /tmp/repo_host/ /tmp/repo_digi1/ /tmp/repo_digi2/
 
 build_base_image() {
     ctr=$(buildah from fedora)
@@ -35,102 +35,142 @@ EOF
 
 podman images | grep fedora-with-rpm >/dev/null || build_base_image
 
-VOLUMES="--volume $(realpath rpmbuild):/rpmbuild --volume /tmp/dnfcache:/var/cache/dnf"
-VOLUMES="$VOLUMES --volume /tmp/repo_host:/repo_host --volume /tmp/repo_digi1:/repo_digi1"
+BASE_VOLUMES="--volume $(realpath rpmbuild):/rpmbuild"
+VOLUMES="$BASE_VOLUMES --volume /tmp/dnfcache:/var/cache/dnf --volume /tmp/repo_host:/repo_host"
 
 RPMDEFS="--define='_host x86_64-redhat-linux-gnu' --define='_target x86_64-pc-linux-gnu' --define='_fedora_dependencies 1'"
 
-REPOS='--disablerepo=digitalis-stage1'
+IMAGE='fedora-with-rpm'
+DIST='fc32'
+REPO='repo_host'
+MAKECACHE_REPOS='local-bootstrap'
+ADDITIONAL_DNF_ARGS='--disablerepo digitalis-stage1'
+
+refresh_repo() {
+    find rpmbuild/RPMS -name '*.'$DIST'.*' -exec cp {} /tmp/$REPO ';'
+    podman run --net host $VOLUMES --rm $IMAGE createrepo_c /$REPO
+}
 
 build_rpm() {
-    find rpmbuild/RPMS -name '*.fc32.*' -exec cp {} /tmp/repo_host ';'
-    find rpmbuild/RPMS -name '*.digi1.*' -exec cp {} /tmp/repo_digi1 ';'
-    podman run --net host $VOLUMES --rm fedora-with-rpm createrepo_c /repo_host
-    podman run --net host $VOLUMES --rm fedora-with-rpm createrepo_c /repo_digi1
     podman run --net host $VOLUMES --rm -it \
-        fedora-with-rpm sh -exc \
-        "dnf makecache --repo=local-bootstrap; \
-         dnf makecache --repo=digitalis-stage1; \
-         dnf install -y --best --allowerasing $REPOS \$(rpmspec $RPMDEFS $2 -q --buildrequires /rpmbuild/SPECS/$1.spec); \
+        $IMAGE sh -exc \
+        "dnf makecache --repo='$MAKECACHE_REPOS'; \
+         dnf install -y --best --allowerasing $ADDITIONAL_DNF_ARGS \$(rpmspec $RPMDEFS $2 -q --buildrequires /rpmbuild/SPECS/$1.spec); \
          rpmbuild $RPMDEFS $2 -ba /rpmbuild/SPECS/$1.spec"
 }
 
+STAGE1_MODIFIED=''
+refresh_repo
+
 if [ ! -e rpmbuild/SRPMS/x86_64-pc-linux-gnu-binutils-*.rpm ]; then
     build_rpm binutils
+    refresh_repo
+    STAGE1_MODIFIED=1
 fi
 
 if [ ! -e rpmbuild/SRPMS/x86_64-pc-linux-gnu-standalone-gcc-*.rpm ]; then
+    refresh_repo
     build_rpm gcc "--without threads --with standalone"
+    refresh_repo
+    STAGE1_MODIFIED=1
 fi
 
 if [ ! -e rpmbuild/SRPMS/x86_64-pc-linux-gnu-kernel-headers-*.rpm ]; then
     build_rpm kernel-headers
+    refresh_repo
+    STAGE1_MODIFIED=1
 fi
 
-# LIBRPMS="glibc gcc libstdc++ ncurses gmp mpfr libmpc zlib libgpg-error libgcrypt"
-# LIBRPMS="$LIBRPMS file popt libarchive sqlite pkg-config-wrapper lua"
-# LIBRPMS="$LIBRPMS cmake-toolchain expat libsolv meson-toolchain libffi glib2 util-linux"
-# LIBRPMS="$LIBRPMS check openssl libxml2 curl zchunk python libassuan gpgme"
-# LIBRPMS="$LIBRPMS librepo libyaml rpm gtk-doc gobject-introspection libmodulemd"
-# LIBRPMS="$LIBRPMS cppunit json-c libdnf"
-
-LIBRPMS="glibc gcc pkg-config-wrapper cmake-toolchain meson-toolchain"
+LIBRPMS="glibc gcc"
 LIBRPMS="$LIBRPMS libncurses libgmp libmpfr libmpc zlib libgpg-error libgcrypt"
-LIBRPMS="$LIBRPMS file libpopt libarchive libsqlite lua libexpat libzstd rpm"
+LIBRPMS="$LIBRPMS file libpopt libarchive libsqlite lua libexpat libzstd libelf rpm"
 LIBRPMS="$LIBRPMS libsolv libffi glib2 util-linux libcheck curl libopenssl"
 LIBRPMS="$LIBRPMS libzchunk python libassuan libgpgme libxml2 librepo libyaml"
 LIBRPMS="$LIBRPMS gtk-doc libgobject-introspection libmodulemd libcppunit"
-LIBRPMS="$LIBRPMS libjson-c libdnf libcomps"
+LIBRPMS="$LIBRPMS libjson-c libdnf libcomps bzip2 xz libksba libnpth libpcre"
 
-for rpm in $LIBRPMS; do
+echo "#### Building .fc32 packages ####"
+DIST='fc32'
+
+for rpm in $LIBRPMS pkg-config-wrapper cmake-toolchain meson-toolchain; do
     if [ ! -n "$(ls -l rpmbuild/SRPMS/x86_64-pc-linux-gnu-$rpm-*.rpm)" ]; then
         build_rpm $rpm
+        refresh_repo
+        STAGE1_MODIFIED=1
     fi
 done
 
 RPMDEFS="--define='_build x86_64-redhat-linux-gnu' --define='_host x86_64-pc-linux-gnu' --define='_target x86_64-pc-linux-gnu' --define='dist .digi1'"
 
-# RPMS="binutils libstdc++ m4 ncurses bash coreutils diffutils file findutils"
-# RPMS="$RPMS gawk gzip make patch tar sed xz gmp mpfr libmpc gcc bzip2"
-# RPMS="$RPMS rpm"
+RPMS="$LIBRPMS"
 
-RPMS="binutils libncurses libgmp libmpfr libmpc zlib libgpg-error libgcrypt"
-RPMS="$RPMS glibc file libpopt libarchive libsqlite lua libexpat libzstd rpm"
-RPMS="$RPMS libsolv libffi glib2 util-linux libcheck curl libopenssl"
-RPMS="$RPMS libzchunk python libassuan libgpgme libxml2 librepo libyaml"
-RPMS="$RPMS gtk-doc libgobject-introspection libmodulemd libcppunit"
-RPMS="$RPMS libjson-c libdnf libcomps"
-
-RPMS="$RPMS gcc bash fs-tree coreutils kernel-headers perl dnf"
+RPMS="$RPMS binutils gcc bash fs-tree coreutils kernel-headers perl dnf"
+RPMS="$RPMS createrepo_c make sed bison tar grep gawk m4 gzip findutils"
+RPMS="$RPMS diffutils texinfo pkgconf cmake patch autoconf automake"
+RPMS="$RPMS libtool setuptools meson ninja-build gnupg swig which"
+RPMS="$RPMS xml-common docbook-dtds libxslt docbook-style-xsl flex"
+RPMS="$RPMS gdb help2man"
 RPMS="$RPMS digitalis-bootstrap-repository"
 
 RPMS="$RPMS base-system"
 
+echo "#### Building .digi1 packages ####"
+DIST='digi1'
+
 for rpm in $RPMS; do
     if [ ! -n "$(ls -l rpmbuild/SRPMS/$rpm-*.digi1.*.rpm)" ]; then
         build_rpm $rpm
+        STAGE1_MODIFIED=1
     fi
 done
 
-find rpmbuild/RPMS -name '*.digi1.*' -exec cp {} /tmp/repo_digi1 ';'
-podman run --net host $VOLUMES --rm fedora-with-rpm createrepo_c /repo_digi1
+VOLUMES="$BASE_VOLUMES --volume /tmp/repo_digi1:/repo_digi1"
+ADDITIONAL_DNF_ARGS=''
+DIST='digi1'
+REPO='repo_digi1'
+refresh_repo
 
-ctr=$(buildah from fedora-with-rpm)
-buildah run --net host $VOLUMES "$ctr" -- mkdir /new_root
-buildah run --net host $VOLUMES "$ctr" -- dnf install -y \
-    --verbose --repo=digitalis-stage1 --installroot=/new_root --releasever=digi1 \
-    fs-tree
-buildah run --net host $VOLUMES "$ctr" -- dnf install -y \
-    --verbose --repo=digitalis-stage1 --installroot=/new_root --releasever=digi1 \
-    digitalis-bootstrap-repository base-system
+if [[ -n $STAGE1_MODIFIED ]]; then
 
-rm -rf new_root
-buildah unshare sh -c 'cp -rp $(buildah mount '$ctr')/new_root new_root'
-buildah umount "$ctr"
-buildah rm "$ctr"
+    ctr=$(buildah from fedora-with-rpm)
+    buildah run --net host $VOLUMES "$ctr" -- mkdir /new_root
+    buildah run --net host $VOLUMES "$ctr" -- dnf install -y \
+        --verbose --repo=digitalis-stage1 --installroot=/new_root --releasever=digi1 \
+        fs-tree
+    buildah run --net host $VOLUMES "$ctr" -- dnf install -y \
+        --verbose --repo=digitalis-stage1 --installroot=/new_root --releasever=digi1 \
+        digitalis-bootstrap-repository base-system
 
-ctr=$(buildah from scratch)
+    rm -rf new_root
+    buildah unshare sh -c 'cp -rp $(buildah mount '$ctr')/new_root new_root'
+    buildah umount "$ctr"
+    buildah rm "$ctr"
 
-buildah copy "$ctr" $(realpath new_root)/ /
-buildah commit "$ctr" digitalis-stage1
-buildah rm "$ctr"
+    VOLUMES='--volume /tmp/repo_digi1:/repo'
+
+    ctr=$(buildah from scratch)
+
+    buildah copy "$ctr" $(realpath new_root)/ /
+    buildah run --net host $VOLUMES "$ctr" -- dnf install -y --releasever=digi1 \
+        fs-tree digitalis-bootstrap-repository base-system createrepo_c
+    buildah run --net host "$ctr" sh -c 'echo "%_topdir /rpmbuild" >>~/.rpmmacros'
+    buildah commit "$ctr" digitalis-stage1
+    buildah rm "$ctr"
+fi
+
+VOLUMES="$BASE_VOLUMES --volume /tmp/repo_digi1:/repo"
+
+echo "#### Building .digi2 packages ####"
+DIST='digi2'
+
+REPO='repo_digi2'
+DIST='digi2'
+IMAGE='digitalis-stage1'
+RPMDEFS="--define='_build x86_64-pc-linux-gnu' --define='_host x86_64-pc-linux-gnu' --define='_target x86_64-pc-linux-gnu' --define='dist .digi2'"
+MAKECACHE_REPOS="digitalis"
+
+for rpm in $RPMS; do
+    if [ ! -n "$(ls -l rpmbuild/SRPMS/$rpm-*.digi2.*.rpm)" ]; then
+        build_rpm $rpm
+    fi
+done

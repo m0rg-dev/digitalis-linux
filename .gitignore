@@ -12,3 +12,4 @@ rpmbuild/*
 !rpmbuild/SPECS
 !rpmbuild/SOURCES
 rpmbuild/SOURCES/*.tar.*
+rpmbuild/SOURCES/*.zip

@@ -17,7 +17,6 @@ BuildRequires:  %{?host_tool_prefix}gcc
 BuildRequires:  make
 
 %undefine _annotated_build
-%global _bindir %{_prefix}/../bin
 
 %description
 
@@ -31,15 +30,12 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 
 %install
 %make_install
-install -dm755 %{buildroot}/usr/bin
-ln -s %{_bindir}/sed %{buildroot}/usr/bin/sed
 
 %find_lang %{name}
 
 %files -f %{name}.lang
 %license COPYING
 %{_bindir}/*
-/usr/bin/sed
 %doc %{_infodir}/*.info*.gz
 %doc %{_mandir}/man1/*.gz
 

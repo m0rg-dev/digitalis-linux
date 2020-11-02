@@ -24,20 +24,29 @@ URL:            https://gi.readthedocs.io/en/latest/
 Source0:        https://download.gnome.org/sources/%{libname}/1.64/%{libname}-%{version}.tar.xz
 %define         SHA256SUM0 80beae6728c134521926affff9b2e97125749b38d38744dc901f4010ee3e7fa7
 
-BuildRequires:  meson ninja-build gcc glib2-devel flex bison gobject-introspection-devel
+BuildRequires:  meson ninja-build gcc glib2-devel flex bison
+
+%if "%{_build}" != "%{_target}"
+BuildRequires:  pkgconfig(gobject-introspection-1.0)
+%endif
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
+BuildRequires: %{?host_tool_prefix}meson-toolchain
 %endif
 
 %if "%{_host}" != "%{_target}"
 %define target_tool_prefix %{_target}-
+BuildRequires: %{?target_tool_prefix}meson-toolchain
 %else
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
 BuildRequires: %{?target_tool_prefix}gcc
-BuildRequires: %{?target_tool_prefix}meson-toolchain %{?target_tool_prefix}glib2-devel
+BuildRequires: %{?target_tool_prefix}glib2-devel
 BuildRequires: %{?target_tool_prefix}libpython-devel
+
+# hack until I figure out what's *supposed* to generate these
+Provides:      pkgconfig(gobject-introspection-1.0)
 
 %undefine _annotated_build
 %global debug_package %{nil}
@@ -61,6 +70,9 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 %prep
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %autosetup -n %{libname}-%{version}
+
+# i really don't know
+sed -i "s/    subdir('tests')//" meson.build
 
 %build
 

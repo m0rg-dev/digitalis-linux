@@ -49,7 +49,7 @@ Requires:      %{?cross}libgpg-error
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-Requires:       %{?target_tool_prefix}libgpg-error-devel
+Requires:       %{?cross}libgpg-error-devel
 
 %description    devel
 The %{name}-devel package contains libraries and header files for
@@ -91,8 +91,8 @@ cd build
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %if ! %{isnative}
-install -dm755 %{buildroot}/%{_prefix}/../bin
-ln -sv %{_oldprefix}/bin/%{?cross}libgcrypt-config %{buildroot}/%{_prefix}/../bin/libgcrypt-config
+install -dm755 %{buildroot}/%{_prefix}/bin
+ln -sv %{_oldprefix}/bin/%{?cross}libgcrypt-config %{buildroot}/%{_prefix}/bin/libgcrypt-config
 %endif
 
 %files
@@ -105,7 +105,7 @@ ln -sv %{_oldprefix}/bin/%{?cross}libgcrypt-config %{buildroot}/%{_prefix}/../bi
 %{_datadir}/aclocal/*.m4
 %{_prefix}/lib/pkgconfig/*.pc
 %if ! %{isnative}
-%{_prefix}/../bin/libgcrypt-config
+%{_prefix}/bin/libgcrypt-config
 %endif
 %{_oldprefix}/bin/%{?cross}libgcrypt-config
 %doc %{_infodir}/*.info*

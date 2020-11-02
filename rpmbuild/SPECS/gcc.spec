@@ -141,7 +141,7 @@ License: LGPLv2+
 Summary:        Development files for libstdc++
 Requires:       %{?cross}libstdc++%{?_isa} = %{version}-%{release}
 # stdlib.h depends on linux/errno.h
-Requires:       %{?target_tool_prefix}kernel-headers
+Requires:       %{?cross}kernel-headers
 Requires:       %{?cross}libasan %{?cross}libitm %{?cross}liblsan %{?cross}libtsan %{?cross}libubsan
 
 %description -n %{?cross}libstdc++-devel
@@ -195,7 +195,10 @@ cd build
     --enable-initfini-array \
     --enable-linker-build-id \
     --enable-static-libgcc \
+%if "%{_build}" != "%{_host}"
     --disable-bootstrap
+%endif
+
 
 %make_build
 
@@ -204,10 +207,8 @@ cd build
 %make_install
 cd ..
 
-%if ! %{isnative}
 cat gcc/limitx.h gcc/glimits.h gcc/limity.h > \
   %{buildroot}/%{_prefix}/lib/gcc/%{_target}/%{version}/include-fixed/limits.h
-%endif
 
 # otherwise libgcc_s doesn't get picked up by find-debuginfo and autoreqs
 # and everything goes awful when you try to install
@@ -222,6 +223,12 @@ chmod 755 %{buildroot}/usr/%{_target}/lib/libgcc_s.so.1
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 # should we link into /usr/_target/bin?
+
+if [ -e %{buildroot}/usr/lib ]; then
+    rm -fv %{buildroot}/usr/lib/libcc*
+fi
+
+rm -fv %{buildroot}/%{_infodir}/dir
 
 %find_lang gcc
 %find_lang cpplib

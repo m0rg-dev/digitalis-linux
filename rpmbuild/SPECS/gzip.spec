@@ -30,13 +30,10 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 
 %install
 %make_install
-install -dm755 %{buildroot}/%{_bindir}/../../bin
-mv -v %{buildroot}/%{_bindir}/gzip %{buildroot}/%{_bindir}/../../bin/
 
 %files
 %license COPYING
 %{_bindir}/*
-%{_bindir}/../../bin/gzip
 %doc %{_infodir}/*.info*.gz
 %doc %{_mandir}/man1/*.gz
 

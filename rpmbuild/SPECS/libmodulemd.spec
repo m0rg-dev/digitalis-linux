@@ -29,19 +29,23 @@ BuildRequires:  meson ninja-build gcc gtk-doc
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
+BuildRequires: %{?host_tool_prefix}meson-toolchain
 %endif
 
 %if "%{_host}" != "%{_target}"
 %define target_tool_prefix %{_target}-
+BuildRequires: %{?target_tool_prefix}meson-toolchain
 %else
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
 BuildRequires: %{?target_tool_prefix}gcc
-BuildRequires: %{?target_tool_prefix}meson-toolchain %{?target_tool_prefix}glib2-devel %{?target_tool_prefix}libyaml-devel
+BuildRequires: %{?target_tool_prefix}glib2-devel %{?target_tool_prefix}libyaml-devel
 BuildRequires: %{?target_tool_prefix}librpm-devel %{?target_tool_prefix}libmagic-devel %{?target_tool_prefix}gtk-doc
-# for mkenums
-BuildRequires: glib2-devel
-BuildRequires: gobject-introspection-devel
+BuildRequires: /usr/bin/glib-mkenums
+BuildRequires: /usr/bin/xsltproc
+BuildRequires: docbook-dtds
+BuildRequires: docbook-style-xsl
+BuildRequires: pkgconfig(gobject-introspection-1.0)
 BuildRequires: help2man
 BuildRequires: libmodulemd-devel
 
@@ -73,11 +77,12 @@ mkdir build
 # for some unknowable reason, but you can't cross-compile those...
 mkdir -p /usr/%{_target}/usr/share/gtk-doc/html/{glib,gobject}
 touch /usr/%{_target}/usr/share/gtk-doc/html/{glib,gobject}/index.html
-
+mkdir -p /usr/share/gtk-doc/html/{glib,gobject}
+touch /usr/share/gtk-doc/html/{glib,gobject}/index.html
 # no idea if that overrides dir is at all correct (or important)
 
 meson -Dbuildtype=release -Dnative=true \
-    -Dgtk_doc=false -Ddeveloper_build=false -Dskip_introspection=true \
+    -Dwith_docs=false -Ddeveloper_build=false -Dskip_introspection=true \
     -Dgobject_overrides_dir_py3='/usr/lib/python3.8/site-packages/gi/overrides' \
     --prefix=%{_prefix} \
 %if "%{_build}" != "%{_target}"
@@ -100,7 +105,13 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_includedir}/*
 %{_prefix}/lib/pkgconfig/*.pc
 %{_prefix}/lib/*.so
-%doc %{_datadir}/gtk-doc/html/modulemd-2.0
+# TODO
+# %doc %{_datadir}/gtk-doc/html/modulemd-2.0
+
+%if "%{_build}" == "%{_target}"
+%{_bindir}/modulemd-validator
+%doc %{_mandir}/man1/*
+%endif
 
 %changelog
 
