@@ -85,16 +85,16 @@ fi
 
 LIBRPMS="glibc gcc"
 LIBRPMS="$LIBRPMS libncurses libgmp libmpfr libmpc zlib libgpg-error libgcrypt"
-LIBRPMS="$LIBRPMS file libpopt libarchive libsqlite lua libexpat libzstd libelf rpm"
-LIBRPMS="$LIBRPMS libsolv libffi glib2 util-linux libcheck curl libopenssl"
-LIBRPMS="$LIBRPMS libzchunk python libassuan libgpgme libxml2 librepo libyaml"
+LIBRPMS="$LIBRPMS file libpopt bzip2 xz libarchive libsqlite lua libexpat libzstd libelf libffi python rpm"
+LIBRPMS="$LIBRPMS libsolv glib2 util-linux libcheck curl libopenssl"
+LIBRPMS="$LIBRPMS libzchunk libassuan libgpgme libxml2 librepo libyaml"
 LIBRPMS="$LIBRPMS gtk-doc libgobject-introspection libmodulemd libcppunit"
-LIBRPMS="$LIBRPMS libjson-c libdnf libcomps bzip2 xz libksba libnpth libpcre"
+LIBRPMS="$LIBRPMS libjson-c libdnf libcomps libksba libnpth libpcre"
 
 echo "#### Building .fc32 packages ####"
 DIST='fc32'
 
-for rpm in $LIBRPMS pkg-config-wrapper cmake-toolchain meson-toolchain; do
+for rpm in pkg-config-wrapper cmake-toolchain meson-toolchain $LIBRPMS; do
     if [ ! -n "$(ls -l rpmbuild/SRPMS/x86_64-pc-linux-gnu-$rpm-*.rpm)" ]; then
         build_rpm $rpm
         refresh_repo

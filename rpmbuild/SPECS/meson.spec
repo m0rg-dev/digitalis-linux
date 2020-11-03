@@ -16,9 +16,9 @@ BuildArch:      noarch
 
 BuildRequires:  make
 BuildRequires:  python
-BuildRequires:  setuptools
+BuildRequires:  python-setuptools
 
-Requires:       setuptools
+Requires:       python-setuptools
 
 %undefine _annotated_build
 

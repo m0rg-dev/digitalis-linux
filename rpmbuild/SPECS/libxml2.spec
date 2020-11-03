@@ -39,7 +39,8 @@ BuildRequires:  make
 BuildRequires: %{?target_tool_prefix}gcc
 BuildRequires: %{?target_tool_prefix}zlib-devel
 BuildRequires: %{?target_tool_prefix}liblzma-devel
-BuildRequires: %{?target_tool_prefix}libpython-devel 
+BuildRequires: %{?target_tool_prefix}libpython-devel
+BuildRequires: %{?target_tool_prefix}pkg-config
 
 %undefine _annotated_build
 %global debug_package %{nil}
@@ -49,6 +50,8 @@ BuildRequires: %{?target_tool_prefix}libpython-devel
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       %{?cross}zlib-devel
+Requires:       %{?cross}liblzma-devel
 
 %description    devel
 The %{name}-devel package contains libraries and header files for
@@ -82,10 +85,12 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %files
 %license COPYING
 %{_prefix}/lib/*.so.*
+%if "%{_build}" == "%{_target}"
 %{_prefix}/lib/python3.8/site-packages/*
+%doc %{_datadir}/doc/libxml2-python-%{version}
+%endif
 %doc %{_datadir}/gtk-doc/html/libxml2
 %doc %{_datadir}/doc/libxml2-%{version}
-%doc %{_datadir}/doc/libxml2-python-%{version}
 
 %files devel
 %{_includedir}/libxml2

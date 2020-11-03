@@ -101,9 +101,9 @@ mv -v %{buildroot}%{_datadir}/cmake %{buildroot}%{_datadir}/cmake-3.18
 %{_prefix}/lib/*.so
 %{_prefix}/lib/pkgconfig/*.pc
 %if %{isnative}
-%{_prefix}/share/cmake-3.18/Modules/*.cmake
+%{_prefix}/share/cmake*/Modules/*.cmake
 %else
-/usr/share/cmake-3.18/Modules/*.cmake
+/usr/share/cmake*/Modules/*.cmake
 %endif
 
 %doc %{_mandir}/man3/*

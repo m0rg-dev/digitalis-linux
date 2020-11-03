@@ -69,6 +69,7 @@ Summary:        Development files for librpm
 Requires:       %{?cross}librpm%{?_isa} = %{version}-%{release}
 Requires:       %{?cross}libgcrypt-devel %{?cross}zlib-devel %{?cross}libpopt-devel %{?cross}libsqlite-devel
 Requires:       %{?cross}libzstd-devel
+Requires:       %{?cross}libarchive-devel
 
 %description -n %{?cross}librpm-devel
 The librpm-devel package contains libraries and header files for

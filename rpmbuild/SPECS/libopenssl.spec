@@ -67,7 +67,9 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 
 ./config \
     --prefix=%{_prefix} --libdir=lib \
+%if "%{_build}" != "%{_target}"
     --cross-compile-prefix=%{?_target}- \
+%endif
     --openssldir=/etc/ssl shared zlib-dynamic
 AR=%{?target_tool_prefix}ar %make_build
 
