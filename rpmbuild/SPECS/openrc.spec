@@ -15,10 +15,40 @@ Source0:        https://github.com/OpenRC/openrc/archive/%{version}.tar.gz#/%{na
 
 BuildRequires:  gcc
 BuildRequires:  make
+Requires:       libeinfo%{?_isa} = %{version}-%{release}
+Requires:       librc%{?_isa} = %{version}-%{release}
 
 %undefine _annotated_build
 
 %description
+
+%package     -n libeinfo
+Summary:        Support library for openrc
+License:        GPLv2+
+
+%description -n libeinfo
+
+%package     -n libeinfo-devel
+Summary:        Development files for libeinfo
+Requires:       libeinfo%{?_isa} = %{version}-%{release}
+
+%description -n libeinfo-devel
+The libeinfo-devel package contains libraries and header files for
+developing applications that use libeinfo.
+
+%package     -n librc
+Summary:        Support library for openrc
+License:        GPLv2+
+
+%description -n librc
+
+%package     -n librc-devel
+Summary:        Development files for librc
+Requires:       librc%{?_isa} = %{version}-%{release}
+
+%description -n librc-devel
+The librc-devel package contains libraries and header files for
+developing applications that use librc.
 
 %prep
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
@@ -58,6 +88,8 @@ mv %{buildroot}/bin/* %{buildroot}%{_bindir}
 mv %{buildroot}/sbin/* %{buildroot}%{_sbindir}
 mv %{buildroot}/lib/* %{buildroot}%{_prefix}/lib
 
+find %{buildroot} -name '*.so.*' -exec chmod +x {} ';'
+
 find %{buildroot} -name '*.a' -exec rm -f {} ';'
 
 %files
@@ -79,9 +111,22 @@ find %{buildroot} -name '*.a' -exec rm -f {} ';'
 %config(noreplace) %{_sysconfdir}/rc.conf
 %doc %{_mandir}/man8/*
 
-# TODO
-%{_prefix}/lib/*.so*
-%doc %{_mandir}/man3/*
-%{_includedir}/*
-%{_prefix}/lib/pkgconfig/*.pc
+%files -n libeinfo
+%{_prefix}/lib/libeinfo.so.*
+
+%files -n libeinfo-devel
+%{_includedir}/einfo.h
+%{_prefix}/lib/libeinfo.so
+%{_prefix}/lib/pkgconfig/einfo.pc
+%doc %{_mandir}/man3/e*
+
+%files -n librc
+%{_prefix}/lib/librc.so.*
+
+%files -n librc-devel
+%{_includedir}/rc.h
+%{_prefix}/lib/librc.so
+%{_prefix}/lib/pkgconfig/openrc.pc
+%doc %{_mandir}/man3/rc_*
+
 %changelog
