@@ -50,6 +50,7 @@ Requires:       tar
 Requires:       bzip2
 Requires:       elfutils
 Requires:       patch
+Requires:       curl
 
 Requires:       %{?cross}librpm = %{version}-%{release}
 

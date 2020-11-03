@@ -7,25 +7,23 @@
 # /usr/arch-vendor-os-abi/.
 %define isnative 0
 %define cross %{_target}-
-%global _oldprefix %{_prefix}
-# TODO unify target/usr and target/... but later
 %define _prefix /usr/%{_target}/usr
 %endif
 
-%define libname openssl
+%define libname libtasn1
 
-Name:           %{?cross}lib%{libname}
-Version:        1.1.1h
+Name:           %{?cross}%{libname}
+Version:        4.16.0
 Release:        1%{?dist}
-Summary:        OpenSSL is a robust, commercial-grade, and full-featured toolkit for the Transport Layer Security (TLS) and Secure Sockets Layer (SSL) protocols.
+Summary:        ASN.1 certificate library
 
-License:        OpenSSL
-URL:            https://www.openssl.org/
+License:        LGPLv2+
+URL:            https://gnu.org/software/libtasn1
 %undefine       _disable_source_fetch
-Source0:        https://www.openssl.org/source/%{libname}-%{version}.tar.gz
-%define         SHA256SUM0 5c9ca8774bd7b03e5784f26ae9e9e6d749c9da2438545077e6b3d755a06595d9
+Source0:        https://ftp.gnu.org/gnu/%{libname}/%{libname}-%{version}.tar.gz
+%define         SHA256SUM0 0e0fb0903839117cb6e3b56e68222771bebf22ad7fc2295a0ed7d576e8d4329d
 
-BuildRequires:  make perl
+BuildRequires:  make
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
@@ -37,7 +35,6 @@ BuildRequires:  make perl
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
 BuildRequires: %{?target_tool_prefix}gcc
-BuildRequires: %{?target_tool_prefix}zlib-devel
 
 %undefine _annotated_build
 %global debug_package %{nil}
@@ -52,12 +49,11 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-
-%package     -n openssl
-Summary:        Command-line utilities for libopenssl
+%package     -n %{?cross}tasn1
+Summary:        Command-line utilities for %{libname}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 
-%description -n openssl
+%description -n %{?cross}tasn1
 
 %prep
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
@@ -65,43 +61,30 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 
 %build
 
-./config \
-    --prefix=%{_prefix} --libdir=lib \
-%if "%{_build}" != "%{_target}"
-    --cross-compile-prefix=%{?_target}- \
-%endif
-    --openssldir=/etc/ssl shared zlib-dynamic
-AR=%{?target_tool_prefix}ar %make_build
+mkdir build
+cd build
+%define _configure ../configure
+%configure --host=%{_target} --libdir=%{_prefix}/lib --disable-static
+%make_build
 
 %install
-%make_install MANSUFFIX=ssl
+cd build
+%make_install
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %files
 %license LICENSE
-%if %{isnative}
-%{_sysconfdir}/ssl
-%else
-%exclude %{_sysconfdir}/ssl
-%endif
-# this gets installed as empty and would conflict with p11-kit
-%exclude %{_sysconfdir}/ssl/certs
 %{_prefix}/lib/*.so.*
-%{_prefix}/lib/engines-1.1
-%doc %{_mandir}/man{5,7}/*
 
 %files devel
-%{_includedir}/openssl
+%{_includedir}/*
 %{_prefix}/lib/*.so
-%exclude %{_prefix}/lib/*.a
 %{_prefix}/lib/pkgconfig/*.pc
 %doc %{_mandir}/man3/*
-# TODO this probably should get split too - have one package
-# own the dir
-%doc %{_datadir}/doc/openssl
+%doc %{_infodir}/*.info*
 
-%files -n openssl
+%files -n %{?cross}tasn1
 %{_bindir}/*
 %doc %{_mandir}/man1/*
 

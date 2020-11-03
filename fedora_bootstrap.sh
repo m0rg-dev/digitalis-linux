@@ -58,7 +58,7 @@ build_rpm() {
         $IMAGE sh -exc \
         "dnf makecache --repo='$MAKECACHE_REPOS'; \
          dnf install -y --best --allowerasing $ADDITIONAL_DNF_ARGS \$(rpmspec $RPMDEFS $2 -q --buildrequires /rpmbuild/SPECS/$1.spec); \
-         rpmbuild $RPMDEFS $2 -ba /rpmbuild/SPECS/$1.spec"
+         rpmbuild --verbose $RPMDEFS $2 -ba /rpmbuild/SPECS/$1.spec"
 }
 
 STAGE1_MODIFIED=''
@@ -86,7 +86,7 @@ fi
 LIBRPMS="glibc gcc"
 LIBRPMS="$LIBRPMS libncurses libgmp libmpfr libmpc zlib libgpg-error libgcrypt"
 LIBRPMS="$LIBRPMS file libpopt bzip2 xz libarchive libsqlite lua libexpat libzstd libelf libffi python rpm"
-LIBRPMS="$LIBRPMS libsolv glib2 util-linux libcheck curl libopenssl"
+LIBRPMS="$LIBRPMS libsolv glib2 util-linux libcheck libopenssl libtasn1 make-ca p11-kit curl"
 LIBRPMS="$LIBRPMS libzchunk libassuan libgpgme libxml2 librepo libyaml"
 LIBRPMS="$LIBRPMS gtk-doc libgobject-introspection libmodulemd libcppunit"
 LIBRPMS="$LIBRPMS libjson-c libdnf libcomps libksba libnpth libpcre"
@@ -170,6 +170,8 @@ DIST='digi2'
 IMAGE='digitalis-stage1'
 RPMDEFS="--define='_build x86_64-pc-linux-gnu' --define='_host x86_64-pc-linux-gnu' --define='_target x86_64-pc-linux-gnu' --define='dist .digi2'"
 MAKECACHE_REPOS="digitalis"
+
+RPMS="$RPMS openrc grub"
 
 for rpm in $RPMS; do
     if [ ! -n "$(ls -l rpmbuild/SRPMS/$rpm-*.digi2.*.rpm)" ]; then

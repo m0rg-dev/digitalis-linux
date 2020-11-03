@@ -29,10 +29,20 @@ Source0:        https://curl.haxx.se/download/%{libname}-%{version}.tar.xz
 %define host_tool_prefix %{_host}-
 %endif
 
-BuildRequires:  %{?host_tool_prefix}gcc
+%if "%{_host}" != "%{_target}"
+%define target_tool_prefix %{_target}-
+%else
+%define target_tool_prefix %{?host_tool_prefix}
+%endif
+
+BuildRequires:  %{?target_tool_prefix}gcc
+BuildRequires:  %{?target_tool_prefix}libp11-kit-devel
+BuildRequires:  %{?target_tool_prefix}zlib-devel
+BuildRequires:  %{?target_tool_prefix}libopenssl-devel
 BuildRequires:  make
 
 Requires:       %{?cross}libcurl = %{version}-%{release}
+Requires:       p11-kit
 
 %undefine _annotated_build
 %global debug_package %{nil}
@@ -60,7 +70,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %autosetup -n %{libname}-%{version}
 
 %build
-%configure --libdir=%{_prefix}/lib --with-ca-path=/etc/ssl/certs --disable-static
+%configure --libdir=%{_prefix}/lib --with-ca-path=/etc/ssl/certs --disable-static --host=%{_target}
 %make_build
 
 %install
