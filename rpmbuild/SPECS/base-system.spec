@@ -10,14 +10,15 @@ Requires: fs-tree
 
 Requires: bash
 Requires: coreutils
-Requires: sed
-Requires: grep
-Requires: gawk
-Requires: gzip
-Requires: findutils
-Requires: file
 Requires: diffutils
+Requires: file
+Requires: findutils
+Requires: gawk
+Requires: grep
+Requires: gzip
 Requires: pkg-config
+Requires: sed
+Requires: shadow
 Requires: which
 
 Requires: dnf
