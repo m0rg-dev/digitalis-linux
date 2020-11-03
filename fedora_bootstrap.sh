@@ -143,6 +143,7 @@ if [[ -n $STAGE1_MODIFIED ]]; then
         --verbose --repo=digitalis-stage1 --installroot=/new_root --releasever=digi1 \
         digitalis-bootstrap-repository base-system
 
+    find new_root -type d | xargs -r chmod u+w
     rm -rf new_root
     buildah unshare sh -c 'cp -rp $(buildah mount '$ctr')/new_root new_root'
     buildah umount "$ctr"
@@ -192,6 +193,7 @@ buildah run --net host $VOLUMES "$ctr" -- dnf install -y \
     --verbose --repo=digitalis --installroot=/new_root --releasever=digi2 \
     digitalis-bootstrap-repository base-system
 
+find new_root -type d | xargs -r chmod u+w
 rm -rf new_root
 buildah unshare sh -c 'cp -rp $(buildah mount '$ctr')/new_root new_root'
 buildah umount "$ctr"

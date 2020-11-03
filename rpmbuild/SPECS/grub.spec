@@ -15,8 +15,11 @@ Source0:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
 
 BuildRequires:  %{?host_tool_prefix}gcc
 BuildRequires:  make
+BuildRequires:  bison
+BuildRequires:  flex
 
 %undefine _annotated_build
+%global debug_package %{nil}
 
 %description
 
@@ -25,7 +28,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %autosetup
 
 %build
-%configure
+%configure --disable-werror --libdir=%{_prefix}/lib
 %make_build
 
 %install
@@ -35,7 +38,11 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %files -f %{name}.lang
 %license COPYING
 %{_bindir}/*
-%doc %{_infodir}/*.info*
-%doc %{_mandir}/man1/*
+%{_sbindir}/*
+%{_sysconfdir}/grub.d
+%{_prefix}/lib/grub
+%{_datadir}/grub
+%{_sysconfdir}/bash_completion.d/grub
+%doc %{_infodir}/*
 
 %changelog
