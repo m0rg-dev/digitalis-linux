@@ -111,7 +111,7 @@ RPMS="$RPMS createrepo_c make sed bison tar grep gawk m4 gzip findutils"
 RPMS="$RPMS diffutils texinfo pkgconf cmake patch autoconf automake"
 RPMS="$RPMS libtool setuptools meson asciidoc ninja-build gnupg swig which"
 RPMS="$RPMS xml-common docbook-dtds libxslt docbook-style-xsl flex"
-RPMS="$RPMS gdb help2man gettext python-sphinx"
+RPMS="$RPMS gdb help2man gettext python-sphinx gperf"
 RPMS="$RPMS digitalis-bootstrap-repository"
 
 RPMS="$RPMS base-system"
