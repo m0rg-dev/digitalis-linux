@@ -19,6 +19,7 @@ Requires: gzip
 Requires: pkg-config
 Requires: sed
 Requires: shadow
+Requires: tzdata
 Requires: which
 
 Requires: dnf

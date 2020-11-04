@@ -111,6 +111,7 @@ RPMS="$RPMS createrepo_c make sed bison tar grep gawk m4 gzip findutils"
 RPMS="$RPMS diffutils texinfo pkgconf cmake patch autoconf automake"
 RPMS="$RPMS libtool setuptools meson asciidoc ninja-build gnupg swig which"
 RPMS="$RPMS xml-common docbook-dtds libxslt docbook-style-xsl flex shadow"
+RPMS="$RPMS tzdata groff"
 RPMS="$RPMS digitalis-bootstrap-repository"
 
 RPMS="$RPMS base-system"
@@ -171,7 +172,7 @@ IMAGE='digitalis-stage1'
 RPMDEFS="--define='_build x86_64-pc-linux-gnu' --define='_host x86_64-pc-linux-gnu' --define='_target x86_64-pc-linux-gnu' --define='dist .digi2'"
 MAKECACHE_REPOS="digitalis"
 
-RPMS="$RPMS openrc grub eudev"
+RPMS="$RPMS openrc grub eudev udev-init-scripts"
 
 for rpm in $RPMS; do
     if [ ! -n "$(ls -l rpmbuild/SRPMS/$rpm-*.digi2.*.rpm)" ]; then
