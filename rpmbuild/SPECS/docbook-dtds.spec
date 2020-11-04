@@ -69,21 +69,23 @@ for DTDVERSION in 4.1.2 4.2 4.3 4.4; do
 done
 
 %postun
-while read f; do
-    xmlcatalog --noout --del /usr/share/xml/docbook/xml-dtd-%{version}/ /etc/xml/docbook
-done <<ENDENT
-    docbookx.dtd
-    calstblx.dtd
-    soextblx.dtd
-    dbpoolx.mod 
-    dbhierx.mod 
-    htmltblx.mod
-    dbnotx.mod  
-    dbcentx.mod 
-    dbgenent.mod
-ENDENT
+if [ "$1" = 0 ]; then
+    while read f; do
+        xmlcatalog --noout --del /usr/share/xml/docbook/xml-dtd-%{version}/ /etc/xml/docbook
+    done <<ENDENT
+        docbookx.dtd
+        calstblx.dtd
+        soextblx.dtd
+        dbpoolx.mod 
+        dbhierx.mod 
+        htmltblx.mod
+        dbnotx.mod  
+        dbcentx.mod 
+        dbgenent.mod
+    ENDENT
 
-xmlcatalog --noout --del /usr/share/xml/docbook/xml-dtd-%{version}/ /etc/xml/catalog
+    xmlcatalog --noout --del /usr/share/xml/docbook/xml-dtd-%{version}/ /etc/xml/catalog
+fi
 
 %files
 %{_datadir}/xml/docbook/xml-dtd-%{version}
