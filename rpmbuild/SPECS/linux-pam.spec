@@ -66,7 +66,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %autosetup -n Linux-PAM-%{version}
 
 %build
-%configure --libdir=%{_prefix}/lib --enable-securedir=%{_prefix}/lib/security --host=%{_target}
+%configure --libdir=%{_prefix}/lib --includedir=%{_includedir}/security --enable-securedir=%{_prefix}/lib/security --host=%{_target}
 %make_build
 
 %install

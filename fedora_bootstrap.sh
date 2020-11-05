@@ -111,7 +111,7 @@ RPMS="$RPMS createrepo_c make sed bison tar grep gawk m4 gzip findutils"
 RPMS="$RPMS diffutils texinfo pkgconf cmake patch autoconf automake"
 RPMS="$RPMS libtool setuptools meson asciidoc ninja-build gnupg swig which"
 RPMS="$RPMS xml-common docbook-dtds libxslt docbook-style-xsl flex shadow"
-RPMS="$RPMS tzdata groff cpio make-ca bc"
+RPMS="$RPMS tzdata groff cpio make-ca bc procps inetutils"
 RPMS="$RPMS digitalis-bootstrap-repository"
 
 RPMS="$RPMS base-system"
@@ -173,7 +173,7 @@ RPMDEFS="--define='_build x86_64-pc-linux-gnu' --define='_host x86_64-pc-linux-g
 MAKECACHE_REPOS="digitalis"
 
 RPMS="$RPMS openrc grub eudev udev-init-scripts kernel mkinitcpio mkinitcpio-busybox"
-RPMS="$RPMS bare-metal"
+RPMS="$RPMS e2fsprogs kbd bare-metal"
 
 for rpm in $RPMS; do
     if [ ! -n "$(ls rpmbuild/SRPMS | grep -P $rpm-'\d.*\.digi2\..*\.rpm')" ]; then

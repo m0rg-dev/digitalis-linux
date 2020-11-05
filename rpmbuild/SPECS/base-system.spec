@@ -1,5 +1,5 @@
 Name:     base-system
-Version:  2
+Version:  3
 Release:  1%{?dist}
 Summary:  Virtual package for basic system setup
 BuildArch: noarch
@@ -17,6 +17,8 @@ Requires: gawk
 Requires: grep
 Requires: gzip
 Requires: pkg-config
+Requires: procps
+Requires: inetutils
 Requires: sed
 Requires: shadow
 Requires: tzdata
@@ -33,6 +35,9 @@ BuildRequires: /usr/bin/true
 %files
 
 %changelog
+
+- 2020-11-05 Morgan Thomas <m@m0rg.dev>
+  Added procps and inetutils to requires, version -> 3
 
 - 2020-11-04 Morgan Thomas <m@m0rg.dev>
   Added util-linux to requires, version -> 2
