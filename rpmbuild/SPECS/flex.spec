@@ -22,6 +22,8 @@ BuildRequires:  texinfo
 BuildRequires:  gettext
 BuildRequires:  /usr/bin/autopoint
 
+Requires:       m4
+
 Requires:       libfl%{?_isa} = %{version}-%{release}
 
 %undefine _annotated_build

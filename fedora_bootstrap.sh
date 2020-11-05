@@ -86,7 +86,7 @@ fi
 LIBRPMS="glibc gcc"
 LIBRPMS="$LIBRPMS libncurses libgmp libmpfr libmpc zlib libgpg-error libgcrypt"
 LIBRPMS="$LIBRPMS file libpopt bzip2 xz libarchive libsqlite lua libexpat libzstd libelf libffi python rpm"
-LIBRPMS="$LIBRPMS libsolv glib2 util-linux libcheck libopenssl libtasn1 make-ca p11-kit curl"
+LIBRPMS="$LIBRPMS libsolv glib2 util-linux libcheck libopenssl libtasn1 p11-kit curl"
 LIBRPMS="$LIBRPMS libzchunk libassuan libgpgme libxml2 librepo libyaml"
 LIBRPMS="$LIBRPMS gtk-doc libgobject-introspection libmodulemd libcppunit"
 LIBRPMS="$LIBRPMS libjson-c libdnf libcomps libksba libnpth libpcre linux-pam"
@@ -111,7 +111,7 @@ RPMS="$RPMS createrepo_c make sed bison tar grep gawk m4 gzip findutils"
 RPMS="$RPMS diffutils texinfo pkgconf cmake patch autoconf automake"
 RPMS="$RPMS libtool setuptools meson asciidoc ninja-build gnupg swig which"
 RPMS="$RPMS xml-common docbook-dtds libxslt docbook-style-xsl flex shadow"
-RPMS="$RPMS tzdata groff"
+RPMS="$RPMS tzdata groff cpio make-ca bc"
 RPMS="$RPMS digitalis-bootstrap-repository"
 
 RPMS="$RPMS base-system"
@@ -172,10 +172,11 @@ IMAGE='digitalis-stage1'
 RPMDEFS="--define='_build x86_64-pc-linux-gnu' --define='_host x86_64-pc-linux-gnu' --define='_target x86_64-pc-linux-gnu' --define='dist .digi2'"
 MAKECACHE_REPOS="digitalis"
 
-RPMS="$RPMS openrc grub eudev udev-init-scripts"
+RPMS="$RPMS openrc grub eudev udev-init-scripts kernel mkinitcpio mkinitcpio-busybox"
+RPMS="$RPMS bare-metal"
 
 for rpm in $RPMS; do
-    if [ ! -n "$(ls -l rpmbuild/SRPMS/$rpm-*.digi2.*.rpm)" ]; then
+    if [ ! -n "$(ls rpmbuild/SRPMS | grep -P $rpm-'\d.*\.digi2\..*\.rpm')" ]; then
         build_rpm $rpm
     fi
 done

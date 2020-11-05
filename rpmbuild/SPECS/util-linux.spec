@@ -24,6 +24,11 @@ Source0:        https://mirrors.edge.kernel.org/pub/linux/utils/%{libname}/v%{ve
 %define         SHA256SUM0 9e4b1c67eb13b9b67feb32ae1dc0d50e08ce9e5d82e1cccd0ee771ad2fa9e0b1
 
 BuildRequires:  make
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  /usr/bin/autopoint
+BuildRequires:  bison
+BuildRequires:  libtool
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
@@ -111,10 +116,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %autosetup -n %{libname}-%{version}
 
 %build
-
-mkdir build
-cd build
-%define _configure ../configure
+./autogen.sh
 %configure --host=%{_target} --libdir=%{_prefix}/lib \
     ADJTIME_PATH=/var/lib/hwclock/adjtime   \
                 --disable-chfn-chsh  \
@@ -131,16 +133,16 @@ cd build
 %make_build
 
 %install
-cd build
 %make_install
 %find_lang util-linux
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
-%files -f build/util-linux.lang
+%files -f util-linux.lang
 %license COPYING README.licensing
 %{_bindir}/*
 %{_sbindir}/*
+%{_sbindir}/blkid
 %{_datadir}/bash-completion/completions/*
 %doc %{_datadir}/doc/util-linux
 %doc %{_mandir}/man{1,5,8}/*

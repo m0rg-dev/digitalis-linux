@@ -14,6 +14,7 @@ Source0:        https://git.yzena.com/gavin/bc/archive/%{version}.tar.gz#/%{name
 %endif
 
 BuildRequires:  %{?host_tool_prefix}gcc
+BuildRequires:  gcc
 BuildRequires:  make
 
 %undefine _annotated_build
@@ -26,17 +27,17 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %autosetup -n %{name}
 
 %build
-PREFIX=%{_prefix} CC=%{?host_tool_prefix}gcc CFLAGS="-std=c99" ./configure.sh -G -O3
+PREFIX=%{_prefix} HOSTCC=gcc CC=%{?host_tool_prefix}gcc CFLAGS="-std=c99" ./configure.sh -g -O3
 %make_build
 
 %install
-%make_install
+DESTDIR=%{buildroot} make install
 
 %files
-%licence LICENSE.md
+%license LICENSE.md
 %{_bindir}/bc
 %{_bindir}/dc
-%doc %{_infodir}/%{name}.info*.gz
-%doc %{_mandir}/man1/%{name}.1.gz
+%{_datadir}/locale/*/bc
+%doc %{_mandir}/man1/*
 
 %changelog

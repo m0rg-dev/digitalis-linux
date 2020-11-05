@@ -18,6 +18,8 @@ BuildRequires:  make
 Requires:       libeinfo%{?_isa} = %{version}-%{release}
 Requires:       librc%{?_isa} = %{version}-%{release}
 
+Provides:       /sbin/openrc-run
+
 %undefine _annotated_build
 
 %description
@@ -68,7 +70,8 @@ BRANDING="Digitalis" %make_build \
     SH=/usr/bin/sh \
     MKSTATICLIBS=no \
     OS=Linux \
-    PREFIX=/usr \
+    PREFIX=/%{_prefix} \
+    SYSCONFDIR=%{_sysconfdir} \
     MKSYSVINIT=yes
 
 %install

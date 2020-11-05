@@ -16,9 +16,13 @@ Source2:        eudev-02-initcpio-install
 %endif
 
 BuildRequires:  %{?host_tool_prefix}gcc
+BuildRequires:  %{?host_tool_prefix}g++
 BuildRequires:  make
 BuildRequires:  gperf
 BuildRequires:  kmod
+BuildRequires:  /usr/sbin/blkid
+BuildRequires:  libblkid-devel
+BuildRequires:  libkmod-devel
 
 Requires:       openrc
 Requires:       kmod
@@ -58,8 +62,8 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{buildroot}%{_bindir}/udevadm hwdb -r %{buildroot} --update
 %{__install} -dm755 %{buildroot}%{_prefix}/lib/initcpio/hooks
 %{__install} -dm755 %{buildroot}%{_prefix}/lib/initcpio/install
-%{__install} -m644 %{SOURCE1} %{buildroot}%{_prefix}/lib/initcpio/hooks/
-%{__install} -m644 %{SOURCE2} %{buildroot}%{_prefix}/lib/initcpio/install/
+%{__install} -m644 %{SOURCE1} %{buildroot}%{_prefix}/lib/initcpio/hooks/udev
+%{__install} -m644 %{SOURCE2} %{buildroot}%{_prefix}/lib/initcpio/install/udev
 
 %files
 %license COPYING

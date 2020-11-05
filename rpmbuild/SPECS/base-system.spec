@@ -1,5 +1,5 @@
 Name:     base-system
-Version:  1
+Version:  2
 Release:  1%{?dist}
 Summary:  Virtual package for basic system setup
 BuildArch: noarch
@@ -20,6 +20,7 @@ Requires: pkg-config
 Requires: sed
 Requires: shadow
 Requires: tzdata
+Requires: util-linux
 Requires: which
 
 Requires: dnf
@@ -32,3 +33,6 @@ BuildRequires: /usr/bin/true
 %files
 
 %changelog
+
+- 2020-11-04 Morgan Thomas <m@m0rg.dev>
+  Added util-linux to requires, version -> 2

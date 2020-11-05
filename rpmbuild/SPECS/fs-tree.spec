@@ -24,9 +24,8 @@ mkdir -pv usr/{,local/}share/{color,dict,doc,info,locale,man}
 mkdir -v  usr/{,local/}share/{misc,terminfo,zoneinfo}
 mkdir -pv usr/{,local/}share/man/man{1..8}
 
-mkdir -v var/{log,mail,spool}
-ln -sv run /var/run
-ln -sv run/lock /var/lock
+mkdir -v var/{log,mail,spool,lock,run}
+mkdir -v run
 mkdir -pv var/{opt,cache,lib/{color,misc,locate},local}
 
 ln -sv /proc/self/mounts etc/mtab
@@ -35,6 +34,7 @@ ln -sv /proc/self/mounts etc/mtab
 ln -sv usr/bin bin
 ln -sv usr/sbin sbin
 ln -sv usr/lib lib
+ln -sv usr/libexec libexec
 
 # no multilib
 ln -sv lib lib64
@@ -42,7 +42,7 @@ ln -sv lib usr/lib64
 
 # root pw is 'digitalis'
 cat > etc/passwd << "EOF"
-root:$6$sBFCR/KcG9c/$OOz3BE31qYZEuYgcCVRpmRfYXzYVk8ta7/yI.WteeWscePD36mtyQh37zQ/Ga08VzVpMlWMkp/5fGi2bjl8nJ1:0:0:root:/root:/bin/zsh
+root:x:0:0:root:/root:/bin/bash
 bin:x:1:1:bin:/dev/null:/bin/false
 daemon:x:6:6:Daemon User:/dev/null:/bin/false
 messagebus:x:18:18:D-Bus Message Daemon User:/var/run/dbus:/bin/false

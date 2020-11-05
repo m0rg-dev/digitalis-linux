@@ -2,7 +2,7 @@
 distfiles/
 Makefile
 stage*.tar
-digitalis_rootfs.img
+digitalis_rootfs.*
 repository/Manifest.yml
 keys.json
 repository/sources
