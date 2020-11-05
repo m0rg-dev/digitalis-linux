@@ -42,4 +42,5 @@ mount /dev/sda1 /
 sh "grub-install /dev/sda"
 sh "grub-mkconfig -o /boot/grub/grub.cfg"
 sh "echo 'root:digitalis' | chpasswd"
+sh "echo /dev/sda1 / ext4 noatime 0 1 >/etc/fstab"
 EOF
