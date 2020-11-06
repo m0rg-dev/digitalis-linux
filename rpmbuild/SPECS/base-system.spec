@@ -1,5 +1,5 @@
 Name:     base-system
-Version:  3
+Version:  4
 Release:  1%{?dist}
 Summary:  Virtual package for basic system setup
 BuildArch: noarch
@@ -10,15 +10,18 @@ Requires: fs-tree
 
 Requires: bash
 Requires: coreutils
+Requires: dhcpcd
 Requires: diffutils
 Requires: file
 Requires: findutils
 Requires: gawk
 Requires: grep
 Requires: gzip
+Requires: iana-etc
+Requires: inetutils
+Requires: iproute2
 Requires: pkg-config
 Requires: procps
-Requires: inetutils
 Requires: sed
 Requires: shadow
 Requires: tzdata
@@ -35,6 +38,9 @@ BuildRequires: /usr/bin/true
 %files
 
 %changelog
+
+- 2020-11-06 Morgan Thomas <m@m0rg.dev>
+  Added iproute2, iana-etc and dhcpcd to requires, version -> 4
 
 - 2020-11-05 Morgan Thomas <m@m0rg.dev>
   Added procps and inetutils to requires, version -> 3

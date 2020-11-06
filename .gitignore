@@ -13,3 +13,6 @@ rpmbuild/*
 !rpmbuild/SOURCES
 rpmbuild/SOURCES/*.tar.*
 rpmbuild/SOURCES/*.zip
+
+rpmbuild/SOURCES/protocol-numbers.xml
+rpmbuild/SOURCES/service-names-port-numbers.xml
