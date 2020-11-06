@@ -1,5 +1,5 @@
 Name:     base-system
-Version:  4
+Version:  5
 Release:  1%{?dist}
 Summary:  Virtual package for basic system setup
 BuildArch: noarch
@@ -20,6 +20,7 @@ Requires: gzip
 Requires: iana-etc
 Requires: inetutils
 Requires: iproute2
+Requires: nano
 Requires: pkg-config
 Requires: procps
 Requires: sed
@@ -38,6 +39,8 @@ BuildRequires: /usr/bin/true
 %files
 
 %changelog
+- 2020-11-06 Morgan Thomas <m@m0rg.dev>
+  Added nano to requires, version -> 5
 
 - 2020-11-06 Morgan Thomas <m@m0rg.dev>
   Added iproute2, iana-etc and dhcpcd to requires, version -> 4
