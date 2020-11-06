@@ -9,6 +9,15 @@ sh fedora_bootstrap.sh
 podman run --rm -it --net host --volume /tmp/repo_digi2:/repo digitalis bash
 ```
 
+Building a QEMU image requires guestfish.
+
+```
+sh mkqemuimage.sh
+qemu-system-x86_64 -hda digitalis_rootfs.img -m 2G
+```
+
+Running that script also creates `digitalis_rootfs.tar`, which can (hopefully) be used for a bare-metal install.
+
 Based on the Linux kernel, openrc, dnf, and GNU.
 
 If you find a bug, you can keep it. For the entomophobes, PRs and issues are welcome.
