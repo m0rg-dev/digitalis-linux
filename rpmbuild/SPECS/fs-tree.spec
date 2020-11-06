@@ -1,5 +1,5 @@
 Name:           fs-tree
-Version:        1.0.1
+Version:        2
 Release:        1%{?dist}
 Summary:        The base filesystem tree.
 License:        none
@@ -82,9 +82,22 @@ chmod -v 664  var/log/lastlog
 chmod -v 600  var/log/btmp
 chmod -v 755 .
 
+cat > etc/os-release <<"EOF"
+NAME=Digitalis
+ID=digitalis
+PRETTY_NAME="Digitalis"
+ANSI_COLOR="1;35"
+HOME_URL="https://github.com/digitalagedragon/digitalis-linux"
+SUPPORT_URL="https://github.com/digitalagedragon/digitalis-linux"
+BUG_REPORT_URL="https://github.com/digitalagedragon/digitalis-linux"
+EOF
+
 %files
 /
 %config(noreplace) /etc/passwd
 %config(noreplace) /etc/group
 
 %changelog
+
+- 2020-11-06 Morgan Thomas <m@m0rg.dev>
+  Add /etc/os-release, version -> 2
