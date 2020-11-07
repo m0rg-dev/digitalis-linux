@@ -15,7 +15,7 @@
 
 Name:           %{?cross}lib%{libname}
 Version:        6.2.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        GMP is a free library for arbitrary precision arithmetic, operating on signed integers, rational numbers, and floating-point numbers.
 
 License:        GPL-2.0-or-later OR LGPL-3.0-or-later
@@ -60,7 +60,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 mkdir build
 cd build
 %define _configure ../configure
-%configure --host=%{_target} --libdir=%{_prefix}/lib --disable-static
+%configure --host=%{_target} --libdir=%{_prefix}/lib --disable-static CC=%{?target_tool_prefix}gcc
 %make_build
 
 %install
@@ -81,3 +81,5 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %changelog
 
+- 2020-11-07 Morgan Thomas <m@m0rg.dev> 6.2.0 release 2
+  Fix gcc detection when cross-compiling from Fedora.
