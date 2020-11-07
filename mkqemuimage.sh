@@ -29,7 +29,7 @@ cd new_root
 tar xf ../digitalis_rootfs.tar
 cd ..
 
-virt-make-fs --partition=mbr -t ext4 -s +10G -- digitalis_rootfs.tar digitalis_rootfs.img
+virt-make-fs --partition=mbr -t ext4 -s +64G --format=qcow2 -- digitalis_rootfs.tar digitalis_rootfs.img
 
 # virt-make-fs doesn't do a good job of qcow2 sparse images
 qemu-img convert -O qcow2 digitalis_rootfs.img digitalis_rootfs.new.img
