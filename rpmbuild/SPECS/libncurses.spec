@@ -12,7 +12,7 @@
 
 Name:           %{?cross}libncurses
 Version:        6.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The ncurses (new curses) library is a free software emulation of curses in System V Release 4.0 (SVr4), and more.
 
 License:        MIT
@@ -76,6 +76,7 @@ cd ..
 mkdir -pv /usr/share/pkgconfig
 
 %configure \
+    --host=%{_target}            \
     --libdir=%{_prefix}/lib      \
     --with-manpage-format=normal \
     --with-shared                \
@@ -127,3 +128,5 @@ done
 
 %changelog
 
+- 2020-11-07 Morgan Thomas <m@m0rg.dev> 6.2 release 2
+  Actually pass %%_target when cross-compiling.
