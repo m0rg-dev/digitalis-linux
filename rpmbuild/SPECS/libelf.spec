@@ -14,7 +14,7 @@
 
 Name:           %{?cross}%{libname}
 Version:        0.181
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A library for working with ELF files
 
 License:        GPLv3+, LGPLv3+, GPLv2
@@ -67,6 +67,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 mkdir build
 cd build
 %define _configure ../configure
+%global optflags %(echo "%{optflags}" | sed 's/-flto=auto//')
 %configure --host=%{_target} --libdir=%{_prefix}/lib --disable-static --disable-debuginfod --disable-libdebuginfod --program-prefix=eu-
 %make_build
 
@@ -95,3 +96,5 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %changelog
 
+- 2020-11-07 Morgan Thomas <m@m0rg.dev> 0.181 release 2
+  Explicitly disable LTO in case Fedora turned it on
