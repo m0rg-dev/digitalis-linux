@@ -14,7 +14,7 @@
 
 Name:           %{?cross}lib%{libname}
 Version:        4.1.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The MPFR library is a C library for multiple-precision floating-point computations with correct rounding. 
 
 License:        LGPLv3+
@@ -68,6 +68,7 @@ cd build
 %make_install
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
+rm -f %{buildroot}%{_infodir}/dir
 
 %files
 %license COPYING COPYING.LESSER
@@ -82,3 +83,5 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %changelog
 
+- 2020-11-07 Morgan Thomas <m@m0rg.dev> 4.1.0 release 2
+  Remove the generated info directory (if present) before packaging.
