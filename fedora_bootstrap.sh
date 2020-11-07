@@ -9,6 +9,8 @@ ulimit -n 65536 || ulimit -n 4096 || true
 
 mkdir -p /tmp/dnfcache /tmp/repo_host/ /tmp/repo_digi1/ /tmp/repo_digi2/
 
+mkdir -p rpmbuild/{BUILD,BUILDROOT,RPMS,SRPMS}
+
 build_base_image() {
     ctr=$(buildah from fedora)
 
