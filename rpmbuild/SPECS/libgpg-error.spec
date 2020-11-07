@@ -15,7 +15,7 @@
 
 Name:           %{?cross}%{libname}
 Version:        1.39
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Libgpg-error is a small library that originally defined common error values for all GnuPG components.
 
 License:        LGPLv2+
@@ -79,6 +79,7 @@ cd build
 %find_lang %{libname}
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
+rm -f %{buildroot}%{_infodir}/dir
 
 %if ! %{isnative}
 install -dm755 %{buildroot}/%{_prefix}/bin
@@ -113,3 +114,5 @@ ln -sv %{_oldprefix}/bin/%{?cross}gpgrt-config %{buildroot}/%{_prefix}/bin/gpgrt
 
 %changelog
 
+- 2020-11-07 Morgan Thomas <m@m0rg.dev> 1.39 release 2
+  Remove the generated info directory (if present) before packaging.
