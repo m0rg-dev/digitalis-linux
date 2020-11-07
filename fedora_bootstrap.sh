@@ -18,6 +18,9 @@ build_base_image() {
     buildah run --net host --volume /tmp/dnfcache:/var/cache/dnf "$ctr" dnf install -y rpm-build createrepo_c
     buildah run --net host "$ctr" sh -c 'echo "%_topdir /rpmbuild" >>~/.rpmmacros'
     buildah run --net host "$ctr" sh -c 'echo "%_unique_build_ids 1" >>~/.rpmmacros'
+    # work around toolchain magic in Fedora 33 setting $CC to random crud
+    buildah run --net host "$ctr" sh -c 'sed -i "/  CC=/d" /lib/rpm/redhat/macros'
+    buildah run --net host "$ctr" sh -c 'sed -i "/  CXX=/c\\  true" /lib/rpm/redhat/macros'
     buildah run --net host "$ctr" sh -c 'cat >/etc/yum.repos.d/local-bootstrap.repo' <<EOF
 [local-bootstrap]
 name=local-bootstrap
