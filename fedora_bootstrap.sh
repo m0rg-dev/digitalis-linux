@@ -45,7 +45,7 @@ VOLUMES="$BASE_VOLUMES --volume /tmp/dnfcache:/var/cache/dnf --volume /tmp/repo_
 RPMDEFS="--define='_host x86_64-redhat-linux-gnu' --define='_target x86_64-pc-linux-gnu' --define='_fedora_dependencies 1'"
 
 IMAGE='fedora-with-rpm'
-DIST='fc32'
+DIST='fc33'
 REPO='repo_host'
 MAKECACHE_REPOS='local-bootstrap'
 ADDITIONAL_DNF_ARGS='--disablerepo digitalis-stage1'
@@ -63,7 +63,7 @@ build_rpm() {
          rpmbuild --verbose $RPMDEFS $2 -ba /rpmbuild/SPECS/$1.spec"
 }
 
-STAGE1_MODIFIED=''
+STAGE1_MODIFIED='1'
 refresh_repo
 
 if [ ! -e rpmbuild/SRPMS/x86_64-pc-linux-gnu-binutils-*.rpm ]; then
@@ -94,8 +94,8 @@ LIBRPMS="$LIBRPMS gtk-doc libgobject-introspection libmodulemd libcppunit"
 LIBRPMS="$LIBRPMS libjson-c libdnf libcomps libksba libnpth libpcre linux-pam"
 LIBRPMS="$LIBRPMS kmod eudev libaio libmnl"
 
-echo "#### Building .fc32 packages ####"
-DIST='fc32'
+echo "#### Building .fc33 packages ####"
+DIST='fc33'
 
 for rpm in pkg-config-wrapper cmake-toolchain meson-toolchain $LIBRPMS; do
     if [ ! -n "$(ls -l rpmbuild/SRPMS/x86_64-pc-linux-gnu-$rpm-*.rpm)" ]; then
