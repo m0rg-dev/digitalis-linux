@@ -12,6 +12,7 @@ rpmbuild/*
 !rpmbuild/SPECS
 !rpmbuild/SOURCES
 rpmbuild/SOURCES/*.tar.*
+rpmbuild/SOURCES/*.tgz
 rpmbuild/SOURCES/*.zip
 
 rpmbuild/SOURCES/protocol-numbers.xml

@@ -90,6 +90,7 @@ LIBRPMS="$LIBRPMS libsolv glib2 util-linux libcheck libopenssl libtasn1 p11-kit 
 LIBRPMS="$LIBRPMS libzchunk libassuan libgpgme libxml2 librepo libyaml"
 LIBRPMS="$LIBRPMS gtk-doc libgobject-introspection libmodulemd libcppunit"
 LIBRPMS="$LIBRPMS libjson-c libdnf libcomps libksba libnpth libpcre linux-pam"
+LIBRPMS="$LIBRPMS kmod eudev libaio libmnl"
 
 echo "#### Building .fc32 packages ####"
 DIST='fc32'
@@ -112,7 +113,8 @@ RPMS="$RPMS diffutils texinfo pkgconf cmake patch autoconf automake"
 RPMS="$RPMS libtool setuptools meson asciidoc ninja-build gnupg swig which"
 RPMS="$RPMS xml-common docbook-dtds libxslt docbook-style-xsl flex shadow"
 RPMS="$RPMS tzdata groff cpio make-ca bc procps inetutils iproute2 dhcpcd"
-RPMS="$RPMS iana-etc nano less"
+RPMS="$RPMS iana-etc nano less golang libseccomp xmlto git lvm2"
+RPMS="$RPMS libnftnl libreadline"
 RPMS="$RPMS digitalis-bootstrap-repository"
 
 RPMS="$RPMS base-system"
@@ -173,8 +175,9 @@ IMAGE='digitalis-stage1'
 RPMDEFS="--define='_build x86_64-pc-linux-gnu' --define='_host x86_64-pc-linux-gnu' --define='_target x86_64-pc-linux-gnu' --define='dist .digi2'"
 MAKECACHE_REPOS="digitalis"
 
-RPMS="$RPMS openrc grub eudev udev-init-scripts kernel mkinitcpio mkinitcpio-busybox"
-RPMS="$RPMS e2fsprogs kbd bare-metal"
+RPMS="$RPMS openrc grub udev-init-scripts kernel mkinitcpio mkinitcpio-busybox"
+RPMS="$RPMS e2fsprogs kbd bare-metal runc cni-plugins buildah containers-common"
+RPMS="$RPMS podman conmon iptables nftables"
 
 for rpm in $RPMS; do
     if [ ! -n "$(ls rpmbuild/SRPMS | grep -P $rpm-'\d.*\.digi2\..*\.rpm')" ]; then

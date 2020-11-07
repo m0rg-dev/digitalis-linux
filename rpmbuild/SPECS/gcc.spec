@@ -19,7 +19,7 @@
 
 Name:           %{?cross}%{?standalone_flag}gcc
 Version:        10.2.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The GNU Compiler Collection includes front ends for C, C++, Objective-C, Fortran, Ada, Go, and D, as well as libraries for these languages (libstdc++,...).
 
 License:        GPLv3+ and GPLv3+ with exceptions and GPLv2+ with exceptions and LGPLv2+ and BSD
@@ -228,6 +228,8 @@ if [ -e %{buildroot}/usr/lib ]; then
     rm -fv %{buildroot}/usr/lib/libcc*
 fi
 
+ln -s gcc %{buildroot}%{_bindir}/cc
+
 rm -fv %{buildroot}/%{_infodir}/dir
 
 %find_lang gcc
@@ -251,6 +253,8 @@ rm -fv %{buildroot}/%{_infodir}/dir
 %{_bindir}/%{?_target}-gcc-ar
 %{_bindir}/%{?_target}-gcc-nm
 %{_bindir}/%{?_target}-gcc-ranlib
+
+%{_bindir}/cc
 
 %if ! %{isnative}
 
@@ -361,3 +365,6 @@ rm -fv %{buildroot}/%{_infodir}/dir
 %endif
 
 %changelog
+
+- 2020-11-06 Morgan Thomas <m@m0rg.dev> 10.2.0 release 2
+  Provide the _bindir/cc symlink.

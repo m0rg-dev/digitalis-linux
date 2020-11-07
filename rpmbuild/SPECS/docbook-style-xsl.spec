@@ -1,6 +1,6 @@
 Name:           docbook-style-xsl
 Version:        1.79.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 
 Summary:        Stylesheets for DocBook XML
 License:        DMIT
@@ -12,6 +12,8 @@ Source0:        https://github.com/docbook/xslt10-stylesheets/releases/download/
 BuildArch:      noarch
 
 BuildRequires:  coreutils
+
+Requires: xml-common
 
 Requires(post): /usr/bin/xmlcatalog
 Requires(postun): /usr/bin/xmlcatalog
@@ -56,3 +58,8 @@ fi
 %files
 %{_datadir}/xml/docbook/xsl-stylesheets-nons-%{version}
 %doc README RELEASE-NOTES* NEWS*
+
+%changelog
+- 2020-11-06 Morgan Thomas <m@m0rg.dev> - 1.79.2 release 2
+  Add xml-common to requires so that installing docbook-dtds after this doesn't
+  stomp our xml catalog changes
