@@ -15,7 +15,7 @@
 
 Name:           %{?cross}lib%{libname}
 Version:        6.2.0
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        GMP is a free library for arbitrary precision arithmetic, operating on signed integers, rational numbers, and floating-point numbers.
 
 License:        GPL-2.0-or-later OR LGPL-3.0-or-later
@@ -36,8 +36,6 @@ BuildRequires:  make m4
 %define target_tool_prefix %{?host_tool_prefix}
 %endif
 BuildRequires: %{?target_tool_prefix}gcc
-
-BuildRequires: gcc
 
 %undefine _annotated_build
 %global debug_package %{nil}
@@ -83,5 +81,3 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %changelog
 
-- 2020-11-07 Morgan Thomas <m@m0rg.dev> 6.2.0 release 2
-  Add build GCC to the build requirements.
