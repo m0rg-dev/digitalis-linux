@@ -15,7 +15,7 @@
 
 Name:           %{?cross}%{libname}
 Version:        1.8.7
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Libgcrypt is a general purpose cryptographic library originally based on code from GnuPG.
 
 License:        LGPLv2+
@@ -89,6 +89,7 @@ cd build
 %make_install
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
+rm -f %{buildroot}%{_infodir}/dir
 
 %if ! %{isnative}
 install -dm755 %{buildroot}/%{_prefix}/bin
@@ -118,3 +119,5 @@ ln -sv %{_oldprefix}/bin/%{?cross}libgcrypt-config %{buildroot}/%{_prefix}/bin/l
 
 %changelog
 
+- 2020-11-07 Morgan Thomas <m@m0rg.dev> 1.8.7 release 2
+  Remove the generated info directory (if present) before packaging.
