@@ -1,6 +1,6 @@
 Name:           shadow
 Version:        4.8.1
-Release:        1%{?dist}
+Release:        3%{?dist}
 Summary:        User management tools
 
 License:        3-clause BSD
@@ -19,6 +19,7 @@ Source4:        shadow-04-pam-chage
 %endif
 
 BuildRequires:  %{?host_tool_prefix}gcc
+BuildRequires:  %{?host_tool_prefix}libpam-devel
 BuildRequires:  make
 
 %undefine _annotated_build
@@ -61,6 +62,8 @@ do
     sed -i "s/chage/$PROGRAM/g" %{buildroot}%{_sysconfdir}/pam.d/$PROGRAM
 done
 
+touch %{buildroot}%{_sysconfdir}/sub{u,g}id
+
 %find_lang %{name}
 
 %post
@@ -72,11 +75,17 @@ grpconv
 %{_bindir}/*
 %{_sbindir}/*
 %{_sysconfdir}/pam.d/*
+%config(noreplace) %{_sysconfdir}/subuid
+%config(noreplace) %{_sysconfdir}/subgid
 %config %{_sysconfdir}/default/useradd
-%config %{_sysconfdir}/limits
-%config %{_sysconfdir}/login.access
 %config %{_sysconfdir}/login.defs
 %doc %{_mandir}/man{1,3,5,8}/*
 %doc %{_mandir}/*/man{1,3,5,8}/*
 
 %changelog
+
+- 2020-11-06 Morgan Thomas <m@m0rg.dev> 4.8.1 release 3
+  Add empty subuid/subgid.
+
+- 2020-11-06 Morgan Thomas <m@m0rg.dev> 4.8.1 release 2
+  Add dependency on libpam-devel.

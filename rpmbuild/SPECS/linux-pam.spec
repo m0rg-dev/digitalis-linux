@@ -95,10 +95,14 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_prefix}/lib/*.so.*
 %{_prefix}/lib/security
 %exclude %{_prefix}/lib/systemd
+%if %{isnative}
 %dir %{_sysconfdir}/pam.d
 %config %{_sysconfdir}/pam.d/*
 %config %{_sysconfdir}/security/*
 %config %{_sysconfdir}/environment
+%else
+%exclude %{_sysconfdir}
+%endif
 
 %files -n %{?cross}libpam-devel
 %{_includedir}/*
