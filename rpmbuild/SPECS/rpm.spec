@@ -83,6 +83,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 sed -i '1s/python/python3/' scripts/pythondistdeps.py
 
 %build
+export PYTHON=python3.8
 %configure --libdir=%{_prefix}/lib --host=%{_target} --enable-bdb=no --enable-sqlite=yes --disable-openmp --enable-python
 %make_build
 
@@ -116,3 +117,6 @@ rm %{buildroot}%{_prefix}/lib/rpm/fileattrs/perl*.attr
 %{_includedir}/rpm
 
 %changelog
+
+- 2020-11-07 Morgan Thomas <m@m0rg.dev> <no version change>
+  Explicitly set PYTHON.

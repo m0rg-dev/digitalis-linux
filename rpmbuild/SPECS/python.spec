@@ -11,10 +11,12 @@
 %endif
 
 %define libname python
+%define pybasever 3.8
+%define general_version %{pybasever}.3
 
 Name:           %{?cross}%{?libname}
-Version:        3.8.3
-Release:        1%{?dist}
+Version:        %{general_version}
+Release:        2%{?dist}
 Summary:        The Python programming language
 
 License:        Python-2.0
@@ -38,6 +40,7 @@ BuildRequires: %{?target_tool_prefix}libncurses-devel
 BuildRequires: make python gcc zlib-devel
 
 Requires:       %{?cross}libpython = %{version}-%{release}
+Provides:       %{?cross}python%{pybasever} = %{version}-%{release}
 
 %undefine _annotated_build
 %global debug_package %{nil}
@@ -59,6 +62,7 @@ URL:            https://www.python.org/
 %package     -n %{?cross}libpython-devel
 Summary:        Development files for libpython
 Requires:       %{?cross}libpython%{?_isa} = %{version}-%{release}
+Requires:       python%{pybasever}
 
 %description -n %{?cross}libpython-devel
 The libpython-devel package contains libraries and header files for
