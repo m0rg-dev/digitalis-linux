@@ -66,7 +66,7 @@ build_rpm() {
          rpmbuild --verbose $RPMDEFS $2 -ba /rpmbuild/SPECS/$1.spec"
 }
 
-STAGE1_MODIFIED='1'
+STAGE1_MODIFIED=''
 refresh_repo
 
 if [ ! -e rpmbuild/SRPMS/x86_64-pc-linux-gnu-binutils-*.rpm ]; then
@@ -182,7 +182,7 @@ MAKECACHE_REPOS="digitalis"
 
 RPMS="$RPMS openrc grub udev-init-scripts kernel mkinitcpio mkinitcpio-busybox"
 RPMS="$RPMS e2fsprogs kbd bare-metal runc cni-plugins buildah containers-common"
-RPMS="$RPMS podman conmon iptables nftables sudo"
+RPMS="$RPMS podman conmon iptables nftables sudo openssh"
 
 for rpm in $RPMS; do
     if [ ! -n "$(ls rpmbuild/SRPMS | grep -P $rpm-'\d.*\.digi2\..*\.rpm')" ]; then
@@ -203,6 +203,7 @@ buildah run --net host $VOLUMES "$ctr" -- dnf install -y \
     --verbose --repo=digitalis --installroot=/new_root --releasever=digi2 \
     digitalis-bootstrap-repository base-system
 
+rm -rf new_root 2>/dev/null || true
 find new_root -type d | xargs -r chmod u+w
 rm -rf new_root
 buildah unshare sh -c 'cp -rp $(buildah mount '$ctr')/new_root new_root'

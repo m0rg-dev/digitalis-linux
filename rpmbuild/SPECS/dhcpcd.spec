@@ -1,6 +1,6 @@
 Name:           dhcpcd
 Version:        9.3.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        DHCP client and connection manager
 
 License:        2-clause BSD
@@ -31,6 +31,57 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %install
 %make_install
 
+%{__install} -dm755 %{buildroot}%{_sysconfdir}/init.d/
+cat > %{buildroot}%{_sysconfdir}/init.d/dhcpcd <<EOF
+#!/sbin/openrc-run
+# Copyright 2007-2008 Roy Marples <roy@marples.name>
+# All rights reserved. Released under the 2-clause BSD license.
+
+command=/sbin/dhcpcd
+pidfile=/var/run/dhcpcd.pid
+command_args=-q
+name="DHCP Client Daemon"
+
+depend()
+{
+	provide net
+	need localmount
+	use logger network
+	after bootmisc modules
+	before dns
+}
+EOF
+chmod 755 %{buildroot}%{_sysconfdir}/init.d/dhcpcd
+%{__install} -dm755 %{buildroot}%{_localstatedir}/chroot/dhcpcd
+
+%pre
+# Create the 'dhcpcd' user if it doesn't exist
+if [ -z "$(getent passwd dhcpcd)" ]; then
+    # TODO this number doesn't mean anything
+    useradd dhcpcd \
+        --home-dir /var/chroot/dhcpcd \
+        --uid 303 \
+        --system
+fi
+
+%post
+# Enable the OpenRC service if OpenRC is installed
+if [ -x "$(command -v rc-update)" ]; then
+    rc-update add dhcpcd default
+fi
+
+%preun
+if [ -x "$(command -v rc-update)" ]; then
+    rc-update del dhcpcd default
+fi
+
+%postun
+if [ "$1" = 0 ]; then
+    userdel dhcpcd
+    groupdel dhcpcd
+fi
+
+
 %files
 %license LICENSE
 %dir %{_localstatedir}/db/dhcpcd
@@ -38,7 +89,12 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %{_datadir}/dhcpcd/hooks
 %{_libexecdir}/dhcpcd-hooks
 %{_libexecdir}/dhcpcd-run-hooks
+%{_sysconfdir}/init.d/dhcpcd
+%attr(-, dhcpcd, dhcpcd) %{_localstatedir}/chroot/dhcpcd
 %config(noreplace) %{_sysconfdir}/dhcpcd.conf
 %doc %{_mandir}/man{5,8}/*
 
 %changelog
+
+- 2020-11-08 Morgan Thomas <m@m0rg.dev> 9.3.2 release 2
+  Add init script and privsep user.
