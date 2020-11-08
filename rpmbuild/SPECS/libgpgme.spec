@@ -15,7 +15,7 @@
 
 Name:           %{?cross}lib%{libname}
 Version:        1.14.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        GPGME is the standard library to access GnuPG functions from programming languages. 
 
 License:        LGPLv2+, GPLv2+
@@ -72,6 +72,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 mkdir build
 cd build
 %define _configure ../configure
+export PYTHON=python3.8
 export SYSROOT=%(%{?target_tool_prefix}gcc -print-sysroot)/usr # needed for libgpg-error config??? someday I'll figure that out
 %configure --host=%{_target} --libdir=%{_prefix}/lib \
 %if "%{_build}" != "%{_target}"
@@ -95,11 +96,12 @@ ln -sv %{_oldprefix}/bin/%{?cross}gpgme-config %{buildroot}/%{_prefix}/bin/gpgme
 %endif
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
+rm -f %{buildroot}%{_infodir}/dir
 
 %files
 %license COPYING COPYING.LESSER
 %{_prefix}/lib/*.so.*
-%{_prefix}/lib*/python3.*/site-packages/gpg*
+%{_prefix}/lib*/python3.8/site-packages/gpg*
 %doc %{_infodir}/*.info*
 
 %files devel
@@ -118,3 +120,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %changelog
 
+- 2020-11-07 Morgan Thomas <m@m0rg.dev> 1.14.0 release 2
+  Explicitly set PYTHON.
+  Remove the generated info directory (if present) before packaging.

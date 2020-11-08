@@ -78,6 +78,7 @@ ln -sv %{_oldprefix}/bin/%{?cross}libassuan-config %{buildroot}/%{_prefix}/bin/l
 %endif
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
+rm -f %{buildroot}%{_infodir}/dir
 
 %files
 %license COPYING.LIB
@@ -96,3 +97,5 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %changelog
 
+- 2020-11-07 Morgan Thomas <m@m0rg.dev> <no version change>
+  Remove the generated info directory (if present) before packaging.
