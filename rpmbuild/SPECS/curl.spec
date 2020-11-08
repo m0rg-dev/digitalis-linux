@@ -16,7 +16,7 @@
 
 Name:           %{?cross}%{?libname}
 Version:        7.73.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Curl is a command line tool and library for transferring data with URLs.
 
 License:        libcurl
@@ -59,6 +59,7 @@ URL:            https://curl.haxx.se/
 %package     -n %{?cross}libcurl-devel
 Summary:        Development files for libcurl
 Requires:       %{?cross}libcurl%{?_isa} = %{version}-%{release}
+Requires:       %{?cross}zlib-devel
 
 %description -n %{?cross}libcurl-devel
 The libcurl-devel package contains libraries and header files for
@@ -93,3 +94,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/man3/*
 
 %changelog
+
+- 2020-11-07 Morgan Thomas <m@m0rg.dev> 7.73.0 release 2
+  -devel package should depend on zlib-devel.
