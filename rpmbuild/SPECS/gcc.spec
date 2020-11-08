@@ -19,7 +19,7 @@
 
 Name:           %{?cross}%{?standalone_flag}gcc
 Version:        10.2.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        The GNU Compiler Collection includes front ends for C, C++, Objective-C, Fortran, Ada, Go, and D, as well as libraries for these languages (libstdc++,...).
 
 License:        GPLv3+ and GPLv3+ with exceptions and GPLv2+ with exceptions and LGPLv2+ and BSD
@@ -164,6 +164,7 @@ cd build
 %define _configure ../configure
 # this is apparently a known upstream issue
 %global optflags %(echo %{optflags} | sed 's/-Werror=format-security//')
+%global optflags %(echo "%{optflags}" | sed 's/-flto=auto//')
 %configure --enable-languages=c,c++ --disable-multilib --with-system-zlib \
     --libdir=%{_prefix}/lib \
     CC_FOR_TARGET=%{?target_tool_prefix}gcc \
@@ -365,6 +366,9 @@ rm -fv %{buildroot}/%{_infodir}/dir
 %endif
 
 %changelog
+
+- 2020-11-07 Morgan Thomas <m@m0rg.dev> 10.2.0 release 3
+  Explicitly disable LTO in case Fedora turned it on
 
 - 2020-11-06 Morgan Thomas <m@m0rg.dev> 10.2.0 release 2
   Provide the _bindir/cc symlink.

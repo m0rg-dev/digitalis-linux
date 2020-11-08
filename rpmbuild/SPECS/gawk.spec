@@ -41,6 +41,8 @@ sed -i 's/extras//' Makefile.in
 %make_install
 %find_lang %{name}
 
+rm -f %{buildroot}%{_infodir}/dir
+
 %files -f %{name}.lang
 %license COPYING
 %{_bindir}/*

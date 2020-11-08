@@ -57,8 +57,6 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %autosetup
 
 %build
-# TODO
-ln -s gcc /usr/bin/cc
 
 # TODO remove -fcommon after next OpenRC release
 sed -i 's/-Wall/-fcommon -Wall/' mk/cc.mk

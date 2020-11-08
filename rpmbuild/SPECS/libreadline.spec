@@ -72,6 +72,7 @@ cd build
 %make_install LDFLAGS="-lncurses" SHLIB_LIBS="-lncurses"
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
+rm -f %{buildroot}%{_infodir}/dir
 
 %files
 %license COPYING

@@ -16,7 +16,7 @@
 
 Name:           %{?cross}%{libname}
 Version:        0.54.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        This library provides a high level package-manager.
 
 License:        LGPLv2+
@@ -76,6 +76,7 @@ cmake -Wno-dev \
     -DCMAKE_TOOLCHAIN_FILE=/usr/%{_target}/cmake_toolchain \
 %endif
     -DGTKDOC_SCANGOBJ_WRAPPER=/usr/bin/gtkdoc-scangobj \
+    -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3.8 \
     -DCMAKE_INSTALL_PREFIX=%{_prefix} -DPYTHON_DESIRED=3 -DWITH_MAN=0 ..
 
 %make_build
@@ -103,3 +104,5 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %changelog
 
+- 2020-11-07 Morgan Thomas <m@m0rg.dev> 0.54.2 release 2
+  Explicitly target Python 3.8.

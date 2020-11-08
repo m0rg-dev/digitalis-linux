@@ -47,6 +47,7 @@ export SYSROOT=%(%{?target_tool_prefix}gcc -print-sysroot)/usr # needed for libg
 %install
 %make_install
 %find_lang gnupg2
+rm -f %{buildroot}%{_infodir}/dir
 
 %files -f gnupg2.lang
 %license COPYING

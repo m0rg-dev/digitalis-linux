@@ -34,6 +34,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 sed -i 's|find:=\${BINDIR}|find:=/bin|' %{buildroot}/%{_bindir}/updatedb
 
 %find_lang %{name}
+rm -f %{buildroot}%{_infodir}/dir
 
 %files -f %{name}.lang
 %license COPYING

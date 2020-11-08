@@ -38,6 +38,8 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %make_install
 %find_lang %{name}
 
+rm -f %{buildroot}%{_infodir}/dir
+
 %files -f %{name}.lang
 %license COPYING
 %{_bindir}/*

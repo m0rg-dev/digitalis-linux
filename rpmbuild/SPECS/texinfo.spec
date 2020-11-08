@@ -28,13 +28,14 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %autosetup
 
 %build
-%configure
+%configure --disable-perl-xs
 %make_build
 
 %install
 %make_install
 %find_lang %{name}
 %find_lang %{name}_document
+rm -f %{buildroot}%{_infodir}/dir
 
 %files -f %{name}.lang -f %{name}_document.lang
 %license COPYING

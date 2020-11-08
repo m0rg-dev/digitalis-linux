@@ -39,6 +39,8 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %find_lang %{name}-gnulib
 %find_lang %{name}-runtime
 
+rm -f %{buildroot}%{_infodir}/dir
+
 %files -f %{name}.lang -f %{name}-gnulib.lang -f %{name}-runtime.lang
 %license COPYING
 %{_bindir}/*

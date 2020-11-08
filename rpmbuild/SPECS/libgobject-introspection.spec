@@ -15,7 +15,7 @@
 
 Name:           %{?cross}lib%{libname}
 Version:        1.64.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        C Library for manipulating module metadata files
 
 License:        LGPLv2+, GPLv2+, MIT
@@ -78,7 +78,7 @@ sed -i "s/    subdir('tests')//" meson.build
 
 mkdir build
 
-meson -Dbuildtype=release -Dgi_cross_use_prebuilt_gi=true -Dbuild_introspection_data=false --prefix=%{_prefix} \
+meson -Dpython=python3.8 -Dbuildtype=release -Dgi_cross_use_prebuilt_gi=true -Dbuild_introspection_data=false --prefix=%{_prefix} \
 %if "%{_build}" != "%{_target}"
     --cross-file %{_target} \
 %endif
@@ -116,3 +116,5 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %changelog
 
+- 2020-11-07 Morgan Thomas <m@m0rg.dev> 1.64.1 release 2
+  Explicitly target Python 3.8.

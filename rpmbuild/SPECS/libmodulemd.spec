@@ -14,7 +14,7 @@
 
 Name:           %{?cross}%{libname}
 Version:        2.9.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        C Library for manipulating module metadata files
 
 License:        MIT
@@ -48,6 +48,7 @@ BuildRequires: docbook-style-xsl
 BuildRequires: pkgconfig(gobject-introspection-1.0)
 BuildRequires: help2man
 BuildRequires: libmodulemd-devel
+BuildRequires: python3.8
 
 Requires:      %{?cross}libmagic
 
@@ -115,3 +116,5 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %changelog
 
+- 2020-11-07 Morgan Thomas <m@m0rg.dev> 2.9.4 release 2
+  Explicitly depend on a Python version to not break brp-python-bytecompile

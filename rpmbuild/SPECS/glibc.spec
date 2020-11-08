@@ -12,7 +12,7 @@
 %endif
 
 Name:           %{?cross}glibc
-Version:        2.31
+Version:        2.32
 Release:        1%{?dist}
 Summary:        The GNU C Library project provides the core libraries for the GNU system and GNU/Linux systems, as well as many other systems that use Linux as the kernel.
 
@@ -20,7 +20,7 @@ License:        LGPLv2+ and LGPLv2+ with exceptions and GPLv2+ and GPLv2+ with e
 URL:            https://www.gnu.org/software/libc/
 %undefine       _disable_source_fetch
 Source0:        https://ftp.gnu.org/gnu/glibc/glibc-%{version}.tar.xz
-%define         SHA256SUM0 9246fe44f68feeec8c666bb87973d590ce0137cca145df014c72ec95be9ffd17
+%define         SHA256SUM0 1627ea54f5a1a8467032563393e0901077626dc66f37f10ee6363bb722222836
 Source1:        nscd.conf
 Source2:        nsswitch.conf
 
@@ -92,7 +92,6 @@ cd build
     --disable-werror \
     --enable-shared \
     libc_cv_slibdir=/lib
-
 %make_build
 
 %install
@@ -176,3 +175,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %endif
 
 %changelog
+
+- 2020-11-08 Morgan Thomas <m@m0rg.dev> 2.32
+  Update to version 2.32.

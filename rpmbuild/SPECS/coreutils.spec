@@ -34,6 +34,8 @@ export FORCE_UNSAFE_CONFIGURE=1
 %make_install
 %find_lang %{name}
 
+rm -f %{buildroot}%{_infodir}/dir
+
 %files -f %{name}.lang
 %license COPYING
 %{_bindir}/*

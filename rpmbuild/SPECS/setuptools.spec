@@ -17,7 +17,7 @@ Provides:       python-setuptools
 %endif
 
 BuildRequires:  make
-BuildRequires:  python
+BuildRequires:  python3.8
 
 %undefine _annotated_build
 
@@ -28,11 +28,11 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %autosetup
 
 %build
-%{__python3} ./bootstrap.py
-%{__python3} setup.py build
+python3.8 ./bootstrap.py
+python3.8 setup.py build
 
 %install
-%{__python3} setup.py install --skip-build --root %{buildroot}
+python3.8 setup.py install --skip-build --root %{buildroot}
 
 %files
 %license LICENSE

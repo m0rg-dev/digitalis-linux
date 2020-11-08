@@ -56,6 +56,8 @@ developing applications that use libcreaterepo_c.
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %autosetup
 
+sed -i '/unset(PYTHON_EXECUTABLE/d' src/python/CMakeLists.txt
+
 %build
 mkdir build
 cd build
@@ -63,6 +65,8 @@ cmake -Wno-dev \
 %if "%{_build}" != "%{_target}"
     -DCMAKE_TOOLCHAIN_FILE=/usr/%{_target}/cmake_toolchain \
 %endif
+    -DPYTHON_DESIRED=3 \
+    -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3.8 \
     -DCMAKE_INSTALL_PREFIX=%{_prefix} -DENABLE_DRPM=OFF ..
 
 %make_build

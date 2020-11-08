@@ -47,6 +47,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %make_install
 
 ln -sv bash %{buildroot}/%{_bindir}/sh
+rm -f %{buildroot}%{_infodir}/dir
 
 %find_lang bash
 

@@ -42,6 +42,7 @@ cmake \
 %if "%{_build}" != "%{_target}"
     -DCMAKE_TOOLCHAIN_FILE=/usr/%{_target}/cmake_toolchain \
 %endif
+    -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3.8 \
     -DCMAKE_INSTALL_PREFIX=%{_prefix} -DPYTHON_DESIRED=3 -DWITH_MAN=0 ..
 %make_build
 

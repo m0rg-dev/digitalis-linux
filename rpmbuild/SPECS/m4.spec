@@ -36,6 +36,8 @@ echo "#define _IO_IN_BACKUP 0x100" >> lib/stdio-impl.h
 %install
 %make_install
 
+rm -f %{buildroot}%{_infodir}/dir
+
 %files
 %license COPYING
 %{_bindir}/m4

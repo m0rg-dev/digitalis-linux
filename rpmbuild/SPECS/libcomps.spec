@@ -14,7 +14,7 @@
 
 Name:           %{?cross}%{libname}
 Version:        0.1.15
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Libcomps is alternative for yum.comps library
 
 License:        GPLv2
@@ -73,6 +73,7 @@ cmake \
 %if "%{_build}" != "%{_target}"
     -DCMAKE_TOOLCHAIN_FILE=/usr/%{_target}/cmake_toolchain \
 %endif
+    -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3.8 \
     -DCMAKE_INSTALL_PREFIX=%{_prefix} -DPYTHON_DESIRED=3 ../libcomps
 
 %make_build
@@ -99,3 +100,5 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %changelog
 
+- 2020-11-07 Morgan Thomas <m@m0rg.dev> 0.1.15 release 2
+  Explicitly target Python 3.8.

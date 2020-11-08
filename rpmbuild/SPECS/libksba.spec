@@ -78,6 +78,7 @@ ln -sv %{_oldprefix}/bin/%{?cross}ksba-config %{buildroot}/%{_prefix}/bin/ksba-c
 %endif
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
+rm -f %{buildroot}%{_infodir}/dir
 
 %files
 %license COPYING COPYING.GPLv2 COPYING.GPLv3 COPYING.LGPLv3

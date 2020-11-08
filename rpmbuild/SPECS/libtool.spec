@@ -49,6 +49,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %make_install
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
+rm -f %{buildroot}%{_infodir}/dir
 
 %files
 %license COPYING

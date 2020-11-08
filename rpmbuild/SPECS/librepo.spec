@@ -14,7 +14,7 @@
 
 Name:           %{?cross}%{libname}
 Version:        1.12.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A library providing C and Python (libcURL like) API for downloading linux repository metadata and packages
 
 License:        LGPLv2
@@ -76,7 +76,7 @@ cmake --debug-find \
 %if "%{_build}" != "%{_target}"
     -DCMAKE_TOOLCHAIN_FILE=/usr/%{_target}/cmake_toolchain \
 %endif
-    -DCMAKE_INSTALL_PREFIX=%{_prefix} -DPYTHON_DESIRED=3 -DENABLE_TESTS=0 ..
+    -DCMAKE_INSTALL_PREFIX=%{_prefix} -DPYTHON_DESIRED=3 -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3.8 -DENABLE_TESTS=0 ..
 %make_build
 
 %install
@@ -97,3 +97,5 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %changelog
 
+- 2020-11-07 Morgan Thomas <m@m0rg.dev> 1.12.1 release 2
+  Explicitly target Python 3.8.

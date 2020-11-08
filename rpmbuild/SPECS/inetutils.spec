@@ -43,6 +43,7 @@ sed -i '/PATH_PROCNET_DEV/s/ no//' paths
 
 %{__install} -dm755 %{buildroot}%{_sbindir}
 ln -s ../bin/ifconfig %{buildroot}%{_sbindir}/ifconfig
+rm -f %{buildroot}%{_infodir}/dir
 
 %files
 %license COPYING

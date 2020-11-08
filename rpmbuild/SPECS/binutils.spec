@@ -92,6 +92,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 
 %build
 
+%global optflags %(echo "%{optflags}" | sed 's/-flto=auto//')
 %configure \
     --disable-werror \
     --libdir=%{_prefix}/lib \

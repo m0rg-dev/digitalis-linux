@@ -34,6 +34,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 
 %install
 %make_install
+rm -f %{buildroot}%{_infodir}/dir
 
 %files
 %license COPYING
