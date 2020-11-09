@@ -124,7 +124,7 @@ RPMS="$RPMS libtool setuptools meson asciidoc ninja-build gnupg swig which"
 RPMS="$RPMS xml-common docbook-dtds libxslt docbook-style-xsl flex shadow"
 RPMS="$RPMS tzdata groff cpio make-ca bc procps inetutils iproute2"
 RPMS="$RPMS iana-etc nano less golang libseccomp xmlto git lvm2"
-RPMS="$RPMS libnftnl libreadline help2man"
+RPMS="$RPMS libnftnl libreadline help2man gettext"
 RPMS="$RPMS digitalis-bootstrap-repository"
 
 RPMS="$RPMS base-system"

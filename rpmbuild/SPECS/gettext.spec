@@ -34,6 +34,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %find_lang gettext-runtime
 
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
+rm -f %{buildroot}%{_infodir}/dir
 
 %files -f gettext-tools.lang -f gettext-runtime.lang
 # this should be split but i'm having an awful case of the not-giving-a-s**ts
