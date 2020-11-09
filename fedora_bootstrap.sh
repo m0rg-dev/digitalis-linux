@@ -100,6 +100,11 @@ LIBRPMS="$LIBRPMS kmod eudev libaio libmnl"
 echo "#### Building .fc33 packages ####"
 DIST='fc33'
 
+if [ ! -n "$(ls -l rpmbuild/SRPMS/make-ca.*.$DIST.src.rpm)" ]; then
+    build_rpm make-ca
+    refresh_repo
+fi
+
 for rpm in pkg-config-wrapper cmake-toolchain meson-toolchain $LIBRPMS; do
     if [ ! -n "$(ls -l rpmbuild/SRPMS/x86_64-pc-linux-gnu-$rpm-*.rpm)" ]; then
         build_rpm $rpm
@@ -119,7 +124,7 @@ RPMS="$RPMS libtool setuptools meson asciidoc ninja-build gnupg swig which"
 RPMS="$RPMS xml-common docbook-dtds libxslt docbook-style-xsl flex shadow"
 RPMS="$RPMS tzdata groff cpio make-ca bc procps inetutils iproute2 dhcpcd"
 RPMS="$RPMS iana-etc nano less golang libseccomp xmlto git lvm2"
-RPMS="$RPMS libnftnl libreadline"
+RPMS="$RPMS libnftnl libreadline help2man"
 RPMS="$RPMS digitalis-bootstrap-repository"
 
 RPMS="$RPMS base-system"
@@ -151,6 +156,7 @@ if [[ -n $STAGE1_MODIFIED ]]; then
         --verbose --repo=digitalis-stage1 --installroot=/new_root --releasever=digi1 \
         digitalis-bootstrap-repository base-system
 
+    rm -rf new_root 2>/dev/null || true
     find new_root -type d | xargs -r chmod u+w
     rm -rf new_root
     buildah unshare sh -c 'cp -rp $(buildah mount '$ctr')/new_root new_root'
