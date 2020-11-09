@@ -122,7 +122,7 @@ RPMS="$RPMS createrepo_c make sed bison tar grep gawk m4 gzip findutils"
 RPMS="$RPMS diffutils texinfo pkgconf cmake patch autoconf automake"
 RPMS="$RPMS libtool setuptools meson asciidoc ninja-build gnupg swig which"
 RPMS="$RPMS xml-common docbook-dtds libxslt docbook-style-xsl flex shadow"
-RPMS="$RPMS tzdata groff cpio make-ca bc procps inetutils iproute2 dhcpcd"
+RPMS="$RPMS tzdata groff cpio make-ca bc procps inetutils iproute2"
 RPMS="$RPMS iana-etc nano less golang libseccomp xmlto git lvm2"
 RPMS="$RPMS libnftnl libreadline help2man"
 RPMS="$RPMS digitalis-bootstrap-repository"
@@ -186,7 +186,7 @@ IMAGE='digitalis-stage1'
 RPMDEFS="--define='_build x86_64-pc-linux-gnu' --define='_host x86_64-pc-linux-gnu' --define='_target x86_64-pc-linux-gnu' --define='dist .digi2'"
 MAKECACHE_REPOS="digitalis"
 
-RPMS="$RPMS openrc grub udev-init-scripts kernel mkinitcpio mkinitcpio-busybox"
+RPMS="$RPMS openrc dhcpcd grub udev-init-scripts kernel mkinitcpio mkinitcpio-busybox"
 RPMS="$RPMS e2fsprogs kbd bare-metal runc cni-plugins buildah containers-common"
 RPMS="$RPMS podman conmon iptables nftables sudo openssh"
 
