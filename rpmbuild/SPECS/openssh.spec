@@ -54,7 +54,18 @@ start_pre() {
 EOF
 chmod 755 %{buildroot}%{_sysconfdir}/init.d/sshd
 
-sed -i 's/#UsePam no/UsePam yes/' %{buildroot}%{_sysconfdir}/sshd_config
+%{__install} -dm755 %{buildroot}%{_sysconfdir}/pam.d/
+cat > %{buildroot}%{_sysconfdir}/pam.d/sshd <<EOF
+auth    required        pam_env.so
+auth    required        pam_unix.so
+account required        pam_unix.so
+password required       pam_pwcheck.so  nullok
+password required       pam_unix.so     nullok use_first_pass use_authtok
+session required        pam_limits.so
+session required        pam_unix.so
+EOF
+
+sed -i 's/#UsePAM no/UsePAM yes/' %{buildroot}%{_sysconfdir}/sshd_config
 
 %pre
 # Create the 'sshd' user if it doesn't exist
@@ -79,6 +90,7 @@ fi
 %{_libexecdir}/*
 %{_sysconfdir}/moduli
 %{_sysconfdir}/init.d/sshd
+%{_sysconfdir}/pam.d/sshd
 %attr(0755, root, root) %dir %{_localstatedir}/empty
 %config(noreplace) %{_sysconfdir}/ssh_config
 %config(noreplace) %{_sysconfdir}/sshd_config
@@ -87,4 +99,4 @@ fi
 %changelog
 
 - 2020-11-05 Morgan Thomas <m@m0rg.dev> 8.4p1 release 5
-  Enable UsePam in sshd_config.
+  Enable UsePAM in sshd_config.
