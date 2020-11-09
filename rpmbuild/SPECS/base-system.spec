@@ -1,5 +1,5 @@
 Name:     base-system
-Version:  6
+Version:  7
 Release:  1%{?dist}
 Summary:  Virtual package for basic system setup
 BuildArch: noarch
@@ -10,7 +10,6 @@ Requires: fs-tree
 
 Requires: bash
 Requires: coreutils
-Requires: dhcpcd
 Requires: diffutils
 Requires: file
 Requires: findutils
@@ -40,6 +39,9 @@ BuildRequires: /usr/bin/true
 %files
 
 %changelog
+- 2020-11-09 Morgan Thomas <m@m0rg.dev> 7 release 1
+  Removed dhcpcd from requires (moved to bare-metal).
+
 - 2020-11-06 Morgan Thomas <m@m0rg.dev>
   Added less to requires, version -> 6
   
