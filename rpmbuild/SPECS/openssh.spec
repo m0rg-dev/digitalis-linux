@@ -1,6 +1,6 @@
 Name:           openssh
 Version:        8.4p1
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        SSH client and server
 
 License:        3-clause BSD
@@ -54,6 +54,8 @@ start_pre() {
 EOF
 chmod 755 %{buildroot}%{_sysconfdir}/init.d/sshd
 
+sed -i 's/#UsePam no/UsePam yes/' %{buildroot}%{_sysconfdir}/sshd_config
+
 %pre
 # Create the 'sshd' user if it doesn't exist
 if [ -z "$(getent passwd sshd)" ]; then
@@ -83,3 +85,6 @@ fi
 %doc %{_mandir}/man{1,5,8}/*
 
 %changelog
+
+- 2020-11-05 Morgan Thomas <m@m0rg.dev> 8.4p1 release 5
+  Enable UsePam in sshd_config.
