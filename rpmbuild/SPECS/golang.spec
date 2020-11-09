@@ -7,7 +7,8 @@ License:        3-clause BSD
 URL:            https://golang.org
 %undefine       _disable_source_fetch
 Source0:        https://go.googlesource.com/go/+archive/refs/tags/go%{version}.tar.gz
-%define         SHA256SUM0 9f664e9a8a750d4f20100972268ec3d3212cd2472cebc609b352e5d47ff28804
+# Apparently Google likes to change the timestamps in here...
+# %%define         SHA256SUM0 9f664e9a8a750d4f20100972268ec3d3212cd2472cebc609b352e5d47ff28804
 Source1:        https://dl.google.com/go/go1.4-bootstrap-20171003.tar.gz
 %define         SHA256SUM1 f4ff5b5eb3a3cae1c993723f3eab519c5bae18866b5e5f96fe1102f0cb5c3e52
 
@@ -27,7 +28,6 @@ Requires:       gcc
 %description
 
 %prep
-echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 echo "%SHA256SUM1  %SOURCE1" | sha256sum -c -
 
 rm -rf go%{version}
