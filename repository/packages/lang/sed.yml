@@ -1,9 +1,0 @@
-version: "4.8"
-bdepend:
-  - core/fs-tree
-  - lang/gcc
-filename: sed
-upstream: https://ftp.gnu.org/gnu/sed/
-license: GPL-3.0-or-later
-additional_configure_options: --bindir=/bin
-post_install_script: mkdir -p usr/bin; ln -s ../../bin/sed usr/bin/sed

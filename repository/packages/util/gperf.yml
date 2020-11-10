@@ -1,5 +1,0 @@
-version: "3.1"
-filename: gperf
-comp: tar.gz
-upstream: https://ftp.gnu.org/gnu/gperf/
-license: GPL-3.0-or-later

@@ -1,7 +1,0 @@
-version: "5.1.0"
-bdepend:
-  - core/fs-tree
-filename: gawk
-upstream: https://ftp.gnu.org/gnu/gawk/
-license: GPL-3.0-or-later
-additional_configure_options: --sysconfdir=/etc

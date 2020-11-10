@@ -1,4 +1,0 @@
-version: "1.9.0"
-filename: libevdev
-upstream: https://www.freedesktop.org/software/libevdev/
-license: MIT

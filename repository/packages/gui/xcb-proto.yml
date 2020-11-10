@@ -1,4 +1,0 @@
-version: "1.14"
-filename: xcb-proto
-upstream: https://www.x.org/releases/individual/xcb/
-license: MIT

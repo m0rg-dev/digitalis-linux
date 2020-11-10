@@ -1,7 +1,0 @@
-version: "1.1.4"
-bdepend:
-  - gui/xorgproto
-filename: libfontenc
-comp: tar.bz2
-upstream: https://www.x.org/releases/individual/lib/
-license: MIT

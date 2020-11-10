@@ -1,9 +1,0 @@
-version: "2.4.48"
-bdepend:
-  - core/fs-tree
-filename: attr
-upstream: https://download.savannah.gnu.org/releases/attr/
-license: GPL-2.0-or-later
-license_location: spdx
-comp: tar.gz
-additional_configure_options: --sysconfdir=/etc

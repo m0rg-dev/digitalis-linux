@@ -1,6 +1,0 @@
-version: "2.2.9"
-bdepend:
-  - core/fs-tree
-filename: expat
-upstream: https://prdownloads.sourceforge.net/expat/
-license: MIT

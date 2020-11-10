@@ -1,9 +1,0 @@
-version: 6.7
-bdepend:
-  - core/fs-tree
-  - lang/perl
-rdepend:
-  - lang/perl
-filename: texinfo
-upstream: http://ftp.gnu.org/gnu/texinfo/
-license: GPL-3.0-or-later

@@ -1,7 +1,0 @@
-version: "1.0.9"
-bdepend:
-  - gui/xorgproto
-filename: libXau
-comp: tar.bz2
-upstream: https://www.x.org/releases/individual/lib/
-license: MIT

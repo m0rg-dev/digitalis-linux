@@ -1,8 +1,0 @@
-version: "5.39"
-bdepend:
-  - core/fs-tree
-comp: tar.gz
-filename: file
-upstream: ftp://ftp.astron.com/pub/file/
-license: BSD-2-Clause
-#install: make PREFIX=$(realpath ..)/usr install

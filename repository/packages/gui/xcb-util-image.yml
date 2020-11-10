@@ -1,9 +1,0 @@
-version: "0.4.0"
-bdepend:
-  - gui/xcb-util
-  - gui/xorgproto
-rdepend:
-  - gui/xcb-util
-filename: xcb-util-image
-comp: tar.bz2
-upstream: https://xcb.freedesktop.org/dist/

@@ -1,9 +1,0 @@
-version: "1.1.1"
-bdepend:
-  - libs/libogg
-  - libs/libvorbis
-rdepend:
-- libs/libogg
-- libs/libvorbis
-filename: libtheora
-upstream: https://downloads.xiph.org/releases/theora/

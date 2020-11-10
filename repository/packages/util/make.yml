@@ -1,7 +1,0 @@
-version: 4.3
-bdepend:
-  - core/fs-tree
-filename: make
-comp: tar.gz
-upstream: https://ftp.gnu.org/gnu/make/
-license: GPL-3.0-or-later

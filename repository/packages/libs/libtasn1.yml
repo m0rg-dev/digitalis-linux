@@ -1,5 +1,0 @@
-version: "4.16.0"
-filename: libtasn1
-comp: tar.gz
-upstream: https://ftp.gnu.org/gnu/libtasn1/
-license: LGPL-2.1-or-later

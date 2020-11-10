@@ -1,9 +1,0 @@
-version: "2.0.6"
-bdepend:
-  - libs/libxml2
-rdepend:
-  - libs/libxml2
-filename: itstool
-comp: tar.bz2
-upstream: http://files.itstool.org/itstool/
-license: GPL-3.0-or-later

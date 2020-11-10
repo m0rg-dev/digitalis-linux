@@ -1,9 +1,0 @@
-version: "0.9.24"
-comp: tar.gz
-unpack_dir: lmdb-LMDB_%{version}
-src: LMDB_%{version}.%{comp}
-src_url: https://github.com/LMDB/lmdb/archive/%{src}
-license: OLDAP-2.8
-configure: ~
-make: cd libraries/liblmdb; make %{make_options}
-install: cd libraries/liblmdb; make prefix=/target_root/usr install

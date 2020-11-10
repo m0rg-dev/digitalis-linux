@@ -1,4 +1,0 @@
-version: "2.10.2"
-filename: freetype
-upstream: https://download.savannah.gnu.org/releases/freetype/
-license: FTL

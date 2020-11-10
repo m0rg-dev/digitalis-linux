@@ -1,9 +1,0 @@
-version: "5.05"
-filename: man-pages
-upstream: https://www.kernel.org/pub/linux/docs/man-pages/
-# many of the man pages are licensed per-file as well, but the associated
-# build stuff is GPLv2 as part of the Linux kernel
-license: GPL-2.0-or-later
-license_location: spdx
-configure: ~
-make: ~

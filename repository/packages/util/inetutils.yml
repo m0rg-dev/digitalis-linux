@@ -1,6 +1,0 @@
-version: 1.9.4
-bdepend:
-  - core/fs-tree
-filename: inetutils
-upstream: https://ftp.gnu.org/gnu/inetutils/
-license: GPL-3.0-or-later

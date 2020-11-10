@@ -1,5 +1,0 @@
-version: "0.15.0"
-comp: tar.gz
-filename: check
-upstream: https://github.com/libcheck/check/releases/download/%{version}
-license: LGPL-2.1-only

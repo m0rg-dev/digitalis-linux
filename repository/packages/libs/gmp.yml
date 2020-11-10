@@ -1,9 +1,0 @@
-version: 6.2.0
-filename: gmp
-upstream: http://ftp.gnu.org/gnu/gmp/
-license: GPL-2.0-or-later OR LGPL-3.0-or-later
-additional_configure_options: --disable-static --enable-fat --build=x86_64-unknown-linux-gnu
-pre_configure_script: |
-  cp -v ../%{unpack_dir}/configfsf.guess ../%{unpack_dir}/config.guess
-  cp -v ../%{unpack_dir}/configfsf.sub   ../%{unpack_dir}/config.sub
-use_build_dir: true

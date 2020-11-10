@@ -1,8 +1,0 @@
-version: "2.04"
-bdepend:
-  - util/flex
-  - util/diffutils
-filename: grub
-upstream: https://ftp.gnu.org/gnu/grub/
-license: GPL-3.0-or-later
-additional_configure_options: --sbindir=/sbin --sysconfdir=/etc --disable-efiemu --disable-werror

@@ -1,9 +1,0 @@
-version: "0.0.28"
-rdepend:
-  - libs/libxslt
-  - core/docbook-xml
-  - core/docbook-xsl
-filename: xmlto
-comp: tar.bz2
-upstream: https://releases.pagure.org/xmlto/
-license: GPL-2.0-or-later

@@ -1,4 +1,0 @@
-version: "1.3.1"
-filename: opus
-comp: tar.gz
-upstream: https://archive.mozilla.org/pub/opus

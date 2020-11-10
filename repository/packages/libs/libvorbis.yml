@@ -1,7 +1,0 @@
-version: "1.3.7"
-bdepend:
-  - libs/libogg
-rdepend:
-  - libs/libogg
-filename: libvorbis
-upstream: https://downloads.xiph.org/releases/vorbis/
