@@ -16,6 +16,7 @@ BuildArch:      noarch
 
 BuildRequires:  make
 BuildRequires:  python
+BuildRequires:  python3.8
 BuildRequires:  python-setuptools
 
 Requires:       python-setuptools
@@ -33,6 +34,11 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 
 %install
 %{__python3} setup.py install --skip-build --root %{buildroot}
+
+# danger: terrible hack
+if [ -e %{buildroot}%{_prefix}/lib/python3.9 ]; then
+    mv %{buildroot}%{_prefix}/lib/python{3.9,3.8}
+fi
 
 %files
 %license LICENSE
