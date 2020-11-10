@@ -1,6 +1,6 @@
 Name:           bash
 Version:        5.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The Bourne Again SHell
 
 License:        GPLv3+
@@ -40,7 +40,8 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %build
 %configure \
     --without-bash-malloc \
-    --libdir=%{_prefix}/lib
+    --libdir=%{_prefix}/lib \
+    bash_cv_getcwd_malloc=yes
 %make_build
 
 %install
@@ -67,3 +68,7 @@ rm -f %{buildroot}%{_infodir}/dir
 %{_includedir}/bash
 
 %changelog
+
+- 2020-09-11 Morgan Thomas <m@m0rg.dev> 5.0 release 2
+  Set bash_cv_getcwd_malloc=yes in configure to hopefully work out some issues
+  related to overlayfs.
