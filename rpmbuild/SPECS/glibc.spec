@@ -13,7 +13,7 @@
 
 Name:           %{?cross}glibc
 Version:        2.32
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The GNU C Library project provides the core libraries for the GNU system and GNU/Linux systems, as well as many other systems that use Linux as the kernel.
 
 License:        LGPLv2+ and LGPLv2+ with exceptions and GPLv2+ and GPLv2+ with exceptions and BSD and Inner-Net and ISC and Public Domain and GFDL
@@ -108,7 +108,7 @@ cd build
 # build, but it _also_ makes it take absolutely forever. if it turns out to be a problem
 # I may try to patch the makefile instead
 # though it does make one heck of a mess in the log output like this
-#make %{?_smp_mflags} DESTDIR=%{buildroot} localedata/install-locales
+make %{?_smp_mflags} DESTDIR=%{buildroot} localedata/install-locales
 # nscd.conf
 install -m 644 %{SOURCE1} %{buildroot}/etc
 # nsswitch.conf
@@ -141,6 +141,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_sbindir}/*
 /lib/gconv
 /lib/audit
+/lib/locale/locale-archive
 /sbin/ldconfig
 /sbin/sln
 /var/db
@@ -175,6 +176,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %endif
 
 %changelog
+
+- 2020-11-09 Morgan Thomas <m@m0rg.dev> 2.32 release 2
+  Turn locale generation back on.
 
 - 2020-11-08 Morgan Thomas <m@m0rg.dev> 2.32
   Update to version 2.32.
