@@ -1,6 +1,6 @@
 Name:           grep
 Version:        3.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Search by line for a regular expression
 
 License:        GPLv3+
@@ -14,6 +14,7 @@ Source0:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
 %endif
 
 BuildRequires:  %{?host_tool_prefix}gcc
+BuildRequires:  %{?host_tool_prefix}libpcre-devel
 BuildRequires:  make
 
 %undefine _annotated_build
@@ -25,7 +26,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %autosetup
 
 %build
-%configure
+%configure --enable-perl-regexp
 %make_build
 
 %install
@@ -41,3 +42,6 @@ rm -f %{buildroot}%{_infodir}/dir
 %doc %{_mandir}/man1/*
 
 %changelog
+
+- 2020-11-09 Morgan Thomas <m@m0rg.dev> 3.5 release 2
+  Enable PCRE support.
