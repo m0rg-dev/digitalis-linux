@@ -188,7 +188,7 @@ MAKECACHE_REPOS="digitalis"
 
 RPMS="$RPMS openrc dhcpcd grub udev-init-scripts kernel mkinitcpio mkinitcpio-busybox"
 RPMS="$RPMS e2fsprogs kbd bare-metal runc cni-plugins buildah containers-common"
-RPMS="$RPMS podman conmon iptables nftables sudo openssh"
+RPMS="$RPMS podman conmon iptables nftables sudo openssh pinentry"
 
 for rpm in $RPMS; do
     if [ ! -n "$(ls rpmbuild/SRPMS | grep -P ^$rpm-'\d.*\.digi2\..*\.rpm')" ]; then

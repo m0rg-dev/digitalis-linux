@@ -23,6 +23,8 @@ BuildRequires:  %{?host_tool_prefix}libnpth-devel
 BuildRequires:  make
 BuildRequires:  gcc
 
+Recommends:     pinentry
+
 %undefine _annotated_build
 
 %description
