@@ -1,23 +1,21 @@
-import { Action, PackageBuildAction, PackageInstallAction } from "./Action";
-import { Config } from "./Config";
-import { RPMDatabase } from "./RPMDatabase";
 import * as fs from "fs";
-import * as uuid from "uuid";
+import { Action, PackageInstallAction } from "./Action";
+import { Config } from "./Config";
 import { Logger } from "./Logger";
-import { RPMDependency } from "./Dependency";
+import { RPMDatabase } from "./RPMDatabase";
 
 let actions: Map<string, Action> = new Map();
 
 async function main() {
     await Config.read_config();
-    if (!fs.existsSync("/tmp/dnfcache"))
+    if (!fs.existsSync("/tmp/dnfcache")) {
         await fs.promises.mkdir("/tmp/dnfcache");
+    }
 
-    const depend = new RPMDependency('base-system');
-    const strategy = await (await Config.get()).build_targets['digi1'].can_install(depend);
-    if (!strategy) throw new Error(`No install strategy for ${depend.name}!`);
+    const target = (await RPMDatabase.get()).lookup_rpm('digi1', 'base-system');
+    console.log(target);
 
-    const action = new PackageInstallAction(depend, strategy, uuid.v4());
+    const action = new PackageInstallAction({ name: target.as_string }, (await Config.get()).build_targets['digi1']);
 
     actions.set(action.uuid, action);
 

@@ -1,11 +1,11 @@
 import * as child_process from "child_process";
 import { Config } from "./Config";
-import { BuildTargetDependency, Dependency, RPMDependency } from "./Dependency";
 import { InstallStrategy } from "./InstallStrategy";
-import { RPMCandidates, RPMDatabase } from "./RPMDatabase";
+import { NEVRA, RPMDatabase, RPMDependency } from "./RPMDatabase";
 import * as uuid from "uuid";
 import * as path from "path";
 import { Logger } from "./Logger";
+import { BuildTarget } from "./BuildTarget";
 
 export abstract class Action {
     uuid: string;
@@ -35,14 +35,14 @@ export abstract class Action {
 }
 
 export class ImageBuildAction extends Action {
-    image: BuildTargetDependency;
+    image: string;
 
-    constructor(image: BuildTargetDependency) {
+    constructor(image: string) {
         super();
         this.image = image;
     }
     async necessary(): Promise<boolean> {
-        const proc = child_process.spawn('podman', ['image', 'exists', this.image.target.runner_image]);
+        const proc = child_process.spawn('podman', ['image', 'exists', this.image]);
         return new Promise((resolve, reject) => {
             proc.on('close', (code, signal) => {
                 if (signal) reject(`Process killed by signal ${signal}`);
@@ -59,11 +59,48 @@ export class ImageBuildAction extends Action {
         throw new Error("Method not implemented.");
     }
     toString(): string {
-        return `${this.uuid}: ImageBuildAction ${this.image.target.runner_image}`;
+        return `${this.uuid}: ImageBuildAction ${this.image}`;
     }
 }
 
 export class PackageInstallAction extends Action {
+    what: RPMDependency;
+    where: BuildTarget;
+    completed: boolean = false;
+
+    constructor(what: RPMDependency, where: BuildTarget) {
+        super();
+        this.what = what;
+        this.where = where;
+    }
+    async necessary(): Promise<boolean> {
+        return !this.completed;
+    }
+    async prerequisites(): Promise<Action[]> {
+        const nevra = (await RPMDatabase.get()).lookup_rpm(this.where.name, this.what.name);
+        if (nevra) {
+            const requires = await RPMDatabase.get_install_dependencies(nevra, this.where);
+
+            const actions = [];
+            if (!nevra.have_artifacts) {
+                actions.push(new PackageBuildAction(nevra))
+            }
+            actions.push(...requires.map(d => new PackageInstallAction(d, this.where)));
+            return actions;
+        } else {
+            Logger.error(`Couldn't find package for ${this.what.name}`);
+            throw new Error();
+            return [];
+        }
+    }
+    execute(): Promise<void> {
+        throw new Error("Method not implemented.");
+        this.completed = true;
+    }
+    toString(): string {
+        return `PackageInstallAction: ${this.what.name} on ${this.where.name}`;
+    }
+    /*
     pkg: RPMDependency;
     strategy: InstallStrategy;
     container_uuid: string;
@@ -91,31 +128,44 @@ export class PackageInstallAction extends Action {
 
     toString(): string {
         return `${this.uuid} PackageInstallAction ${this.pkg.name} ${this.strategy.name()} ${this.container_uuid}`;
-    }
+    }*/
 }
 
 export class PackageBuildAction extends Action {
-    spec: RPMCandidates;
+    what: NEVRA;
 
-    constructor(spec: RPMCandidates) {
+    constructor(what: NEVRA) {
         super();
-        this.spec = spec;
+        this.what = what;
     }
-    
+
     async necessary(): Promise<boolean> {
         await RPMDatabase.get().then(d => d.read_specs());
-        return !(await RPMDatabase.get()).lookup_rpm(this.spec.dist, this.spec.name).have_artifacts;
+        return !(await RPMDatabase.get()).lookup_rpm(this.what.dist, this.what.name).have_artifacts;
     }
-    
+
     async prerequisites(): Promise<Action[]> {
-        const deps = await RPMDatabase.get_build_dependencies(this.spec, (await Config.get()).build_targets[this.spec.dist]);
-        const actions = await Dependency.resolve_dependency_list(deps, (await Config.get()).build_targets[this.spec.dist], this.uuid);
-        return Action.prune(actions);
+        const nevra = (await RPMDatabase.get()).lookup_rpm(this.what.dist, this.what.name);
+        const where = (await Config.get()).build_targets[this.what.dist]
+        if (nevra) {
+            const requires = await RPMDatabase.get_install_dependencies(nevra, where);
+
+            const actions = [];
+            if (!nevra.have_artifacts) {
+                actions.push(new PackageBuildAction(nevra))
+            }
+            actions.push(...requires.map(d => new PackageInstallAction(d, where)));
+            return actions;
+        } else {
+            Logger.warn(`Couldn't find package for ${this.what.name}`);
+            throw new Error();
+            return [];
+        }
     }
 
     async execute(): Promise<void> {
-        const target = (await Config.get()).build_targets[this.spec.dist];
-        const proc = await target.run_in_container(this.uuid, ['rpmbuild', '--verbose', ...this.spec.options, '-ba', "/rpmbuild/SPECS/" + path.basename(this.spec.spec)], { stdio: 'pipe' });
+        const target = (await Config.get()).build_targets[this.what.dist];
+        const proc = await target.run_in_container(this.uuid, ['rpmbuild', '--verbose', ...this.what.options, '-ba', "/rpmbuild/SPECS/" + path.basename(this.what.spec)], { stdio: 'pipe' });
         proc.stderr.on('data', (data) => {
             Logger.debug(`[${this.uuid} stderr] ${data}`);
         });
@@ -132,7 +182,7 @@ export class PackageBuildAction extends Action {
     }
 
     toString(): string {
-        return `${this.uuid} PackageBuildAction ${this.spec.name} ${this.spec.dist}`;
+        return `${this.uuid} PackageBuildAction ${this.what.name} ${this.what.dist}`;
     }
 }
 

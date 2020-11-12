@@ -28,4 +28,4 @@ export class Logger {
     static error(message: string) { Logger._log(LogLevel.ERROR, message); }
 }
 
-fs.truncateSync(Logger.detailed_log, 0);
+if(fs.existsSync(Logger.detailed_log)) fs.truncateSync(Logger.detailed_log, 0);

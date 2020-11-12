@@ -4,6 +4,7 @@ import { Dependency } from "./Dependency";
 import { InstallStrategy } from "./InstallStrategy";
 import * as fs from "fs";
 import { Logger } from "./Logger";
+import { RPMDependency } from "./RPMDatabase";
 
 export class BuildTarget {
     runner_image: string;
@@ -85,7 +86,7 @@ export class BuildTarget {
         return process;
     }
 
-    async can_install(dependency: Dependency): Promise<InstallStrategy | null> {
+    async can_install(dependency: RPMDependency): Promise<InstallStrategy | null> {
         return new Promise(async (resolve, reject) => {
             for (const strategy of this.install_strategies) {
                 if (await strategy.can_process(dependency)) {
