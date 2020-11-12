@@ -1,0 +1,76 @@
+rpm_option_sets:
+  fc33-standalone-gcc:
+    - "--define=_build x86_64-redhat-linux-gnu"
+    - "--define=_host x86_64-redhat-linux-gnu"
+    - "--define=_target x86_64-pc-linux-gnu"
+    - "--define=_fedora_dependencies 1"
+    - "--define=dist .fc33"
+    - --without
+    - threads
+    - --with
+    - standalone
+  fc33:
+    - "--define=_build x86_64-redhat-linux-gnu"
+    - "--define=_host x86_64-redhat-linux-gnu"
+    - "--define=_target x86_64-pc-linux-gnu"
+    - "--define=_fedora_dependencies 1"
+    - "--define=dist .fc33"
+  digi1: ["--define=_build x86_64-redhat-linux-gnu", "--define=_host x86_64-pc-linux-gnu", "--define=_target x86_64-pc-linux-gnu", "--define=dist .digi1"]
+build_targets:
+  fc33:
+    runner_image: fedora-with-rpm
+    install_strategy:
+      - from_image_repo
+      - build
+    additional_podman_args: [ "--volume", "/tmp/dnfcache:/var/cache/dnf" ]
+  digi1:
+    runner_image: digitalis-stage1
+    install_strategy:
+      - from_target = fc33
+  digi2:
+    runner_image: digitalis-stage2
+    install_strategy:
+      - from_target(digi1)
+  digitalis:
+    runner_image: digitalis
+    install_strategy:
+      - from_target(digi2)
+      - from_image_repo
+      - build
+build_images:
+  fedora-with-rpm:
+    script: |
+        ctr=$(buildah from fedora:33)
+
+        mkdir /tmp/dnfcache
+        buildah run --net host "$ctr" sh -c 'echo "keepcache=True" >>/etc/dnf/dnf.conf'
+        buildah run --net host --volume /tmp/dnfcache:/var/cache/dnf "$ctr" dnf install -y rpm-build createrepo_c
+        buildah run --net host "$ctr" sh -c 'echo "%_topdir /rpmbuild" >>~/.rpmmacros'
+        buildah run --net host "$ctr" sh -c 'echo "%_unique_build_ids 1" >>~/.rpmmacros'
+        # work around toolchain magic in Fedora 33 setting $CC to random crud
+        buildah run --net host "$ctr" sh -c 'sed -i "/  CC=/d" /lib/rpm/redhat/macros'
+        buildah run --net host "$ctr" sh -c 'sed -i "/  CXX=/c\\  true" /lib/rpm/redhat/macros'
+        buildah run --net host "$ctr" sh -c 'cat >/etc/yum.repos.d/local-bootstrap.repo' <<EOF
+        [local-bootstrap]
+        name=local-bootstrap
+        baseurl=/repo_host
+        enabled=1
+        metadata_expire=1d
+        gpgcheck=0
+        EOF
+        buildah commit "$ctr" fedora-with-rpm
+  digitalis-stage1:
+    install_strategy: from_target(digi1)
+    install_packages:
+      - fs-tree
+      - digitalis-bootstrap-repository
+      - base-system
+      - createrepo_c
+  digitalis-stage2:
+    install_strategy: from_target(digi1)
+    install_packages:
+      - fs-tree
+      - digitalis-bootstrap-repository
+      - base-system
+      - createrepo_c
+default_build_target: digitalis

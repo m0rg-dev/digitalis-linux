@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "inlineSourceMap": true,
+        "target": "ES5",
+        "moduleResolution": "node",
+        "downlevelIteration": true,
+        "lib": ["ES2019"]
+    },
+}
