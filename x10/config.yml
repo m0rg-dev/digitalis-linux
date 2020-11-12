@@ -53,7 +53,7 @@ build_images:
         buildah run --net host "$ctr" sh -c 'cat >/etc/yum.repos.d/local-bootstrap.repo' <<EOF
         [local-bootstrap]
         name=local-bootstrap
-        baseurl=/repo_host
+        baseurl=/repo
         enabled=1
         metadata_expire=1d
         gpgcheck=0

@@ -1,8 +1,10 @@
-import { Action, PackageBuildAction } from "./Action";
+import { Action, PackageBuildAction, PackageInstallAction } from "./Action";
 import { Config } from "./Config";
 import { RPMDatabase } from "./RPMDatabase";
 import * as fs from "fs";
+import * as uuid from "uuid";
 import { Logger } from "./Logger";
+import { RPMDependency } from "./Dependency";
 
 let actions: Map<string, Action> = new Map();
 
@@ -11,8 +13,11 @@ async function main() {
     if (!fs.existsSync("/tmp/dnfcache"))
         await fs.promises.mkdir("/tmp/dnfcache");
 
-    const rpminfo = (await RPMDatabase.get()).lookup_rpm("fc33", "x86_64-pc-linux-gnu-gcc");
-    const action = new PackageBuildAction(rpminfo);
+    const depend = new RPMDependency('base-system');
+    const strategy = await (await Config.get()).build_targets['digi1'].can_install(depend);
+    if (!strategy) throw new Error(`No install strategy for ${depend.name}!`);
+
+    const action = new PackageInstallAction(depend, strategy, uuid.v4());
 
     actions.set(action.uuid, action);
 
@@ -21,7 +26,7 @@ async function main() {
     while (actions.size) {
         let changed = false;
         for (const [uuid, action] of actions) {
-            if (action.necessary()) {
+            if (await action.necessary()) {
                 const prerequisites = await action.prerequisites();
                 if (prerequisites.length) {
                     Logger.info(`${action}: waiting ${prerequisites.length}`);
@@ -49,4 +54,8 @@ async function main() {
     }
 }
 
-main();
+try {
+    main();
+} catch (e) {
+    console.error(e);
+}

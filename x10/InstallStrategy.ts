@@ -1,13 +1,14 @@
-import { Action, PackageBuildAction } from "./Action";
+import { Action, ImageBuildAction, PackageBuildAction } from "./Action";
 import { BuildTarget } from "./BuildTarget";
 import { Config } from "./Config";
-import { Dependency, RPMDependency } from "./Dependency";
+import { BuildTargetDependency, Dependency, RPMDependency } from "./Dependency";
 import { Logger } from "./Logger";
 import { RPMDatabase } from "./RPMDatabase";
 
 import * as glob from "glob";
 import * as fs from "fs";
 import * as util from "util";
+import * as uuid from "uuid";
 import path = require("path");
 
 export abstract class InstallStrategy {
@@ -108,17 +109,72 @@ export class FromTargetStrategy extends InstallStrategy {
     async can_process(dependency: RPMDependency): Promise<boolean> {
         return true;
     }
+    
     async can_install(dependency: RPMDependency): Promise<boolean> {
-        console.log(`from_target ${dependency.name} ${this.from.name}`);
-        const candidates = (await RPMDatabase.get()).lookup_rpm(this.from.name, dependency.name);
-        console.log(candidates);
+        const rpminfo = (await RPMDatabase.get()).lookup_rpm(this.from.name, dependency.name);
+        if (rpminfo) return true;
         return false;
     }
-    prerequisites(dependency: Dependency): Promise<Action[]> {
-        throw new Error("Method not implemented.");
+    
+    async prerequisites(dependency: RPMDependency): Promise<Action[]> {
+        const rpminfo = (await RPMDatabase.get()).lookup_rpm(this.target.name, dependency.name);
+        console.log(rpminfo);
+        const bdepends = await RPMDatabase.get_build_dependencies(rpminfo, this.from);
+        const rdepends = await RPMDatabase.get_install_dependencies(rpminfo, this.target);
+        const actions = [
+            ...await Dependency.resolve_dependency_list(bdepends, this.from, uuid.v4()),
+            ...await Dependency.resolve_dependency_list(rdepends, this.target, uuid.v4()),
+        ]
+
+        console.log(actions);
+        throw 'h';
+        // 
+/*            new ImageBuildAction(new BuildTargetDependency(this.from)),
+            new PackageBuildAction(rpminfo)]; */
+        return Action.prune(actions);
     }
-    install(dependency: RPMDependency): Promise<void> {
-        throw new Error("Method not implemented.");
+    
+    // awful cut & paste ahoy
+    async install(dependency: RPMDependency, container_uuid: string): Promise<void> {
+        Logger.info(`Installing ${dependency.toString()} dist ${this.target.name} uuid ${container_uuid}`);
+        await fs.promises.mkdir(`/tmp/repo-${container_uuid}`);
+        const files = await util.promisify(glob)(`../rpmbuild/RPMS/**/*.${this.target.name}.*.rpm`);
+        await Promise.all(files.map(f => fs.promises.copyFile(f, path.join(`/tmp/repo-${container_uuid}`, path.basename(f)))))
+
+        Logger.info(`Rebuilding repo for ${container_uuid}`);
+        const proc_createrepo = await this.target.run_in_container(container_uuid, ["createrepo_c", "/repo"], { stdio: 'pipe' },  [`--volume=/tmp/repo-${container_uuid}:/repo`]);
+        proc_createrepo.stderr.on('data', (data) => {
+            Logger.debug(`[${dependency.name} stderr] ${data}`);
+        });
+        proc_createrepo.stdout.on('data', (data) => {
+            Logger.debug(`[${dependency.name}] ${data}`);
+        });
+        await new Promise((resolve, reject) => {
+            proc_createrepo.on('close', (code, signal) => {
+                if (signal) reject(`Subprocess killed by signal ${signal}`);
+                if (code) reject(`Subprocess exited with code ${code}`);
+                resolve();
+            });
+        });
+
+        Logger.info(`Installing package`);
+        const proc = await this.target.run_in_container(container_uuid, ["dnf", "install", "-y", dependency.name], { stdio: 'pipe' }, [`--volume=/tmp/repo-${container_uuid}:/repo`]);
+        proc.stderr.on('data', (data) => {
+            Logger.debug(`[${dependency.name} stderr] ${data}`);
+        });
+        proc.stdout.on('data', (data) => {
+            Logger.debug(`[${dependency.name}] ${data}`);
+        });
+        await new Promise((resolve, reject) => {
+            proc.on('close', (code, signal) => {
+                if (signal) reject(`Subprocess killed by signal ${signal}`);
+                if (code) reject(`Subprocess exited with code ${code}`);
+                resolve();
+            });
+        })
+
+        Logger.info(`Cleaning /tmp/repo-${container_uuid}`);
+        await fs.promises.rmdir(`/tmp/repo-${container_uuid}`, {recursive: true});
     }
 }
 
@@ -137,9 +193,9 @@ export class LocalBuildStrategy extends InstallStrategy {
 
     async prerequisites(dependency: RPMDependency, container_uuid: string): Promise<Action[]> {
         const rpminfo = (await RPMDatabase.get()).lookup_rpm(this.target.name, dependency.name);
-        //const deps = await RPMDatabase.get_build_dependencies(rpminfo, this.target);
-        const actions = [new PackageBuildAction(rpminfo)];
-        //await Dependency.resolve_dependency_list(deps, this.target, container_uuid);
+        const actions = [
+            new ImageBuildAction(new BuildTargetDependency(this.target)),
+            new PackageBuildAction(rpminfo)];
         return Action.prune(actions);
     }
 
@@ -150,7 +206,7 @@ export class LocalBuildStrategy extends InstallStrategy {
         await Promise.all(files.map(f => fs.promises.copyFile(f, path.join(`/tmp/repo-${container_uuid}`, path.basename(f)))))
 
         Logger.info(`Rebuilding repo for ${container_uuid}`);
-        const proc_createrepo = await this.target.run_in_container(container_uuid, ["createrepo_c", "/repo_host"], { stdio: 'pipe' },  [`--volume=/tmp/repo-${container_uuid}:/repo_host`]);
+        const proc_createrepo = await this.target.run_in_container(container_uuid, ["createrepo_c", "/repo"], { stdio: 'pipe' },  [`--volume=/tmp/repo-${container_uuid}:/repo`]);
         proc_createrepo.stderr.on('data', (data) => {
             Logger.debug(`[${dependency.name} stderr] ${data}`);
         });
@@ -166,7 +222,7 @@ export class LocalBuildStrategy extends InstallStrategy {
         });
 
         Logger.info(`Installing package`);
-        const proc = await this.target.run_in_container(container_uuid, ["dnf", "install", "-y", dependency.name], { stdio: 'pipe' }, [`--volume=/tmp/repo-${container_uuid}:/repo_host`]);
+        const proc = await this.target.run_in_container(container_uuid, ["dnf", "install", "-y", dependency.name], { stdio: 'pipe' }, [`--volume=/tmp/repo-${container_uuid}:/repo`]);
         proc.stderr.on('data', (data) => {
             Logger.debug(`[${dependency.name} stderr] ${data}`);
         });

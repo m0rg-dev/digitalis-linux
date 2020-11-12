@@ -78,7 +78,7 @@ export class RPMDatabase {
 
     static async get_install_dependencies(spec: RPMCandidates, build_target: BuildTarget): Promise<Dependency[]> {
         let dependencies: Dependency[] = [new BuildTargetDependency(build_target)];
-        dependencies.push(...await RPMDatabase.get_rpm_dependencies(spec, 'buildrequires'));
+        dependencies.push(...await RPMDatabase.get_rpm_dependencies(spec, 'requires'));
 
         return dependencies;
     }
@@ -117,13 +117,15 @@ export class RPMDatabase {
             const [relver, dist, arch] = release.split('.');
 
             if (!this.db.get(dist)) this.db.set(dist, new Map());
+            const have_artifacts = fs.existsSync(path.join(this.topdir, 'RPMS', arch, `${name}-${version}-${relver}.${dist}.${arch}.rpm`));
+
             this.db.get(dist).set(name, {
                 name: name,
                 version: version + '-' + relver,
                 spec: path.join(this.topdir, "SPECS", info.file),
                 options: info.options,
                 dist: dist,
-                have_artifacts: fs.existsSync(path.join(this.topdir, 'RPMS', arch, `${name}-${version}-${relver}.${dist}.${arch}.rpm`))
+                have_artifacts: have_artifacts
             });
         }
         //console.log(this.db);

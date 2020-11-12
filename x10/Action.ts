@@ -132,7 +132,7 @@ export class PackageBuildAction extends Action {
     }
 
     toString(): string {
-        return `${this.uuid} PackageBuildAction ${this.spec.name}`;
+        return `${this.uuid} PackageBuildAction ${this.spec.name} ${this.spec.dist}`;
     }
 }
 
