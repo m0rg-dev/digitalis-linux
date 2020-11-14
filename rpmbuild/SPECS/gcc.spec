@@ -69,15 +69,15 @@ Requires:       %{?cross}glibc-devel
 
 %description
 
-%package     -n %{?cross}g++
+%package     -n %{?cross}%{?standalone_flag}g++
 Summary:        The GNU C++ compiler.
-Requires:       %{?cross}gcc = %{version}-%{release}
+Requires:       %{?cross}%{?standalone_flag}gcc = %{version}-%{release}
 
 %if %{without standalone}
 Requires:       %{?cross}libstdc++-devel
 %endif
 
-%description -n %{?cross}g++
+%description -n %{?cross}%{?standalone_flag}g++
 
 %if %{without standalone}
 
@@ -297,7 +297,7 @@ rm -fv %{buildroot}/%{_infodir}/dir
 %exclude /usr/lib64/libcc1.so*
 %endif
 
-%files -n %{?cross}g++
+%files -n %{?cross}%{?standalone_flag}g++
 %if %{isnative}
 %{_bindir}/g++
 %{_bindir}/c++

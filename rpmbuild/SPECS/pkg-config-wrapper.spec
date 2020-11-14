@@ -10,10 +10,10 @@ License:        None
 BuildArch:      noarch
 
 # random dependency to not screw up fedora_bootstrap.sh (FIXME)
-BuildRequires:  /bin/cat
+BuildRequires:  /usr/bin/cat
 
 Requires:       pkg-config
-Provides:       %{_target}-pkg-config
+Provides:       %{_target}-pkg-config = %{version}-%{release}
 
 %description
 

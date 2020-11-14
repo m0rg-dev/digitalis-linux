@@ -104,7 +104,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/man3/*
 
 %files utils
-%{_bindir}/*
+%{_bindir}/xml2-config
+%{_bindir}/xmlcatalog
+%{_bindir}/xmllint
 %doc %{_mandir}/man1/*
 
 %changelog

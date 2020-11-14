@@ -85,7 +85,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/man{3,5}/*
 
 %files -n %{?cross}archive
-%{_bindir}/bsd{cat,cpio,tar}
+%{_bindir}/bsdcat
+%{_bindir}/bsdcpio
+%{_bindir}/bsdtar
 %doc %{_mandir}/man1/*
 
 %changelog

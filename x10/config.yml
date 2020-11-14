@@ -12,6 +12,7 @@ rpm_profiles:
       - threads
       - --with
       - standalone
+    additional_podman_args: [ "--volume", "/tmp/dnfcache:/var/cache/dnf" ]
   fc33:
     installs_from: [ image, local_repo = fc33 ]
     image: fedora-with-rpm
@@ -21,10 +22,16 @@ rpm_profiles:
       - "--define=_target x86_64-pc-linux-gnu"
       - "--define=_fedora_dependencies 1"
       - "--define=dist .fc33"
+    additional_podman_args: [ "--volume", "/tmp/dnfcache:/var/cache/dnf" ]
   digi1:
     installs_from: [ image, local_repo = fc33 ]
     image: fedora-with-rpm
     options: ["--define=_build x86_64-redhat-linux-gnu", "--define=_host x86_64-pc-linux-gnu", "--define=_target x86_64-pc-linux-gnu", "--define=dist .digi1"]
+    additional_podman_args: [ "--volume", "/tmp/dnfcache:/var/cache/dnf" ]
+  digi2:
+    installs_from: [ local_repo = digi1 ]
+    image: digitalis-stage1
+    options: ["--define=_build x86_64-pc-linux-gnu", "--define=_host x86_64-pc-linux-gnu", "--define=_target x86_64-pc-linux-gnu", "--define=dist .digi2"]
 rpm_option_sets:
   fc33-standalone-gcc:
     image: fedora-with-rpm
@@ -75,7 +82,7 @@ build_images:
     script: |
         ctr=$(buildah from fedora:33)
 
-        mkdir /tmp/dnfcache
+        mkdir -p /tmp/dnfcache
         buildah run --net host "$ctr" sh -c 'echo "keepcache=True" >>/etc/dnf/dnf.conf'
         buildah run --net host --volume /tmp/dnfcache:/var/cache/dnf "$ctr" dnf install -y rpm-build createrepo_c
         buildah run --net host "$ctr" sh -c 'echo "%_topdir /rpmbuild" >>~/.rpmmacros'
@@ -88,10 +95,11 @@ build_images:
         name=local-bootstrap
         baseurl=/repo
         enabled=1
-        metadata_expire=1d
+        metadata_expire=1s
         gpgcheck=0
         EOF
         buildah commit "$ctr" fedora-with-rpm
+    dirs: [ "/tmp/dnfcache" ]
   digitalis-stage1:
     install_strategy: from_target(digi1)
     install_packages:

@@ -9,7 +9,7 @@ BuildRequires:  /usr/bin/cat
 
 Requires:       dnf
 
-Provides:       digitalis-repository
+Provides:       digitalis-repository = %{version}-%{release}
 
 %description
 %prep

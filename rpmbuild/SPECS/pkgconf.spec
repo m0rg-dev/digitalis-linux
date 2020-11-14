@@ -19,7 +19,7 @@ BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  libtool
 
-Provides:       pkg-config
+Provides:       pkg-config = %{version}-%{release}
 Requires:       libpkgconf%{?_isa} = %{version}-%{release}
 
 %undefine _annotated_build

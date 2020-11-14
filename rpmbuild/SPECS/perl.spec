@@ -51,7 +51,37 @@ sh Configure -des -Dprefix=/usr \
 
 %files
 %license Artistic
-%{_bindir}/*
+/usr/bin/corelist
+/usr/bin/cpan
+/usr/bin/enc2xs
+/usr/bin/encguess
+/usr/bin/h2ph
+/usr/bin/h2xs
+/usr/bin/instmodsh
+/usr/bin/json_pp
+/usr/bin/libnetcfg
+/usr/bin/perl
+/usr/bin/perl5.32.0
+/usr/bin/perlbug
+/usr/bin/perldoc
+/usr/bin/perlivp
+/usr/bin/perlthanks
+/usr/bin/piconv
+/usr/bin/pl2pm
+/usr/bin/pod2html
+/usr/bin/pod2man
+/usr/bin/pod2text
+/usr/bin/pod2usage
+/usr/bin/podchecker
+/usr/bin/prove
+/usr/bin/ptar
+/usr/bin/ptardiff
+/usr/bin/ptargrep
+/usr/bin/shasum
+/usr/bin/splain
+/usr/bin/streamzip
+/usr/bin/xsubpp
+/usr/bin/zipdetails
 %{_prefix}/lib/perl5/%{version}
 %{_prefix}/lib/perl5/site_perl/%{version}
 %doc %{_mandir}/man1/*

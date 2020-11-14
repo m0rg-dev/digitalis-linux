@@ -10,7 +10,7 @@ License:        None
 BuildArch:      noarch
 
 # random dependency to not screw up fedora_bootstrap.sh (FIXME)
-BuildRequires:  /bin/cat
+BuildRequires:  /usr/bin/cat
 
 Provides:       %{_target}-cmake-toolchain
 

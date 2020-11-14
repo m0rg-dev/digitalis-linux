@@ -39,7 +39,28 @@ rm -f %{buildroot}%{_infodir}/dir
 %files -f gettext-tools.lang -f gettext-runtime.lang
 # this should be split but i'm having an awful case of the not-giving-a-s**ts
 %license COPYING
-%{_bindir}/*
+%{_bindir}/autopoint
+%{_bindir}/envsubst
+%{_bindir}/gettext
+%{_bindir}/gettext.sh
+%{_bindir}/gettextize
+%{_bindir}/msgattrib
+%{_bindir}/msgcat
+%{_bindir}/msgcmp
+%{_bindir}/msgcomm
+%{_bindir}/msgconv
+%{_bindir}/msgen
+%{_bindir}/msgexec
+%{_bindir}/msgfilter
+%{_bindir}/msgfmt
+%{_bindir}/msggrep
+%{_bindir}/msginit
+%{_bindir}/msgmerge
+%{_bindir}/msgunfmt
+%{_bindir}/msguniq
+%{_bindir}/ngettext
+%{_bindir}/recode-sr-latin
+%{_bindir}/xgettext
 %{_prefix}/lib/*.so*
 %{_prefix}/lib/gettext
 %{_includedir}/*

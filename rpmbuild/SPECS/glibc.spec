@@ -138,7 +138,10 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %if %{isnative}
 /lib/*.so*
 %{_bindir}/*
-%{_sbindir}/*
+%{_sbindir}/iconvconfig
+%{_sbindir}/nscd
+%{_sbindir}/zdump
+%{_sbindir}/zic
 /lib/gconv
 /lib/audit
 /lib/locale/locale-archive

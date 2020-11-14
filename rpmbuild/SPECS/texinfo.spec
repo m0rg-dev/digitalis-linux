@@ -39,7 +39,13 @@ rm -f %{buildroot}%{_infodir}/dir
 
 %files -f %{name}.lang -f %{name}_document.lang
 %license COPYING
-%{_bindir}/*
+/usr/bin/install-info
+/usr/bin/makeinfo
+/usr/bin/pdftexi2dvi
+/usr/bin/pod2texi
+/usr/bin/texi2any
+/usr/bin/texi2dvi
+/usr/bin/texi2pdf
 %{_datadir}/texinfo
 %doc %{_infodir}/*.info*
 %doc %{_mandir}/man{1,5}/*

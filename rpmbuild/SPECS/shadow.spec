@@ -14,8 +14,9 @@ Source2:        shadow-02-pam-passwd
 Source3:        shadow-03-pam-su
 Source4:        shadow-04-pam-chage
 
-%if "%{_build}" != "%{_host}"
-%define host_tool_prefix %{_host}-
+# TODO?
+%if "%{_build}" != "%{_target}"
+%define host_tool_prefix %{_target}-
 %endif
 
 BuildRequires:  %{?host_tool_prefix}gcc

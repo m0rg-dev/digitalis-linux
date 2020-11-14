@@ -6,7 +6,6 @@ export class Config {
     static get() {
         if (!Config.conf) {
             Config.conf = yaml.parse(fs.readFileSync('config.yml').toString());
-            console.log(Config.conf);
         }
         return Config.conf;
     }
