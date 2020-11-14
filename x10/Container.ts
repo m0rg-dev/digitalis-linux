@@ -49,7 +49,7 @@ export class Container {
         });
     }
 
-    private async ensure_image() {
+    async ensure_image() {
         const image = Config.get().rpm_profiles[this.profile].image;
         if (Container.ensured_images.has(image)) return;
         Logger.debug(`ensuring ${image}`);

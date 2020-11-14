@@ -56,27 +56,6 @@ rpm_option_sets:
   digi1: 
     image: fedora-with-rpm
     options: ["--define=_build x86_64-redhat-linux-gnu", "--define=_host x86_64-pc-linux-gnu", "--define=_target x86_64-pc-linux-gnu", "--define=dist .digi1"]
-build_targets:
-  fc33:
-    runner_image: fedora-with-rpm
-    install_strategy:
-      - from_image_repo
-      - build
-    additional_podman_args: [ "--volume", "/tmp/dnfcache:/var/cache/dnf" ]
-  digi1:
-    runner_image: digitalis-stage1
-    install_strategy:
-      - from_target = fc33
-  digi2:
-    runner_image: digitalis-stage2
-    install_strategy:
-      - from_target(digi1)
-  digitalis:
-    runner_image: digitalis
-    install_strategy:
-      - from_target(digi2)
-      - from_image_repo
-      - build
 build_images:
   fedora-with-rpm:
     script: |
@@ -101,7 +80,34 @@ build_images:
         buildah commit "$ctr" fedora-with-rpm
     dirs: [ "/tmp/dnfcache" ]
   digitalis-stage1:
-    install_strategy: from_target(digi1)
+    # TODO this suffers from bad
+    script: |
+        mkdir -p /tmp/repo_digi1
+        find ../rpmbuild/RPMS -name '*.'digi1'.*' -exec cp {} /tmp/repo_digi1 ';'
+        ctr=$(buildah from fedora-with-rpm)
+        VOLUMES="--volume /tmp/dnfcache:/var/cache/dnf --volume /tmp/repo_digi1:/repo"
+        podman run --net host $VOLUMES --rm fedora-with-rpm createrepo_c /repo
+        buildah run --net host $VOLUMES "$ctr" -- mkdir /new_root
+        buildah run --net host $VOLUMES "$ctr" -- dnf install -y \
+            --verbose --repo=local-bootstrap --installroot=/new_root --releasever=digi1 \
+            fs-tree
+        buildah run --net host $VOLUMES "$ctr" -- dnf install -y \
+            --verbose --repo=local-bootstrap --installroot=/new_root --releasever=digi1 \
+            digitalis-bootstrap-repository base-system
+
+        buildah unshare sh -c 'cp -rp $(buildah mount '$ctr')/new_root /tmp/$(ctr)-new_root'
+        buildah umount "$ctr"
+        buildah rm "$ctr"
+
+        ctr=$(buildah from scratch)
+
+        buildah copy "$ctr" /tmp/$(ctr)-new_root /
+        buildah run --net host --volume /tmp/repo_digi1:/repo "$ctr" -- dnf install -y --releasever=digi1 \
+            fs-tree digitalis-bootstrap-repository base-system createrepo_c
+        buildah run --net host "$ctr" sh -c 'echo "%_topdir /rpmbuild" >>~/.rpmmacros'
+        buildah commit "$ctr" digitalis-stage1
+        buildah rm "$ctr"
+    installs_from: digi1
     install_packages:
       - fs-tree
       - digitalis-bootstrap-repository

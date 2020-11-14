@@ -102,8 +102,8 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_datadir}/doc/openssl
 
 %files -n openssl
-/usr/bin/c_rehash
-/usr/bin/openssl
+%{_bindir}/c_rehash
+%{_bindir}/openssl
 %doc %{_mandir}/man1/*
 
 %changelog

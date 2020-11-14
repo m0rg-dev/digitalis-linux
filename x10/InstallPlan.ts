@@ -1,4 +1,4 @@
-import { Action, PackageBuildAction, PackageInstallAction } from "./Action";
+import { Action, MakeInstallableAction, PackageBuildAction, PackageInstallAction } from "./Action";
 import { Config } from "./Config";
 import { Container } from "./Container";
 import { Logger } from "./Logger";
@@ -15,8 +15,9 @@ export abstract class InstallPlan {
     where: Container;
 
     abstract can_install(): Promise<boolean>;
-    abstract prerequisites(parent: Action): Promise<Action[]>;
+    abstract prerequisites(parent: Action, _recur?: any): Promise<Action[]>;
     abstract prepare(key: string): Promise<void>;
+    abstract toString(): string;
 
     protected constructor(what: package_name, where: Container) {
         this.what = what;
@@ -67,7 +68,7 @@ export class ImageInstallPlan extends InstallPlan {
     }
 
     async can_install(): Promise<boolean> {
-        Logger.info(`Checking installability: ImageInstall ${this.what} ${this.where}`);
+        Logger.debug(`Checking installability: ImageInstall ${this.what} ${this.where}`);
         await ImageInstallPlan.read_cache();
         const cache_key = `${this.what} ${this.where.image_name()}`;
         if (!ImageInstallPlan.installability_cache.has(cache_key)) {
@@ -110,6 +111,10 @@ export class ImageInstallPlan extends InstallPlan {
     async prepare() {
 
     }
+
+    toString(): string {
+        return `[${this.where.image_name()}]`;
+    }
 }
 
 export class LocalRepoInstallPlan extends InstallPlan {
@@ -127,18 +132,27 @@ export class LocalRepoInstallPlan extends InstallPlan {
         this.cached_requires = await RPMDatabase.getPackageRequires(this.what, this.whence);
     }
 
+    private static installabilityCache = new Map<string, boolean>();
+
     async can_install(): Promise<boolean> {
-        Logger.info(`Checking installability: LocalRepoInstall ${this.what} ${this.where} ${this.whence}`);
-        try {
-            await this.ensure_requires();
-            return true;
-        } catch (e) {
-            Logger.info(`Failed because ${e}`);
-            return false;
+        const cache_key = `${this.what}:${this.whence}`;
+        if (LocalRepoInstallPlan.installabilityCache.has(cache_key)) {
+            return LocalRepoInstallPlan.installabilityCache.get(cache_key);
+        } else {
+            Logger.debug(`Checking installability: LocalRepoInstall ${this.what} ${this.where} ${this.whence}`);
+            try {
+                await this.ensure_requires();
+                LocalRepoInstallPlan.installabilityCache.set(cache_key, true);
+                return true;
+            } catch (e) {
+                Logger.info(`Failed because ${e}`);
+                LocalRepoInstallPlan.installabilityCache.set(cache_key, false);
+                return false;
+            }
         }
     }
 
-    async prerequisites(parent: Action): Promise<Action[]> {
+    async prerequisites(parent: Action, _recur?: Set<package_name>): Promise<Action[]> {
         await this.ensure_requires();
         const spec = RPMDatabase.getSpecFromName(this.what, this.whence);
         const ret: Action[] = [];
@@ -147,7 +161,7 @@ export class LocalRepoInstallPlan extends InstallPlan {
                 Logger.info(`Creating a new container for ${this.what} ${this.where} ${this.whence}`);
                 this.sub_container = new Container(this.whence);
             }
-            ret.push(new PackageBuildAction(spec.spec, this.sub_container, spec.profile, parent));
+            ret.push(new PackageBuildAction(spec.spec, this.sub_container, spec.profile));
             Speculation.dispatch(spec);
         }
         ret.push(...this.cached_requires.map(req => new PackageInstallAction(req, this.where)));
@@ -186,5 +200,9 @@ export class LocalRepoInstallPlan extends InstallPlan {
             LocalRepoInstallPlan.done.add(key + this.whence);
         }
         release();
+    }
+
+    toString() {
+        return `${this.whence}`;
     }
 }

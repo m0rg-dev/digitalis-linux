@@ -9,11 +9,12 @@ import uuid = require("uuid");
 
 export abstract class Action {
     cached_prerequisites: Action[];
+    pruned = false;
 
-    abstract toString(): string;
     protected abstract _prerequisites(): Promise<Action[]>;
-    abstract hash(): string;
     abstract execute(): Promise<void>;
+    abstract toString(): string;
+    abstract hash(): string;
 
     async prerequisites(): Promise<Action[]> {
         if (this.cached_prerequisites) return this.cached_prerequisites;
@@ -36,10 +37,16 @@ export abstract class Action {
         }
         r.push(this);
         Logger.debug(`Traverse: ${this} exiting`);
-        for (let i = 0; i < stack.length; i++) {
+        /*for (let i = 0; i < stack.length; i++) {
             Logger.debug(`stack: ${"-".repeat(i)} ${stack[i]}`);
-        }
+        }*/
         return r;
+    }
+
+    async prune() {
+        await Promise.all((await this.prerequisites()).map(p => p.prune()));
+        Logger.debug(`pruned: ${this}`);
+        this.pruned = true;
     }
 }
 
@@ -62,7 +69,9 @@ export class PackageInstallAction extends Action {
 
     async _prerequisites(): Promise<Action[]> {
         await this.ensure_plan();
-        return this.cached_plan.prerequisites(this);
+        return [
+            ...await this.cached_plan.prerequisites(this)
+        ];
     }
 
     async execute() {
@@ -70,11 +79,25 @@ export class PackageInstallAction extends Action {
     }
 
     toString(): string {
-        return `install ${this.what} on ${this.where}`;
+        return `install ${this.what}:${this.cached_plan} on ${this.where}`;
     }
 
     hash(): string {
         return `PackageInstall[${this.where}:${this.what}]`;
+    }
+}
+
+export class MakeInstallableAction extends PackageInstallAction {
+    async execute() {
+        return;
+    }
+
+    toString(): string {
+        return `install prerequisites of ${this.what}:${this.cached_plan} on ${this.where}`;
+    }
+
+    hash(): string {
+        return `MakeInstallable[${this.where}:${this.what}]`;
     }
 }
 
@@ -118,7 +141,7 @@ export class MultipleInstallAction extends Action {
     }
 
     toString(): string {
-        return `install ${Array.from(this.what.values()).map(a => a.name).join(", ")} on ${this.where}`;
+        return `install ${Array.from(this.what.values()).map(a => `${a.name}:${a.plan}`).join(", ")} on ${this.where}`;
     }
 
     hash(): string {
@@ -131,7 +154,7 @@ export class PackageBuildAction extends Action {
     where: Container;
     target: rpm_profile;
 
-    constructor(what: spec_file_name, where: Container, target: rpm_profile, parent: Action) {
+    constructor(what: spec_file_name, where: Container, target: rpm_profile) {
         super();
         this.what = what;
         this.where = where;
@@ -139,7 +162,10 @@ export class PackageBuildAction extends Action {
     }
 
     async _prerequisites(): Promise<Action[]> {
-        return (await RPMDatabase.getSpecRequires(this.what, Config.get().rpm_profiles[this.target].options, 'buildrequires')).map(r => new PackageInstallAction(r, this.where));
+        return [
+            new EnsureImageAction(this.where),
+            ...(await RPMDatabase.getSpecRequires(this.what, Config.get().rpm_profiles[this.target].options, 'buildrequires')).map(r => new PackageInstallAction(r, this.where))
+        ];
     }
 
     async execute(): Promise<void> {
@@ -159,11 +185,69 @@ export class PackageBuildAction extends Action {
         }
     }
 
+    haveArtifacts(): Promise<boolean> {
+        return RPMDatabase.haveArtifacts(this.what, this.target);
+    }
+
     toString(): string {
         return `build ${this.what} in ${this.where} for ${this.target}`;
     }
 
     hash(): string {
         return `PackageBuild[${this.where}:${this.what}:${this.target}]`;
+    }
+}
+
+export class EnsureImageAction extends Action {
+    where: Container;
+    build_container: Container;
+
+    constructor(where: Container) {
+        super();
+        this.where = where;
+    }
+
+    protected async _prerequisites(): Promise<Action[]> {
+        const image_spec: {
+            script?: string,
+            install_packages?: package_name[]
+            installs_from?: string
+        } = Config.get().build_images[this.where.image_name()];
+        if (image_spec.install_packages?.length) {
+            if (!this.build_container) {
+                Logger.info(`Creating a new container for ${this.where} ${image_spec.installs_from}`);
+                this.build_container = new Container(image_spec.installs_from);
+            }
+            // this sucks.
+            const builds: Action[] = [];
+            for(const name of image_spec.install_packages) {
+                const spec = RPMDatabase.getSpecFromName(name, image_spec.installs_from);
+                builds.push(new PackageBuildAction(spec.spec, this.build_container, image_spec.installs_from));
+                const install = new PackageInstallAction(name, this.where);
+                const tree = await install.traverse();
+                for(const action of tree) {
+                    if(action instanceof PackageBuildAction) {
+                        builds.push(action);
+                    }
+                }
+            }
+
+            return builds;
+        } else {
+            return [];
+        }
+    }
+
+    toString(): string {
+        return `build image ${this.where.image_name()}`;
+    }
+
+    execute(): Promise<void> {
+        Logger.info(`Running: ${this}`);
+        return this.where.ensure_image();
+    }
+
+    hash(): string {
+        return `EnsureImage[${this.where.image_name()}]`;
     }
 }
