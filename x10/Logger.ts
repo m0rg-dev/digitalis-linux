@@ -32,7 +32,7 @@ export class Logger {
     static warn(message: string) { Logger._log(LogLevel.WARN, message); }
     static error(message: string) { Logger._log(LogLevel.ERROR, message); }
 
-    static log_process_output(id: string, proc: ChildProcess, level = LogLevel.DEBUG) {
+    static logProcessOutput(id: string, proc: ChildProcess, level = LogLevel.DEBUG) {
         proc.stdout.on('data', (data) => {
             for(const line of data.toString().trimEnd().split('\n')) {
                 Logger._log(level, `[${id}] ${line}`);

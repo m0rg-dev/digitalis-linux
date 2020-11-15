@@ -46,7 +46,7 @@ BuildRequires: %{?target_tool_prefix}glib2-devel
 BuildRequires: %{?target_tool_prefix}libpython-devel
 
 # hack until I figure out what's *supposed* to generate these
-Provides:      pkgconfig(gobject-introspection-1.0)
+Provides:      pkgconfig(gobject-introspection-1.0) = %{version}-%{release}
 
 %undefine _annotated_build
 %global debug_package %{nil}

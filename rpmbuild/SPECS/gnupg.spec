@@ -53,7 +53,21 @@ rm -f %{buildroot}%{_infodir}/dir
 
 %files -f gnupg2.lang
 %license COPYING
-%{_bindir}/*
+%{_bindir}/dirmngr
+%{_bindir}/dirmngr-client
+%{_bindir}/gpg
+%{_bindir}/gpg-agent
+%{_bindir}/gpg-connect-agent
+%{_bindir}/gpg-wks-server
+%{_bindir}/gpgconf
+%{_bindir}/gpgparsemail
+%{_bindir}/gpgscm
+%{_bindir}/gpgsm
+%{_bindir}/gpgsplit
+%{_bindir}/gpgtar
+%{_bindir}/gpgv
+%{_bindir}/kbxutil
+%{_bindir}/watchgnupg
 %{_sbindir}/*
 %{_libexecdir}/*
 %{_datadir}/gnupg/distsigkey.gpg

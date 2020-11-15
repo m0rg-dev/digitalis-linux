@@ -175,5 +175,14 @@
  "libxml2-devel fedora-with-rpm": true,
  "x86_64-pc-linux-gnu-libmpc-devel fedora-with-rpm": false,
  "x86_64-pc-linux-gnu-libmpc fedora-with-rpm": false,
- "/usr/bin/xmlcatalog fedora-with-rpm": true
+ "/usr/bin/xmlcatalog fedora-with-rpm": true,
+ "glibc-devel fedora-with-rpm": true,
+ "libpkgconf-devel fedora-with-rpm": true,
+ "python-setuptools fedora-with-rpm": true,
+ "asciidoc fedora-with-rpm": true,
+ "x86_64-pc-linux-gnu-libksba-devel fedora-with-rpm": false,
+ "x86_64-pc-linux-gnu-libnpth-devel fedora-with-rpm": false,
+ "/usr/bin/bsdtar fedora-with-rpm": true,
+ "x86_64-pc-linux-gnu-libksba fedora-with-rpm": false,
+ "x86_64-pc-linux-gnu-libnpth fedora-with-rpm": false
 }

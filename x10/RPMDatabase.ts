@@ -19,6 +19,9 @@ export type spec_with_options = {
     profile: rpm_profile
 }
 
+export class PackageNotFoundError extends Error {   
+}
+
 export class RPMDatabase {
     static provider_db: Map<n_evr, spec_with_options> = new Map();
     static dist_name_to_version: Map<dist_name, Map<package_name, evr>> = new Map();
@@ -144,7 +147,7 @@ export class RPMDatabase {
         if (RPMDatabase.specRequireCache.has(cache_key)) {
             output = RPMDatabase.specRequireCache.get(cache_key);
         } else {
-            Logger.info(`getSpecRequires cache miss ${cache_key}`);
+            Logger.debug(`getSpecRequires cache miss ${cache_key}`);
             const args = ['-q', '--' + type, '--macros', 'digitalis.rpm-macros', spec, ...optset];
             Logger.debug(`rpmspec ${args.join(" ")}`);
             const proc = child_process.spawn('rpmspec', args);
@@ -176,14 +179,16 @@ export class RPMDatabase {
     private static packageRequireCache = new Map<string, string>();
 
     static async getPackageRequires(what: package_name, profile: rpm_profile): Promise<string[]> {
-        const spec = RPMDatabase.getSpecFromName(what, profile);
+        // [ TODO 
+        const spec = RPMDatabase.getSpecFromName(what, Config.get().rpm_profiles[profile].dist || profile);
         const optset = Config.get().rpm_profiles[spec.profile].options;
+        // TODO ]
         const cache_key = `${what}-${profile}`;
         let output: string;
         if (RPMDatabase.packageRequireCache.has(cache_key)) {
             output = RPMDatabase.packageRequireCache.get(cache_key);
         } else {
-            Logger.info(`getPackageRequires cache miss ${cache_key}`);
+            Logger.debug(`getPackageRequires cache miss ${cache_key}`);
             const args = ['-q', '--queryformat', '[%{provides} ];[%{requires} ]\\n', '--macros', 'digitalis.rpm-macros', spec.spec, ...optset];
             Logger.debug(`rpmspec ${args.join(" ")}`);
             const proc = child_process.spawn('rpmspec', args);
@@ -218,7 +223,7 @@ export class RPMDatabase {
                 }
             }
         }
-        Logger.warn(`Couldn't find ${what} in ${spec.spec}!`);
+        Logger.debug(`Couldn't find ${what} in ${spec.spec}!`);
         return await RPMDatabase.getSpecRequires(spec.spec, optset);
     }
 
@@ -231,7 +236,7 @@ export class RPMDatabase {
             if (found) {
                 return found;
             } else {
-                throw new Error(`Can't find ${what} in ${dist}.`);
+                throw new PackageNotFoundError(`Can't find ${what} in ${dist}.`);
             }
         } else {
             let [name, evr] = what.split(/\s*=\s*/);
@@ -239,7 +244,7 @@ export class RPMDatabase {
                 Logger.debug(` looking for version`);
                 evr = RPMDatabase.dist_name_to_version.get(dist).get(name) + '.' + dist;
                 if (!evr) {
-                    throw new Error(`Can't find ${what} in ${dist}.`);
+                    throw new PackageNotFoundError(`Can't find ${what} in ${dist}.`);
                 }
             }
             Logger.debug(` n_evr ${name} = ${evr}`);
@@ -247,7 +252,7 @@ export class RPMDatabase {
             if (found) {
                 return found;
             } else {
-                throw new Error(`Can't find ${what} in ${dist}.`);
+                throw new PackageNotFoundError(`Can't find ${what} in ${dist}.`);
             }
         }
     }

@@ -2,7 +2,7 @@ rpm_profiles:
   fc33-standalone-gcc:
     installs_from: [ image, local_repo = fc33 ]
     image: fedora-with-rpm
-    options: 
+    options: &1
       - "--define=_build x86_64-redhat-linux-gnu"
       - "--define=_host x86_64-redhat-linux-gnu"
       - "--define=_target x86_64-pc-linux-gnu"
@@ -12,26 +12,32 @@ rpm_profiles:
       - threads
       - --with
       - standalone
+    native_options: *1
     additional_podman_args: [ "--volume", "/tmp/dnfcache:/var/cache/dnf" ]
+    dist: fc33
   fc33:
     installs_from: [ image, local_repo = fc33 ]
     image: fedora-with-rpm
-    options:
+    options: &1
       - "--define=_build x86_64-redhat-linux-gnu"
       - "--define=_host x86_64-redhat-linux-gnu"
       - "--define=_target x86_64-pc-linux-gnu"
       - "--define=_fedora_dependencies 1"
       - "--define=dist .fc33"
+    native_options: *1
+    #native_options: ["--define=_build x86_64-redhat-linux-gnu", "--define=_host x86_64-redhat-linux-gnu", "--define=_target x86_64-redhat-linux-gnu",  "--define=_fedora_dependencies 1", "--define=dist .fc33"]
     additional_podman_args: [ "--volume", "/tmp/dnfcache:/var/cache/dnf" ]
   digi1:
     installs_from: [ image, local_repo = fc33 ]
     image: fedora-with-rpm
     options: ["--define=_build x86_64-redhat-linux-gnu", "--define=_host x86_64-pc-linux-gnu", "--define=_target x86_64-pc-linux-gnu", "--define=dist .digi1"]
+    native_options: ["--define=_build x86_64-pc-linux-gnu", "--define=_host x86_64-pc-linux-gnu", "--define=_target x86_64-pc-linux-gnu", "--define=dist .digi1"]
     additional_podman_args: [ "--volume", "/tmp/dnfcache:/var/cache/dnf" ]
   digi2:
     installs_from: [ local_repo = digi1 ]
     image: digitalis-stage1
-    options: ["--define=_build x86_64-pc-linux-gnu", "--define=_host x86_64-pc-linux-gnu", "--define=_target x86_64-pc-linux-gnu", "--define=dist .digi2"]
+    options: &1 ["--define=_build x86_64-pc-linux-gnu", "--define=_host x86_64-pc-linux-gnu", "--define=_target x86_64-pc-linux-gnu", "--define=dist .digi2"]
+    native_options: *1
 rpm_option_sets:
   fc33-standalone-gcc:
     image: fedora-with-rpm
@@ -79,6 +85,10 @@ build_images:
         EOF
         buildah commit "$ctr" fedora-with-rpm
     dirs: [ "/tmp/dnfcache" ]
+    additional_podman_args: [ "--volume", "/tmp/dnfcache:/var/cache/dnf" ]
+    has_axioms: true
+    profile: fc33
+    repository: local-bootstrap
   digitalis-stage1:
     # TODO this suffers from bad
     script: |
@@ -95,29 +105,61 @@ build_images:
             --verbose --repo=local-bootstrap --installroot=/new_root --releasever=digi1 \
             digitalis-bootstrap-repository base-system
 
-        buildah unshare sh -c 'cp -rp $(buildah mount '$ctr')/new_root /tmp/$(ctr)-new_root'
+        buildah unshare sh -c 'cp -rp $(buildah mount '$ctr')/new_root /tmp/'$ctr'-new_root'
         buildah umount "$ctr"
         buildah rm "$ctr"
 
-        ctr=$(buildah from scratch)
+        ctr1=$(buildah from scratch)
 
-        buildah copy "$ctr" /tmp/$(ctr)-new_root /
-        buildah run --net host --volume /tmp/repo_digi1:/repo "$ctr" -- dnf install -y --releasever=digi1 \
+        buildah copy "$ctr1" /tmp/"$ctr"-new_root /
+        buildah run --net host --volume /tmp/repo_digi1:/repo "$ctr1" -- dnf install -y --releasever=digi1 \
             fs-tree digitalis-bootstrap-repository base-system createrepo_c
-        buildah run --net host "$ctr" sh -c 'echo "%_topdir /rpmbuild" >>~/.rpmmacros'
-        buildah commit "$ctr" digitalis-stage1
-        buildah rm "$ctr"
+        buildah run --net host "$ctr1" sh -c 'echo "%_topdir /rpmbuild" >>~/.rpmmacros'
+        buildah commit "$ctr1" digitalis-stage1
+        buildah rm "$ctr1"
     installs_from: digi1
     install_packages:
       - fs-tree
       - digitalis-bootstrap-repository
       - base-system
       - createrepo_c
+    profile: digi1
+    repository: digitalis
   digitalis-stage2:
-    install_strategy: from_target(digi1)
+    # TODO this suffers from bad
+    script: |
+        mkdir -p /tmp/repo_digi2
+        find ../rpmbuild/RPMS -name '*.'digi2'.*' -exec cp {} /tmp/repo_digi2 ';'
+        ctr=$(buildah from digitalis-stage1)
+        VOLUMES="--volume /tmp/dnfcache:/var/cache/dnf --volume /tmp/repo_digi2:/repo"
+        podman run --net host $VOLUMES --rm digitalis-stage1 createrepo_c /repo
+        buildah run --net host $VOLUMES "$ctr" -- rm -rf /new_root
+        buildah run --net host $VOLUMES "$ctr" -- mkdir /new_root
+        buildah run --net host $VOLUMES "$ctr" -- dnf install -y \
+            --verbose --repo=digitalis --installroot=/new_root --releasever=digi2 \
+            fs-tree
+        buildah run --net host $VOLUMES "$ctr" -- dnf install -y \
+            --verbose --repo=digitalis --installroot=/new_root --releasever=digi2 \
+            digitalis-bootstrap-repository base-system
+
+        buildah unshare sh -c 'cp -rp $(buildah mount '$ctr')/new_root /tmp/'$ctr'-new_root'
+        buildah umount "$ctr"
+        buildah rm "$ctr"
+
+        ctr1=$(buildah from scratch)
+
+        buildah copy "$ctr1" /tmp/"$ctr"-new_root /
+        buildah run --net host --volume /tmp/repo_digi2:/repo "$ctr1" -- dnf install -y --releasever=digi1 \
+            fs-tree digitalis-bootstrap-repository base-system createrepo_c
+        buildah run --net host "$ctr1" sh -c 'echo "%_topdir /rpmbuild" >>~/.rpmmacros'
+        buildah commit "$ctr1" digitalis-stage2
+        buildah rm "$ctr1"
+    installs_from: digi2
     install_packages:
       - fs-tree
       - digitalis-bootstrap-repository
       - base-system
       - createrepo_c
+    profile: digi2
+    repository: digitalis
 default_build_target: digitalis

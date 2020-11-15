@@ -97,7 +97,21 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_datadir}/gettext/its/gschema.*
 
 %files utils
-%{_bindir}/*
+%{_bindir}/gapplication
+%{_bindir}/gdbus
+%{_bindir}/gdbus-codegen
+%{_bindir}/gio
+%{_bindir}/gio-querymodules
+%{_bindir}/glib-compile-resources
+%{_bindir}/glib-compile-schemas
+%{_bindir}/glib-genmarshal
+%{_bindir}/glib-gettextize
+%{_bindir}/glib-mkenums
+%{_bindir}/gobject-query
+%{_bindir}/gresource
+%{_bindir}/gsettings
+%{_bindir}/gtester
+%{_bindir}/gtester-report
 %{_datadir}/bash-completion/completions/*
 
 %changelog

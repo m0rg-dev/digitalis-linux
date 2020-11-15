@@ -28,7 +28,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %autosetup
 
 %build
-%configure --disable-perl-xs
+%configure --disable-perl-xs --disable-texindex
 %make_build
 
 %install
@@ -39,13 +39,14 @@ rm -f %{buildroot}%{_infodir}/dir
 
 %files -f %{name}.lang -f %{name}_document.lang
 %license COPYING
-/usr/bin/install-info
-/usr/bin/makeinfo
-/usr/bin/pdftexi2dvi
-/usr/bin/pod2texi
-/usr/bin/texi2any
-/usr/bin/texi2dvi
-/usr/bin/texi2pdf
+%{_bindir}/install-info
+%{_bindir}/makeinfo
+%{_bindir}/pdftexi2dvi
+%{_bindir}/pod2texi
+%{_bindir}/texi2any
+%{_bindir}/texi2dvi
+%{_bindir}/texi2pdf
+%{_bindir}/texindex
 %{_datadir}/texinfo
 %doc %{_infodir}/*.info*
 %doc %{_mandir}/man{1,5}/*
