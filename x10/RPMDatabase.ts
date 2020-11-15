@@ -22,6 +22,8 @@ export type spec_with_options = {
 export class PackageNotFoundError extends Error {   
 }
 
+const debug_rpmdb_build = false;
+
 export class RPMDatabase {
     static provider_db: Map<n_evr, spec_with_options> = new Map();
     static dist_name_to_version: Map<dist_name, Map<package_name, evr>> = new Map();
@@ -31,11 +33,11 @@ export class RPMDatabase {
         Logger.info('Loading RPM database...');
         const specs = await util.promisify(glob)('../rpmbuild/SPECS/*.spec');
         await Promise.all(specs.map(async spec => {
-            Logger.debug(`Processing: ${spec}`);
+            if(debug_rpmdb_build) Logger.debug(`Processing: ${spec}`);
             for (const profile in Config.get().rpm_profiles) {
                 const optset = Config.get().rpm_profiles[profile].options;
                 const output = await RPMDatabase.getSpecProvides(spec, optset);
-                Logger.debug(output);
+                if(debug_rpmdb_build) Logger.debug(output);
                 let found_dist: string;
                 const file_like_provides: string[] = [];
                 for (const line of output.split("\n")) {
@@ -147,9 +149,9 @@ export class RPMDatabase {
         if (RPMDatabase.specRequireCache.has(cache_key)) {
             output = RPMDatabase.specRequireCache.get(cache_key);
         } else {
-            Logger.debug(`getSpecRequires cache miss ${cache_key}`);
+            if(debug_rpmdb_build) Logger.debug(`getSpecRequires cache miss ${cache_key}`);
             const args = ['-q', '--' + type, '--macros', 'digitalis.rpm-macros', spec, ...optset];
-            Logger.debug(`rpmspec ${args.join(" ")}`);
+            if(debug_rpmdb_build) Logger.debug(`rpmspec ${args.join(" ")}`);
             const proc = child_process.spawn('rpmspec', args);
             const stdout: Buffer[] = [];
             proc.stdout.on('data', (data) => {
@@ -172,7 +174,7 @@ export class RPMDatabase {
             RPMDatabase.specRequireCache.set(cache_key, output);
         }
         const ret = output.split("\n").filter(s => s.length > 0);
-        Logger.debug(`${type} of ${spec}: ${ret.join("\n")}`);
+        if(debug_rpmdb_build) Logger.debug(`${type} of ${spec}: ${ret.join("\n")}`);
         return ret;
     }
 
@@ -188,9 +190,9 @@ export class RPMDatabase {
         if (RPMDatabase.packageRequireCache.has(cache_key)) {
             output = RPMDatabase.packageRequireCache.get(cache_key);
         } else {
-            Logger.debug(`getPackageRequires cache miss ${cache_key}`);
+            if(debug_rpmdb_build) Logger.debug(`getPackageRequires cache miss ${cache_key}`);
             const args = ['-q', '--queryformat', '[%{provides} ];[%{requires} ]\\n', '--macros', 'digitalis.rpm-macros', spec.spec, ...optset];
-            Logger.debug(`rpmspec ${args.join(" ")}`);
+            if(debug_rpmdb_build) Logger.debug(`rpmspec ${args.join(" ")}`);
             const proc = child_process.spawn('rpmspec', args);
             const stdout: Buffer[] = [];
             proc.stdout.on('data', (data) => {
@@ -213,7 +215,6 @@ export class RPMDatabase {
             RPMDatabase.packageRequireCache.set(cache_key, output);
         }
         const subpackages = output.split("\n").filter(s => s.length > 0);
-        Logger.debug(output);
         for (const subpackage of subpackages) {
             const names = subpackage.split(/;/)[0].split(/\s+/).filter(s => s.length > 0);
             const reqs = subpackage.split(/;/)[1].split(/\s+/).filter(s => s.length > 0);
@@ -223,15 +224,13 @@ export class RPMDatabase {
                 }
             }
         }
-        Logger.debug(`Couldn't find ${what} in ${spec.spec}!`);
+        if(debug_rpmdb_build) Logger.debug(`Couldn't find ${what} in ${spec.spec}!`);
         return await RPMDatabase.getSpecRequires(spec.spec, optset);
     }
 
     static getSpecFromName(what: package_name, dist: dist_name): spec_with_options {
-        Logger.debug(`getSpecFromName ${what} ${dist}`);
         if (what.startsWith('/')) {
             // This is a file-like dependency.
-            Logger.debug(` looking for file-like`);
             const found = RPMDatabase.dist_file_to_spec.get(dist).get(what);
             if (found) {
                 return found;
@@ -241,13 +240,11 @@ export class RPMDatabase {
         } else {
             let [name, evr] = what.split(/\s*=\s*/);
             if (!evr) {
-                Logger.debug(` looking for version`);
                 evr = RPMDatabase.dist_name_to_version.get(dist).get(name) + '.' + dist;
                 if (!evr) {
                     throw new PackageNotFoundError(`Can't find ${what} in ${dist}.`);
                 }
             }
-            Logger.debug(` n_evr ${name} = ${evr}`);
             const found = RPMDatabase.provider_db.get(`${name} = ${evr}`);
             if (found) {
                 return found;
@@ -278,7 +275,6 @@ export class RPMDatabase {
                 resolve(Buffer.concat(stdout).toString());
             });
         });
-        Logger.debug(`haveArtifacts ${what} ${where} ${output}`);
         for(const line of output.split('\n').filter(s => s.length > 0)) {
             const parts = line.split('.');
             const arch = parts.pop();
