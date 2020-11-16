@@ -1,6 +1,6 @@
 Name:           dhcpcd
 Version:        9.3.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        DHCP client and connection manager
 
 License:        2-clause BSD
@@ -71,8 +71,10 @@ if [ -x "$(command -v rc-update)" ]; then
 fi
 
 %preun
-if [ -x "$(command -v rc-update)" ]; then
-    rc-update del dhcpcd default
+if [ "$1" = 0 ]; then
+    if [ -x "$(command -v rc-update)" ]; then
+        rc-update del dhcpcd default
+    fi
 fi
 
 %postun
@@ -95,6 +97,8 @@ fi
 %doc %{_mandir}/man{5,8}/*
 
 %changelog
+- 2020-11-08 Morgan Thomas <m@m0rg.dev> 9.3.2 release 3
+  Don't break the init script on reinstalls.
 
 - 2020-11-08 Morgan Thomas <m@m0rg.dev> 9.3.2 release 2
   Add init script and privsep user.
