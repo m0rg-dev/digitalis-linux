@@ -120,9 +120,9 @@ export class BuiltPackage extends Package {
 
     async run(target?: string) {
         if (await this.alreadyDone()) {
-            Logger.info(`Already have artifacts for ${this._prettyPrint()}.`)
+            Logger.debug(`Already have artifacts for ${this._prettyPrint()}.`)
         } else {
-            Logger.info(`Running: ${this._prettyPrint()}`);
+            Logger.debug(`Running: ${this._prettyPrint()}`);
             const build_container = new Container(this.buildImage(), target);
             await build_container.run_in_container(['true']);
             const deps = await this.buildDependencies();
@@ -163,7 +163,7 @@ export class BuiltPackage extends Package {
                     await Promise.all(files.map(f => fs.promises.copyFile(f, path.join(`/tmp/repo-${build_container.uuid}`, path.basename(f)))))
                 }
                 // Run the actual createrepo_c job.
-                Logger.info(`Rebuilding repo ${dist} for ${build_container.uuid}`);
+                Logger.debug(`Rebuilding repo ${dist} for ${build_container.uuid}`);
                 const proc_createrepo = await build_container.run_in_container(["createrepo_c", "/repo"], { stdio: 'pipe' }, [`--volume=/tmp/repo-${build_container.uuid}:/repo`]);
                 Logger.logProcessOutput(`${dist} repo`, proc_createrepo);
                 await Util.waitForProcess(proc_createrepo);
@@ -175,14 +175,14 @@ export class BuiltPackage extends Package {
                 await Util.waitForProcess(proc_makecache);
             }
             // Build a srpm locally.
-            Logger.info(`Building srpm for ${this._prettyPrint()}`);
+            Logger.debug(`Building srpm for ${this._prettyPrint()}`);
             // TODO we probably don't need to lock here
             const proc_srpm = await build_container.run_in_image(["rpmbuild", "-bs", "--verbose", ...Config.get().rpm_profiles[this.spec.profile].options, '/rpmbuild/SPECS/' + path.basename(this.spec.spec)], undefined, true, ['--volume', (await fs.promises.realpath("../rpmbuild")) + ':/rpmbuild']);
             Logger.logProcessOutput(`${this.spec.spec}:${this.spec.profile} srpm`, proc_srpm);
             await Util.waitForProcess(proc_srpm);
 
             // Install the build-time dependencies.
-            Logger.info(`Installing build-time dependencies of ${this._prettyPrint()}`);
+            Logger.debug(`Installing build-time dependencies of ${this._prettyPrint()}`);
             const proc_install = await build_container.run_in_container(["dnf", "install", "-y", ...Array.from(packages.values())], { stdio: 'pipe' }, [`--volume=/tmp/repo-${build_container.uuid}:/repo`]);
             Logger.logProcessOutput(`${this.spec.spec}:${this.spec.profile} depend_install`, proc_install);
             await Util.waitForProcess(proc_install);
@@ -201,7 +201,7 @@ export class BuiltPackage extends Package {
             await Util.waitForProcess(proc_copy_srpm);
 
             // Perform the build.
-            Logger.info(`Running rpmbuild for ${this._prettyPrint()}`)
+            Logger.debug(`Running rpmbuild for ${this._prettyPrint()}`)
             const proc_build = await build_container.run_in_container(["rpmbuild", "-rb", "--verbose", ...Config.get().rpm_profiles[this.spec.profile].options, `/rpmbuild/SRPMS/${srpm_name}.src.rpm`]);
             Logger.logProcessOutput(`${this.spec.spec}:${this.spec.profile}`, proc_build);
             await Util.waitForProcess(proc_build);

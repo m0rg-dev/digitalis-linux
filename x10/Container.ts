@@ -36,7 +36,7 @@ export class Container {
             })
         }).then((container_exists) => {
             if (!container_exists) {
-                Logger.info(`Creating container ${this.uuid} from ${this.image}`);
+                Logger.debug(`Creating container ${this.uuid} from ${this.image}`);
                 const proc2 = this.spawn('buildah', ['from', '--name', this.uuid, this.image]);
                 return new Promise((resolve, reject) => {
                     proc2.on('exit', (code, signal) => {
@@ -91,7 +91,7 @@ export class Container {
             const remote_imgs = JSON.parse(get_remote_id.output.join("\n"));
             if (get_remote_id.status
                 || local_imgs[0].Id != remote_imgs[0].Id) {
-                Logger.info(`Copying ${this.image} to ${target}`);
+                Logger.debug(`Copying ${this.image} to ${target}`);
                 const copy = child_process.spawn('sh',
                     ['-c', `podman image save "${this.image}" | ssh "${target}" podman image load`],
                     { stdio: 'pipe' }

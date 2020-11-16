@@ -145,7 +145,7 @@ async function main() {
             if (!allBuiltPackages(prerequisites)) throw new Error("huh?");
             const results: boolean[] = await Promise.all(prerequisites.map(x => x.alreadyDone()));
             if (results.every(x => x)) {
-                Logger.info(`[controller] Runnable: ${candidate._prettyPrint()}`);
+                Logger.debug(`[controller] Runnable: ${candidate._prettyPrint()}`);
                 const cancel_uuid = uuid.v4();
                 const promises = Array.from(mutices.entries()).map(async ([target, mutex]) => {
                     // Attempt to acquire our mutex.
