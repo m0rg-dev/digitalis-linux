@@ -1,5 +1,6 @@
 import { ChildProcess } from "child_process";
 import * as fs from "fs";
+import strip_ansi = require('strip-ansi');
 
 export enum LogLevel {
     DEBUG = 0,
@@ -11,6 +12,7 @@ export enum LogLevel {
 export class Logger {
     static detailed_log = "/tmp/x10.log";
     static debug_to_console = false;
+    static status_line = "";
 
     static _log(level: LogLevel, message: string) {
         message = message.trimEnd();
@@ -20,11 +22,17 @@ export class Logger {
         }
 
         if (level > LogLevel.DEBUG || Logger.debug_to_console) {
-            process.stderr.write(s);
+            process.stderr.write("\x1b[K" + s);
+            process.stderr.write("\x1b[K  " + Logger.status_line + "\r");
         }
         let fd = fs.openSync(Logger.detailed_log, 'a');
-        fs.writeSync(fd, s);
+        fs.writeSync(fd, strip_ansi(s));
         fs.closeSync(fd);
+    }
+
+    static setStatus(status_line: string) {
+        Logger.status_line = status_line;
+        process.stderr.write("\x1b[K  " + Logger.status_line + "\r");
     }
 
     static debug(message: string) { Logger._log(LogLevel.DEBUG, message); }
@@ -32,18 +40,20 @@ export class Logger {
     static warn(message: string) { Logger._log(LogLevel.WARN, message); }
     static error(message: string) { Logger._log(LogLevel.ERROR, message); }
 
-    static logProcessOutput(id: string, proc: ChildProcess, level = LogLevel.DEBUG) {
-        proc.stdout.on('data', (data) => {
-            for(const line of data.toString().trimEnd().split('\n')) {
-                Logger._log(level, `[${id}] ${line}`);
-            }
-        });
+    static logProcessOutput(id: string, proc: ChildProcess, stderr_only = false, level = LogLevel.DEBUG) {
+        if (!stderr_only) {
+            proc.stdout.on('data', (data) => {
+                for (const line of data.toString().trimEnd().split('\n')) {
+                    Logger._log(level, `[${id}] ${line}`);
+                }
+            });
+        }
         proc.stderr.on('data', (data) => {
-            for(const line of data.toString().trimEnd().split('\n')) {
+            for (const line of data.toString().trimEnd().split('\n')) {
                 Logger._log(level, `[${id} stderr] ${line}`);
             }
         });
     }
 }
 
-if(fs.existsSync(Logger.detailed_log)) fs.truncateSync(Logger.detailed_log, 0);
+if (fs.existsSync(Logger.detailed_log)) fs.truncateSync(Logger.detailed_log, 0);

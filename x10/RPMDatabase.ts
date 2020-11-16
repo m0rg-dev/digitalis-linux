@@ -19,7 +19,7 @@ export type spec_with_options = {
     profile: rpm_profile
 }
 
-export class PackageNotFoundError extends Error {   
+export class PackageNotFoundError extends Error {
 }
 
 const debug_rpmdb_build = false;
@@ -33,11 +33,11 @@ export class RPMDatabase {
         Logger.info('Loading RPM database...');
         const specs = await util.promisify(glob)('../rpmbuild/SPECS/*.spec');
         await Promise.all(specs.map(async spec => {
-            if(debug_rpmdb_build) Logger.debug(`Processing: ${spec}`);
+            if (debug_rpmdb_build) Logger.debug(`Processing: ${spec}`);
             for (const profile in Config.get().rpm_profiles) {
                 const optset = Config.get().rpm_profiles[profile].options;
                 const output = await RPMDatabase.getSpecProvides(spec, optset);
-                if(debug_rpmdb_build) Logger.debug(output);
+                if (debug_rpmdb_build) Logger.debug(output);
                 let found_dist: string;
                 const file_like_provides: string[] = [];
                 for (const line of output.split("\n")) {
@@ -149,9 +149,9 @@ export class RPMDatabase {
         if (RPMDatabase.specRequireCache.has(cache_key)) {
             output = RPMDatabase.specRequireCache.get(cache_key);
         } else {
-            if(debug_rpmdb_build) Logger.debug(`getSpecRequires cache miss ${cache_key}`);
+            if (debug_rpmdb_build) Logger.debug(`getSpecRequires cache miss ${cache_key}`);
             const args = ['-q', '--' + type, '--macros', 'digitalis.rpm-macros', spec, ...optset];
-            if(debug_rpmdb_build) Logger.debug(`rpmspec ${args.join(" ")}`);
+            if (debug_rpmdb_build) Logger.debug(`rpmspec ${args.join(" ")}`);
             const proc = child_process.spawn('rpmspec', args);
             const stdout: Buffer[] = [];
             proc.stdout.on('data', (data) => {
@@ -174,7 +174,7 @@ export class RPMDatabase {
             RPMDatabase.specRequireCache.set(cache_key, output);
         }
         const ret = output.split("\n").filter(s => s.length > 0);
-        if(debug_rpmdb_build) Logger.debug(`${type} of ${spec}: ${ret.join("\n")}`);
+        if (debug_rpmdb_build) Logger.debug(`${type} of ${spec}: ${ret.join("\n")}`);
         return ret;
     }
 
@@ -190,9 +190,9 @@ export class RPMDatabase {
         if (RPMDatabase.packageRequireCache.has(cache_key)) {
             output = RPMDatabase.packageRequireCache.get(cache_key);
         } else {
-            if(debug_rpmdb_build) Logger.debug(`getPackageRequires cache miss ${cache_key}`);
+            if (debug_rpmdb_build) Logger.debug(`getPackageRequires cache miss ${cache_key}`);
             const args = ['-q', '--queryformat', '[%{provides} ];[%{requires} ]\\n', '--macros', 'digitalis.rpm-macros', spec.spec, ...optset];
-            if(debug_rpmdb_build) Logger.debug(`rpmspec ${args.join(" ")}`);
+            if (debug_rpmdb_build) Logger.debug(`rpmspec ${args.join(" ")}`);
             const proc = child_process.spawn('rpmspec', args);
             const stdout: Buffer[] = [];
             proc.stdout.on('data', (data) => {
@@ -224,7 +224,7 @@ export class RPMDatabase {
                 }
             }
         }
-        if(debug_rpmdb_build) Logger.debug(`Couldn't find ${what} in ${spec.spec}!`);
+        if (debug_rpmdb_build) Logger.debug(`Couldn't find ${what} in ${spec.spec}!`);
         return await RPMDatabase.getSpecRequires(spec.spec, optset);
     }
 
@@ -254,15 +254,15 @@ export class RPMDatabase {
         }
     }
 
-    static async haveArtifacts(what: spec_file_name, where: rpm_profile): Promise<boolean> {
-        const optset = Config.get().rpm_profiles[where].options;
-        const proc = child_process.spawn('rpmspec', ['-q', '--rpms', '--macros', 'digitalis.rpm-macros', what, ...optset]);
+    static async getSrpmFile(what: spec_with_options): Promise<string> {
+        const optset = Config.get().rpm_profiles[what.profile].options;
+        const proc = child_process.spawn('rpmspec', ['-q', '--srpm', '--macros', 'digitalis.rpm-macros', what.spec, ...optset]);
         const stdout: Buffer[] = [];
         proc.stdout.on('data', (data) => {
             stdout.push(data);
         });
         proc.stderr.on('data', (data) => {
-            Logger.debug(`${what} ${data.toString()}`);
+            Logger.debug(`${what.spec} ${data.toString()}`);
         });
         const output = await new Promise<string>((resolve, reject) => {
             proc.on('close', (code, signal) => {
@@ -275,10 +275,45 @@ export class RPMDatabase {
                 resolve(Buffer.concat(stdout).toString());
             });
         });
-        for(const line of output.split('\n').filter(s => s.length > 0)) {
+        const with_arch = output.split('\n')[0];
+        return with_arch.split('.').slice(0, -1).join('.');
+    }
+
+    // TODO instead of all this ad-hoc caching use an explicit "memoized rpmspec" kind of thing
+    private static artifactListCache = new Map<string, string>();
+
+    static async haveArtifacts(what: spec_file_name, where: rpm_profile): Promise<boolean> {
+        const optset = Config.get().rpm_profiles[where].options;
+        const cache_key = `${what}:${optset.join(":")}`;
+        var output: string;
+        if (RPMDatabase.artifactListCache.has(cache_key)) {
+            output = RPMDatabase.artifactListCache.get(cache_key);
+        } else {
+            const proc = child_process.spawn('rpmspec', ['-q', '--rpms', '--macros', 'digitalis.rpm-macros', what, ...optset]);
+            const stdout: Buffer[] = [];
+            proc.stdout.on('data', (data) => {
+                stdout.push(data);
+            });
+            proc.stderr.on('data', (data) => {
+                Logger.debug(`${what} ${data.toString()}`);
+            });
+            output = await new Promise<string>((resolve, reject) => {
+                proc.on('close', (code, signal) => {
+                    if (signal)
+                        reject(`Process killed by signal ${signal}`);
+                    if (code > 1)
+                        reject(`Process exited with code ${code}`);
+                    if (code)
+                        resolve("");
+                    resolve(Buffer.concat(stdout).toString());
+                });
+            });
+            RPMDatabase.artifactListCache.set(cache_key, output);
+        }
+        for (const line of output.split('\n').filter(s => s.length > 0)) {
             const parts = line.split('.');
             const arch = parts.pop();
-            if(!fs.existsSync(path.join('../rpmbuild/RPMS/', arch, `${line}.rpm`))) return false;
+            if (!fs.existsSync(path.join('../rpmbuild/RPMS/', arch, `${line}.rpm`))) return false;
         }
         return true;
     }
