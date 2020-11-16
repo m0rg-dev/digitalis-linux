@@ -9,6 +9,17 @@ sh fedora_bootstrap.sh
 podman run --rm -it --net host --volume /tmp/repo_digi2:/repo digitalis bash
 ```
 
+Alternatively, you can try the experimental new build tools:
+
+```
+cd x10
+npm install
+node index.js build-image digitalis-stage2
+podman run --rm -it --net host digitalis-stage2 bash
+```
+
+Your mileage may vary.
+
 Building a QEMU image requires guestfish.
 
 ```
