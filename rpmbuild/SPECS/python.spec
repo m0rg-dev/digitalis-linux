@@ -16,7 +16,7 @@
 
 Name:           %{?cross}%{?libname}
 Version:        %{general_version}
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        The Python programming language
 
 License:        Python-2.0
@@ -37,6 +37,7 @@ Source0:        https://www.python.org/ftp/python/%{version}/Python-%{version}.t
 BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}libffi-devel
 BuildRequires: %{?target_tool_prefix}libsqlite-devel %{?target_tool_prefix}zlib-devel
 BuildRequires: %{?target_tool_prefix}libncurses-devel
+BuildRequires: %{?target_tool_prefix}libbzip2-devel
 BuildRequires: make python gcc zlib-devel
 
 Requires:       %{?cross}libpython = %{version}-%{release}
@@ -106,3 +107,6 @@ rm %{buildroot}/%{_prefix}/lib/python3.8/cgi.py
 %{_prefix}/lib/*.so
 
 %changelog
+
+- 2020-11-15 Morgan Thomas <m@m0rg.dev> 3.8.3 release 3
+  Compile in bzip2 support.

@@ -49,10 +49,23 @@ export class Container {
         });
     }
 
+    async imagePresent(): Promise<boolean> {
+        const proc = child_process.spawn('podman', ['image', 'exists', this.image]);
+        return (!Config.ignoredExistingImages.has(this.image))
+            && await new Promise((resolve, reject) => {
+                proc.on('close', (code, signal) => {
+                    if (signal) reject(`Process killed by signal ${signal}`);
+                    if (code > 1) reject(`Process exited with code ${code}`);
+                    if (code == 1) resolve(false);
+                    Container.ensured_images.add(this.image);
+                    resolve(true);
+                })
+            });
+    }
+
     async ensure_image() {
         if (Container.ensured_images.has(this.image)) return;
         Logger.debug(`ensuring ${this.image}`);
-        const proc = child_process.spawn('podman', ['image', 'exists', this.image]);
         const image_spec = Config.get().build_images[this.image];
         if (image_spec.dirs) {
             for (const dir of image_spec.dirs) {
@@ -61,15 +74,7 @@ export class Container {
                 fs.mkdirSync(dir);
             }
         }
-        const present = await new Promise((resolve, reject) => {
-            proc.on('close', (code, signal) => {
-                if (signal) reject(`Process killed by signal ${signal}`);
-                if (code > 1) reject(`Process exited with code ${code}`);
-                if (code == 1) resolve(false);
-                Container.ensured_images.add(this.image);
-                resolve(true);
-            })
-        });
+        const present = await this.imagePresent();
         if (!present) {
             if (image_spec.script) {
                 const proc2 = child_process.spawn('sh', ['-exc', image_spec.script], { stdio: 'pipe' });

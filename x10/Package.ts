@@ -111,12 +111,17 @@ export class BuiltPackage extends Package {
         }
     }
 
+    async alreadyDone(): Promise<boolean> {
+        return (!Config.ignoredExistingPackages.has(`${this.spec.spec}:${this.spec.profile}`))
+            && await RPMDatabase.haveArtifacts(this.spec.spec, this.spec.profile);
+    }
+
     async run() {
-        if (await RPMDatabase.haveArtifacts(this.spec.spec, this.spec.profile)) {
+        if (await this.alreadyDone()) {
             Logger.info(`Already have artifacts for ${this._prettyPrint()}.`)
         } else {
             Logger.info(`Running: ${this._prettyPrint()}`);
-            const build_container = new Container(Config.get().rpm_profiles[this.spec.profile].image);
+            const build_container = new Container(this.buildImage());
             await build_container.run_in_container(['true']);
             const deps = await this.buildDependencies();
             const repos = new Set<dist_name>();
@@ -182,6 +187,10 @@ export class BuiltPackage extends Package {
                 fs.promises.rmdir(`/tmp/repo-${build_container.uuid}`, { recursive: true });
             });
         }
+    }
+
+    buildImage(): string {
+        return Config.get().rpm_profiles[this.spec.profile].image;
     }
 }
 

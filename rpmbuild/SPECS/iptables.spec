@@ -62,7 +62,45 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %files
 %license COPYING
 %{_bindir}/iptables-xml
-%{_sbindir}/*
+%{_sbindir}/arptables
+%{_sbindir}/arptables-nft
+%{_sbindir}/arptables-nft-restore
+%{_sbindir}/arptables-nft-save
+%{_sbindir}/arptables-restore
+%{_sbindir}/arptables-save
+%{_sbindir}/ebtables
+%{_sbindir}/ebtables-nft
+%{_sbindir}/ebtables-nft-restore
+%{_sbindir}/ebtables-nft-save
+%{_sbindir}/ebtables-restore
+%{_sbindir}/ebtables-save
+%{_sbindir}/ip6tables
+%{_sbindir}/ip6tables-apply
+%{_sbindir}/ip6tables-legacy
+%{_sbindir}/ip6tables-legacy-restore
+%{_sbindir}/ip6tables-legacy-save
+%{_sbindir}/ip6tables-nft
+%{_sbindir}/ip6tables-nft-restore
+%{_sbindir}/ip6tables-nft-save
+%{_sbindir}/ip6tables-restore
+%{_sbindir}/ip6tables-restore-translate
+%{_sbindir}/ip6tables-save
+%{_sbindir}/ip6tables-translate
+%{_sbindir}/iptables
+%{_sbindir}/iptables-apply
+%{_sbindir}/iptables-legacy
+%{_sbindir}/iptables-legacy-restore
+%{_sbindir}/iptables-legacy-save
+%{_sbindir}/iptables-nft
+%{_sbindir}/iptables-nft-restore
+%{_sbindir}/iptables-nft-save
+%{_sbindir}/iptables-restore
+%{_sbindir}/iptables-restore-translate
+%{_sbindir}/iptables-save
+%{_sbindir}/iptables-translate
+%{_sbindir}/xtables-legacy-multi
+%{_sbindir}/xtables-monitor
+%{_sbindir}/xtables-nft-multi
 %{_sysconfdir}/ethertypes
 %doc %{_mandir}/man{1,8}/*
 

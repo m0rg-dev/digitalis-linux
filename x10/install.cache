@@ -184,5 +184,22 @@
  "x86_64-pc-linux-gnu-libnpth-devel fedora-with-rpm": false,
  "/usr/bin/bsdtar fedora-with-rpm": true,
  "x86_64-pc-linux-gnu-libksba fedora-with-rpm": false,
- "x86_64-pc-linux-gnu-libnpth fedora-with-rpm": false
+ "x86_64-pc-linux-gnu-libnpth fedora-with-rpm": false,
+ "xmlto fedora-with-rpm": true,
+ "/usr/bin/msgfmt fedora-with-rpm": true,
+ "x86_64-pc-linux-gnu-libaio-devel fedora-with-rpm": false,
+ "x86_64-pc-linux-gnu-libblkid-devel fedora-with-rpm": false,
+ "x86_64-pc-linux-gnu-libudev-devel fedora-with-rpm": false,
+ "x86_64-pc-linux-gnu-libuuid-devel fedora-with-rpm": false,
+ "x86_64-pc-linux-gnu-libmnl-devel fedora-with-rpm": false,
+ "/usr/sbin/blkid fedora-with-rpm": true,
+ "gperf fedora-with-rpm": true,
+ "kmod fedora-with-rpm": true,
+ "x86_64-pc-linux-gnu-libkmod-devel fedora-with-rpm": false,
+ "x86_64-pc-linux-gnu-libaio fedora-with-rpm": false,
+ "x86_64-pc-linux-gnu-libblkid fedora-with-rpm": false,
+ "x86_64-pc-linux-gnu-libuuid fedora-with-rpm": false,
+ "x86_64-pc-linux-gnu-libmnl fedora-with-rpm": false,
+ "x86_64-pc-linux-gnu-libkmod fedora-with-rpm": false,
+ "x86_64-pc-linux-gnu-libudev fedora-with-rpm": false
 }

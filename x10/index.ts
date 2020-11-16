@@ -4,6 +4,8 @@ import { Logger } from "./Logger";
 import { BuiltPackage, Package } from "./Package";
 import { package_name, RPMDatabase } from "./RPMDatabase";
 
+import program = require('commander');
+
 function filterDuplicateBuilds(list: BuiltPackage[]): BuiltPackage[] {
     const r: BuiltPackage[] = [];
     const seen_builds = new Set<string>();
@@ -15,15 +17,25 @@ function filterDuplicateBuilds(list: BuiltPackage[]): BuiltPackage[] {
     return r;
 }
 
+async function filterExistingBuilds(list: BuiltPackage[]): Promise<BuiltPackage[]> {
+    const r: BuiltPackage[] = []
+    for(const pkg of list) {
+        if(!await pkg.alreadyDone()) r.push(pkg);
+    }
+    return r;
+}
+
 function allBuiltPackages(list: Package[]): list is BuiltPackage[] {
     return list.every(x => x instanceof BuiltPackage);
 }
 
 async function prepareImage(image: image_name): Promise<BuiltPackage[]> {
+    if(await (new Container(image)).imagePresent()) return [];
     const pkgs: Package[] = await Promise.all(Config.get().build_images[image].install_packages
         .map((name: package_name) => Package.resolve(name, image))
     );
-    return orderPackageSet(pkgs);
+    if(!allBuiltPackages(pkgs)) throw new Error("oops");
+    return pkgs;
 }
 
 async function orderPackageSet(packages: Package[]): Promise<BuiltPackage[]> {
@@ -51,7 +63,7 @@ async function orderPackageSet(packages: Package[]): Promise<BuiltPackage[]> {
                         pending.set(corequisite.hash(), corequisite);
                     }
                 }
-                Logger.info(`Dispatched: ${pkg.name} (${pending.size} remaining)`);
+                Logger.info(`Dispatched: ${pkg.name}:${pkg.installed_on} (${pending.size} remaining)`);
             }
         }
     }
@@ -61,13 +73,48 @@ async function orderPackageSet(packages: Package[]): Promise<BuiltPackage[]> {
     return filterDuplicateBuilds(ordered);
 }
 
+function combine(map: Map<string, BuiltPackage>, list: BuiltPackage[]) { list.forEach(x => map.set(x.hash(), x)) }
+
 async function main() {
     await RPMDatabase.rebuild();
 
-    const ordered = await prepareImage('digitalis-stage1');
+    const requirements = new Map<string, BuiltPackage>();
 
-    //const pkg = new BuiltPackage('x86_64-pc-linux-gnu-gcc', 'fedora-with-rpm');
-    //const ordered = await orderPackageSet([pkg]);
+    while (process.argv.length) {
+        const command = process.argv.shift();
+        if(command == 'rebuild-image' || command == 'build-image') {
+            const image = process.argv.shift();
+            if(command == 'rebuild-image') Config.ignoredExistingImages.add(image);
+            combine(requirements, await prepareImage(image));
+        } else if(command == 'rebuild-package' || command == 'build-package') {
+            const pkg = process.argv.shift();
+            const image = process.argv.shift();
+            const action = new BuiltPackage(pkg, image);
+            if(command == 'rebuild-package') Config.ignoredExistingPackages.add(`${action.spec.spec}:${action.spec.profile}`);
+            requirements.set(action.hash(), action);
+        } else if(command == 'build-all') {
+            const image = process.argv.shift();
+            const dist = Config.get().build_images[image].installs_from;
+            const names = Array.from(RPMDatabase.dist_name_to_version.get(dist).keys());
+            const pkgs = names.map(x => new BuiltPackage(x, image));
+            combine(requirements, pkgs);
+        }
+    }
+
+    const images_involved = new Set<image_name>();
+    for(const pkg of requirements.values()) {
+        images_involved.add(pkg.buildImage());
+    }
+
+    var ordered: BuiltPackage[] = [];
+
+    for(const image of images_involved) {
+        const image_reqs = await prepareImage(image);
+        ordered.push(...await orderPackageSet(image_reqs));
+    }
+
+    ordered.push(...await orderPackageSet(Array.from(requirements.values())));
+    ordered = await filterExistingBuilds(ordered);
     Logger.info("----- Plan: -----");
     for (const build of ordered) {
         Logger.info(build._prettyPrint());
@@ -77,22 +124,6 @@ async function main() {
     for (const build of ordered) {
         await build.run();
     }
-
-    await (new Container('digitalis-stage1')).ensure_image();
-
-    const ordered_stage2 = await prepareImage('digitalis-stage2');
-
-    Logger.info("----- Plan: -----");
-    for (const build of ordered_stage2) {
-        Logger.info(build._prettyPrint());
-    }
-
-    Logger.info("-----------------");
-    for (const build of ordered_stage2) {
-        await build.run();
-    }
-
-    await (new Container('digitalis-stage2')).ensure_image();
 }
 
 main().catch(e => console.error(e));
