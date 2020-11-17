@@ -1,6 +1,6 @@
 Name:           man-db
 Version:        2.9.3
-Release:        2%{?dist}
+Release:        4%{?dist}
 Summary:        Manual page database and viewer.
 
 License:        GPLv3+
@@ -17,6 +17,7 @@ BuildRequires:  %{?host_tool_prefix}gcc
 BuildRequires:  %{?host_tool_prefix}libpipeline-devel
 BuildRequires:  %{?host_tool_prefix}libgdbm-devel
 BuildRequires:  %{?host_tool_prefix}pkg-config
+BuildRequires:  %{?host_tool_prefix}zlib-devel
 BuildRequires:  groff
 BuildRequires:  make
 BuildRequires:  man-db-user
@@ -37,7 +38,8 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %if "%{_build}" != "%{_host}"
     --disable-cache-owner \
 %endif
-    --libdir=%{_prefix}/lib
+    --libdir=%{_prefix}/lib \
+    --with-zlib
 %make_build
 
 %install
@@ -50,13 +52,13 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %find_lang %{name}-gnulib
 
 %post
-/usr/bin/mandb
+/usr/bin/mandb -q
 
 %transfiletriggerin -- %{_mandir}
-/usr/bin/mandb
+/usr/bin/mandb -q
 
 %transfiletriggerun -- %{_mandir}
-/usr/bin/mandb
+/usr/bin/mandb -q
 
 %files -f %{name}.lang -f %{name}-gnulib.lang
 %license README
@@ -74,3 +76,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/*/man8/*
 
 %changelog
+
+- 2020-11-17 Morgan Thomas <m@m0rg.dev> 2.9.3 release 4
+  Add zlib support.
+
+- 2020-11-17 Morgan Thomas <m@m0rg.dev> 2.9.3 release 3
+  Pass -q to /usr/bin/mandb in scriptlets.
