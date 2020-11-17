@@ -1,5 +1,5 @@
 Name:     base-system
-Version:  7
+Version:  8
 Release:  1%{?dist}
 Summary:  Virtual package for basic system setup
 BuildArch: noarch
@@ -20,6 +20,7 @@ Requires: iana-etc
 Requires: inetutils
 Requires: iproute2
 Requires: less
+Requires: man-db
 Requires: nano
 Requires: pkg-config
 Requires: procps
@@ -28,6 +29,7 @@ Requires: shadow
 Requires: tzdata
 Requires: util-linux
 Requires: which
+Requires: zsh
 
 Requires: dnf
 Requires: digitalis-repository
@@ -39,6 +41,9 @@ BuildRequires: /usr/bin/true
 %files
 
 %changelog
+- 2020-11-17 Morgam Thomas <m@m0rg.dev> 8 release 1
+  Added man-db and zsh.
+
 - 2020-11-09 Morgan Thomas <m@m0rg.dev> 7 release 1
   Removed dhcpcd from requires (moved to bare-metal).
 

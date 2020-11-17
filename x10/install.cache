@@ -201,5 +201,12 @@
  "x86_64-pc-linux-gnu-libuuid fedora-with-rpm": false,
  "x86_64-pc-linux-gnu-libmnl fedora-with-rpm": false,
  "x86_64-pc-linux-gnu-libkmod fedora-with-rpm": false,
- "x86_64-pc-linux-gnu-libudev fedora-with-rpm": false
+ "x86_64-pc-linux-gnu-libudev fedora-with-rpm": false,
+ "man-db-user fedora-with-rpm": false,
+ "groff fedora-with-rpm": true,
+ "x86_64-pc-linux-gnu-libgdbm-devel fedora-with-rpm": false,
+ "x86_64-pc-linux-gnu-libpipeline-devel fedora-with-rpm": false,
+ "/bin/sh fedora-with-rpm": true,
+ "x86_64-pc-linux-gnu-libgdbm fedora-with-rpm": false,
+ "x86_64-pc-linux-gnu-libpipeline fedora-with-rpm": false
 }

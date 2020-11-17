@@ -1,6 +1,6 @@
 Name:           shadow
 Version:        4.8.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        User management tools
 
 License:        3-clause BSD
@@ -13,6 +13,7 @@ Source1:        shadow-01-pam-login
 Source2:        shadow-02-pam-passwd
 Source3:        shadow-03-pam-su
 Source4:        shadow-04-pam-chage
+Source5:        shadow-05-etc-shells
 
 # TODO?
 %if "%{_build}" != "%{_target}"
@@ -55,6 +56,7 @@ sed -i 's/#FORCE_SHADOW/FORCE_SHADOW/' %{buildroot}/etc/login.defs
 %{__install} -m644 %SOURCE2 %{buildroot}%{_sysconfdir}/pam.d/passwd
 %{__install} -m644 %SOURCE3 %{buildroot}%{_sysconfdir}/pam.d/su
 %{__install} -m644 %SOURCE4 %{buildroot}%{_sysconfdir}/pam.d/chage
+%{__install} -m644 %SOURCE5 %{buildroot}%{_sysconfdir}/shells
 
 for PROGRAM in chfn chgpasswd chpasswd chsh groupadd groupdel \
                groupmems groupmod newusers useradd userdel usermod
@@ -80,10 +82,14 @@ grpconv
 %config(noreplace) %{_sysconfdir}/subgid
 %config %{_sysconfdir}/default/useradd
 %config %{_sysconfdir}/login.defs
+%config %{_sysconfdir}/shells
 %doc %{_mandir}/man{1,3,5,8}/*
 %doc %{_mandir}/*/man{1,3,5,8}/*
 
 %changelog
+
+- 2020-11-17 Morgan Thomas <m@m0rg.dev> 4.8.1 release 4
+  Add /etc/shells.
 
 - 2020-11-06 Morgan Thomas <m@m0rg.dev> 4.8.1 release 3
   Add empty subuid/subgid.
