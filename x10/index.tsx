@@ -125,16 +125,23 @@ export async function main(tui: TUI) {
     var ordered: BuiltPackage[] = [];
     Logger.setStatus(`Planning... `);
 
-    for (const image of images_involved) {
-        const image_reqs = await prepareImage(image);
-        ordered.push(...await orderPackageSet(image_reqs, (status) => tui.setState({ planStatus: status })));
-    }
+    try {
+        for (const image of images_involved) {
+            const image_reqs = await prepareImage(image);
+            ordered.push(...await orderPackageSet(image_reqs, (status) => tui.setState({ planStatus: status })));
+        }
 
-    ordered.push(...await orderPackageSet(Array.from(requirements.values()), (status) => tui.setState({ planStatus: status })));
-    ordered = await filterExistingBuilds(ordered);
-    Logger.info("----- Plan: -----");
-    for (const build of ordered) {
-        Logger.info(build._prettyPrint());
+        ordered.push(...await orderPackageSet(Array.from(requirements.values()), (status) => tui.setState({ planStatus: status })));
+        ordered = await filterExistingBuilds(ordered);
+        Logger.info("----- Plan: -----");
+        for (const build of ordered) {
+            Logger.info(build._prettyPrint());
+        }
+    } catch (e) {
+        tui.setState({ planStatus: {
+            resolved: 0, remaining: 0, currently_working_on: "", done: true, failed: e.toString()
+        }});
+        return;
     }
 
     Logger.info("-----------------");

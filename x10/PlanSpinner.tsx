@@ -8,17 +8,25 @@ export type PlanProgress = {
     remaining: number;
     currently_working_on: string;
     done: boolean;
+    failed?: string
 };
 
 export class PlanSpinner extends React.Component<{ progress: PlanProgress; }, {}> {
     render() {
         if (this.props.progress.done) {
-            return <ink.Static items={[true]}>
-                {() => (<ink.Box key="plan">
-                    <ink.Text><ink.Text color="green">✔</ink.Text>{` Plan complete: ${this.props.progress.resolved} packages`}</ink.Text>
-                </ink.Box>
-                )}
-            </ink.Static>;
+            if (this.props.progress.failed) {
+                return <ink.Box flexDirection="column">
+                    <ink.Text><ink.Text color="red">✘</ink.Text>{` Plan failed.`}</ink.Text>
+                    <ink.Text>{this.props.progress.failed}</ink.Text>
+                </ink.Box>;
+            } else {
+                return <ink.Static items={[true]}>
+                    {() => (<ink.Box key="plan">
+                        <ink.Text><ink.Text color="green">✔</ink.Text>{` Plan complete: ${this.props.progress.resolved} packages`}</ink.Text>
+                    </ink.Box>
+                    )}
+                </ink.Static>;
+            }
         } else {
             return <ink.Text>
                 <ink.Text color="green"><Spinner /></ink.Text>
