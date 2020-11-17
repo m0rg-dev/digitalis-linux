@@ -109,7 +109,7 @@ export async function main(tui: TUI) {
                 requirements.set(action.hash(), action);
             }
         } else if (command == 'build-all') {
-            const image = program.args.shift();
+            const image = program.args.shift() || Config.get().default_image;
             const dist = Config.get().build_images[image].installs_from;
             const names = Array.from(RPMDatabase.dist_name_to_version.get(dist).keys());
             const pkgs = names.map(x => new BuiltPackage(x, image));

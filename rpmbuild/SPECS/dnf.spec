@@ -1,6 +1,6 @@
 Name:           dnf
 Version:        4.2.6
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A powerful RPM-based package manager
 
 License:        GPLv2
@@ -8,6 +8,7 @@ URL:            https://github.com/rpm-software-management/dnf
 %undefine       _disable_source_fetch
 Source0:        https://github.com/rpm-software-management/dnf/archive/%{version}.tar.gz#/dnf-%{version}.tar.gz
 %define         SHA256SUM0 7357cddca06cfe6fb79f4e3c758006d0c9071e151289ea91497b5836321400cc
+Source1:        dnf-01-etc-dnf-dnf.conf
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
@@ -53,6 +54,7 @@ cd build
 ln -sr %{buildroot}%{_bindir}/dnf-3 %{buildroot}%{_bindir}/dnf
 mv %{buildroot}%{_bindir}/dnf-automatic-3 %{buildroot}%{_bindir}/dnf-automatic
 install -dm755 %{buildroot}%{_sysconfdir}/yum.repos.d
+cp %SOURCE1 %{buildroot}%{_sysconfdir}/dnf/dnf.conf
 
 %files
 %license COPYING
@@ -67,3 +69,6 @@ install -dm755 %{buildroot}%{_sysconfdir}/yum.repos.d
 %dir %{_sysconfdir}/yum.repos.d
 
 %changelog
+
+- 2020-11-16 Morgan Thomas <m@m0rg.dev> 4.2.6 release 2
+  Package our own config file.
