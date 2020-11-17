@@ -17,9 +17,7 @@ Something like `dnf install --repo=digitalis --releasever=digi2 --installroot=<r
 
 Note that this currently only uses a S3 bucket as repo storage, and a full install like that is gonna use like 500 MB of bandwidth out of that. Please don't make me get the "hey, you're losing your shirt over here" email alert I set up (if you have or know someone who has mirror space, please let me know).
 
-Building the current container image requires buildah/podman. It's likely to also
-require nodejs in the future once I start working on build system engineering stuff
-instead of just using the giant terrible shell script.
+Building the current container image requires buildah/podman. You can try the giant shell script approach, which I _think_ still works:
 
 ```
 sh fedora_bootstrap.sh
@@ -48,7 +46,7 @@ qemu-system-x86_64 -hda digitalis_rootfs.img -m 2G
 
 Running that script also creates `digitalis_rootfs.tar`, which can (hopefully) be used for a bare-metal install.
 
-Based on the Linux kernel, openrc, dnf, and GNU.
+Based on the Linux® kernel, openrc, dnf, and GNU.
 
 If you find a bug, you can keep it. For the entomophobes, PRs and issues are welcome.
 
