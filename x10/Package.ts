@@ -53,6 +53,11 @@ export abstract class Package {
     }
 }
 
+export enum FailureType {
+    failed = 1,
+    not_built
+}
+
 export class BuiltPackage extends Package {
     spec: spec_with_options;
     unusable = false;
@@ -74,6 +79,10 @@ export class BuiltPackage extends Package {
             this.unusable = true;
         }
     }
+
+    static failedPackages = new Map<string, FailureType>();
+    markFailed(type: FailureType) { BuiltPackage.failedPackages.set(`${this.spec.spec},${this.spec.profile}`, type) }
+    failed() { return BuiltPackage.failedPackages.get(`${this.spec.spec},${this.spec.profile}`) }
 
     async installDependencies(working_set: Set<string> = new Set()): Promise<Set<Package>> {
         working_set.add(this.hash());
@@ -145,80 +154,92 @@ export class BuiltPackage extends Package {
                 await fs.promises.mkdir(`/tmp/repo-${build_container.uuid}`, { recursive: true });
             }
 
-            // Rebuild the repository, if necessary.
-            if (repos.size) {
-                const dist = Array.from(repos.values())[0];
-                if (target) {
-                    // Rsync the repository to the remote machine. Should probably lock around this eventually based on target / dist
-                    const proc_rsync = child_process.spawn("rsync", ['-av', '../rpmbuild/RPMS', `--include=*.${dist}.*.rpm`, '--include=*/', '--exclude=*', `${target}:/tmp/x10_repo_${dist}`]);
-                    Logger.logProcessOutput(`${dist} rsync ${target}`, proc_rsync);
-                    await Util.waitForProcess(proc_rsync);
+            try {
+                // Rebuild the repository, if necessary.
+                if (repos.size) {
+                    const dist = Array.from(repos.values())[0];
+                    if (target) {
+                        // Rsync the repository to the remote machine. Should probably lock around this eventually based on target / dist
+                        const proc_rsync = child_process.spawn("rsync", ['-av', '../rpmbuild/RPMS', `--include=*.${dist}.*.rpm`, '--include=*/', '--exclude=*', `${target}:/tmp/x10_repo_${dist}`]);
+                        Logger.logProcessOutput(`${dist} rsync ${target}`, proc_rsync);
+                        await Util.waitForProcess(proc_rsync);
 
-                    // Copy it out so we don't have to wory about multiple instances of createrepo_c colliding.
-                    const proc_copyrepo = child_process.spawn("ssh", [target, 'cp', '-r', `/tmp/x10_repo_${dist}`, `/tmp/repo-${build_container.uuid}`]);
-                    Logger.logProcessOutput(`${dist} copyrepo`, proc_copyrepo);
-                    await Util.waitForProcess(proc_copyrepo);
-                } else {
-                    const files = await util.promisify(glob)(`../rpmbuild/RPMS/**/*.${dist}.*.rpm`);
-                    await Promise.all(files.map(f => fs.promises.copyFile(f, path.join(`/tmp/repo-${build_container.uuid}`, path.basename(f)))))
+                        // Copy it out so we don't have to wory about multiple instances of createrepo_c colliding.
+                        const proc_copyrepo = child_process.spawn("ssh", [target, 'cp', '-r', `/tmp/x10_repo_${dist}`, `/tmp/repo-${build_container.uuid}`]);
+                        Logger.logProcessOutput(`${dist} copyrepo`, proc_copyrepo);
+                        await Util.waitForProcess(proc_copyrepo);
+                    } else {
+                        const files = await util.promisify(glob)(`../rpmbuild/RPMS/**/*.${dist}.*.rpm`);
+                        await Promise.all(files.map(f => fs.promises.copyFile(f, path.join(`/tmp/repo-${build_container.uuid}`, path.basename(f)))))
+                    }
+                    // Run the actual createrepo_c job.
+                    Logger.debug(`Rebuilding repo ${dist} for ${build_container.uuid}`);
+                    const proc_createrepo = await build_container.run_in_container(["createrepo_c", "/repo"], { stdio: 'pipe' }, [`--volume=/tmp/repo-${build_container.uuid}:/repo`]);
+                    Logger.logProcessOutput(`${dist} repo`, proc_createrepo);
+                    await Util.waitForProcess(proc_createrepo);
+
+                    // Refresh the dnf cache.
+                    // TODO is this actually required / can we make it not be
+                    const proc_makecache = await build_container.run_in_container(["dnf", "makecache", "--repo", Config.get().build_images[build_container.image].repository], { stdio: 'pipe' }, [`--volume=/tmp/repo-${build_container.uuid}:/repo`]);
+                    Logger.logProcessOutput(`${dist} cache`, proc_makecache);
+                    await Util.waitForProcess(proc_makecache);
                 }
-                // Run the actual createrepo_c job.
-                Logger.debug(`Rebuilding repo ${dist} for ${build_container.uuid}`);
-                const proc_createrepo = await build_container.run_in_container(["createrepo_c", "/repo"], { stdio: 'pipe' }, [`--volume=/tmp/repo-${build_container.uuid}:/repo`]);
-                Logger.logProcessOutput(`${dist} repo`, proc_createrepo);
-                await Util.waitForProcess(proc_createrepo);
+                // Build a srpm locally.
+                Logger.debug(`Building srpm for ${this._prettyPrint()}`);
+                // TODO we probably don't need to lock here
+                const proc_srpm = await build_container.run_in_image(["rpmbuild", "-bs", "--verbose", ...Config.get().rpm_profiles[this.spec.profile].options, '/rpmbuild/SPECS/' + path.basename(this.spec.spec)], undefined, true, ['--volume', (await fs.promises.realpath("../rpmbuild")) + ':/rpmbuild']);
+                Logger.logProcessOutput(`${this.spec.spec}:${this.spec.profile} srpm`, proc_srpm);
+                await Util.waitForProcess(proc_srpm);
 
-                // Refresh the dnf cache.
-                // TODO is this actually required / can we make it not be
-                const proc_makecache = await build_container.run_in_container(["dnf", "makecache", "--repo", Config.get().build_images[build_container.image].repository], { stdio: 'pipe' }, [`--volume=/tmp/repo-${build_container.uuid}:/repo`]);
-                Logger.logProcessOutput(`${dist} cache`, proc_makecache);
-                await Util.waitForProcess(proc_makecache);
-            }
-            // Build a srpm locally.
-            Logger.debug(`Building srpm for ${this._prettyPrint()}`);
-            // TODO we probably don't need to lock here
-            const proc_srpm = await build_container.run_in_image(["rpmbuild", "-bs", "--verbose", ...Config.get().rpm_profiles[this.spec.profile].options, '/rpmbuild/SPECS/' + path.basename(this.spec.spec)], undefined, true, ['--volume', (await fs.promises.realpath("../rpmbuild")) + ':/rpmbuild']);
-            Logger.logProcessOutput(`${this.spec.spec}:${this.spec.profile} srpm`, proc_srpm);
-            await Util.waitForProcess(proc_srpm);
+                // Install the build-time dependencies.
+                Logger.debug(`Installing build-time dependencies of ${this._prettyPrint()}`);
+                const proc_install = await build_container.run_in_container(["dnf", "install", "-y", ...Array.from(packages.values())], { stdio: 'pipe' }, [`--volume=/tmp/repo-${build_container.uuid}:/repo`]);
+                Logger.logProcessOutput(`${this.spec.spec}:${this.spec.profile} depend_install`, proc_install);
+                await Util.waitForProcess(proc_install);
 
-            // Install the build-time dependencies.
-            Logger.debug(`Installing build-time dependencies of ${this._prettyPrint()}`);
-            const proc_install = await build_container.run_in_container(["dnf", "install", "-y", ...Array.from(packages.values())], { stdio: 'pipe' }, [`--volume=/tmp/repo-${build_container.uuid}:/repo`]);
-            Logger.logProcessOutput(`${this.spec.spec}:${this.spec.profile} depend_install`, proc_install);
-            await Util.waitForProcess(proc_install);
+                // Copy the srpm over.
+                const srpm_name = await RPMDatabase.getSrpmFile(this.spec);
+                const srpm = await fs.promises.readFile(`../rpmbuild/SRPMS/${srpm_name}.src.rpm`);
+                const proc_setup_dirs = await build_container.run_in_container(["mkdir", "-p", "/rpmbuild/SRPMS"], { stdio: 'pipe' });
+                Logger.logProcessOutput(`${this.spec.spec}:${this.spec.profile} setup_dirs`, proc_setup_dirs);
+                await Util.waitForProcess(proc_setup_dirs);
 
-            // Copy the srpm over.
-            const srpm_name = await RPMDatabase.getSrpmFile(this.spec);
-            const srpm = await fs.promises.readFile(`../rpmbuild/SRPMS/${srpm_name}.src.rpm`);
-            const proc_setup_dirs = await build_container.run_in_container(["mkdir", "-p", "/rpmbuild/SRPMS"], { stdio: 'pipe' });
-            Logger.logProcessOutput(`${this.spec.spec}:${this.spec.profile} setup_dirs`, proc_setup_dirs);
-            await Util.waitForProcess(proc_setup_dirs);
+                const proc_copy_srpm = await build_container.run_in_container(['sh', '-xc', `cat >/rpmbuild/SRPMS/${srpm_name}.src.rpm`], { stdio: 'pipe' });
+                proc_copy_srpm.stdin.write(srpm);
+                proc_copy_srpm.stdin.end();
+                Logger.logProcessOutput(`${this.spec.spec}:${this.spec.profile} copy_srpm`, proc_copy_srpm);
+                await Util.waitForProcess(proc_copy_srpm);
 
-            const proc_copy_srpm = await build_container.run_in_container(['sh', '-xc', `cat >/rpmbuild/SRPMS/${srpm_name}.src.rpm`], { stdio: 'pipe' });
-            proc_copy_srpm.stdin.write(srpm);
-            proc_copy_srpm.stdin.end();
-            Logger.logProcessOutput(`${this.spec.spec}:${this.spec.profile} copy_srpm`, proc_copy_srpm);
-            await Util.waitForProcess(proc_copy_srpm);
+                // Perform the build.
+                Logger.debug(`Running rpmbuild for ${this._prettyPrint()}`)
+                const proc_build = await build_container.run_in_container(["rpmbuild", "-rb", "--verbose", ...Config.get().rpm_profiles[this.spec.profile].options, `/rpmbuild/SRPMS/${srpm_name}.src.rpm`]);
+                Logger.logProcessOutput(`${this.spec.spec}:${this.spec.profile}`, proc_build);
+                await Util.waitForProcess(proc_build);
 
-            // Perform the build.
-            Logger.debug(`Running rpmbuild for ${this._prettyPrint()}`)
-            const proc_build = await build_container.run_in_container(["rpmbuild", "-rb", "--verbose", ...Config.get().rpm_profiles[this.spec.profile].options, `/rpmbuild/SRPMS/${srpm_name}.src.rpm`]);
-            Logger.logProcessOutput(`${this.spec.spec}:${this.spec.profile}`, proc_build);
-            await Util.waitForProcess(proc_build);
-
-            // Get our artifacts back.
-            const proc_gather = await build_container.run_in_container(["tar", "cv", "-C", "/rpmbuild/RPMS", "."], { stdio: 'pipe' });
-            // TODO should we try to lock around this extract and the repo rsync?
-            const proc_extract = child_process.spawn("tar", ["xv", "-C", "../rpmbuild/RPMS"], { stdio: 'pipe' });
-            Logger.logProcessOutput(`${this.spec.spec}:${this.spec.profile} gather`, proc_gather, true);
-            Logger.logProcessOutput(`${this.spec.spec}:${this.spec.profile} extract`, proc_extract, true);
-            proc_gather.stdout.pipe(proc_extract.stdin);
-            await Promise.all([Util.waitForProcess(proc_gather), Util.waitForProcess(proc_extract)]);
-            build_container.destroy();
-            if(target) {
-                child_process.spawnSync("ssh", [target, 'rm', '-rf', `/tmp/repo-${build_container.uuid}`]);
-            } else {
-                await fs.promises.rmdir(`/tmp/repo-${build_container.uuid}`, {recursive: true});
+                // Get our artifacts back.
+                const proc_gather = await build_container.run_in_container(["tar", "cv", "-C", "/rpmbuild/RPMS", "."], { stdio: 'pipe' });
+                // TODO should we try to lock around this extract and the repo rsync?
+                const proc_extract = child_process.spawn("tar", ["xv", "-C", "../rpmbuild/RPMS"], { stdio: 'pipe' });
+                Logger.logProcessOutput(`${this.spec.spec}:${this.spec.profile} gather`, proc_gather, true);
+                Logger.logProcessOutput(`${this.spec.spec}:${this.spec.profile} extract`, proc_extract, true);
+                proc_gather.stdout.pipe(proc_extract.stdin);
+                await Promise.all([Util.waitForProcess(proc_gather), Util.waitForProcess(proc_extract)]);
+            } catch (e) {
+                Logger.error(`Got error from build: ${e}`);
+                const proc_find = await build_container.run_in_container(["find", "/rpmbuild/BUILDROOT/"], { stdio: 'pipe' });
+                Logger.logProcessOutput(`${this.spec.spec}:${this.spec.profile} find`, proc_find);
+                await Util.waitForProcess(proc_find);
+                const proc_ls = await build_container.run_in_container(["sh", "-c", "ls -l /rpmbuild/BUILD/*"], { stdio: 'pipe' });
+                Logger.logProcessOutput(`${this.spec.spec}:${this.spec.profile} ls`, proc_ls);
+                await Util.waitForProcess(proc_ls);
+                throw e;
+            } finally {
+                build_container.destroy();
+                if (target) {
+                    child_process.spawnSync("ssh", [target, 'rm', '-rf', `/tmp/repo-${build_container.uuid}`]);
+                } else {
+                    await fs.promises.rmdir(`/tmp/repo-${build_container.uuid}`, { recursive: true });
+                }
             }
         }
     }

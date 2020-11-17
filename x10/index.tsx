@@ -6,7 +6,7 @@ import * as uuid from 'uuid';
 import { Config } from "./Config";
 import { Container, image_name } from "./Container";
 import { Logger } from "./Logger";
-import { BuiltPackage, Package } from "./Package";
+import { BuiltPackage, FailureType, Package } from "./Package";
 import { PlanProgress } from "./PlanSpinner";
 import { package_name, RPMDatabase } from "./RPMDatabase";
 import { TUI } from "./TUI";
@@ -155,14 +155,25 @@ export async function main(tui: TUI) {
         for (const candidate of pending.values()) {
             const prerequisites = Array.from((await candidate.buildDependencies()).values()).filter(x => x instanceof BuiltPackage);
             if (!allBuiltPackages(prerequisites)) throw new Error("huh?");
-            const results: boolean[] = await Promise.all(prerequisites.map(x => x.alreadyDone()));
-            if (results.every(x => x)) {
-                Logger.debug(`[controller] Runnable: ${candidate._prettyPrint()}`);
-                runnable.push(candidate);
+            if (prerequisites.some(x => x.failed())) {
+                Logger.warn(`Not building ${candidate._prettyPrint()} as some of its dependencies have failed`);
+                pending.delete(candidate);
+                candidate.markFailed(FailureType.not_built);
+                completions.push(candidate);
+                tui.updateBuildState(completions, currently_running, pending, runnable, ordered.length);
+            } else {
+                const results: boolean[] = await Promise.all(prerequisites.map(x => x.alreadyDone()));
+                if (results.every(x => x)) {
+                    Logger.debug(`[controller] Runnable: ${candidate._prettyPrint()}`);
+                    runnable.push(candidate);
+                }
             }
         }
         tui.updateBuildState(completions, currently_running, pending, runnable, ordered.length);
         for (const candidate of runnable) {
+            const prerequisites = Array.from((await candidate.buildDependencies()).values()).filter(x => x instanceof BuiltPackage);
+            if (!allBuiltPackages(prerequisites)) throw new Error("huh?");
+
             const cancel_uuid = uuid.v4();
             const promises = Array.from(mutices.entries()).map(async ([target, mutex]) => {
                 // Attempt to acquire our mutex.
@@ -190,6 +201,11 @@ export async function main(tui: TUI) {
             candidate.run(target.target == 'localhost' ? undefined : target.target)
                 .then(() => {
                     Logger.info(`[controller] \x1b[1mCompleted: ${candidate._prettyPrint()} on ${target.target}\x1b[0m`);
+                }).catch((e) => {
+                    Logger.error(`[controller] \x1b[1mFailed: ${candidate._prettyPrint()} on ${target.target} (${e})\x1b[0m`);
+                    process.exitCode = 1;
+                    candidate.markFailed(FailureType.failed);
+                }).then(() => {
                     completions.push(candidate);
                     currently_running.set(target.target, undefined);
                     tui.updateBuildState(completions, currently_running, pending, runnable, ordered.length);

@@ -2,7 +2,7 @@ import * as ink from 'ink';
 import Spinner from 'ink-spinner';
 import path from 'path';
 import * as React from "react";
-import { BuiltPackage } from "./Package";
+import { BuiltPackage, FailureType } from "./Package";
 
 
 export type BuildProgress = {
@@ -14,19 +14,35 @@ export type BuildProgress = {
     total: number;
 };
 
-export class BuildInfo extends React.Component<{ progress: BuildProgress; }, {}> {
+export class BuildStatic extends React.Component<{ progress: BuildProgress }, {}> {
+    render() {
+        return <ink.Static items={this.props.progress.built}>
+            {completion => {
+                if (completion.failed() == FailureType.not_built) {
+                    return <ink.Box key={completion.hash()}>
+                        <ink.Text><ink.Text color="yellow">?</ink.Text> Not built: {completion.spec.spec} ({completion.name}) for {completion.installed_on}</ink.Text>
+                    </ink.Box>;
+                } else if (completion.failed() == FailureType.failed) {
+                    return <ink.Box key={completion.hash()}>
+                        <ink.Text><ink.Text color="red">✘</ink.Text> Failed: {completion.spec.spec} ({completion.name}) for {completion.installed_on}</ink.Text>
+                    </ink.Box>;
+                } else {
+                    return <ink.Box key={completion.hash()}>
+                        <ink.Text><ink.Text color="green">✔</ink.Text> Built: {completion.spec.spec} ({completion.name}) for {completion.installed_on}</ink.Text>
+                    </ink.Box>;
+                }
+            }}
+        </ink.Static>;
+    }
+}
+
+export class BuildInfo extends React.Component<{ progress: BuildProgress }, {}> {
     render() {
         if ([...this.props.progress.currently_running.values()].filter(x => x).length
             || this.props.progress.currently_runnable.length
             || this.props.progress.currently_not_runnable.length) {
             return <>
-                <ink.Static items={this.props.progress.built}>
-                    {completion => {
-                        return <ink.Box key={completion.hash()}>
-                            <ink.Text><ink.Text color="green">✔</ink.Text> Built: {completion.spec.spec} ({completion.name}) for {completion.installed_on}</ink.Text>
-                        </ink.Box>;
-                    }}
-                </ink.Static>
+                <BuildStatic progress={this.props.progress}/>
 
                 <ink.Box>
                     <ink.Box>
@@ -75,13 +91,7 @@ export class BuildInfo extends React.Component<{ progress: BuildProgress; }, {}>
             </>;
         } else {
             return <>
-                <ink.Static items={this.props.progress.built}>
-                    {completion => {
-                        return <ink.Box key={completion.hash()}>
-                            <ink.Text><ink.Text color="green">✔</ink.Text> Built: {completion.spec.spec} ({completion.name}) for {completion.installed_on}</ink.Text>
-                        </ink.Box>;
-                    }}
-                </ink.Static>
+                <BuildStatic progress={this.props.progress}/>
                 <ink.Text>All builds completed.</ink.Text>
             </>;
         }
