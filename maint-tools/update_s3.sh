@@ -13,4 +13,4 @@ cp index.html repo/
 cp mirrorlist.txt repo/
 
 echo "Uploading..."
-aws s3 sync repo s3://digitalis-repository
+aws s3 sync --acl public-read repo s3://digitalis-repository
