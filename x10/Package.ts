@@ -192,11 +192,13 @@ export class BuiltPackage extends Package {
                 await Util.waitForProcess(proc_srpm);
 
                 // Install the build-time dependencies.
-                Logger.debug(`Installing build-time dependencies of ${this._prettyPrint()}`);
-                const proc_install = await build_container.run_in_container(["dnf", "install", "-y", ...Array.from(packages.values())], { stdio: 'pipe' }, [`--volume=/tmp/repo-${build_container.uuid}:/repo`]);
-                Logger.logProcessOutput(`${this.spec.spec}:${this.spec.profile} depend_install`, proc_install);
-                await Util.waitForProcess(proc_install);
-
+                if (packages.size) {
+                    Logger.debug(`Installing build-time dependencies of ${this._prettyPrint()}`);
+                    const proc_install = await build_container.run_in_container(["dnf", "install", "-y", ...Array.from(packages.values())], { stdio: 'pipe' }, [`--volume=/tmp/repo-${build_container.uuid}:/repo`]);
+                    Logger.logProcessOutput(`${this.spec.spec}:${this.spec.profile} depend_install`, proc_install);
+                    await Util.waitForProcess(proc_install);
+                }
+                
                 // Copy the srpm over.
                 const srpm_name = await RPMDatabase.getSrpmFile(this.spec);
                 const srpm = await fs.promises.readFile(`../rpmbuild/SRPMS/${srpm_name}.src.rpm`);
