@@ -215,6 +215,11 @@ export class BuiltPackage extends Package {
             proc_gather.stdout.pipe(proc_extract.stdin);
             await Promise.all([Util.waitForProcess(proc_gather), Util.waitForProcess(proc_extract)]);
             build_container.destroy();
+            if(target) {
+                child_process.spawnSync("ssh", [target, 'rm', '-rf', `/tmp/repo-${build_container.uuid}`]);
+            } else {
+                await fs.promises.rmdir(`/tmp/repo-${build_container.uuid}`, {recursive: true});
+            }
         }
     }
 

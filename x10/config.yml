@@ -162,4 +162,4 @@ build_images:
       - createrepo_c
     profile: digi2
     repository: digitalis
-default_build_target: digitalis
+default_image: digitalis-stage2

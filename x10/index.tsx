@@ -1,12 +1,15 @@
+import { Mutex } from "async-mutex";
+import program from 'commander';
+import * as ink from 'ink';
+import * as React from "react";
+import * as uuid from 'uuid';
 import { Config } from "./Config";
 import { Container, image_name } from "./Container";
 import { Logger } from "./Logger";
 import { BuiltPackage, Package } from "./Package";
+import { PlanProgress } from "./PlanSpinner";
 import { package_name, RPMDatabase } from "./RPMDatabase";
-
-import program = require('commander');
-import uuid = require('uuid');
-import { Mutex } from "async-mutex";
+import { TUI } from "./TUI";
 
 function filterDuplicateBuilds(list: BuiltPackage[]): BuiltPackage[] {
     const r: BuiltPackage[] = [];
@@ -40,7 +43,7 @@ async function prepareImage(image: image_name): Promise<BuiltPackage[]> {
     return pkgs;
 }
 
-async function orderPackageSet(packages: Package[]): Promise<BuiltPackage[]> {
+async function orderPackageSet(packages: Package[], statusCallback: ((status: PlanProgress) => void) = () => { }): Promise<BuiltPackage[]> {
     const dispatched = new Map<string, Package>();
     const ordered: Package[] = [];
     const pending = new Map<string, Package>();
@@ -66,23 +69,24 @@ async function orderPackageSet(packages: Package[]): Promise<BuiltPackage[]> {
                     }
                 }
                 Logger.debug(`Dispatched: ${pkg.name}:${pkg.installed_on} (${pending.size} remaining)`);
+                statusCallback({ resolved: ordered.length, remaining: pending.size, currently_working_on: `${pkg.name}:${pkg.installed_on}`, done: false });
                 Logger.setStatus(`Planning... ${pending.size} remaining (${pkg.name}:${pkg.installed_on})`);
             }
         }
     }
 
     if (!allBuiltPackages(ordered)) throw new Error("huh?");
+    statusCallback({ resolved: ordered.length, remaining: pending.size, currently_working_on: "", done: true });
 
     return filterDuplicateBuilds(ordered);
 }
 
 function combine(map: Map<string, BuiltPackage>, list: BuiltPackage[]) { list.forEach(x => map.set(x.hash(), x)) }
-function update_status(currently_running: Map<string, string>, remaining: number) {
-    Logger.setStatus(`${remaining} remaining - ` + Array.from(currently_running.keys()).sort().map(key => `\x1b[1m${key}\x1b[0m: ${currently_running.get(key)}`).join(" "));
-}
 
-async function main() {
+export async function main(tui: TUI) {
+    tui.setState({ buildingDatabase: "working" })
     await RPMDatabase.rebuild();
+    tui.setState({ buildingDatabase: "complete" });
 
     const requirements = new Map<string, BuiltPackage>();
 
@@ -93,11 +97,17 @@ async function main() {
             if (command == 'rebuild-image') Config.ignoredExistingImages.add(image);
             combine(requirements, await prepareImage(image));
         } else if (command == 'rebuild-package' || command == 'build-package') {
-            const pkg = program.args.shift();
-            const image = program.args.shift();
+            const [pkg, image = Config.get().default_image] = program.args.shift().split(":");
             const action = new BuiltPackage(pkg, image);
             if (command == 'rebuild-package') Config.ignoredExistingPackages.add(`${action.spec.spec}:${action.spec.profile}`);
             requirements.set(action.hash(), action);
+        } else if (command == 'rebuild-packages') {
+            for (const arg of program.args) {
+                const [pkg, image = Config.get().default_image] = arg.split(":");
+                const action = new BuiltPackage(pkg, image);
+                Config.ignoredExistingPackages.add(`${action.spec.spec}:${action.spec.profile}`);
+                requirements.set(action.hash(), action);
+            }
         } else if (command == 'build-all') {
             const image = program.args.shift();
             const dist = Config.get().build_images[image].installs_from;
@@ -117,10 +127,10 @@ async function main() {
 
     for (const image of images_involved) {
         const image_reqs = await prepareImage(image);
-        ordered.push(...await orderPackageSet(image_reqs));
+        ordered.push(...await orderPackageSet(image_reqs, (status) => tui.setState({ planStatus: status })));
     }
 
-    ordered.push(...await orderPackageSet(Array.from(requirements.values())));
+    ordered.push(...await orderPackageSet(Array.from(requirements.values()), (status) => tui.setState({ planStatus: status })));
     ordered = await filterExistingBuilds(ordered);
     Logger.info("----- Plan: -----");
     for (const build of ordered) {
@@ -135,49 +145,56 @@ async function main() {
     targets.forEach(x => mutices.set(x, new Mutex()));
 
     const cancellations = new Set<string>();
-    const currently_running = new Map<string, string>();
+    const currently_running = new Map<string, BuiltPackage>();
+    targets.forEach(t => currently_running.set(t, undefined));
+    const completions: BuiltPackage[] = [];
 
     const pending = new Set<BuiltPackage>(ordered);
     while (pending.size) {
-        update_status(currently_running, pending.size);
+        const runnable: BuiltPackage[] = [];
         for (const candidate of pending.values()) {
             const prerequisites = Array.from((await candidate.buildDependencies()).values()).filter(x => x instanceof BuiltPackage);
             if (!allBuiltPackages(prerequisites)) throw new Error("huh?");
             const results: boolean[] = await Promise.all(prerequisites.map(x => x.alreadyDone()));
             if (results.every(x => x)) {
                 Logger.debug(`[controller] Runnable: ${candidate._prettyPrint()}`);
-                const cancel_uuid = uuid.v4();
-                const promises = Array.from(mutices.entries()).map(async ([target, mutex]) => {
-                    // Attempt to acquire our mutex.
-                    const release = await mutex.acquire();
-                    // We are now in a critical section. If we await here, someone else might _also_ acquire their mutex, and we have a problem.
-                    // Check if someone else got theirs first.
-                    if (cancellations.has(cancel_uuid)) {
-                        // Someone got to a target first. Just release the lock immediately.
-                        // It's OK that we don't return anything here because we *can't* get to this place
-                        // unless another promise has already resolved, so it won't be the winner in
-                        // the Promise.race call.
-                        release();
-                    } else {
-                        // Tell everyone else off.
-                        pending.delete(candidate);
-                        cancellations.add(cancel_uuid);
-                        // We're now out of the critical section.
-                        return { target: target, release: release };
-                    }
-                });
-                const target = await Promise.race(promises);
-                Logger.info(`[controller] \x1b[1mRunning: ${candidate._prettyPrint()} on ${target.target}\x1b[0m`);
-                currently_running.set(target.target, candidate.name);
-                update_status(currently_running, pending.size);
-                candidate.run(target.target == 'localhost' ? undefined : target.target)
-                    .then(() => {
-                        Logger.info(`[controller] \x1b[1mCompleted: ${candidate._prettyPrint()} on ${target.target}\x1b[0m`);
-                        currently_running.set(target.target, "<none>");
-                        update_status(currently_running, pending.size);
-                        target.release();
-                    });
+                runnable.push(candidate);
             }
+        }
+        tui.updateBuildState(completions, currently_running, pending, runnable, ordered.length);
+        for (const candidate of runnable) {
+            const cancel_uuid = uuid.v4();
+            const promises = Array.from(mutices.entries()).map(async ([target, mutex]) => {
+                // Attempt to acquire our mutex.
+                const release = await mutex.acquire();
+                // We are now in a critical section. If we await here, someone else might _also_ acquire their mutex, and we have a problem.
+                // Check if someone else got theirs first.
+                if (cancellations.has(cancel_uuid)) {
+                    // Someone got to a target first. Just release the lock immediately.
+                    // It's OK that we don't return anything here because we *can't* get to this place
+                    // unless another promise has already resolved, so it won't be the winner in
+                    // the Promise.race call.
+                    release();
+                } else {
+                    // Tell everyone else off.
+                    pending.delete(candidate);
+                    cancellations.add(cancel_uuid);
+                    // We're now out of the critical section.
+                    return { target: target, release: release };
+                }
+            });
+            const target = await Promise.race(promises);
+            Logger.info(`[controller] \x1b[1mRunning: ${candidate._prettyPrint()} on ${target.target}\x1b[0m`);
+            currently_running.set(target.target, candidate);
+            tui.updateBuildState(completions, currently_running, pending, runnable, ordered.length);
+            candidate.run(target.target == 'localhost' ? undefined : target.target)
+                .then(() => {
+                    Logger.info(`[controller] \x1b[1mCompleted: ${candidate._prettyPrint()} on ${target.target}\x1b[0m`);
+                    completions.push(candidate);
+                    currently_running.set(target.target, undefined);
+                    tui.updateBuildState(completions, currently_running, pending, runnable, ordered.length);
+                    target.release();
+                });
         }
         // wait a bit to not thrash the disk by way of BuiltPackage.alreadyDone()
         await new Promise((resolve, reject) => setTimeout(resolve, 10000));
@@ -192,4 +209,4 @@ program.option(
 
 program.parse();
 
-main().catch(e => console.error(e));
+ink.render(<TUI />);

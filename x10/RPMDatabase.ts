@@ -1,6 +1,6 @@
-import * as glob from 'glob';
-import * as util from 'util';
-import * as child_process from 'child_process';
+import glob = require('glob');
+import util = require('util');
+import child_process = require('child_process')
 import fs = require('fs');
 import path = require('path');
 import { Logger } from './Logger';
