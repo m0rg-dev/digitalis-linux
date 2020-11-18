@@ -24,6 +24,10 @@ URL:            https://gnupg.org/software/libgpg-error/index.html
 Source0:        https://gnupg.org/ftp/gcrypt/%{libname}/%{libname}-%{version}.tar.bz2
 %define         SHA256SUM0 4a836edcae592094ef1c5a4834908f44986ab2b82e0824a0344b49df8cdb298f
 
+# X10-Update-Spec: { "type": "webscrape", 
+# X10-Update-Spec:   "url": "https://gnupg.org/ftp/gcrypt/libgpg-error",
+# X10-Update-Spec:   "pattern": "(?:href=\"|/)libgpg-error-((?:\\d+\\.)*\\d+)\\.tar\\..z2?\""}
+
 BuildRequires:  make gcc
 
 %if "%{_build}" != "%{_host}"

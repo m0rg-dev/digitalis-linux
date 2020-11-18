@@ -23,6 +23,8 @@ URL:            https:///www.lua.org
 Source0:        https://www.lua.org/ftp/%{libname}-%{version}.tar.gz
 %define         SHA256SUM0 4ba786c3705eb9db6567af29c91a01b81f1c0ac3124fdbf6cd94bdd9e53cca7d
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://www.lua.org/ftp/", "pattern": "(?:HREF=\"|/)\\w+-((?:\\d+\\.)*\\d+)\\.tar\\..z2?\""}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

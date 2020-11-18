@@ -9,6 +9,8 @@ URL:            https://gnu.org/software/help2man
 Source0:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
 %define         SHA256SUM0 3ef8580c5b86e32ca092ce8de43df204f5e6f714b0cd32bc6237e6cd0f34a8f4
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/help2man/"}
+
 BuildArch:      noarch
 
 %if "%{_build}" != "%{_host}"

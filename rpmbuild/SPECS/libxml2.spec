@@ -25,6 +25,11 @@ URL:            http://xmlsoft.org/
 Source0:        ftp://xmlsoft.org/%{libname}/%{libname}-%{version}.tar.gz
 %define         SHA256SUM0 aafee193ffb8fe0c82d4afef6ef91972cbaf5feea100edc2f262750611b4be1f
 
+
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://gitlab.gnome.org/GNOME/libxml2.git", 
+# X10-Update-Spec:   "pattern": "^v((?:\\d+\\.?)+)$" }
+
 BuildRequires:  make
 
 %if "%{_build}" != "%{_host}"

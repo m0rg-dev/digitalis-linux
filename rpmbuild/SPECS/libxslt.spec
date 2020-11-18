@@ -23,6 +23,10 @@ URL:            https://xmlsoft.org/libxslt
 Source0:        ftp://xmlsoft.org/%{name}/%{name}-%{version}.tar.gz
 %define         SHA256SUM0 98b1bd46d6792925ad2dfe9a87452ea2adebf69dcb9919ffd55bf926a7f93f7f
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://gitlab.gnome.org/GNOME/libxslt.git", 
+# X10-Update-Spec:   "pattern": "^v((?:\\d+\\.?)+)$" }
+
 BuildRequires:  make
 
 %if "%{_build}" != "%{_host}"

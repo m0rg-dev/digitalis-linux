@@ -24,6 +24,10 @@ URL:            https://github.com/json-c/json-c
 Source0:        https://github.com/json-c/%{libname}/archive/%{libname}-%{version}%{silly_version}.tar.gz
 %define         SHA256SUM0 4ba9a090a42cf1e12b84c64e4464bb6fb893666841d5843cc5bef90774028882
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/json-c/json-c.git", 
+# X10-Update-Spec:   "pattern": "^json-c-((?:\\d+\\.?)+)-\\d+$" }
+
 BuildRequires:  cmake
 BuildRequires:  make
 

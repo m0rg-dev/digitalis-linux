@@ -6,6 +6,8 @@ BuildArch: noarch
 
 License:  None
 
+# X10-Update-Spec: { "type": "none" }
+
 Requires: fs-tree
 
 Requires: bash

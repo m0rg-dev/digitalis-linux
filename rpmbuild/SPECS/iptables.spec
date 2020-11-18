@@ -6,7 +6,7 @@ Summary:        Legacy network packet filter / firewall
 License:        GPLv2
 URL:            https://www.netfilter.org/
 %undefine       _disable_source_fetch
-Source0:        https://www.netfilter.org/pub/iptables/iptables-1.8.6.tar.bz2
+Source0:        https://www.netfilter.org/pub/iptables/iptables-%{version}.tar.bz2
 %define         SHA256SUM0 a0f4fe0c3eb8faa5bd9c8376d132f340b9558e750c91deb2d5028aa3d0047767
 
 %if "%{_build}" != "%{_host}"

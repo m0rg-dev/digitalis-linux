@@ -10,6 +10,8 @@ BuildArch:      noarch
 # first place.
 License:        Unknown
 
+# X10-Update-Spec: { "type": "none" }
+
 BuildRequires:  /usr/bin/cat
 
 %description

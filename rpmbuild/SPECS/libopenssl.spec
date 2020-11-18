@@ -25,6 +25,10 @@ URL:            https://www.openssl.org/
 Source0:        https://www.openssl.org/source/%{libname}-%{version}.tar.gz
 %define         SHA256SUM0 5c9ca8774bd7b03e5784f26ae9e9e6d749c9da2438545077e6b3d755a06595d9
 
+# X10-Update-Spec: { "type": "webscrape", 
+# X10-Update-Spec:   "url": "https://www.openssl.org/source/",
+# X10-Update-Spec:   "pattern": "(?:href=\"|/)\\w+-((?:\\d+\\.)*\\d+.?)\\.tar\\..z2?\"" }
+
 BuildRequires:  make perl
 
 %if "%{_build}" != "%{_host}"

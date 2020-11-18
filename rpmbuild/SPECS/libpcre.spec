@@ -23,6 +23,10 @@ URL:            https://pcre.org
 Source0:        https://ftp.pcre.org/pub/pcre/%{libname}-%{version}.tar.bz2
 %define         SHA256SUM0 19108658b23b3ec5058edc9f66ac545ea19f9537234be1ec62b714c84399366d
 
+# X10-Update-Spec: { "type": "webscrape", 
+# X10-Update-Spec:   "url": "https://ftp.pcre.org/pub/pcre/",
+# X10-Update-Spec:   "pattern": "(?:href=\"|/)\\w+-(\\d\\.(?:\\d+\\.)*\\d+)\\.tar\\..z2?\"" }
+
 BuildRequires:  make
 
 %if "%{_build}" != "%{_host}"

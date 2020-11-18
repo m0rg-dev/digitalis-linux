@@ -10,6 +10,10 @@ Source0:        https://github.com/pypa/%{name}/archive/v%{version}.tar.gz#/%{na
 %define         SHA256SUM0 7d97c001ce9193c6d947bc584b6a19f593e1d2dd4d6c443de3b1e545875bc132
 BuildArch:      noarch
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/pypa/setuptools.git", 
+# X10-Update-Spec:   "pattern": "^v((?:\\d+\\.?)+)$" }
+
 Provides:       python-setuptools = %{version}-%{release}
 
 %if "%{_build}" != "%{_host}"

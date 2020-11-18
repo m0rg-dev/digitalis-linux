@@ -21,6 +21,10 @@ URL:            https://tukaani.org/xz/
 Source0:        https://tukaani.org/xz/xz-%{version}.tar.xz
 %define         SHA256SUM0 3e1e518ffc912f86608a8cb35e4bd41ad1aec210df2a47aaa1f95e7f5576ef56
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://git.tukaani.org/xz.git", 
+# X10-Update-Spec:   "pattern": "^v((?:\\d+\\.?)+)$" }
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

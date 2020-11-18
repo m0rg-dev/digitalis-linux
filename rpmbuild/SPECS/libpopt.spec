@@ -23,6 +23,10 @@ URL:            https://github.com/rpm-software-management/popt/
 Source0:        http://ftp.rpm.org/%{libname}/releases/%{libname}-1.x/%{libname}-%{version}.tar.gz
 %define         SHA256SUM0 5159bc03a20b28ce363aa96765f37df99ea4d8850b1ece17d1e6ad5c24fdc5d1
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/rpm-software-management/popt.git", 
+# X10-Update-Spec:   "pattern": "^popt-((?:\\d+\\.?)+)-release$" }
+
 BuildRequires:  make
 
 %if "%{_build}" != "%{_host}"

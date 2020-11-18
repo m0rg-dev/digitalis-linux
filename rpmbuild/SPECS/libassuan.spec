@@ -24,6 +24,8 @@ URL:            https://www.gnupg.org/
 Source0:        https://www.gnupg.org/ftp/gcrypt/%{libname}/%{libname}-%{version}.tar.bz2
 %define         SHA256SUM0 c080ee96b3bd519edd696cfcebdecf19a3952189178db9887be713ccbcb5fbf0
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://www.gnupg.org/ftp/gcrypt/libassuan/"}
+
 BuildRequires:  make gcc
 
 %if "%{_build}" != "%{_host}"

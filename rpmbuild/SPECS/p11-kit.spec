@@ -21,6 +21,11 @@ URL:            https://github.com/p11-glue/p11-kit
 Source0:        https://github.com/p11-glue/p11-kit/releases/download/%{version}/p11-kit-%{version}.tar.xz
 %define         SHA256SUM0 f1baa493f05ca0d867f06bcb54cbb5cdb28c756db07207b6e18de18a87b10627
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/p11-glue/p11-kit.git", 
+# X10-Update-Spec:   "pattern": "^((?:\\d+\\.?)+)$" }
+
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

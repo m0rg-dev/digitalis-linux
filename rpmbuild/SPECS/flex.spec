@@ -9,6 +9,10 @@ URL:            https://github.com/westes/flex
 Source0:        https://github.com/westes/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.gz
 %define         SHA256SUM0 e87aae032bf07c26f85ac0ed3250998c37621d95f8bd748b31f15b33c45ee995
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/westes/flex.git", 
+# X10-Update-Spec:   "pattern": "^v(\\d+\\.\\d+\\.\\d+)$" }
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

@@ -23,6 +23,8 @@ URL:            https://zlib.net/
 Source0:        https://zlib.net/zlib-%{version}.tar.xz
 %define         SHA256SUM0 4ff941449631ace0d4d203e3483be9dbc9da454084111f97ea0a2114e19bf066
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://zlib.net/", "pattern": "(?:HREF=\"|/)\\w+-((?:\\d+\\.)*\\d+)\\.tar\\..z2?\""}
+
 BuildRequires:  make
 
 %if "%{_build}" != "%{_host}"

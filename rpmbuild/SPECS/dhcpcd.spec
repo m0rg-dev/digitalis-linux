@@ -9,6 +9,8 @@ URL:            https://roy.marples.name/projects/dhcpcd/
 Source0:        https://roy.marples.name/downloads/dhcpcd/dhcpcd-%{version}.tar.xz
 %define         SHA256SUM0 6d49af5e766a2515e6366e4f669663df04ecdf90a1a60ddb1d7a2feb4b5d2566
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://roy.marples.name/downloads/dhcpcd/"}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

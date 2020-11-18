@@ -9,6 +9,8 @@ URL:            https://gnu.org/software/grub
 Source0:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
 %define         SHA256SUM0 e5292496995ad42dabe843a0192cf2a2c502e7ffcc7479398232b10a472df77d
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/grub/"}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

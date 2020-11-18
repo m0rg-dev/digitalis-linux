@@ -23,6 +23,10 @@ URL:            https://github.com/fedora-modularity/libmodulemd
 Source0:        https://github.com/fedora-modularity/libmodulemd/releases/download/%{libname}-%{version}/modulemd-%{version}.tar.xz
 %define         SHA256SUM0 cb86b1dad4f1578895225ba4ee435dbb7d75262898f69a08507b01759bfc81ab
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/fedora-modularity/libmodulemd.git", 
+# X10-Update-Spec:   "pattern": "^libmodulemd-((?:\\d+\\.?)+)$" }
+
 Patch0:         libmodulemd-0001-no-cross-validator.patch
 
 BuildRequires:  meson ninja-build gcc gtk-doc

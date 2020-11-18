@@ -9,6 +9,10 @@ URL:            https://github.com/containernetworking/plugins
 Source0:        https://github.com/containernetworking/plugins/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 %define         SHA256SUM0 de9fa170b4b6d38f6ff5287b313ddaf3c31f70bccb10e971ad59adadae22dd74
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/containernetworking/plugins.git", 
+# X10-Update-Spec:   "pattern": "^v(\\d+\\.\\d+\\.\\d+)$" }
+
 %if "%{_build}" != "%{_host}"
 %error This package is not set up for cross-compilation.
 %endif

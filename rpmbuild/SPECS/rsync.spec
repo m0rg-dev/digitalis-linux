@@ -9,6 +9,8 @@ URL:            https://rsync.samba.org/
 Source0:        https://download.samba.org/pub/rsync/src/rsync-%{version}.tar.gz
 %define         SHA256SUM0 becc3c504ceea499f4167a260040ccf4d9f2ef9499ad5683c179a697146ce50e
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://download.samba.org/pub/rsync/src/"}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

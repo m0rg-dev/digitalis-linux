@@ -20,6 +20,8 @@ URL:            https://www.gnu.org/software/binutils/
 Source0:        https://ftp.gnu.org/gnu/binutils/binutils-%{version}.tar.xz
 %define         SHA256SUM0 f00b0e8803dc9bab1e2165bd568528135be734df3fabf8d0161828cd56028952
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/binutils/"}
+
 BuildRequires:  make zlib-devel
 BuildRequires:  /usr/bin/pod2man /usr/bin/makeinfo
 

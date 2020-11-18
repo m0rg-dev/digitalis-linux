@@ -9,6 +9,8 @@ URL:            https://www.netfilter.org/projects/nftables/index.html
 Source0:        https://www.netfilter.org/projects/nftables/files/nftables-%{version}.tar.bz2
 %define         SHA256SUM0 fe6b8a8c326a2c09c02ca162b840d7d4aadb043ce7a367c166d6455b0e112cb0
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://www.netfilter.org/projects/nftables/files/", "pattern": "(?:href=\"|/)\\w+-((?:\\d+\\.){2}\\d+)\\.tar\\..z2?\""}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

@@ -9,6 +9,10 @@ URL:            https://git-scm.com
 Source0:        https://github.com/git/%{name}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 %define         SHA256SUM0 8cc15abf2bc1cfa4b8acc37025cf92ec73c20efdb3f243793fef71dfe87478be
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/git/git.git", 
+# X10-Update-Spec:   "pattern": "^v(\\d+\\.\\d+\\.\\d+)$" }
+
 Patch0:         git-0001-explicit-python3.patch
 
 %if "%{_build}" != "%{_host}"

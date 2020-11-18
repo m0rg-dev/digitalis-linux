@@ -9,6 +9,8 @@ URL:            https://gnu.org/software/libtool
 Source0:        https://ftpmirror.gnu.org/libtool/libtool-2.4.6.tar.gz
 %define         SHA256SUM0 e3bd4d5d3d025a36c21dd6af7ea818a2afcd4dfc1ea5a17b39d7854bcd0c06e3
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/libtool/"}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

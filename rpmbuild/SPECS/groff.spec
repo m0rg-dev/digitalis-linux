@@ -9,6 +9,8 @@ URL:            https://gnu.org/software/groff
 Source0:        https://ftp.gnu.org/gnu/groff/%{name}-%{version}.tar.gz
 %define         SHA256SUM0 e78e7b4cb7dec310849004fa88847c44701e8d133b5d4c13057d876c1bad0293
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/groff/"}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

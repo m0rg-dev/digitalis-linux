@@ -9,6 +9,10 @@ URL:            https://gitlab.com/procps-ng/procps
 Source0:        https://gitlab.com/procps-ng/procps/-/archive/v%{version}/procps-v%{version}.tar.gz
 %define         SHA256SUM0 7f09945e73beac5b12e163a7ee4cae98bcdd9a505163b6a060756f462907ebbc
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://gitlab.com/procps-ng/procps.git", 
+# X10-Update-Spec:   "pattern": "^v((?:\\d+\\.?)+)$" }
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

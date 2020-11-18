@@ -23,6 +23,8 @@ URL:            https://www.mpfr.org/
 Source0:        https://ftp.gnu.org/gnu/%{libname}/%{libname}-%{version}.tar.xz
 %define         SHA256SUM0 0c98a3f1732ff6ca4ea690552079da9c597872d30e96ec28414ee23c95558a7f
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/mpfr/"}
+
 BuildRequires:  make
 
 %if "%{_build}" != "%{_host}"

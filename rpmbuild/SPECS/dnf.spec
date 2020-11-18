@@ -10,6 +10,10 @@ Source0:        https://github.com/rpm-software-management/dnf/archive/%{version
 %define         SHA256SUM0 7357cddca06cfe6fb79f4e3c758006d0c9071e151289ea91497b5836321400cc
 Source1:        dnf-01-etc-dnf-dnf.conf
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/rpm-software-management/dnf.git", 
+# X10-Update-Spec:   "pattern": "^(\\d+\\.\\d+\\.\\d+)$" }
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 BuildRequires: %{?host_tool_prefix}cmake-toolchain

@@ -23,6 +23,10 @@ URL:            https://github.com/seccomp/libseccomp
 Source0:        https://github.com/seccomp/libseccomp/releases/download/v%{version}/libseccomp-%{version}.tar.gz
 %define         SHA256SUM0 4e79738d1ef3c9b7ca9769f1f8b8d84fc17143c2c1c432e53b9c64787e0ff3eb
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/seccomp/libseccomp.git", 
+# X10-Update-Spec:   "pattern": "^v((?:\\d+\\.?)+)$" }
+
 BuildRequires:  make
 
 %if "%{_build}" != "%{_host}"

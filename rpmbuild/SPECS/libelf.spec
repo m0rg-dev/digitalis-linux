@@ -23,6 +23,10 @@ URL:            https://sourceware.org/elfutils/
 Source0:        https://sourceware.org/elfutils/ftp/%{version}/elfutils-%{version}.tar.bz2
 %define         SHA256SUM0 29a6ad7421ec2acfee489bb4a699908281ead2cb63a20a027ce8804a165f0eb3
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "git://sourceware.org/git/elfutils.git", 
+# X10-Update-Spec:   "pattern": "^elfutils-((?:\\d+\\.?)+)$" }
+
 BuildRequires:  make
 
 %if "%{_build}" != "%{_host}"

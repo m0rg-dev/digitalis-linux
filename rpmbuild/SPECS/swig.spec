@@ -9,6 +9,10 @@ URL:            http://www.swig.org/
 Source0:        https://github.com/swig/%{name}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 %define         SHA256SUM0 b5f43d5f94c57ede694ffe5e805acc5a3a412387d7f97dcf290d06c46335cb0b
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/swig/swig.git", 
+# X10-Update-Spec:   "pattern": "^v((?:\\d+\\.?)+)$" }
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

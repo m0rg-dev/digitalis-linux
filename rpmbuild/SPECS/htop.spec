@@ -9,6 +9,8 @@ URL:            https://htop.dev/
 Source0:        https://bintray.com/htop/source/download_file?file_path=htop-%{version}.tar.gz
 %define         SHA256SUM0 6471d9505daca5c64073fc37dbab4d012ca4fc6a7040a925dad4a7553e3349c4
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://htop.dev/downloads.html", "pattern": "in htop ((?:\\d+\\.?)+)"}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

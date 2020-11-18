@@ -9,6 +9,8 @@ URL:            https://kbd-project.org/
 Source0:        https://mirrors.edge.kernel.org/pub/linux/utils/kbd/kbd-%{version}.tar.xz
 %define         SHA256SUM0 685056143cb8effd0a1d44b5c391eb50d80dcfd014b1a4d6e2650a28d61cb82a
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://mirrors.edge.kernel.org/pub/linux/utils/kbd/"}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

@@ -10,6 +10,7 @@ import { BuiltPackage, FailureType, Package } from "./Package";
 import { PlanProgress } from "./PlanSpinner";
 import { package_name, RPMDatabase } from "./RPMDatabase";
 import { TUI } from "./TUI";
+import { Updater } from "./Updater";
 
 function filterDuplicateBuilds(list: BuiltPackage[]): BuiltPackage[] {
     const r: BuiltPackage[] = [];
@@ -83,39 +84,10 @@ async function orderPackageSet(packages: Package[], statusCallback: ((status: Pl
 
 function combine(map: Map<string, BuiltPackage>, list: BuiltPackage[]) { list.forEach(x => map.set(x.hash(), x)) }
 
-export async function main(tui: TUI) {
+async function doBuild(tui: TUI, requirements: Map<string, BuiltPackage>) {
     tui.setState({ buildingDatabase: "working" })
     await RPMDatabase.rebuild();
     tui.setState({ buildingDatabase: "complete" });
-
-    const requirements = new Map<string, BuiltPackage>();
-
-    while (program.args.length) {
-        const command = program.args.shift();
-        if (command == 'rebuild-image' || command == 'build-image') {
-            const image = program.args.shift();
-            if (command == 'rebuild-image') Config.ignoredExistingImages.add(image);
-            combine(requirements, await prepareImage(image));
-        } else if (command == 'rebuild-package' || command == 'build-package') {
-            const [pkg, image = Config.get().default_image] = program.args.shift().split(":");
-            const action = new BuiltPackage(pkg, image);
-            if (command == 'rebuild-package') Config.ignoredExistingPackages.add(`${action.spec.spec}:${action.spec.profile}`);
-            requirements.set(action.hash(), action);
-        } else if (command == 'rebuild-packages') {
-            for (const arg of program.args) {
-                const [pkg, image = Config.get().default_image] = arg.split(":");
-                const action = new BuiltPackage(pkg, image);
-                Config.ignoredExistingPackages.add(`${action.spec.spec}:${action.spec.profile}`);
-                requirements.set(action.hash(), action);
-            }
-        } else if (command == 'build-all') {
-            const image = program.args.shift() || Config.get().default_image;
-            const dist = Config.get().build_images[image].installs_from;
-            const names = Array.from(RPMDatabase.dist_name_to_version.get(dist).keys());
-            const pkgs = names.map(x => new BuiltPackage(x, image));
-            combine(requirements, pkgs);
-        }
-    }
 
     const images_involved = new Set<image_name>();
     for (const pkg of requirements.values()) {
@@ -223,6 +195,47 @@ export async function main(tui: TUI) {
         await new Promise((resolve, reject) => setTimeout(resolve, 10000));
     }
     Logger.info('[controller] All build tasks dispatched.');
+}
+
+export async function main(tui: TUI) {
+    var mode = "build";
+    const requirements = new Map<string, BuiltPackage>();
+
+    while (program.args.length) {
+        const command = program.args.shift();
+        if (command == 'rebuild-image' || command == 'build-image') {
+            const image = program.args.shift();
+            if (command == 'rebuild-image') Config.ignoredExistingImages.add(image);
+            combine(requirements, await prepareImage(image));
+        } else if (command == 'rebuild-package' || command == 'build-package') {
+            const [pkg, image = Config.get().default_image] = program.args.shift().split(":");
+            const action = new BuiltPackage(pkg, image);
+            if (command == 'rebuild-package') Config.ignoredExistingPackages.add(`${action.spec.spec}:${action.spec.profile}`);
+            requirements.set(action.hash(), action);
+        } else if (command == 'rebuild-packages') {
+            for (const arg of program.args) {
+                const [pkg, image = Config.get().default_image] = arg.split(":");
+                const action = new BuiltPackage(pkg, image);
+                Config.ignoredExistingPackages.add(`${action.spec.spec}:${action.spec.profile}`);
+                requirements.set(action.hash(), action);
+            }
+        } else if (command == 'build-all') {
+            const image = program.args.shift() || Config.get().default_image;
+            const dist = Config.get().build_images[image].installs_from;
+            const names = Array.from(RPMDatabase.dist_name_to_version.get(dist).keys());
+            const pkgs = names.map(x => new BuiltPackage(x, image));
+            combine(requirements, pkgs);
+        } else if (command == 'check-updates') {
+            mode = "update";
+            break;
+        }
+    }
+
+    if(mode == "build") {
+        await doBuild(tui, requirements);
+    } else {
+        await Updater.run(tui, program.args);
+    }
 }
 
 program.option(

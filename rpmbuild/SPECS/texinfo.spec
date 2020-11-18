@@ -9,6 +9,8 @@ URL:            https://gnu.org/software/texinfo
 Source0:        https://ftp.gnu.org/gnu/texinfo/%{name}-%{version}.tar.xz
 %define         SHA256SUM0 988403c1542d15ad044600b909997ba3079b10e03224c61188117f3676b02caa
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/texinfo/"}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

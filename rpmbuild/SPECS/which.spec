@@ -9,6 +9,8 @@ URL:            https://carlowood.github.io/which/
 Source0:        https://carlowood.github.io/%{name}/%{name}-%{version}.tar.gz
 %define         SHA256SUM0 f4a245b94124b377d8b49646bf421f9155d36aa7614b6ebf83705d3ffc76eaad
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://carlowood.github.io/which/", "pattern": "(?:HREF=\"|/)\\w+-((?:\\d+\\.)*\\d+)\\.tar\\..z2?\""}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

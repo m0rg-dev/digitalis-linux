@@ -23,6 +23,10 @@ Source0:        https://dev.gentoo.org/~blueness/eudev/eudev-%{version}.tar.gz
 Source1:        eudev-01-initcpio-hooks
 Source2:        eudev-02-initcpio-install
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/gentoo/eudev.git", 
+# X10-Update-Spec:   "pattern": "^v((?:\\d+\\.?)+)$" }
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

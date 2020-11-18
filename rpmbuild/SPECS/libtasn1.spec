@@ -23,6 +23,8 @@ URL:            https://gnu.org/software/libtasn1
 Source0:        https://ftp.gnu.org/gnu/%{libname}/%{libname}-%{version}.tar.gz
 %define         SHA256SUM0 0e0fb0903839117cb6e3b56e68222771bebf22ad7fc2295a0ed7d576e8d4329d
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/libtasn1/"}
+
 BuildRequires:  make
 
 %if "%{_build}" != "%{_host}"

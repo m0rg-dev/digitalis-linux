@@ -9,6 +9,8 @@ Summary:        Information for meson about cross-compilers.
 License:        None
 BuildArch:      noarch
 
+# X10-Update-Spec: { "type": "none" }
+
 # random dependency to not screw up fedora_bootstrap.sh (FIXME)
 BuildRequires:  /usr/bin/cat
 

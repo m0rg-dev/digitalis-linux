@@ -9,6 +9,10 @@ URL:            https://cmake.org
 Source0:        https://github.com/Kitware/CMake/releases/download/v%{version}/%{name}-%{version}.tar.gz
 %define         SHA256SUM0 597c61358e6a92ecbfad42a9b5321ddd801fc7e7eca08441307c9138382d4f77
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/Kitware/CMake.git", 
+# X10-Update-Spec:   "pattern": "^v(\\d+\\.\\d+\\.\\d+)$" }
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 BuildRequires: %{?host_tool_prefix}cmake-toolchain

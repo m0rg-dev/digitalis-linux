@@ -23,6 +23,9 @@ URL:            https://github.com/libexpat/libexpat
 Source0:        https://github.com/libexpat/libexpat/releases/download/R_%(echo %{version} | tr . _)/%{libname}-%{version}.tar.xz
 %define         SHA256SUM0 5dfe538f8b5b63f03e98edac520d7d9a6a4d22e482e5c96d4d06fcc5485c25f2
 
+# X10-Update-Spec: { "type": "webscrape", 
+# X10-Update-Spec:   "url": "https://github.com/libexpat/libexpat/releases" }
+
 BuildRequires:  make
 
 %if "%{_build}" != "%{_host}"

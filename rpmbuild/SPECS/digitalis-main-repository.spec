@@ -5,6 +5,8 @@ Summary:        Main digitalis dnf repository.
 License:        None
 BuildArch:      noarch
 
+# X10-Update-Spec: { "type": "none" }
+
 BuildRequires:  /usr/bin/cat
 
 Requires:       dnf

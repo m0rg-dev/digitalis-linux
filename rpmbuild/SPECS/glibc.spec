@@ -24,6 +24,8 @@ Source0:        https://ftp.gnu.org/gnu/glibc/glibc-%{version}.tar.xz
 Source1:        nscd.conf
 Source2:        nsswitch.conf
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/glibc/"}
+
 BuildRequires:  make bison
 #Requires:       
 Provides:       rtld(GNU_HASH)

@@ -23,6 +23,8 @@ URL:            https://www.libarchive.org/
 Source0:        http://www.libarchive.org/downloads/%{libname}-%{version}.tar.xz
 %define         SHA256SUM0 0bfc3fd40491768a88af8d9b86bf04a9e95b6d41a94f9292dbc0ec342288c05f
 
+# X10-Update-Spec: { "type": "webscrape", "url": "http://www.libarchive.org/downloads/"}
+
 BuildRequires:  make
 
 %if "%{_build}" != "%{_host}"

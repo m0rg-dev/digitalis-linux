@@ -5,6 +5,8 @@ Summary: because something has to own the XML catalog
 License: None
 BuildArch: noarch
 
+# X10-Update-Spec: { "type": "none" }
+
 BuildRequires: /usr/bin/xmlcatalog
 
 %description

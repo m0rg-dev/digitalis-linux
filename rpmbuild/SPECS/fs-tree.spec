@@ -6,6 +6,8 @@ License:        none
 BuildArch:      noarch
 BuildRequires:  coreutils
 
+# X10-Update-Spec: { "type": "none" }
+
 %description
 
 %prep

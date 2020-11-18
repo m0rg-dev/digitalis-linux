@@ -9,6 +9,10 @@ URL:            https://github.com/pkgconf/pkgconf
 Source0:        https://github.com/pkgconf/%{name}/archive/%{name}-%{version}.tar.gz
 %define         SHA256SUM0 8f2c6e9f08adc5773d7fa3c1db1ed03f5fa02ceed037a537ce1195f7c93700ed
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/pkgconf/pkgconf.git", 
+# X10-Update-Spec:   "pattern": "^pkgconf-((?:\\d+\\.?)+)$" }
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

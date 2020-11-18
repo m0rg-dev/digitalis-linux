@@ -23,6 +23,8 @@ URL:            https://pagure.io/libaio
 Source0:        https://releases.pagure.org/libaio/libaio-%{version}.tar.gz
 %define         SHA256SUM0 ab0462f2c9d546683e5147b1ce9c195fe95d07fac5bf362f6c01637955c3b492
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://releases.pagure.org/libaio/"}
+
 BuildRequires:  make
 
 %if "%{_build}" != "%{_host}"

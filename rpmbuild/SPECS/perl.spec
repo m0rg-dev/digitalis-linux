@@ -9,6 +9,8 @@ URL:            https://www.perl.org/
 Source0:        https://www.cpan.org/src/5.0/%{name}-%{version}.tar.gz
 %define         SHA256SUM0 efeb1ce1f10824190ad1cadbcccf6fdb8a5d37007d0100d2d9ae5f2b5900c0b4
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://www.cpan.org/src/5.0/"}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

@@ -23,6 +23,8 @@ URL:            https://www.freedesktop.org/wiki/Software/cppunit/
 Source0:        http://dev-www.libreoffice.org/src/%{libname}-%{version}.tar.gz
 %define         SHA256SUM0 89c5c6665337f56fd2db36bc3805a5619709d51fb136e51937072f63fcc717a7
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://www.freedesktop.org/wiki/Software/cppunit/"}
+
 BuildRequires:  make
 
 %if "%{_build}" != "%{_host}"

@@ -12,6 +12,8 @@ Source0:        https://go.googlesource.com/go/+archive/refs/tags/go%{version}.t
 Source1:        https://dl.google.com/go/go1.4-bootstrap-20171003.tar.gz
 %define         SHA256SUM1 f4ff5b5eb3a3cae1c993723f3eab519c5bae18866b5e5f96fe1102f0cb5c3e52
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://golang.org/dl/", "pattern": "filename\">go((?:\\d+\\.?)+).linux"}
+
 # TODO check arch for cross-compile
 # go is self-contained enough to Just Work between systems with identical arch and
 # similar libc, but we should do better than that

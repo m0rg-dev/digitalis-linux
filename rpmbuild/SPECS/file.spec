@@ -25,6 +25,8 @@ URL:            http://astron.com/pub/file/
 Source0:        http://astron.com/pub/%{libname}/%{libname}-%{version}.tar.gz
 %define         SHA256SUM0 f05d286a76d9556243d0cb05814929c2ecf3a5ba07963f8f70bfaaa70517fad1
 
+# X10-Update-Spec: { "type": "webscrape", "url": "http://astron.com/pub/file/"}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

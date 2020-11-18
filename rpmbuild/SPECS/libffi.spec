@@ -23,6 +23,10 @@ URL:            https://github.com/libffi/libffi/
 Source0:        https://github.com/libffi/%{libname}/archive/v%{version}.tar.gz#/libffi-%{version}.tar.gz
 %define         SHA256SUM0 3f2f86094f5cf4c36cfe850d2fe029d01f5c2c2296619407c8ba0d8207da9a6b
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/libffi/libffi.git", 
+# X10-Update-Spec:   "pattern": "^v((?:\\d+\\.?)+)$" }
+
 BuildRequires:  make autoconf automake libtool texinfo
 
 %if "%{_build}" != "%{_host}"

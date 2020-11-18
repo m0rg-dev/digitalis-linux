@@ -9,6 +9,10 @@ URL:            https://www.kernel.org
 Source0:        https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-%{version}.tar.xz
 %define         SHA256SUM0 d1ae28dfe9d25b73f2e437319df1b77d7ac1d0efd188cfb5df84a6784a318a73
 
+# X10-Update-Spec: { "type": "webscrape", 
+# X10-Update-Spec:   "url": "https://www.kernel.org",
+# X10-Update-Spec:   "pattern": "latest_link\">\\s*<a href=\"https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-((?:\\d+\\.?)+)\\." }
+
 Source1:        linux-01-config
 Source2:        linux-02-modprobe-usb-conf
 Source3:        linux-03-mkinitcpio-linux

@@ -4,6 +4,8 @@ Release: 1%{?dist}
 Summary: Packages required to boot digitalis on a real computer
 License: None
 
+# X10-Update-Spec: { "type": "none" }
+
 BuildRequires: /usr/bin/true
 
 Requires: dhcpcd

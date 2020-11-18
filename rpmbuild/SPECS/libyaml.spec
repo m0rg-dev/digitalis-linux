@@ -23,6 +23,8 @@ URL:            https://pyyaml.org/wiki/LibYAML
 Source0:        http://pyyaml.org/download/%{libname}/yaml-%{version}.tar.gz
 %define         SHA256SUM0 c642ae9b75fee120b2d96c712538bd2cf283228d2337df2cf2988e3c02678ef4
 
+# X10-Update-Spec: { "type": "webscrape", "url": "http://pyyaml.org/download/libyaml/"}
+
 BuildRequires:  make
 
 %if "%{_build}" != "%{_host}"

@@ -9,6 +9,8 @@ URL:            https://www.gnu.org/software/grep/
 Source0:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
 %define         SHA256SUM0 b82ac77707c2ab945520c8404c9fa9f890f7791a62cf2103cf6238acad87a44a
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/grep/"}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

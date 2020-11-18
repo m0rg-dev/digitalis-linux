@@ -24,6 +24,10 @@ URL:            https://gi.readthedocs.io/en/latest/
 Source0:        https://download.gnome.org/sources/%{libname}/1.64/%{libname}-%{version}.tar.xz
 %define         SHA256SUM0 80beae6728c134521926affff9b2e97125749b38d38744dc901f4010ee3e7fa7
 
+# X10-Update-Spec: { "type": "webscrape", 
+# X10-Update-Spec: "url": "https://download.gnome.org/sources/gobject-introspection/cache.json",
+# X10-Update-Spec: "pattern": "(?:href=\"|/)gobject-introspection-((?:\\d+\\.)*\\d+)\\.tar\\..z2?\""}
+
 BuildRequires:  meson ninja-build gcc glib2-devel flex bison
 
 %if "%{_build}" != "%{_target}"

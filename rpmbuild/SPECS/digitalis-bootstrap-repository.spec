@@ -5,6 +5,8 @@ Summary:        dnf repo for digitalis bootstrap process
 License:        None
 BuildArch:      noarch
 
+# X10-Update-Spec: { "type": "none" }
+
 BuildRequires:  /usr/bin/cat
 
 Requires:       dnf

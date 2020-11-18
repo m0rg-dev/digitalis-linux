@@ -9,6 +9,8 @@ URL:            https://gnu.org/software/gperf
 Source0:        http://ftp.gnu.org/pub/gnu/%{name}/%{name}-%{version}.tar.gz
 %define         SHA256SUM0 588546b945bba4b70b6a3a616e80b4ab466e3f33024a352fc2198112cdbb3ae2
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/gperf/"}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

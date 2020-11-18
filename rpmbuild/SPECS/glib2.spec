@@ -23,6 +23,8 @@ URL:            http://www.gtk.org/
 Source0:        http://ftp.gnome.org/pub/gnome/sources/glib/2.66/glib-%{version}.tar.xz
 %define         SHA256SUM0 ec390bed4e8dd0f89e918f385e8d4cfd7470b1ef7c1ce93ec5c4fc6e3c6a17c4
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://download.gnome.org/sources/glib/cache.json"}
+
 BuildRequires:  meson ninja-build gcc g++
 #BuildRequires:  git
 

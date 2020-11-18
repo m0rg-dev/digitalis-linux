@@ -24,6 +24,8 @@ URL:            https://www.gnupg.org/
 Source0:        https://www.gnupg.org/ftp/gcrypt/%{libname}/%{libname}-%{version}.tar.bz2
 %define         SHA256SUM0 bfe6a8e91ff0f54d8a329514db406667000cb207238eded49b599761bfca41b6
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://www.gnupg.org/ftp/gcrypt/libksba"}
+
 BuildRequires:  make gcc
 
 %if "%{_build}" != "%{_host}"

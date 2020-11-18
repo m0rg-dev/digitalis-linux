@@ -23,6 +23,10 @@ URL:            https://facebook.github.io/zstd/
 Source0:        https://github.com/facebook/zstd/releases/download/v%{version}/zstd-%{version}.tar.gz
 %define         SHA256SUM0 98e91c7c6bf162bf90e4e70fdbc41a8188b9fa8de5ad840c401198014406ce9e
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/facebook/zstd.git", 
+# X10-Update-Spec:   "pattern": "^v((?:\\d+\\.?)+)$" }
+
 BuildRequires:  make
 BuildRequires:  cmake
 

@@ -9,6 +9,10 @@ URL:            https://github.com/rpm-software-management/createrepo_c
 Source0:        https://github.com/rpm-software-management/createrepo_c/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 %define         SHA256SUM0 1807128d5193274ec7eab49ea3d5f50509bd4528147c96a2ffb6ae9137097b72
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/rpm-software-management/createrepo_c.git", 
+# X10-Update-Spec:   "pattern": "^(\\d+\\.\\d+\\.\\d+)$" }
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 BuildRequires:  %{?host_tool_prefix}cmake-toolchain

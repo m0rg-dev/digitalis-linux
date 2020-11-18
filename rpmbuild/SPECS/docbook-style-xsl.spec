@@ -9,6 +9,10 @@ URL:            https://github.com/docbook/xslt10-stylesheets
 Source0:        https://github.com/docbook/xslt10-stylesheets/releases/download/release/%{version}/docbook-xsl-nons-%{version}.tar.bz2
 %define         SHA256SUM0 ee8b9eca0b7a8f89075832a2da7534bce8c5478fc8fc2676f512d5d87d832102
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/docbook/xslt10-stylesheets.git", 
+# X10-Update-Spec:   "pattern": "^release/((?:\\d+\\.?)+)$" }
+
 BuildArch:      noarch
 
 BuildRequires:  coreutils

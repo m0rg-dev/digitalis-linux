@@ -9,6 +9,8 @@ URL:            https://busybox.net/
 Source0:        https://busybox.net/downloads/busybox-%{version}.tar.bz2
 %define         SHA256SUM0 d0f940a72f648943c1f2211e0e3117387c31d765137d92bd8284a3fb9752a998
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://busybox.net/downloads/"}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

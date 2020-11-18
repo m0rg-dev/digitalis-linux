@@ -24,6 +24,8 @@ URL:            https://gnupg.org/software/libgcrypt/index.html
 Source0:        https://gnupg.org/ftp/gcrypt/%{libname}/%{libname}-%{version}.tar.bz2
 %define         SHA256SUM0 03b70f028299561b7034b8966d7dd77ef16ed139c43440925fe8782561974748
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://gnupg.org/ftp/gcrypt/libgcrypt/"}
+
 BuildRequires:  make gcc
 
 %if "%{_build}" != "%{_host}"

@@ -9,6 +9,8 @@ URL:            https://www.gnu.org/software/gawk
 Source0:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
 %define         SHA256SUM0 cf5fea4ac5665fd5171af4716baab2effc76306a9572988d5ba1078f196382bd
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/gawk/"}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

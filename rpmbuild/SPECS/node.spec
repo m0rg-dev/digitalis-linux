@@ -9,6 +9,8 @@ URL:            https://nodejs.org
 Source0:        https://nodejs.org/dist/v%{version}/node-v%{version}.tar.gz
 %define         SHA256SUM0 5f9529e0a42985d5a81620635ab2541e3553daede42903d1b3176f808d46411c
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://nodejs.org/en/", "pattern": "((?:\\d+\\.?)+) LTS"}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

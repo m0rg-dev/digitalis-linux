@@ -9,6 +9,8 @@ URL:            https://www.gnu.org/software/m4/
 Source0:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
 %define         SHA256SUM0 f2c1e86ca0a404ff281631bdc8377638992744b175afb806e25871a24a934e07
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/m4/"}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

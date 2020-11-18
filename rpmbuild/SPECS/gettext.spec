@@ -9,6 +9,8 @@ URL:            https://gnu.org/software/gettext
 Source0:        https://ftp.gnu.org/pub/gnu/%{name}/%{name}-%{version}.tar.gz
 %define         SHA256SUM0 c77d0da3102aec9c07f43671e60611ebff89a996ef159497ce8e59d075786b12
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/gettext/"}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

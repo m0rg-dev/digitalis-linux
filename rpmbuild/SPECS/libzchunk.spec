@@ -23,6 +23,10 @@ URL:            https://github.com/zchunk/zchunk
 Source0:        https://github.com/zchunk/%{libname}/archive/%{version}.tar.gz#/%{libname}-%{version}.tar.gz
 %define         SHA256SUM0 eb3d531916d6fea399520a2a4663099ddbf2278088599fa09980631067dc9d7b
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/zchunk/zchunk.git", 
+# X10-Update-Spec:   "pattern": "^((?:\\d+\\.?)+)$" }
+
 BuildRequires:  meson ninja-build gcc
 
 %if "%{_build}" != "%{_host}"

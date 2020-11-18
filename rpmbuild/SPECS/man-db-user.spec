@@ -5,6 +5,8 @@ Release:        1%{?dist}
 License:        0BSD
 BuildArch:      noarch
 
+# X10-Update-Spec: { "type": "none" }
+
 %description
 This gets its own package because man-db needs the user to exist at build time.
 

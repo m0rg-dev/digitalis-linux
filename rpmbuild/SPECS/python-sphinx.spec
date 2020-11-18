@@ -10,6 +10,10 @@ Source0:        https://github.com/sphinx-doc/sphinx/archive/v%{version}.tar.gz#
 %define         SHA256SUM0 8816c90665b192b36c4482fb59819c276bae37ed275948fb2ab2ba873aa29d8a
 BuildArch:      noarch
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/sphinx-doc/sphinx.git", 
+# X10-Update-Spec:   "pattern": "^v((?:\\d+\\.?)+)$" }
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

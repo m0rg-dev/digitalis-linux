@@ -9,6 +9,10 @@ URL:            https://github.com/shadow-maint/shadow
 Source0:        https://github.com/shadow-maint/shadow/releases/download/%{version}/%{name}-%{version}.tar.xz
 %define         SHA256SUM0 a3ad4630bdc41372f02a647278a8c3514844295d36eefe68ece6c3a641c1ae62
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/shadow-maint/shadow.git", 
+# X10-Update-Spec:   "pattern": "^(\\d+\\.(?:\\d+\\.)+\\d+)$" }
+
 Source1:        shadow-01-pam-login
 Source2:        shadow-02-pam-passwd
 Source3:        shadow-03-pam-su

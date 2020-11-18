@@ -9,6 +9,10 @@ URL:            https://podman.io
 Source0:        https://github.com/containers/libpod/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 %define         SHA256SUM0 990c341fe563d34a25ebab818af60480061cb80e4e8d61eacbdeb998151d6663
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/containers/libpod.git", 
+# X10-Update-Spec:   "pattern": "^v((?:\\d+\\.?)+)$" }
+
 %if "%{_build}" != "%{_host}"
 %error This package is not set up for cross-compilation.
 %endif

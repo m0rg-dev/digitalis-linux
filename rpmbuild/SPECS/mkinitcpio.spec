@@ -9,6 +9,10 @@ URL:            https://git.archlinux.org/mkinitcpio.git/
 Source0:        https://git.archlinux.org/mkinitcpio.git/snapshot/mkinitcpio-%{version}.tar.gz
 %define         SHA256SUM0 9f229a3cf5096d605f2043e0eb11ec57fc5b6f6f2e5d410b132920ae2573d86f
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://git.archlinux.org/mkinitcpio.git", 
+# X10-Update-Spec:   "pattern": "^v((?:\\d+\\.?)+)$" }
+
 BuildArch:      noarch
 AutoReqProv:    no
 

@@ -9,6 +9,8 @@ URL:            http://www.greenwoodsoftware.com/less/
 Source0:        http://www.greenwoodsoftware.com/less/less-%{version}.tar.gz
 %define         SHA256SUM0 ce5b6d2b9fc4442d7a07c93ab128d2dff2ce09a1d4f2d055b95cf28dd0dc9a9a
 
+# X10-Update-Spec: { "type": "webscrape", "url": "http://www.greenwoodsoftware.com/less/download.html", "pattern": "(?:HREF=\"|/)\\w+-((?:\\d+\\.)*\\d+)\\.tar\\..z2?\""}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

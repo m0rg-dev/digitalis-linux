@@ -10,6 +10,10 @@ Source0:        https://github.com/mesonbuild/meson/releases/download/%{version}
 %define         SHA256SUM0 291dd38ff1cd55fcfca8fc985181dd39be0d3e5826e5f0013bf867be40117213
 BuildArch:      noarch
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/mesonbuild/meson.git", 
+# X10-Update-Spec:   "pattern": "^((?:\\d+\\.?)+)$" }
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

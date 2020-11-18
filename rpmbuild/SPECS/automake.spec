@@ -10,6 +10,8 @@ Source0:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
 %define         SHA256SUM0 ccc459de3d710e066ab9e12d2f119bd164a08c9341ca24ba22c9adaa179eedd0
 BuildArch:      noarch
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/automake/"}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

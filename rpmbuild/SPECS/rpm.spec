@@ -22,6 +22,8 @@ Source0:        http://ftp.rpm.org/releases/rpm-4.16.x/rpm-%{version}.tar.bz2
 %define         SHA256SUM0 ca5974e9da2939afb422598818ef187385061889ba766166c4a3829c5ef8d411
 Source1:        rpm-01-digitalis-macros
 
+# X10-Update-Spec: { "type": "webscrape", "url": "http://rpm.org/timeline", "pattern": "RPM ((?:\\d+\\.?)+) released" }
+
 Patch0:         rpm-0001-use-sqlite.patch
 Patch1:         rpm-0002-enable-debugpkgs.patch
 

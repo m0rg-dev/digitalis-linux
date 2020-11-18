@@ -9,6 +9,10 @@ URL:            http://e2fsprogs.sourceforge.net/
 Source0:        https://github.com/tytso/e2fsprogs/archive/v%{version}.tar.gz#/e2fsprogs-%{version}.tar.gz
 %define         SHA256SUM0 d785164a2977cd88758cb0cac5c29add3fe491562a60040cfb193abcd0f9609b
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/tytso/e2fsprogs.git", 
+# X10-Update-Spec:   "pattern": "^v(\\d+\\.\\d+\\.\\d+)$" }
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

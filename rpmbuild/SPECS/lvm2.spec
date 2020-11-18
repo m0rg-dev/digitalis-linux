@@ -9,6 +9,10 @@ URL:            https://sourceware.org/lvm2/
 Source0:        https://mirrors.kernel.org/sourceware/lvm2/releases/LVM2.%{version}.tgz
 %define         SHA256SUM0 0e0d521a863a5db2440f2e1e7627ba82b70273ae4ab0bbe130851db0d58e5af1
 
+# X10-Update-Spec: { "type": "webscrape", 
+# X10-Update-Spec:   "url": "https://mirrors.kernel.org/sourceware/lvm2/releases/",
+# X10-Update-Spec:   "pattern": "(?:href=\"|/)LVM2\\.((?:\\d+\\.)*\\d+)\\.tgz\""}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

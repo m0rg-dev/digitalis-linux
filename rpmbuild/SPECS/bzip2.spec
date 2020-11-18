@@ -21,6 +21,8 @@ URL:            https://sourceware.org/bzip2
 Source0:        https://sourceware.org/pub/bzip2/bzip2-%{version}.tar.gz
 %define         SHA256SUM0 ab5a03176ee106d3f0fa90e381da478ddae405918153cca248e682cd0c4a2269
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://sourceware.org/pub/bzip2/"}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

@@ -23,6 +23,8 @@ URL:            https://www.gnu.org.ua/software/gdbm/
 Source0:        ftp://ftp.gnu.org/gnu/gdbm/gdbm-%{version}.tar.gz
 %define         SHA256SUM0 86e613527e5dba544e73208f42b78b7c022d4fa5a6d5498bf18c8d6f745b91dc
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/gdbm/"}
+
 BuildRequires:  make
 
 %if "%{_build}" != "%{_host}"

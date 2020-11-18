@@ -9,6 +9,10 @@ URL:            https://gitweb.gentoo.org/proj/udev-gentoo-scripts.git/
 Source0:        https://gitweb.gentoo.org/proj/udev-gentoo-scripts.git/snapshot/udev-gentoo-scripts-%{version}.tar.gz
 %define         SHA256SUM0 b245b999f0f3a5c2fa12e95115767d0983013e6a23c4b3792640385bb8e1e853
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://anongit.gentoo.org/git/proj/udev-gentoo-scripts.git", 
+# X10-Update-Spec:   "pattern": "^((?:\\d+\\.?)+)$" }
+
 BuildArch:      noarch
 
 BuildRequires:  make

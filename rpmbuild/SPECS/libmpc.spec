@@ -23,6 +23,8 @@ URL:            http://www.multiprecision.org/mpc/home.html
 Source0:        https://ftp.gnu.org/gnu/mpc/mpc-%{version}.tar.gz
 %define         SHA256SUM0 e90f2d99553a9c19911abdb4305bf8217106a957e3994436428572c8dfe8fda6
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/mpc/"}
+
 BuildRequires:  make
 
 %if "%{_build}" != "%{_host}"

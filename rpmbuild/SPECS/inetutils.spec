@@ -9,6 +9,8 @@ URL:            https://www.gnu.org/software/inetutils/
 Source0:        https://ftp.gnu.org/gnu/inetutils/inetutils-%{version}.tar.xz
 %define         SHA256SUM0 849d96f136effdef69548a940e3e0ec0624fc0c81265296987986a0dd36ded37
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/inetutils/"}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

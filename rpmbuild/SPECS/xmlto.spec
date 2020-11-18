@@ -9,6 +9,8 @@ URL:            https://pagure.io/xmlto
 Source0:        https://releases.pagure.org/xmlto/xmlto-%{version}.tar.bz2
 %define         SHA256SUM0 1130df3a7957eb9f6f0d29e4aa1c75732a7dfb6d639be013859b5c7ec5421276
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://releases.pagure.org/xmlto/"}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

@@ -9,6 +9,8 @@ URL:            https://www.gnu.org/software/gzip
 Source0:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
 %define         SHA256SUM0 8425ccac99872d544d4310305f915f5ea81e04d0f437ef1a230dc9d1c819d7c0
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/gzip/"}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

@@ -23,6 +23,8 @@ URL:            http://libpipeline.nongnu.org/
 Source0:        http://download.savannah.nongnu.org/releases/libpipeline/libpipeline-%{version}.tar.gz
 %define         SHA256SUM0 5dbf08faf50fad853754293e57fd4e6c69bb8e486f176596d682c67e02a0adb0
 
+# X10-Update-Spec: { "type": "webscrape", "url": "http://download.savannah.nongnu.org/releases/libpipeline/"}
+
 BuildRequires:  make
 
 %if "%{_build}" != "%{_host}"

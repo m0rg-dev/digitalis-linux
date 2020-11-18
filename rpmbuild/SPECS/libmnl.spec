@@ -23,6 +23,8 @@ URL:            https://www.netfilter.org/projects/libmnl/index.html
 Source0:        https://www.netfilter.org/projects/libmnl/files/libmnl-%{version}.tar.bz2
 %define         SHA256SUM0 171f89699f286a5854b72b91d06e8f8e3683064c5901fb09d954a9ab6f551f81
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://www.netfilter.org/projects/libmnl/files/"}
+
 BuildRequires:  make
 
 %if "%{_build}" != "%{_host}"

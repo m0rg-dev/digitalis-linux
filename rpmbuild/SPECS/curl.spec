@@ -25,6 +25,8 @@ URL:            https://curl.haxx.se/
 Source0:        https://curl.haxx.se/download/%{libname}-%{version}.tar.xz
 %define         SHA256SUM0 7c4c7ca4ea88abe00fea4740dcf81075c031b1d0bb23aff2d5efde20a3c2408a
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://curl.haxx.se/download/"}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

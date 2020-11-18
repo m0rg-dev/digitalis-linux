@@ -24,6 +24,8 @@ URL:            https://www.gnupg.org/
 Source0:        https://www.gnupg.org/ftp/gcrypt/%{libname}/%{libname}-%{version}.tar.bz2
 %define         SHA256SUM0 cef1f710a6b0d28f5b44242713ad373702d1466dcbe512eb4e754d7f35cd4307
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://www.gnupg.org/ftp/gcrypt/gpgme"}
+
 BuildRequires:  make gcc /usr/bin/gpgsm
 BuildRequires:  swig
 BuildRequires:  python

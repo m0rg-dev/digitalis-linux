@@ -9,6 +9,10 @@ URL:            https://github.com/OpenRC/openrc
 Source0:        https://github.com/OpenRC/openrc/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 %define         SHA256SUM0 91a01ca6d930a0688fb91338209985de57cac7aa2d37feddacb78fd3d95308e2
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/OpenRC/openrc.git", 
+# X10-Update-Spec:   "pattern": "^((?:\\d+\\.?)+)$" }
+
 %if "%{_build}" != "%{_target}"
 %error "This package does not currently cross-compile"
 %endif

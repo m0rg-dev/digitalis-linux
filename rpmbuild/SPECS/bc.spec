@@ -9,6 +9,10 @@ URL:            https://git.yzena.com/gavin/bc
 Source0:        https://git.yzena.com/gavin/bc/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 %define         SHA256SUM0 7a407f7f0f8a3f8c5e07c8bbafacd9613b6bf38f1529d99734040c89030ea950
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://git.yzena.com/gavin/bc.git", 
+# X10-Update-Spec:   "pattern": "^(\\d+\\.\\d+\\.\\d+)$" }
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

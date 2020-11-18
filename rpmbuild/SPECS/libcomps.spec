@@ -23,6 +23,10 @@ URL:            https://github.com/rpm-software-management/libcomps
 Source0:        https://github.com/rpm-software-management/libcomps/archive/%{libname}-%{version}.tar.gz
 %define         SHA256SUM0 3304bf7b178fd719fff6fe67f365b63e486f2f5e3e6e0ff1780f42723776cb61
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/rpm-software-management/libcomps.git", 
+# X10-Update-Spec:   "pattern": "^libcomps-(\\d+\\.\\d+\\.\\d+)$" }
+
 BuildRequires:  cmake
 BuildRequires:  make
 

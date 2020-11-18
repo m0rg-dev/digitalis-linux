@@ -9,6 +9,8 @@ URL:            https://wiki.linuxfoundation.org/networking/iproute2
 Source0:        https://mirrors.edge.kernel.org/pub/linux/utils/net/iproute2/iproute2-%{version}.tar.xz
 %define         SHA256SUM0 a25dac94bcdcf2f73316c7f812115ea7a5710580bad892b08a83d00c6b33dacf
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://mirrors.edge.kernel.org/pub/linux/utils/net/iproute2/"}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

@@ -23,6 +23,8 @@ URL:            https://www.netfilter.org/projects/libnftnl/index.html
 Source0:        https://www.netfilter.org/projects/libnftnl/files/libnftnl-%{version}.tar.bz2
 %define         SHA256SUM0 04a3fa5b08b736268f7e65836b9f05d9d5f438181467bee3c76c3c4a4f3ab711
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://www.netfilter.org/projects/libnftnl/files/"}
+
 BuildRequires:  make
 
 %if "%{_build}" != "%{_host}"

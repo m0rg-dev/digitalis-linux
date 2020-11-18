@@ -9,6 +9,8 @@ Summary:        A wrapper script to run pkg-config for a cross sysroot.
 License:        None
 BuildArch:      noarch
 
+# X10-Update-Spec: { "type": "none" }
+
 # random dependency to not screw up fedora_bootstrap.sh (FIXME)
 BuildRequires:  /usr/bin/cat
 

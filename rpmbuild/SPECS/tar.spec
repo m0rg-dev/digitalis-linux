@@ -8,6 +8,8 @@ URL:            https://www.gnu.org/software/tar
 Source0:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
 %define         SHA256SUM0 d0d3ae07f103323be809bc3eac0dcc386d52c5262499fe05511ac4788af1fdd8
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/tar/"}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

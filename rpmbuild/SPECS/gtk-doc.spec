@@ -21,6 +21,10 @@ URL:            https://wiki.gnome.org/DocumentationProject/GtkDoc
 Source0:        http://ftp.gnome.org/pub/gnome/sources/gtk-doc/1.33/gtk-doc-%{version}.tar.xz
 %define         SHA256SUM0 d5e3b3f837174d246fa8482455740627efec1e5210aa15d0c7989ca68f72bb51
 
+# X10-Update-Spec: { "type": "webscrape", 
+# X10-Update-Spec:   "url": "https://download.gnome.org/sources/gtk-doc/cache.json", 
+# X10-Update-Spec:   "pattern": "(?:href=\"|/)gtk-doc-((?:\\d+\\.)*\\d+)\\.tar\\..z2?\""}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

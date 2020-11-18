@@ -4,11 +4,14 @@ import { main } from "./index";
 import { DBBuildSpinner } from "./DBBuildSpinner";
 import { PlanProgress, PlanSpinner } from "./PlanSpinner";
 import { BuildProgress, BuildInfo } from "./BuildInfo";
+import { UpdateInfo, UpdateProgress } from "./UpdateInfo";
+import { UpdateResult } from "./Updater";
 
 type TUIState = {
     buildingDatabase: string | null;
     planStatus: PlanProgress | null;
     buildStatus: BuildProgress | null;
+    updateStatus: UpdateProgress | null;
 };
 export class TUI extends React.Component<{}, TUIState> {
     constructor(props: {} | Readonly<{}>) {
@@ -16,7 +19,8 @@ export class TUI extends React.Component<{}, TUIState> {
         this.state = {
             buildingDatabase: undefined,
             planStatus: undefined,
-            buildStatus: undefined
+            buildStatus: undefined,
+            updateStatus: undefined
         };
     }
 
@@ -39,12 +43,21 @@ export class TUI extends React.Component<{}, TUIState> {
         });
     }
 
+    updateUpdateState(completions: UpdateResult[], currently_running: string | null) {
+        this.setState({
+            updateStatus: {
+                complete: [...completions],
+                currently_running: currently_running
+            }
+        });
+    }
 
     render() {
         return <>
             {this.state.buildingDatabase && <DBBuildSpinner state={this.state.buildingDatabase} />}
             {this.state.planStatus && <PlanSpinner progress={this.state.planStatus} />}
             {this.state.buildStatus && <BuildInfo progress={this.state.buildStatus} />}
+            {this.state.updateStatus && <UpdateInfo progress={this.state.updateStatus} />}
         </>;
     }
 }

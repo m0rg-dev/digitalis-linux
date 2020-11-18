@@ -21,6 +21,8 @@ URL:            https://www.kernel.org/pub/linux/utils/kernel/kmod/
 Source0:        https://mirrors.edge.kernel.org/pub/linux/utils/kernel/kmod/kmod-%{version}.tar.xz
 %define         SHA256SUM0 c1d3fbf16ca24b95f334c1de1b46f17bbe5a10b0e81e72668bdc922ebffbbc0c
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://mirrors.edge.kernel.org/pub/linux/utils/kernel/kmod/"}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

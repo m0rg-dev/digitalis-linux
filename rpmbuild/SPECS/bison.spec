@@ -9,6 +9,8 @@ URL:            https://www.gnu.org/software/bison/
 Source0:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
 %define         SHA256SUM0 88d9e36856b004c0887a12ba00ea3c47db388519629483dd8c3fce9694d4da6f
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/bison/"}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

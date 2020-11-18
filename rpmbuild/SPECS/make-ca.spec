@@ -9,6 +9,10 @@ URL:            https://github.com/djlucas/make-ca
 Source0:        https://github.com/djlucas/make-ca/releases/download/v%{version}/%{name}-%{version}.tar.xz
 %define         SHA256SUM0 6db8b96c961790507c5e36e0ed75a079ae95300f520cd88ac061cf44a4733c2f
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/djlucas/make-ca.git", 
+# X10-Update-Spec:   "pattern": "^v((?:\\d+\\.?)+)$" }
+
 BuildArch:      noarch
 
 %if "%{_build}" != "%{_host}"

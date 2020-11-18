@@ -21,6 +21,10 @@ URL:            https://github.com/linux-pam/linux-pam
 Source0:        https://github.com/linux-pam/linux-pam/releases/download/v%{version}/Linux-PAM-%{version}.tar.xz
 %define         SHA256SUM0 cd6d928c51e64139be3bdb38692c68183a509b83d4f2c221024ccd4bcddfd034
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/linux-pam/linux-pam.git", 
+# X10-Update-Spec:   "pattern": "^v((?:\\d+\\.?)+)$" }
+
 Source1:        linux-pam-01-other
 Source2:        linux-pam-02-system-account
 Source3:        linux-pam-03-system-auth

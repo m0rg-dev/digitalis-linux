@@ -24,6 +24,8 @@ URL:            https://www.gnu.org/software/gmp/
 Source0:        https://ftp.gnu.org/gnu/%{libname}/%{libname}-%{version}.tar.xz
 %define         SHA256SUM0 258e6cd51b3fbdfc185c716d55f82c08aff57df0c6fbd143cf6ed561267a1526
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/gmp/"}
+
 BuildRequires:  make m4
 
 %if "%{_build}" != "%{_host}"

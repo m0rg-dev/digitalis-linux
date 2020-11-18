@@ -9,6 +9,8 @@ URL:            https://gnu.org/software/nano
 Source0:        https://www.nano-editor.org/dist/v5/nano-%{version}.tar.xz
 %define         SHA256SUM0 c5c1cbcf622d9a96b6030d66409ed12b204e8bc01ef5e6554ebbe6fb1d734352
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/nano/"}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

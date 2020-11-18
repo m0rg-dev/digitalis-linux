@@ -9,6 +9,10 @@ URL:            https://github.com/containers/conmon
 Source0:        https://github.com/containers/conmon/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 %define         SHA256SUM0 03c357c2ee35317e781111d59c4f3fb34033e77a17a8f4221f2ed6d3bcc10c25
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/containers/conmon.git", 
+# X10-Update-Spec:   "pattern": "^v(\\d+\\.\\d+\\.\\d+)$" }
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

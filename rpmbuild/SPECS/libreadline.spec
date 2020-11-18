@@ -23,6 +23,8 @@ URL:            https://gnu.org/software/readline
 Source0:        ftp://ftp.cwru.edu/pub/bash/readline-%{version}.tar.gz
 %define         SHA256SUM0 e339f51971478d369f8a053a330a190781acb9864cf4c541060f12078948e461
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/readline/"}
+
 BuildRequires:  make
 
 %if "%{_build}" != "%{_host}"

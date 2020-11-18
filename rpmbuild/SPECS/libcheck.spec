@@ -23,6 +23,10 @@ URL:            https://libcheck.github.io/check/
 Source0:        https://github.com/libcheck/%{libname}/releases/download/%{version}/%{libname}-%{version}.tar.gz
 %define         SHA256SUM0 a8de4e0bacfb4d76dd1c618ded263523b53b85d92a146d8835eb1a52932fa20a
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/libcheck/check.git", 
+# X10-Update-Spec:   "pattern": "^(\\d+\\.\\d+\\.\\d+)$" }
+
 BuildRequires:  make autoconf automake libtool
 %if ! %{defined _fedora_dependencies}
 BuildRequires:  libpkgconf-devel

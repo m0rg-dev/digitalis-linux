@@ -9,6 +9,10 @@ URL:            https://buildah.io
 Source0:        https://github.com/containers/buildah/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 %define         SHA256SUM0 194bb1028e610dab576b04dde0d234f971eaadf38731ec9a85114a170ec59faa
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/containers/buildah.git", 
+# X10-Update-Spec:   "pattern": "^v(\\d+\\.\\d+\\.\\d+)$" }
+
 %if "%{_build}" != "%{_host}"
 %error This package is not set up for cross-compilation.
 %endif

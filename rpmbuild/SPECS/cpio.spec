@@ -9,6 +9,8 @@ URL:            https://gnu.org/software/cpio
 Source0:        https://ftp.gnu.org/gnu/cpio/cpio-2.13.tar.bz2
 %define         SHA256SUM0 eab5bdc5ae1df285c59f2a4f140a98fc33678a0bf61bdba67d9436ae26b46f6d
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/cpio/"}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

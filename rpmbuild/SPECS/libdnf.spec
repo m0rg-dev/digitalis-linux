@@ -25,6 +25,10 @@ URL:            https://github.com/rpm-software-management/libdnf
 Source0:        https://github.com/rpm-software-management/%{libname}/archive/%{version}.tar.gz#/%{libname}-%{version}.tar.gz
 %define         SHA256SUM0 090a417e1d620f3fc196bc5de36c03d7f0d6ebe2bb87346eba89560101280c01
 
+# X10-Update-Spec: { "type": "git-tags", 
+# X10-Update-Spec:   "repo": "https://github.com/rpm-software-management/libdnf.git", 
+# X10-Update-Spec:   "pattern": "^(\\d+\\.\\d+\\.\\d+)$" }
+
 BuildRequires:  cmake make swig gettext gtk-doc
 
 %if "%{_build}" != "%{_host}"

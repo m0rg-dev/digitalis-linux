@@ -23,6 +23,11 @@ URL:            https://sqlite.org
 Source0:        https://sqlite.org/2020/sqlite-autoconf-3330000.tar.gz
 %define         SHA256SUM0 106a2c48c7f75a298a7557bcc0d5f4f454e5b43811cc738b7ca294d6956bbb15
 
+# X10-Update-Spec: { "type": "webscrape", 
+# X10-Update-Spec:   "url": "https://sqlite.org/index.html",
+# X10-Update-Spec:   "pattern": "Version ((?:\\d+\\.?)+)" }
+
+
 BuildRequires:  make
 
 %if "%{_build}" != "%{_host}"

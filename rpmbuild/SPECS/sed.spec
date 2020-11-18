@@ -9,6 +9,8 @@ URL:            https://www.gnu.org/software/sed
 Source0:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
 %define         SHA256SUM0 f79b0cfea71b37a8eeec8490db6c5f7ae7719c35587f21edb0617f370eeff633
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/sed/"}
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

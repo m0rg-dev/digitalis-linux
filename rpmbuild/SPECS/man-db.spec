@@ -9,6 +9,8 @@ URL:            https://nongnu.org/man-db/
 Source0:        http://download.savannah.nongnu.org/releases/man-db/man-db-%{version}.tar.xz
 %define         SHA256SUM0 fa5aa11ab0692daf737e76947f45669225db310b2801a5911bceb7551c5597b8
 
+# X10-Update-Spec: { "type": "webscrape", "url": "http://download.savannah.nongnu.org/releases/man-db/", "pattern": "(?:href=\"|/)man-db-((?:\\d+\\.)*\\d+)\\.tar\\..z2?\"" }
+
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
 %endif

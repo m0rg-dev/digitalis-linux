@@ -21,6 +21,8 @@ URL:            https://invisible-island.net/ncurses/
 Source0:        https://ftp.gnu.org/gnu/ncurses/ncurses-%{version}.tar.gz
 %define         SHA256SUM0 30306e0c76e0f9f1f0de987cf1c82a5c21e1ce6568b9227f7da5b71cbea86c9d
 
+# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/ncurses/"}
+
 BuildRequires:  make
 
 %if "%{_build}" != "%{_host}"
