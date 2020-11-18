@@ -1,3 +1,5 @@
+%define system_cmake 3.19
+
 # If host == target, we aren't building cross tools.
 # We should install into /usr and package headers.
 %if "%{_host}" == "%{_target}"
@@ -28,7 +30,7 @@ Source0:        https://github.com/openSUSE/%{libname}/archive/%{version}.tar.gz
 # X10-Update-Spec:   "pattern": "^((?:\\d+\\.?)+)$" }
 
 BuildRequires:  make
-BuildRequires:  cmake3.19
+BuildRequires:  cmake%{system_cmake}
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
@@ -91,7 +93,7 @@ install -dm755 %{buildroot}/usr/share/cmake/Modules
 mv -v %{buildroot}/%{_datadir}/cmake/Modules/*.cmake %{buildroot}/usr/share/cmake/Modules/
 %else
 # TODO this might be even worse
-mv -v %{buildroot}%{_datadir}/cmake %{buildroot}%{_datadir}/cmake-3.19
+mv -v %{buildroot}%{_datadir}/cmake %{buildroot}%{_datadir}/cmake-%{system_cmake}
 %endif
 
 %files
