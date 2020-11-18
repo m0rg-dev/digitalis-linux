@@ -7,7 +7,8 @@ export type UpdateResult = {
     spec: string,
     new_version: string | null,
     skipped: boolean,
-    error: string | null
+    error: string | null,
+    update_link?: string
 }
 
 // https://stackoverflow.com/a/6832721
@@ -119,7 +120,8 @@ export class Updater {
                         if (latest_version == spec_version || update_json.type == 'none') {
                             results.push({ spec: spec, new_version: undefined, skipped: false, error: undefined });
                         } else {
-                            results.push({ spec: spec, new_version: latest_version, skipped: false, error: undefined });
+                            const update_link = child_process.execSync(`rpmspec -q --qf '%{url}\\n' --define '_build %{_target}' --define '_host %{_build}' ../rpmbuild/SPECS/${spec} 2>/dev/null`).toString().split("\n")[0].trim();
+                            results.push({ spec: spec, new_version: latest_version, skipped: false, error: undefined, update_link: update_link });
                         }
                     } else {
                         throw new Error(`Didn't find any versions for ${spec}`);

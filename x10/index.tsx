@@ -85,10 +85,6 @@ async function orderPackageSet(packages: Package[], statusCallback: ((status: Pl
 function combine(map: Map<string, BuiltPackage>, list: BuiltPackage[]) { list.forEach(x => map.set(x.hash(), x)) }
 
 async function doBuild(tui: TUI, requirements: Map<string, BuiltPackage>) {
-    tui.setState({ buildingDatabase: "working" })
-    await RPMDatabase.rebuild();
-    tui.setState({ buildingDatabase: "complete" });
-
     const images_involved = new Set<image_name>();
     for (const pkg of requirements.values()) {
         images_involved.add(pkg.buildImage());
@@ -200,6 +196,10 @@ async function doBuild(tui: TUI, requirements: Map<string, BuiltPackage>) {
 export async function main(tui: TUI) {
     var mode = "build";
     const requirements = new Map<string, BuiltPackage>();
+
+    tui.setState({ buildingDatabase: "working" })
+    await RPMDatabase.rebuild();
+    tui.setState({ buildingDatabase: "complete" });
 
     while (program.args.length) {
         const command = program.args.shift();

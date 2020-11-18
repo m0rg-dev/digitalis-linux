@@ -18,7 +18,7 @@ export class UpdateStatic extends React.Component<{ progress: UpdateProgress }> 
                     </ink.Box>;
                 } else if (completion.new_version) {
                     return <ink.Box key={completion.spec}>
-                        <ink.Text><ink.Text color="cyan" bold={true}>!</ink.Text> Have new version: {completion.new_version} for {completion.spec}.</ink.Text>
+                        <ink.Text><ink.Text color="cyan" bold={true}>!</ink.Text> Have new version: {`\x1b]8;;${completion.update_link}\x1b\\${completion.new_version}\x1b]8;;\x1b\\`} for {completion.spec}.</ink.Text>
                     </ink.Box>;
                 } else if (completion.skipped) {
                     return <ink.Box key={completion.spec}>
