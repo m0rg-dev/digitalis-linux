@@ -12,7 +12,7 @@
 
 Name:           %{?cross}rpm
 Version:        4.16.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The RPM Package Manager (RPM) is a powerful package management system.
 
 License:        GPLv2
@@ -20,7 +20,6 @@ URL:            https://rpm.org/
 %undefine       _disable_source_fetch
 Source0:        http://ftp.rpm.org/releases/rpm-4.16.x/rpm-%{version}.tar.bz2
 %define         SHA256SUM0 ca5974e9da2939afb422598818ef187385061889ba766166c4a3829c5ef8d411
-Source1:        rpm-01-digitalis-macros
 
 # X10-Update-Spec: { "type": "webscrape", "url": "http://rpm.org/timeline", "pattern": "RPM ((?:\\d+\\.?)+) released" }
 
@@ -53,6 +52,8 @@ Requires:       bzip2
 Requires:       elfutils
 Requires:       patch
 Requires:       curl
+
+Requires:       digitalis-rpm-macros
 
 Requires:       %{?cross}librpm = %{version}-%{release}
 
@@ -93,8 +94,6 @@ export PYTHON=python3.8
 %make_install
 %find_lang rpm
 
-install -m644 %{SOURCE1} %{buildroot}/%{_prefix}/lib/rpm/macros.d/macros.digitalis
-
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 # TODO... just TODO
@@ -119,6 +118,9 @@ rm %{buildroot}%{_prefix}/lib/rpm/fileattrs/perl*.attr
 %{_includedir}/rpm
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 4.16.0 release 2
+  Split the distro-specific RPM macros out to their own package.
 
 - 2020-11-07 Morgan Thomas <m@m0rg.dev> <no version change>
   Explicitly set PYTHON.

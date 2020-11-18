@@ -31,6 +31,7 @@ export class RPMDatabase {
 
     static async rebuild() {
         Logger.info('Loading RPM database...');
+        child_process.execSync(`cat digitalis.rpm-macros.base ../rpmbuild/SOURCES/rpm-01-digitalis-macros >digitalis.rpm-macros`);
         const specs = await util.promisify(glob)('../rpmbuild/SPECS/*.spec');
         await Promise.all(specs.map(async spec => {
             if (debug_rpmdb_build) Logger.debug(`Processing: ${spec}`);

@@ -1319,18 +1319,3 @@ end}
 
 # \endverbatim
 #*/
-# Debugging configuration. This largely matches Fedora.
-
-%_enable_debug_packages 1
-%_include_minidebuginfo 1
-%_debugsource_packages  1
-%_debuginfo_subpackages 1
-
-	
-%install %{?_enable_debug_packages:%{?buildsubdir:%{debug_package}}}\
-%%install\
-%{nil}
-
-# Python configuration (lol)
-
-%__python3 /usr/bin/python3

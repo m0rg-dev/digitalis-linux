@@ -21,6 +21,7 @@ BuildRequires:  m4
 BuildRequires:  help2man
 
 %undefine _annotated_build
+%define debug_package %{nil}
 
 %description
 
