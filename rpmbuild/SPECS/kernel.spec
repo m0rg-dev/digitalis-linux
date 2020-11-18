@@ -1,6 +1,6 @@
 Name:           kernel
 Version:        5.9.3
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        The Linux kernel
 
 License:        GPLv2 with exceptions
@@ -13,6 +13,9 @@ Source1:        linux-01-config
 Source2:        linux-02-modprobe-usb-conf
 Source3:        linux-03-mkinitcpio-linux
 
+# https://src.fedoraproject.org/rpms/kernel/raw/94a4277f8827d1b2c911deabe56e7d929dc93146/f/kernel-x86_64-fedora.config.
+Source4:        linux-04-fedora-base-config
+
 BuildRequires:  elfutils
 BuildRequires:  libopenssl-devel
 BuildRequires:  kmod
@@ -22,6 +25,8 @@ BuildRequires:  bison
 BuildRequires:  make
 BuildRequires:  gcc
 BuildRequires:  bc
+BuildRequires:  zlib-devel
+BuildRequires:  zstd
 
 Requires:       kmod
 Requires:       mkinitcpio
@@ -45,12 +50,14 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %build
 perl -p -i -e "s/^EXTRAVERSION.*/EXTRAVERSION = -%{release}/" Makefile
 %{__make} mrproper
-cp %SOURCE1 .config
+cp %SOURCE4 .config
+./scripts/kconfig/merge_config.sh -m -r .config %SOURCE1
+
 %{__make} olddefconfig
 %make_build
 
 %install
-%{__make} INSTALL_MOD_PATH=%{buildroot} KERNELRELEASE=%{version}-%{release} modules_install
+%{__make} %{?_smp_mflags} INSTALL_MOD_PATH=%{buildroot} INSTALL_MOD_STRIP=1 KERNELRELEASE=%{version}-%{release} modules_install mod-fw=
 
 %{__install} -dm755 %{buildroot}/boot
 cp -iv arch/$(uname -m)/boot/bzImage %{buildroot}/boot/vmlinuz-%{version}-%{release}
@@ -80,6 +87,9 @@ mkinitcpio -p kernel-%{version}-%{release} -k %{version}-%{release}
 %{_sysconfdir}/mkinitcpio.d/kernel-%{version}-%{release}.preset
 
 %changelog
+- 2020-11-17 Morgan Thomas <m@m0rg.dev> 5.9.3 release 6
+  Use a base config from Fedora instead of the previous config of unknown origin.
+
 - 2020-11-06 Morgan Thomas <m@m0rg.dev> 5.9.3 release 5
   Added CONFIG_IP_NF_NAT=m to config.
 
