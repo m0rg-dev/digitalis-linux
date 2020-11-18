@@ -13,20 +13,25 @@
 
 %define libname gobject-introspection
 
+%define major_version 1.66
+%define patch_version 1
+
 Name:           %{?cross}lib%{libname}
-Version:        1.64.1
-Release:        2%{?dist}
+Version:        %{major_version}.%{patch_version}
+Release:        1%{?dist}
 Summary:        C Library for manipulating module metadata files
 
 License:        LGPLv2+, GPLv2+, MIT
 URL:            https://gi.readthedocs.io/en/latest/
 %undefine       _disable_source_fetch
-Source0:        https://download.gnome.org/sources/%{libname}/1.64/%{libname}-%{version}.tar.xz
-%define         SHA256SUM0 80beae6728c134521926affff9b2e97125749b38d38744dc901f4010ee3e7fa7
+Source0:        https://download.gnome.org/sources/%{libname}/%{major_version}/%{libname}-%{version}.tar.xz
+%define         SHA256SUM0 dd44a55ee5f426ea22b6b89624708f9e8d53f5cc94e5485c15c87cb30e06161d
 
 # X10-Update-Spec: { "type": "webscrape", 
 # X10-Update-Spec: "url": "https://download.gnome.org/sources/gobject-introspection/cache.json",
 # X10-Update-Spec: "pattern": "(?:href=\"|/)gobject-introspection-((?:\\d+\\.)*\\d+)\\.tar\\..z2?\""}
+
+Patch0:         libgobject-introspection-0001-no-submodule.patch
 
 BuildRequires:  meson ninja-build gcc glib2-devel flex bison
 
@@ -73,7 +78,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %prep
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
-%autosetup -n %{libname}-%{version}
+%autosetup -n %{libname}-%{version} -p 1
 
 # i really don't know
 sed -i "s/    subdir('tests')//" meson.build
@@ -119,6 +124,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/man1/g-ir-scanner.*
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 1.66.1 release 1
+  Updated to version 1.66.1.
 
 - 2020-11-07 Morgan Thomas <m@m0rg.dev> 1.64.1 release 2
   Explicitly target Python 3.8.

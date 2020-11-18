@@ -14,7 +14,7 @@
 %define libname libksba
 
 Name:           %{?cross}%{libname}
-Version:        1.4.0
+Version:        1.5.0
 Release:        1%{?dist}
 Summary:        GPG certificate management library
 
@@ -22,7 +22,7 @@ License:        LGPLv3+, GPLv2+, GPLv3+
 URL:            https://www.gnupg.org/
 %undefine       _disable_source_fetch
 Source0:        https://www.gnupg.org/ftp/gcrypt/%{libname}/%{libname}-%{version}.tar.bz2
-%define         SHA256SUM0 bfe6a8e91ff0f54d8a329514db406667000cb207238eded49b599761bfca41b6
+%define         SHA256SUM0 ae4af129216b2d7fdea0b5bf2a788cd458a79c983bb09a43f4d525cc87aba0ba
 
 # X10-Update-Spec: { "type": "webscrape", "url": "https://www.gnupg.org/ftp/gcrypt/libksba"}
 
@@ -98,4 +98,7 @@ rm -f %{buildroot}%{_infodir}/dir
 %{_datadir}/aclocal/*.m4
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 1.5.0 release 1
+  Updated to version 1.5.0.
 

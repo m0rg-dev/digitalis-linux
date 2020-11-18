@@ -12,16 +12,19 @@
 
 %define libname glib2
 
+%define major_version 2.67
+%define patch_version 0
+
 Name:           %{?cross}%{libname}
-Version:        2.66.2
+Version:        %{major_version}.%{patch_version}
 Release:        1%{?dist}
 Summary:        GLib library of C routines
 
 License:        GPLv2+
 URL:            http://www.gtk.org/
 %undefine       _disable_source_fetch
-Source0:        http://ftp.gnome.org/pub/gnome/sources/glib/2.66/glib-%{version}.tar.xz
-%define         SHA256SUM0 ec390bed4e8dd0f89e918f385e8d4cfd7470b1ef7c1ce93ec5c4fc6e3c6a17c4
+Source0:        http://ftp.gnome.org/pub/gnome/sources/glib/%{major_version}/glib-%{version}.tar.xz
+%define         SHA256SUM0 0b15e57ab6c2bb90ced4e24a1b0d8d6e9a13af8a70266751aa3a45baffeed7c1
 
 # X10-Update-Spec: { "type": "webscrape", "url": "https://download.gnome.org/sources/glib/cache.json"}
 
@@ -117,4 +120,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_datadir}/bash-completion/completions/*
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 2.67.0 release 1
+  Updated to version 2.67.0.
 

@@ -1,5 +1,5 @@
 Name:           bison
-Version:        3.7.3
+Version:        3.7.4
 Release:        1%{?dist}
 Summary:        A general-purpose parser generator
 
@@ -7,7 +7,7 @@ License:        GPLv3+
 URL:            https://www.gnu.org/software/bison/
 %undefine       _disable_source_fetch
 Source0:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
-%define         SHA256SUM0 88d9e36856b004c0887a12ba00ea3c47db388519629483dd8c3fce9694d4da6f
+%define         SHA256SUM0 a3b5813f48a11e540ef26f46e4d288c0c25c7907d9879ae50e430ec49f63c010
 
 # X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/bison/"}
 
@@ -54,3 +54,6 @@ rm -f %{buildroot}%{_infodir}/dir
 %doc %{_mandir}/man1/*
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 3.7.4 release 1
+  Updated to version 3.7.4.

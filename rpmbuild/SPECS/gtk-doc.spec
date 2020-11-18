@@ -10,16 +10,19 @@
 %define _prefix /usr/%{_target}/usr
 %endif
 
+%define major_version 1.33
+%define patch_version 1
+
 Name:           %{?cross}gtk-doc
-Version:        1.33.0
+Version:        %{major_version}.%{patch_version}
 Release:        1%{?dist}
 Summary:        A tool for documenting GObject code.
 
 License:        GPLv2
 URL:            https://wiki.gnome.org/DocumentationProject/GtkDoc
 %undefine       _disable_source_fetch
-Source0:        http://ftp.gnome.org/pub/gnome/sources/gtk-doc/1.33/gtk-doc-%{version}.tar.xz
-%define         SHA256SUM0 d5e3b3f837174d246fa8482455740627efec1e5210aa15d0c7989ca68f72bb51
+Source0:        http://ftp.gnome.org/pub/gnome/sources/gtk-doc/%{major_version}/gtk-doc-%{version}.tar.xz
+%define         SHA256SUM0 a5cfed2a0b73a09b796fff80ad6d8f040ab2b2655bdc941ac207ffe6d9c10f10
 
 # X10-Update-Spec: { "type": "webscrape", 
 # X10-Update-Spec:   "url": "https://download.gnome.org/sources/gtk-doc/cache.json", 
@@ -59,3 +62,6 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %{_datadir}/pkgconfig/*.pc
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 1.33.1 release 1
+  Updated to version 1.33.1.

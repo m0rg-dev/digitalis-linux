@@ -10,7 +10,7 @@
 %endif
 
 Name:           %{?cross}binutils
-Version:        2.34
+Version:        2.35.1
 Release:        1%{?dist}
 Summary:        The GNU Binutils are a collection of binary tools.
 
@@ -18,7 +18,7 @@ License:        GPLv3+
 URL:            https://www.gnu.org/software/binutils/
 %undefine       _disable_source_fetch
 Source0:        https://ftp.gnu.org/gnu/binutils/binutils-%{version}.tar.xz
-%define         SHA256SUM0 f00b0e8803dc9bab1e2165bd568528135be734df3fabf8d0161828cd56028952
+%define         SHA256SUM0 3ced91db9bf01182b7e420eab68039f2083aed0a214c0424e257eae3ddee8607
 
 # X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/binutils/"}
 
@@ -166,3 +166,6 @@ ldconfig -Nr %{buildroot}
 %endif
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 2.35.1 release 1
+  Updated to version 2.35.1.

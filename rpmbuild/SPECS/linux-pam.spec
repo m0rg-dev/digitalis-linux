@@ -11,7 +11,7 @@
 %endif
 
 Name:           %{?cross}linux-pam
-Version:        1.4.0
+Version:        1.5.0
 Release:        1%{?dist}
 Summary:        Pluggable Authentication Modules
 
@@ -19,7 +19,7 @@ License:        3-clause BSD
 URL:            https://github.com/linux-pam/linux-pam
 %undefine       _disable_source_fetch
 Source0:        https://github.com/linux-pam/linux-pam/releases/download/v%{version}/Linux-PAM-%{version}.tar.xz
-%define         SHA256SUM0 cd6d928c51e64139be3bdb38692c68183a509b83d4f2c221024ccd4bcddfd034
+%define         SHA256SUM0 02d39854b508fae9dc713f7733bbcdadbe17b50de965aedddd65bcb6cc7852c8
 
 # X10-Update-Spec: { "type": "git-tags", 
 # X10-Update-Spec:   "repo": "https://github.com/linux-pam/linux-pam.git", 
@@ -114,3 +114,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/man3/*
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 1.5.0 release 1
+  Updated to version 1.5.0.

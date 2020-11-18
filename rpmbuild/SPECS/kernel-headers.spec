@@ -15,14 +15,14 @@
 %endif
 
 Name:           %{?cross}kernel-headers
-Version:        5.9.3
+Version:        5.9.9
 Release:        1%{?dist}
 Summary:        Development files for the Linux kernel.
 License:        GPLv2 with exceptions
 URL:            https://www.kernel.org
 %undefine       _disable_source_fetch
 Source0:        https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-%{version}.tar.xz
-%define         SHA256SUM0 d1ae28dfe9d25b73f2e437319df1b77d7ac1d0efd188cfb5df84a6784a318a73
+%define         SHA256SUM0 a302d386af1278e7a8c0c2cd9a3b2119a18620eccc1f069b0f23e405bcf61fad
 BuildArch:      noarch
 
 # X10-Update-Spec: { "type": "webscrape", 
@@ -62,5 +62,9 @@ cp -rv usr/include %{buildroot}/%{_prefix}/
 %{_includedir}/xen
 
 %changelog
- - 2020-11-04 Morgan Thomas <m@m0rg.dev>
-   Updated to version 5.9.3.
+ 
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 5.9.9 release 1
+  Updated to version 5.9.9.
+  
+- 2020-11-04 Morgan Thomas <m@m0rg.dev>
+  Updated to version 5.9.3.

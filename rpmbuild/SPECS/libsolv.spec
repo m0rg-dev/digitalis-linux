@@ -14,7 +14,7 @@
 
 Name:           %{?cross}%{libname}
 Version:        0.7.16
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        libsolv is a free package dependency solver using a satisfiability algorithm.
 
 License:        BSD-3-Clause
@@ -28,7 +28,7 @@ Source0:        https://github.com/openSUSE/%{libname}/archive/%{version}.tar.gz
 # X10-Update-Spec:   "pattern": "^((?:\\d+\\.?)+)$" }
 
 BuildRequires:  make
-BuildRequires:  cmake
+BuildRequires:  cmake3.19
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
@@ -91,7 +91,7 @@ install -dm755 %{buildroot}/usr/share/cmake/Modules
 mv -v %{buildroot}/%{_datadir}/cmake/Modules/*.cmake %{buildroot}/usr/share/cmake/Modules/
 %else
 # TODO this might be even worse
-mv -v %{buildroot}%{_datadir}/cmake %{buildroot}%{_datadir}/cmake-3.18
+mv -v %{buildroot}%{_datadir}/cmake %{buildroot}%{_datadir}/cmake-3.19
 %endif
 
 %files
@@ -114,3 +114,5 @@ mv -v %{buildroot}%{_datadir}/cmake %{buildroot}%{_datadir}/cmake-3.18
 
 %changelog
 
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 0.7.16 release 2
+  Rebuild for CMake 3.19.

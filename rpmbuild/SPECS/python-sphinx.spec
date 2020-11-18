@@ -1,5 +1,5 @@
 Name:           python-sphinx
-Version:        3.2.1
+Version:        3.3.1
 Release:        1%{?dist}
 Summary:        A documentation tool
 
@@ -7,7 +7,7 @@ License:        MIT
 URL:            https://www.sphinx-doc.org/en/master/
 %undefine       _disable_source_fetch
 Source0:        https://github.com/sphinx-doc/sphinx/archive/v%{version}.tar.gz#/sphinx-%{version}.tar.gz
-%define         SHA256SUM0 8816c90665b192b36c4482fb59819c276bae37ed275948fb2ab2ba873aa29d8a
+%define         SHA256SUM0 af59d137d94a9a54b00e9a8a282504ccb9b3a35d00a709568ab0589be6fc8155
 BuildArch:      noarch
 
 # X10-Update-Spec: { "type": "git-tags", 
@@ -50,3 +50,6 @@ fi
 %{_prefix}/lib/python3.8/site-packages/*
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 3.3.1 release 1
+  Updated to version 3.3.1.

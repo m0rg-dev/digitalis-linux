@@ -14,15 +14,15 @@
 %define libname gpgme
 
 Name:           %{?cross}lib%{libname}
-Version:        1.14.0
-Release:        2%{?dist}
+Version:        1.15.0
+Release:        1%{?dist}
 Summary:        GPGME is the standard library to access GnuPG functions from programming languages. 
 
 License:        LGPLv2+, GPLv2+
 URL:            https://www.gnupg.org/
 %undefine       _disable_source_fetch
 Source0:        https://www.gnupg.org/ftp/gcrypt/%{libname}/%{libname}-%{version}.tar.bz2
-%define         SHA256SUM0 cef1f710a6b0d28f5b44242713ad373702d1466dcbe512eb4e754d7f35cd4307
+%define         SHA256SUM0 0b472bc12c7d455906c8a539ec56da0a6480ef1c3a87aa5b74d7125df68d0e5b
 
 # X10-Update-Spec: { "type": "webscrape", "url": "https://www.gnupg.org/ftp/gcrypt/gpgme"}
 
@@ -121,6 +121,9 @@ rm -f %{buildroot}%{_infodir}/dir
 %{_oldprefix}/bin/%{?cross}gpgme-json
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 1.15.0 release 1
+  Updated to version 1.15.0.
 
 - 2020-11-07 Morgan Thomas <m@m0rg.dev> 1.14.0 release 2
   Explicitly set PYTHON.

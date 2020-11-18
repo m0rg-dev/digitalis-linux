@@ -1,13 +1,13 @@
 Name:           buildah
-Version:        1.17.0
-Release:        3%{?dist}
+Version:        1.18.0
+Release:        1%{?dist}
 Summary:        OCI container image building tool
 
 License:        Apache-2.0
 URL:            https://buildah.io
 %undefine       _disable_source_fetch
 Source0:        https://github.com/containers/buildah/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
-%define         SHA256SUM0 194bb1028e610dab576b04dde0d234f971eaadf38731ec9a85114a170ec59faa
+%define         SHA256SUM0 500c82fb369fd08a9bb9a41f294c5975f17575770dbfaba5cce9a6e09b6a3fb9
 
 # X10-Update-Spec: { "type": "git-tags", 
 # X10-Update-Spec:   "repo": "https://github.com/containers/buildah.git", 
@@ -68,3 +68,6 @@ cp bin/imgtype %{buildroot}/%{_bindir}/%{name}-imgtype
 %doc README.md
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 1.18.0 release 1
+  Updated to version 1.18.0.

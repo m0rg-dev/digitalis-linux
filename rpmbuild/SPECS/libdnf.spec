@@ -15,15 +15,15 @@
 %define libname libdnf
 
 Name:           %{?cross}%{libname}
-Version:        0.54.2
-Release:        2%{?dist}
+Version:        0.55.0
+Release:        1%{?dist}
 Summary:        This library provides a high level package-manager.
 
 License:        LGPLv2+
 URL:            https://github.com/rpm-software-management/libdnf
 %undefine       _disable_source_fetch
 Source0:        https://github.com/rpm-software-management/%{libname}/archive/%{version}.tar.gz#/%{libname}-%{version}.tar.gz
-%define         SHA256SUM0 090a417e1d620f3fc196bc5de36c03d7f0d6ebe2bb87346eba89560101280c01
+%define         SHA256SUM0 a97b52d5e4aac75a318acba67dae0e623e0267d3522c9cd2deed3188099c5937
 
 # X10-Update-Spec: { "type": "git-tags", 
 # X10-Update-Spec:   "repo": "https://github.com/rpm-software-management/libdnf.git", 
@@ -107,6 +107,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_datadir}/gtk-doc/html/libdnf
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 0.55.0 release 1
+  Updated to version 0.55.0.
 
 - 2020-11-07 Morgan Thomas <m@m0rg.dev> 0.54.2 release 2
   Explicitly target Python 3.8.

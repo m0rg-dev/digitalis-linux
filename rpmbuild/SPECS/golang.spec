@@ -1,5 +1,5 @@
 Name:           golang
-Version:        1.15.4
+Version:        1.15.5
 Release:        1%{?dist}
 Summary:        The Go programming language
 
@@ -83,3 +83,6 @@ rm -v %{buildroot}%{_prefix}/lib/go/src/*.rc
 %doc %{_datadir}/go/doc
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 1.15.5 release 1
+  Updated to version 1.15.5.

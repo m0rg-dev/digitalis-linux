@@ -14,15 +14,15 @@
 %define libname gmp
 
 Name:           %{?cross}lib%{libname}
-Version:        6.2.0
-Release:        3%{?dist}
+Version:        6.2.1
+Release:        1%{?dist}
 Summary:        GMP is a free library for arbitrary precision arithmetic, operating on signed integers, rational numbers, and floating-point numbers.
 
 License:        GPL-2.0-or-later OR LGPL-3.0-or-later
 URL:            https://www.gnu.org/software/gmp/
 %undefine       _disable_source_fetch
 Source0:        https://ftp.gnu.org/gnu/%{libname}/%{libname}-%{version}.tar.xz
-%define         SHA256SUM0 258e6cd51b3fbdfc185c716d55f82c08aff57df0c6fbd143cf6ed561267a1526
+%define         SHA256SUM0 fd4829912cddd12f84181c3451cc752be224643e87fac497b69edddadc49b4f2
 
 # X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/gmp/"}
 
@@ -83,6 +83,9 @@ rm -f %{buildroot}%{_infodir}/dir
 %{_prefix}/lib/pkgconfig/%{libname}.pc
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 6.2.1 release 1
+  Updated to version 6.2.1.
 
 - 2020-11-07 Morgan Thomas <m@m0rg.dev> 6.2.0 release 3
   Remove the generated info directory (if present) before packaging.

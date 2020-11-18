@@ -12,16 +12,19 @@
 
 %define libname util-linux
 
+%define major_version 2.36
+%define patch_version 1
+
 Name:           %{?cross}%{libname}
-Version:        2.36
+Version:        %{major_version}.%{patch_version}
 Release:        1%{?dist}
 Summary:        Various utility programs.
 
 License:        GPLv2+, LGPLv2+, BSD
 URL:            https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/
 %undefine       _disable_source_fetch
-Source0:        https://mirrors.edge.kernel.org/pub/linux/utils/%{libname}/v%{version}/%{libname}-%{version}.tar.xz
-%define         SHA256SUM0 9e4b1c67eb13b9b67feb32ae1dc0d50e08ce9e5d82e1cccd0ee771ad2fa9e0b1
+Source0:        https://mirrors.edge.kernel.org/pub/linux/utils/%{libname}/v%{major_version}/%{libname}-%{version}.tar.xz
+%define         SHA256SUM0 09fac242172cd8ec27f0739d8d192402c69417617091d8c6e974841568f37eed
 
 # X10-Update-Spec: { "type": "git-tags", 
 # X10-Update-Spec:   "repo": "https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git", 
@@ -199,4 +202,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_mandir}/man3/libblkid*
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 2.36.1 release 1
+  Updated to version 2.36.1.
 

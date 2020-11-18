@@ -208,5 +208,10 @@
  "x86_64-pc-linux-gnu-libpipeline-devel fedora-with-rpm": false,
  "/bin/sh fedora-with-rpm": true,
  "x86_64-pc-linux-gnu-libgdbm fedora-with-rpm": false,
- "x86_64-pc-linux-gnu-libpipeline fedora-with-rpm": false
+ "x86_64-pc-linux-gnu-libpipeline fedora-with-rpm": false,
+ "cmake >= 3.19 fedora-with-rpm": false,
+ "cmake3.19 fedora-with-rpm": false,
+ "libncurses-devel fedora-with-rpm": false,
+ "openssl-devel fedora-with-rpm": true,
+ "ncurses-devel fedora-with-rpm": true
 }

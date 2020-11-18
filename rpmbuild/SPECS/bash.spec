@@ -9,7 +9,7 @@ URL:            https://www.gnu.org/software/bash/
 Source0:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.gz
 %define         SHA256SUM0 b4a80f2ac66170b2913efbfb9f2594f1f76c7b1afd11f799e22035d63077fb4d
 
-# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/bash/"}
+# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/bash/", "pattern": "(?:href=\"|/)bash-((?:\\d+\\.)*\\d+)\\.tar\\..z2?\""}
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-

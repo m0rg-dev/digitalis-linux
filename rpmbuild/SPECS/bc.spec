@@ -1,5 +1,5 @@
 Name:           bc
-Version:        3.1.5
+Version:        3.1.6
 Release:        1%{?dist}
 Summary:        bc is an arbitrary precision numeric processing language.
 
@@ -7,7 +7,7 @@ License:        BSD-2-Clause
 URL:            https://git.yzena.com/gavin/bc
 %undefine       _disable_source_fetch
 Source0:        https://git.yzena.com/gavin/bc/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
-%define         SHA256SUM0 7a407f7f0f8a3f8c5e07c8bbafacd9613b6bf38f1529d99734040c89030ea950
+%define         SHA256SUM0 69236e618007237c4fc243ce0db65742dc8ca56301095d79ed094d237d100e9f
 
 # X10-Update-Spec: { "type": "git-tags", 
 # X10-Update-Spec:   "repo": "https://git.yzena.com/gavin/bc.git", 
@@ -45,3 +45,6 @@ DESTDIR=%{buildroot} make install
 %doc %{_mandir}/man1/*
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 3.1.6 release 1
+  Updated to version 3.1.6.

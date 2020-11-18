@@ -1,5 +1,5 @@
 Name:           mkinitcpio-busybox
-Version:        1.31.1
+Version:        1.32.0
 Release:        1%{?dist}
 Summary:        busybox for use in initramfs
 
@@ -7,7 +7,7 @@ License:        GPLv2
 URL:            https://busybox.net/
 %undefine       _disable_source_fetch
 Source0:        https://busybox.net/downloads/busybox-%{version}.tar.bz2
-%define         SHA256SUM0 d0f940a72f648943c1f2211e0e3117387c31d765137d92bd8284a3fb9752a998
+%define         SHA256SUM0 c35d87f1d04b2b153d33c275c2632e40d388a88f19a9e71727e0bbbff51fe689
 
 # X10-Update-Spec: { "type": "webscrape", "url": "https://busybox.net/downloads/"}
 
@@ -46,3 +46,6 @@ sed -i 's/CONFIG_RDATE=y/CONFIG_RDATE=n/' .config
 %{_prefix}/lib/initcpio
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 1.32.0 release 1
+  Updated to version 1.32.0.

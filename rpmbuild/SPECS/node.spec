@@ -1,5 +1,5 @@
 Name:           node
-Version:        14.15.0
+Version:        14.15.1
 Release:        1%{?dist}
 Summary:        An asynchronous JavaScript runtime
 
@@ -7,7 +7,7 @@ License:        MIT
 URL:            https://nodejs.org
 %undefine       _disable_source_fetch
 Source0:        https://nodejs.org/dist/v%{version}/node-v%{version}.tar.gz
-%define         SHA256SUM0 5f9529e0a42985d5a81620635ab2541e3553daede42903d1b3176f808d46411c
+%define         SHA256SUM0 a1120472bf55aea745287693a6651e16973e1008c9d6107df350126adf9716fe
 
 # X10-Update-Spec: { "type": "webscrape", "url": "https://nodejs.org/en/", "pattern": "((?:\\d+\\.?)+) LTS"}
 
@@ -46,3 +46,6 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %doc %{_mandir}/man1/*
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 14.15.1 release 1
+  Updated to version 14.15.1.

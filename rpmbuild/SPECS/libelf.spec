@@ -13,15 +13,15 @@
 %define libname libelf
 
 Name:           %{?cross}%{libname}
-Version:        0.181
-Release:        2%{?dist}
+Version:        0.182
+Release:        1%{?dist}
 Summary:        A library for working with ELF files
 
 License:        GPLv3+, LGPLv3+, GPLv2
 URL:            https://sourceware.org/elfutils/
 %undefine       _disable_source_fetch
 Source0:        https://sourceware.org/elfutils/ftp/%{version}/elfutils-%{version}.tar.bz2
-%define         SHA256SUM0 29a6ad7421ec2acfee489bb4a699908281ead2cb63a20a027ce8804a165f0eb3
+%define         SHA256SUM0 ecc406914edf335f0b7fc084ebe6c460c4d6d5175bfdd6688c1c78d9146b8858
 
 # X10-Update-Spec: { "type": "git-tags", 
 # X10-Update-Spec:   "repo": "git://sourceware.org/git/elfutils.git", 
@@ -99,6 +99,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/man1/*
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 0.182 release 1
+  Updated to version 0.182.
 
 - 2020-11-07 Morgan Thomas <m@m0rg.dev> 0.181 release 2
   Explicitly disable LTO in case Fedora turned it on

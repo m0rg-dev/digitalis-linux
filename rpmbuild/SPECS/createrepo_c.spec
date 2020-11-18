@@ -1,5 +1,5 @@
 Name:           createrepo_c
-Version:        0.16.1
+Version:        0.16.2
 Release:        1%{?dist}
 Summary:        Tool for building yum repos
 
@@ -7,7 +7,7 @@ License:        GPLv2
 URL:            https://github.com/rpm-software-management/createrepo_c
 %undefine       _disable_source_fetch
 Source0:        https://github.com/rpm-software-management/createrepo_c/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
-%define         SHA256SUM0 1807128d5193274ec7eab49ea3d5f50509bd4528147c96a2ffb6ae9137097b72
+%define         SHA256SUM0 cbb9650e0e61895284c398dfa1480f0a4907881e467f968fafdba3b06d1c56fa
 
 # X10-Update-Spec: { "type": "git-tags", 
 # X10-Update-Spec:   "repo": "https://github.com/rpm-software-management/createrepo_c.git", 
@@ -94,3 +94,6 @@ cd build
 %{_includedir}/*
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 0.16.2 release 1
+  Updated to version 0.16.2.

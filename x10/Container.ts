@@ -164,8 +164,8 @@ export class Container {
         ].concat(Config.get().build_images[this.image].additional_podman_args || []);
     }
 
-    async acquire_image_lock(): Promise<MutexInterface.Releaser> {
-        const target = this.remote_target || 'local';
+    async acquire_image_lock(force_local?: boolean): Promise<MutexInterface.Releaser> {
+        const target = (!force_local && this.remote_target) || 'local';
         if(!Container.command_mutices.has(target)) Container.command_mutices.set(target, new Mutex());
         return Container.command_mutices.get(target).acquire();
     }
@@ -175,7 +175,7 @@ export class Container {
         const args = ['run', '--rm', '-it', ...await this.podman_arguments(), ...more_args, this.image, ...command];
         let release: MutexInterface.Releaser;
         if (lock) {
-            release = await this.acquire_image_lock();
+            release = await this.acquire_image_lock(true);
         }
         const process = child_process.spawn('podman', args, options);
         if (lock) {

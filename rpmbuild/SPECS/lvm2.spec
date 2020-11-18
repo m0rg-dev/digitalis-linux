@@ -1,5 +1,5 @@
 Name:           lvm2
-Version:        2.02.187
+Version:        2.03.10
 Release:        1%{?dist}
 Summary:        Logical Volume Manager
 
@@ -7,7 +7,7 @@ License:        GPLv2, LGPLv2
 URL:            https://sourceware.org/lvm2/
 %undefine       _disable_source_fetch
 Source0:        https://mirrors.kernel.org/sourceware/lvm2/releases/LVM2.%{version}.tgz
-%define         SHA256SUM0 0e0d521a863a5db2440f2e1e7627ba82b70273ae4ab0bbe130851db0d58e5af1
+%define         SHA256SUM0 5ad1645a480440892e35f31616682acba0dc204ed049635d2df3e5a5929d0ed0
 
 # X10-Update-Spec: { "type": "webscrape", 
 # X10-Update-Spec:   "url": "https://mirrors.kernel.org/sourceware/lvm2/releases/",
@@ -28,17 +28,6 @@ BuildRequires:  make
 %undefine _annotated_build
 
 %description
-
-%package     -n %{?cross}liblvm2app
-Summary:        LVM2 application library
-License:        GPLv2, LGPLv2
-URL:            https://sourceware.org/lvm2/
-%description -n %{?cross}liblvm2app
-
-%package     -n %{?cross}liblvm2app-devel
-Summary:        Development files for liblvm2app
-Requires:       %{?cross}liblvm2app = %{version}-%{release}
-%description -n %{?cross}liblvm2app-devel
 
 %package     -n %{?cross}libdevice-mapper
 Summary:        Device Mapper userspace library
@@ -87,15 +76,6 @@ sed -i 's,use_lvmetad = 1,use_lvmetad = 0,' %{buildroot}/etc/lvm/lvm.conf
 %doc %{_mandir}/man8/pv*
 %doc %{_mandir}/man8/vg*
 
-%files -n %{?cross}liblvm2app
-%license COPYING
-%{_prefix}/lib/liblvm2app.so.*
-
-%files -n %{?cross}liblvm2app-devel
-%{_includedir}/lvm2app.h
-%{_prefix}/lib/liblvm2app.so
-%{_prefix}/lib/pkgconfig/lvm2app*
-
 %files -n %{?cross}libdevice-mapper
 %license COPYING
 %{_prefix}/lib/libdevmapper*.so.*
@@ -115,3 +95,6 @@ sed -i 's,use_lvmetad = 1,use_lvmetad = 0,' %{buildroot}/etc/lvm/lvm.conf
 %{_prefix}/lib/libdevmapper-event-lvm2.so
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 2.03.10 release 1
+  Updated to version 2.03.10.

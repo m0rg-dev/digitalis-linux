@@ -13,15 +13,15 @@
 %define libname libmpc
 
 Name:           %{?cross}%{libname}
-Version:        1.2.0
-Release:        2%{?dist}
+Version:        1.2.1
+Release:        1%{?dist}
 Summary:        GNU MPC is a C library for the arithmetic of complex numbers with arbitrarily high precision and correct rounding of the result.
 
 License:        LGPLv3+
 URL:            http://www.multiprecision.org/mpc/home.html
 %undefine       _disable_source_fetch
 Source0:        https://ftp.gnu.org/gnu/mpc/mpc-%{version}.tar.gz
-%define         SHA256SUM0 e90f2d99553a9c19911abdb4305bf8217106a957e3994436428572c8dfe8fda6
+%define         SHA256SUM0 17503d2c395dfcf106b622dc142683c1199431d095367c6aacba6eec30340459
 
 # X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/mpc/"}
 
@@ -81,6 +81,9 @@ rm -f %{buildroot}%{_infodir}/dir
 %{_prefix}/lib/*.so
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 1.2.1 release 1
+  Updated to version 1.2.1.
 
 - 2020-11-07 Morgan Thomas <m@m0rg.dev> 1.2.0 release 2
   Remove the generated info directory (if present) before packaging.
