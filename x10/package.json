@@ -13,6 +13,7 @@
     "ink-link": "^2.0.0",
     "ink-progress-bar": "^3.0.0",
     "ink-spinner": "^4.0.1",
+    "ink-use-stdout-dimensions": "^1.0.5",
     "react": "^17.0.1",
     "strip-ansi": "^6.0.0",
     "typescript": "^4.0.5",
