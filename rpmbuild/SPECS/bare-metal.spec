@@ -30,12 +30,12 @@ Requires: udev-init-scripts
 
 %changelog
 
-- 2020-11-09 Morgan Thomas <m@m0rg.dev> 5 release 1
+* Mon Nov 09 2020 Morgan Thomas <m@m0rg.dev> 5-1
   Added dhcpcd to requires (moved from base-system).
 
-- 2020-11-07 Morgan Thomas <m@m0rg.dev> 4 release 1
+* Sat Nov 07 2020 Morgan Thomas <m@m0rg.dev> 4-1
   Added sudo to requires (here instead of base-system beacuse you don't need
   sudo in a container).
 
-- 2020-11-05 Morgan Thomas <m@m0rg.dev> 3 release 1
+* Thu Nov 05 2020 Morgan Thomas <m@m0rg.dev> 3-1
   Added e2fsprogs and kbd to requires.

@@ -43,10 +43,10 @@ BuildRequires: /usr/bin/true
 %files
 
 %changelog
-- 2020-11-17 Morgam Thomas <m@m0rg.dev> 8 release 1
+* Tue Nov 17 2020 Morgam Thomas <m@m0rg.dev> 8-1
   Added man-db and zsh.
 
-- 2020-11-09 Morgan Thomas <m@m0rg.dev> 7 release 1
+* Mon Nov 09 2020 Morgan Thomas <m@m0rg.dev> 7-1
   Removed dhcpcd from requires (moved to bare-metal).
 
 - 2020-11-06 Morgan Thomas <m@m0rg.dev>

@@ -121,5 +121,5 @@ ln -sv %{_oldprefix}/bin/%{?cross}libgcrypt-config %{buildroot}/%{_prefix}/bin/l
 
 %changelog
 
-- 2020-11-07 Morgan Thomas <m@m0rg.dev> 1.8.7 release 2
+* Sat Nov 07 2020 Morgan Thomas <m@m0rg.dev> 1.8.7-2
   Remove the generated info directory (if present) before packaging.

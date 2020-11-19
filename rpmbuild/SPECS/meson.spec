@@ -58,5 +58,5 @@ fi
 
 %changelog
 
-- 2020-11-18 Morgan Thomas <m@m0rg.dev> 0.56.0 release 2
+* Wed Nov 18 2020 Morgan Thomas <m@m0rg.dev> 0.56.0-2
   Updated to Python 3.9

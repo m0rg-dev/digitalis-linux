@@ -121,6 +121,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %changelog
 
-- 2020-11-18 Morgan Thomas <m@m0rg.dev> 2.67.0 release 1
+* Wed Nov 18 2020 Morgan Thomas <m@m0rg.dev> 2.67.0-1
   Updated to version 2.67.0.
 

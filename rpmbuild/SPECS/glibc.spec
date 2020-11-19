@@ -182,7 +182,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %changelog
 
-- 2020-11-09 Morgan Thomas <m@m0rg.dev> 2.32 release 2
+* Mon Nov 09 2020 Morgan Thomas <m@m0rg.dev> 2.32-2
   Turn locale generation back on.
 
 - 2020-11-08 Morgan Thomas <m@m0rg.dev> 2.32

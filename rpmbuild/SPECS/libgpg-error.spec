@@ -118,5 +118,5 @@ ln -sv %{_oldprefix}/bin/%{?cross}gpgrt-config %{buildroot}/%{_prefix}/bin/gpgrt
 
 %changelog
 
-- 2020-11-07 Morgan Thomas <m@m0rg.dev> 1.39 release 2
+* Sat Nov 07 2020 Morgan Thomas <m@m0rg.dev> 1.39-2
   Remove the generated info directory (if present) before packaging.

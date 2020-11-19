@@ -71,6 +71,6 @@ rm -f %{buildroot}%{_infodir}/dir
 
 %changelog
 
-- 2020-09-11 Morgan Thomas <m@m0rg.dev> 5.0 release 2
+* Fri Sep 11 2020 Morgan Thomas <m@m0rg.dev> 5.0-2
   Set bash_cv_getcwd_malloc=yes in configure to hopefully work out some issues
   related to overlayfs.

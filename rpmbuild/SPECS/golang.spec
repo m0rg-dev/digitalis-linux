@@ -84,5 +84,5 @@ rm -v %{buildroot}%{_prefix}/lib/go/src/*.rc
 
 %changelog
 
-- 2020-11-18 Morgan Thomas <m@m0rg.dev> 1.15.5 release 1
+* Wed Nov 18 2020 Morgan Thomas <m@m0rg.dev> 1.15.5-1
   Updated to version 1.15.5.

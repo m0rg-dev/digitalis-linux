@@ -92,23 +92,23 @@ mkinitcpio -p kernel-%{version}-%{release} -k %{version}-%{release}
 
 %changelog
 
-- 2020-11-18 Morgan Thomas <m@m0rg.dev> 5.9.9 release 1
+* Wed Nov 18 2020 Morgan Thomas <m@m0rg.dev> 5.9.9-1
   Updated to version 5.9.9.
 
-- 2020-11-18 Morgan Thomas <m@m0rg.dev> 5.9.8 release 1
+* Wed Nov 18 2020 Morgan Thomas <m@m0rg.dev> 5.9.8-1
   Updated to version 5.9.8.
 
-- 2020-11-17 Morgan Thomas <m@m0rg.dev> 5.9.3 release 6
+* Tue Nov 17 2020 Morgan Thomas <m@m0rg.dev> 5.9.3-6
   Use a base config from Fedora instead of the previous config of unknown origin.
 
-- 2020-11-06 Morgan Thomas <m@m0rg.dev> 5.9.3 release 5
+* Fri Nov 06 2020 Morgan Thomas <m@m0rg.dev> 5.9.3-5
   Added CONFIG_IP_NF_NAT=m to config.
 
-- 2020-11-06 Morgan Thomas <m@m0rg.dev> 5.9.3 release 4
+* Fri Nov 06 2020 Morgan Thomas <m@m0rg.dev> 5.9.3-4
   Correctly set the kernel version for module loading.
 
-- 2020-11-06 Morgan Thomas <m@m0rg.dev> 5.9.3 release 3
+* Fri Nov 06 2020 Morgan Thomas <m@m0rg.dev> 5.9.3-3
   Set up the mkinitcpio hook to take release into account.
 
-- 2020-11-06 Morgan Thomas <m@m0rg.dev> 5.9.3 release 2
+* Fri Nov 06 2020 Morgan Thomas <m@m0rg.dev> 5.9.3-2
   Added CONFIG_OVERLAY_FS=m to config.

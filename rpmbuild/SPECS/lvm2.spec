@@ -96,5 +96,5 @@ sed -i 's,use_lvmetad = 1,use_lvmetad = 0,' %{buildroot}/etc/lvm/lvm.conf
 
 %changelog
 
-- 2020-11-18 Morgan Thomas <m@m0rg.dev> 2.03.10 release 1
+* Wed Nov 18 2020 Morgan Thomas <m@m0rg.dev> 2.03.10-1
   Updated to version 2.03.10.

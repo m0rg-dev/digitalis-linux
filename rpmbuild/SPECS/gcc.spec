@@ -371,8 +371,8 @@ rm -fv %{buildroot}/%{_infodir}/dir
 
 %changelog
 
-- 2020-11-07 Morgan Thomas <m@m0rg.dev> 10.2.0 release 3
+* Sat Nov 07 2020 Morgan Thomas <m@m0rg.dev> 10.2.0-3
   Explicitly disable LTO in case Fedora turned it on
 
-- 2020-11-06 Morgan Thomas <m@m0rg.dev> 10.2.0 release 2
+* Fri Nov 06 2020 Morgan Thomas <m@m0rg.dev> 10.2.0-2
   Provide the _bindir/cc symlink.

@@ -93,5 +93,5 @@ rm -f %{buildroot}%{_infodir}/dir
 
 %changelog
 
-- 2020-11-07 Morgan Thomas <m@m0rg.dev> <no version change>
+* Sat Nov 07 2020 Morgan Thomas <m@m0rg.dev>
   Remove the generated info directory (if present) before packaging.

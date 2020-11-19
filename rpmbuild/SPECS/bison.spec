@@ -55,5 +55,5 @@ rm -f %{buildroot}%{_infodir}/dir
 
 %changelog
 
-- 2020-11-18 Morgan Thomas <m@m0rg.dev> 3.7.4 release 1
+* Wed Nov 18 2020 Morgan Thomas <m@m0rg.dev> 3.7.4-1
   Updated to version 3.7.4.

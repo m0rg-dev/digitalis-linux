@@ -76,8 +76,8 @@ EOF
 
 %changelog
 
-- 2020-11-06 Morgan Thomas <m@m0rg.dev> 2 release 1
+* Fri Nov 06 2020 Morgan Thomas <m@m0rg.dev> 2-1
   Add policy.json.
 
-- 2020-11-06 Morgan Thomas <m@m0rg.dev> 1 release 2
+* Fri Nov 06 2020 Morgan Thomas <m@m0rg.dev> 1-2
   Don't install an obviously screwed-up conf. Also, should be noarch.

@@ -77,11 +77,11 @@ cp %SOURCE1 %{buildroot}%{_sysconfdir}/dnf/dnf.conf
 
 %changelog
 
-- 2020-11-18 Morgan Thomas <m@m0rg.dev> 4.4.2 release 2
+* Wed Nov 18 2020 Morgan Thomas <m@m0rg.dev> 4.4.2-2
   Updated to Python 3.9
 
-- 2020-11-18 Morgan Thomas <m@m0rg.dev> 4.4.2 release 1
+* Wed Nov 18 2020 Morgan Thomas <m@m0rg.dev> 4.4.2-1
   Updated to version 4.4.2.
 
-- 2020-11-16 Morgan Thomas <m@m0rg.dev> 4.2.6 release 2
+* Mon Nov 16 2020 Morgan Thomas <m@m0rg.dev> 4.2.6-2
   Package our own config file.

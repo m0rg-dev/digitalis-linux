@@ -124,12 +124,12 @@ rm -f %{buildroot}%{_infodir}/dir
 
 %changelog
 
-- 2020-11-18 Morgan Thomas <m@m0rg.dev> 1.15.0 release 2
+* Wed Nov 18 2020 Morgan Thomas <m@m0rg.dev> 1.15.0-2
   Updated to Python 3.9
 
-- 2020-11-18 Morgan Thomas <m@m0rg.dev> 1.15.0 release 1
+* Wed Nov 18 2020 Morgan Thomas <m@m0rg.dev> 1.15.0-1
   Updated to version 1.15.0.
 
-- 2020-11-07 Morgan Thomas <m@m0rg.dev> 1.14.0 release 2
+* Sat Nov 07 2020 Morgan Thomas <m@m0rg.dev> 1.14.0-2
   Explicitly set PYTHON.
   Remove the generated info directory (if present) before packaging.

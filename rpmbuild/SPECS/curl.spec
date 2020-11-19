@@ -97,5 +97,5 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %changelog
 
-- 2020-11-07 Morgan Thomas <m@m0rg.dev> 7.73.0 release 2
+* Sat Nov 07 2020 Morgan Thomas <m@m0rg.dev> 7.73.0-2
   -devel package should depend on zlib-devel.

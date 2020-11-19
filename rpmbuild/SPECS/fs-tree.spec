@@ -170,8 +170,8 @@ EOF
 
 %changelog
 
-- 2020-11-07 Morgan Thomas <m@m0rg.dev> 3 release 4
+* Sat Nov 07 2020 Morgan Thomas <m@m0rg.dev> 3-4
   Add /etc/hosts, /etc/profile, /etc/bash/bashrc
 
-- 2020-11-06 Morgan Thomas <m@m0rg.dev> 2 release 1
+* Fri Nov 06 2020 Morgan Thomas <m@m0rg.dev> 2-1
   Add /etc/os-release, version -> 2

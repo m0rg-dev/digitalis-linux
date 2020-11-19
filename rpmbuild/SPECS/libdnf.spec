@@ -110,11 +110,11 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %changelog
 
-- 2020-11-18 Morgan Thomas <m@m0rg.dev> 0.55.0 release 2
+* Wed Nov 18 2020 Morgan Thomas <m@m0rg.dev> 0.55.0-2
   Updated to Python 3.9
 
-- 2020-11-18 Morgan Thomas <m@m0rg.dev> 0.55.0 release 1
+* Wed Nov 18 2020 Morgan Thomas <m@m0rg.dev> 0.55.0-1
   Updated to version 0.55.0.
 
-- 2020-11-07 Morgan Thomas <m@m0rg.dev> 0.54.2 release 2
+* Sat Nov 07 2020 Morgan Thomas <m@m0rg.dev> 0.54.2-2
   Explicitly target Python 3.8.

@@ -81,5 +81,5 @@ rm -f %{buildroot}%{_infodir}/dir
 
 %changelog
 
-- 2020-11-18 Morgan Thomas <m@m0rg.dev> 2.2.24 release 1
+* Wed Nov 18 2020 Morgan Thomas <m@m0rg.dev> 2.2.24-1
   Updated to version 2.2.24.

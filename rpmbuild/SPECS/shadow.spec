@@ -92,11 +92,11 @@ grpconv
 
 %changelog
 
-- 2020-11-17 Morgan Thomas <m@m0rg.dev> 4.8.1 release 4
+* Tue Nov 17 2020 Morgan Thomas <m@m0rg.dev> 4.8.1-4
   Add /etc/shells.
 
-- 2020-11-06 Morgan Thomas <m@m0rg.dev> 4.8.1 release 3
+* Fri Nov 06 2020 Morgan Thomas <m@m0rg.dev> 4.8.1-3
   Add empty subuid/subgid.
 
-- 2020-11-06 Morgan Thomas <m@m0rg.dev> 4.8.1 release 2
+* Fri Nov 06 2020 Morgan Thomas <m@m0rg.dev> 4.8.1-2
   Add dependency on libpam-devel.

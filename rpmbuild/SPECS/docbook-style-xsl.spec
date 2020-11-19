@@ -64,6 +64,6 @@ fi
 %doc README RELEASE-NOTES* NEWS*
 
 %changelog
-- 2020-11-06 Morgan Thomas <m@m0rg.dev> - 1.79.2 release 2
+* Fri Nov 06 2020 Morgan Thomas <m@m0rg.dev> - 1.79.2-2
   Add xml-common to requires so that installing docbook-dtds after this doesn't
   stomp our xml catalog changes

@@ -63,7 +63,7 @@ cp -rv usr/include %{buildroot}/%{_prefix}/
 
 %changelog
  
-- 2020-11-18 Morgan Thomas <m@m0rg.dev> 5.9.9 release 1
+* Wed Nov 18 2020 Morgan Thomas <m@m0rg.dev> 5.9.9-1
   Updated to version 5.9.9.
   
 - 2020-11-04 Morgan Thomas <m@m0rg.dev>

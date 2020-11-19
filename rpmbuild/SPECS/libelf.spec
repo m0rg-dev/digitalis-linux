@@ -100,8 +100,8 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %changelog
 
-- 2020-11-18 Morgan Thomas <m@m0rg.dev> 0.182 release 1
+* Wed Nov 18 2020 Morgan Thomas <m@m0rg.dev> 0.182-1
   Updated to version 0.182.
 
-- 2020-11-07 Morgan Thomas <m@m0rg.dev> 0.181 release 2
+* Sat Nov 07 2020 Morgan Thomas <m@m0rg.dev> 0.181-2
   Explicitly disable LTO in case Fedora turned it on

@@ -55,8 +55,8 @@ fi
 
 %changelog
 
-- 2020-11-18 Morgan Thomas <m@m0rg.dev> 3.3.1 release 2
+* Wed Nov 18 2020 Morgan Thomas <m@m0rg.dev> 3.3.1-2
   Updated to Python 3.9
 
-- 2020-11-18 Morgan Thomas <m@m0rg.dev> 3.3.1 release 1
+* Wed Nov 18 2020 Morgan Thomas <m@m0rg.dev> 3.3.1-1
   Updated to version 3.3.1.

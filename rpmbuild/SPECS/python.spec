@@ -112,11 +112,11 @@ rm %{buildroot}/%{_prefix}/lib/python%{pybasever}/cgi.py
 
 %changelog
 
-- 2020-11-18 Morgan Thomas <m@m0rg.dev> 3.9.0 release 1
+* Wed Nov 18 2020 Morgan Thomas <m@m0rg.dev> 3.9.0-1
   Update to version 3.9.0.
 
-- 2020-11-18 Morgan Thomas <m@m0rg.dev> 3.8.3 release 4
+* Wed Nov 18 2020 Morgan Thomas <m@m0rg.dev> 3.8.3-4
   Explicitly provide libpython%%{pybasever}-devel.
 
-- 2020-11-15 Morgan Thomas <m@m0rg.dev> 3.8.3 release 3
+* Sun Nov 15 2020 Morgan Thomas <m@m0rg.dev> 3.8.3-3
   Compile in bzip2 support.

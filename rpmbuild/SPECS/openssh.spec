@@ -98,5 +98,5 @@ fi
 
 %changelog
 
-- 2020-11-05 Morgan Thomas <m@m0rg.dev> 8.4p1 release 5
+* Thu Nov 05 2020 Morgan Thomas <m@m0rg.dev> 8.4p1-5
   Enable UsePAM in sshd_config.

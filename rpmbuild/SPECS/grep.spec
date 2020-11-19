@@ -45,8 +45,8 @@ rm -f %{buildroot}%{_infodir}/dir
 
 %changelog
 
-- 2020-11-18 Morgan Thomas <m@m0rg.dev> 3.6 release 1
+* Wed Nov 18 2020 Morgan Thomas <m@m0rg.dev> 3.6-1
   Updated to version 3.6.
 
-- 2020-11-09 Morgan Thomas <m@m0rg.dev> 3.5 release 2
+* Mon Nov 09 2020 Morgan Thomas <m@m0rg.dev> 3.5-2
   Enable PCRE support.

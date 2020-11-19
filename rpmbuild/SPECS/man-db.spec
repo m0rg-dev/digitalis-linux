@@ -79,8 +79,8 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %changelog
 
-- 2020-11-17 Morgan Thomas <m@m0rg.dev> 2.9.3 release 4
+* Tue Nov 17 2020 Morgan Thomas <m@m0rg.dev> 2.9.3-4
   Add zlib support.
 
-- 2020-11-17 Morgan Thomas <m@m0rg.dev> 2.9.3 release 3
+* Tue Nov 17 2020 Morgan Thomas <m@m0rg.dev> 2.9.3-3
   Pass -q to /usr/bin/mandb in scriptlets.

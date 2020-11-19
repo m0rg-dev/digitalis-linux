@@ -47,5 +47,5 @@ python%{system_python} setup.py install --skip-build --root %{buildroot}
 
 %changelog
 
-- 2020-11-18 Morgan Thomas <m@m0rg.dev> 50.3.2 release 2
+* Wed Nov 18 2020 Morgan Thomas <m@m0rg.dev> 50.3.2-2
   Updated to Python 3.9

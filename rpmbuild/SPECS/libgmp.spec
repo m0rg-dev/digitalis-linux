@@ -84,11 +84,11 @@ rm -f %{buildroot}%{_infodir}/dir
 
 %changelog
 
-- 2020-11-18 Morgan Thomas <m@m0rg.dev> 6.2.1 release 1
+* Wed Nov 18 2020 Morgan Thomas <m@m0rg.dev> 6.2.1-1
   Updated to version 6.2.1.
 
-- 2020-11-07 Morgan Thomas <m@m0rg.dev> 6.2.0 release 3
+* Sat Nov 07 2020 Morgan Thomas <m@m0rg.dev> 6.2.0-3
   Remove the generated info directory (if present) before packaging.
 
-- 2020-11-07 Morgan Thomas <m@m0rg.dev> 6.2.0 release 2
+* Sat Nov 07 2020 Morgan Thomas <m@m0rg.dev> 6.2.0-2
   Fix gcc detection when cross-compiling from Fedora.

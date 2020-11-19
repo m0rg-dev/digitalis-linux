@@ -120,6 +120,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %changelog
 
-- 2020-11-18 Morgan Thomas <m@m0rg.dev> 2.9.10 release 3
+* Wed Nov 18 2020 Morgan Thomas <m@m0rg.dev> 2.9.10-3
   Updated to Python 3.9
 

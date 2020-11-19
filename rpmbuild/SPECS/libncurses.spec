@@ -130,5 +130,5 @@ done
 
 %changelog
 
-- 2020-11-07 Morgan Thomas <m@m0rg.dev> 6.2 release 2
+* Sat Nov 07 2020 Morgan Thomas <m@m0rg.dev> 6.2-2
   Actually pass %%_target when cross-compiling.

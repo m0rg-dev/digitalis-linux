@@ -119,8 +119,8 @@ mv -v %{buildroot}%{_datadir}/cmake %{buildroot}%{_datadir}/cmake-%{system_cmake
 
 %changelog
 
-- 2020-11-18 Morgan Thomas <m@m0rg.dev> 0.7.16 release 3
+* Wed Nov 18 2020 Morgan Thomas <m@m0rg.dev> 0.7.16-3
   -devel should explicitly depend on the CMake version.
 
-- 2020-11-18 Morgan Thomas <m@m0rg.dev> 0.7.16 release 2
+* Wed Nov 18 2020 Morgan Thomas <m@m0rg.dev> 0.7.16-2
   Rebuild for CMake 3.19.

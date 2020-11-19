@@ -99,8 +99,8 @@ fi
 %doc %{_mandir}/man{5,8}/*
 
 %changelog
-- 2020-11-08 Morgan Thomas <m@m0rg.dev> 9.3.2 release 3
+* Sun Nov 08 2020 Morgan Thomas <m@m0rg.dev> 9.3.2-3
   Don't break the init script on reinstalls.
 
-- 2020-11-08 Morgan Thomas <m@m0rg.dev> 9.3.2 release 2
+* Sun Nov 08 2020 Morgan Thomas <m@m0rg.dev> 9.3.2-2
   Add init script and privsep user.
