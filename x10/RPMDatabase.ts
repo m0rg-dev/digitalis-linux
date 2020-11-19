@@ -82,49 +82,45 @@ export class RPMDatabase {
         Logger.info('RPM database loaded.');
     }
 
-    static async getSpecProvides(spec: string, optset: string[]): Promise<string> {
-        const proc = child_process.spawn('rpmspec', ['-q', '--provides', '--macros', 'digitalis.rpm-macros', spec, ...optset]);
-        const stdout: Buffer[] = [];
-        proc.stdout.on('data', (data) => {
-            stdout.push(data);
-        });
-        proc.stderr.on('data', (data) => {
-            Logger.debug(`${spec} ${data.toString()}`);
-        });
-        const output = await new Promise<string>((resolve, reject) => {
-            proc.on('close', (code, signal) => {
-                if (signal)
-                    reject(`Process killed by signal ${signal}`);
-                if (code > 1)
-                    reject(`Process exited with code ${code}`);
-                if (code)
-                    resolve("");
-                resolve(Buffer.concat(stdout).toString());
+    static process_cache = new Map<string, string>();
+
+    static async memoize_process(command: string, args: readonly string[], identifier: string, empty_on_error_1: boolean = false): Promise<string> {
+        const cache_key = [command, ...args].map(x => `(${x})`).join(", ");
+        if (RPMDatabase.process_cache.has(cache_key)) {
+            return RPMDatabase.process_cache.get(cache_key);
+        } else {
+            const proc = child_process.spawn(command, args);
+            const stdout: Buffer[] = [];
+            proc.stdout.on('data', (data) => {
+                stdout.push(data);
             });
-        });
-        return output;
+            proc.stderr.on('data', (data) => {
+                Logger.debug(`${identifier} ${data.toString()}`);
+            });
+            return new Promise<string>((resolve, reject) => {
+                proc.on('close', (code, signal) => {
+                    if (signal) {
+                        reject(`Process ${identifier} killed by signal ${signal}`);
+                    } else if (code > 1 || (code && !empty_on_error_1)) {
+                        reject(`Process ${identifier} exited with code ${code}`);
+                    } else if (code) {
+                        resolve("");
+                    } else {
+                        const result = Buffer.concat(stdout).toString();
+                        RPMDatabase.process_cache.set(cache_key, result);
+                        resolve(result);
+                    }
+                })
+            });
+        }
+    }
+
+    static async getSpecProvides(spec: string, optset: string[]): Promise<string> {
+        return RPMDatabase.memoize_process(`rpmspec`, ['-q', '--provides', '--macros', 'digitalis.rpm-macros', spec, ...optset], spec, true);
     }
 
     static async getSpecExplicitFiles(spec: string, optset: string[]): Promise<string[]> {
-        const proc = child_process.spawn('rpmspec', ['-P', '--macros', 'digitalis.rpm-macros', spec, ...optset]);
-        const stdout: Buffer[] = [];
-        proc.stdout.on('data', (data) => {
-            stdout.push(data);
-        });
-        proc.stderr.on('data', (data) => {
-            Logger.debug(`${spec} ${data.toString()}`);
-        });
-        const output = await new Promise<string>((resolve, reject) => {
-            proc.on('close', (code, signal) => {
-                if (signal)
-                    reject(`Process killed by signal ${signal}`);
-                if (code > 1)
-                    reject(`Process exited with code ${code}`);
-                if (code)
-                    resolve("");
-                resolve(Buffer.concat(stdout).toString());
-            });
-        });
+        const output = await RPMDatabase.memoize_process('rpmspec', ['-P', '--macros', 'digitalis.rpm-macros', spec, ...optset], spec, true);
         const files: string[] = [];
         let in_files = false;
         for (const line of output.split("\n")) {
@@ -142,79 +138,19 @@ export class RPMDatabase {
         return files;
     }
 
-    private static specRequireCache = new Map<string, string>();
-
     static async getSpecRequires(spec: spec_file_name, optset: string[], type = 'requires'): Promise<string[]> {
-        const cache_key = `${spec}-${optset.join(',')}-${type}`;
-        let output: string;
-        if (RPMDatabase.specRequireCache.has(cache_key)) {
-            output = RPMDatabase.specRequireCache.get(cache_key);
-        } else {
-            if (debug_rpmdb_build) Logger.debug(`getSpecRequires cache miss ${cache_key}`);
-            const args = ['-q', '--' + type, '--macros', 'digitalis.rpm-macros', spec, ...optset];
-            if (debug_rpmdb_build) Logger.debug(`rpmspec ${args.join(" ")}`);
-            const proc = child_process.spawn('rpmspec', args);
-            const stdout: Buffer[] = [];
-            proc.stdout.on('data', (data) => {
-                stdout.push(data);
-            });
-            proc.stderr.on('data', (data) => {
-                Logger.debug(`${spec} ${data.toString()}`);
-            });
-            output = await new Promise<string>((resolve, reject) => {
-                proc.on('close', (code, signal) => {
-                    if (signal)
-                        reject(`Process killed by signal ${signal}`);
-                    if (code > 1)
-                        reject(`Process exited with code ${code}`);
-                    if (code)
-                        resolve("");
-                    resolve(Buffer.concat(stdout).toString());
-                });
-            });
-            RPMDatabase.specRequireCache.set(cache_key, output);
-        }
+        const output = await RPMDatabase.memoize_process('rpmspec', ['-q', '--' + type, '--macros', 'digitalis.rpm-macros', spec, ...optset], spec, true);
         const ret = output.split("\n").filter(s => s.length > 0);
         if (debug_rpmdb_build) Logger.debug(`${type} of ${spec}: ${ret.join("\n")}`);
         return ret;
     }
-
-    private static packageRequireCache = new Map<string, string>();
 
     static async getPackageRequires(what: package_name, profile: rpm_profile): Promise<string[]> {
         // [ TODO 
         const spec = RPMDatabase.getSpecFromName(what, Config.get().rpm_profiles[profile].dist || profile);
         const optset = Config.get().rpm_profiles[spec.profile].options;
         // TODO ]
-        const cache_key = `${what}-${profile}`;
-        let output: string;
-        if (RPMDatabase.packageRequireCache.has(cache_key)) {
-            output = RPMDatabase.packageRequireCache.get(cache_key);
-        } else {
-            if (debug_rpmdb_build) Logger.debug(`getPackageRequires cache miss ${cache_key}`);
-            const args = ['-q', '--queryformat', '[%{provides} ];[%{requires} ]\\n', '--macros', 'digitalis.rpm-macros', spec.spec, ...optset];
-            if (debug_rpmdb_build) Logger.debug(`rpmspec ${args.join(" ")}`);
-            const proc = child_process.spawn('rpmspec', args);
-            const stdout: Buffer[] = [];
-            proc.stdout.on('data', (data) => {
-                stdout.push(data);
-            });
-            proc.stderr.on('data', (data) => {
-                Logger.debug(`${spec.spec} ${data.toString()}`);
-            });
-            output = await new Promise<string>((resolve, reject) => {
-                proc.on('close', (code, signal) => {
-                    if (signal)
-                        reject(`Process killed by signal ${signal}`);
-                    if (code > 1)
-                        reject(`Process exited with code ${code}`);
-                    if (code)
-                        resolve("");
-                    resolve(Buffer.concat(stdout).toString());
-                });
-            });
-            RPMDatabase.packageRequireCache.set(cache_key, output);
-        }
+        const output = await RPMDatabase.memoize_process('rpmspec', ['-q', '--queryformat', '[%{provides} ];[%{requires} ]\\n', '--macros', 'digitalis.rpm-macros', spec.spec, ...optset], spec.spec, true);
         const subpackages = output.split("\n").filter(s => s.length > 0);
         for (const subpackage of subpackages) {
             const names = subpackage.split(/;/)[0].split(/\s+/).filter(s => s.length > 0);
@@ -257,60 +193,14 @@ export class RPMDatabase {
 
     static async getSrpmFile(what: spec_with_options): Promise<string> {
         const optset = Config.get().rpm_profiles[what.profile].options;
-        const proc = child_process.spawn('rpmspec', ['-q', '--srpm', '--macros', 'digitalis.rpm-macros', what.spec, ...optset]);
-        const stdout: Buffer[] = [];
-        proc.stdout.on('data', (data) => {
-            stdout.push(data);
-        });
-        proc.stderr.on('data', (data) => {
-            Logger.debug(`${what.spec} ${data.toString()}`);
-        });
-        const output = await new Promise<string>((resolve, reject) => {
-            proc.on('close', (code, signal) => {
-                if (signal)
-                    reject(`Process killed by signal ${signal}`);
-                if (code > 1)
-                    reject(`Process exited with code ${code}`);
-                if (code)
-                    resolve("");
-                resolve(Buffer.concat(stdout).toString());
-            });
-        });
+        const output = await RPMDatabase.memoize_process('rpmspec', ['-q', '--srpm', '--macros', 'digitalis.rpm-macros', what.spec, ...optset], what.spec, true);
         const with_arch = output.split('\n')[0];
         return with_arch.split('.').slice(0, -1).join('.');
     }
 
-    // TODO instead of all this ad-hoc caching use an explicit "memoized rpmspec" kind of thing
-    private static artifactListCache = new Map<string, string>();
-
     static async haveArtifacts(what: spec_file_name, where: rpm_profile): Promise<boolean> {
         const optset = Config.get().rpm_profiles[where].options;
-        const cache_key = `${what}:${optset.join(":")}`;
-        var output: string;
-        if (RPMDatabase.artifactListCache.has(cache_key)) {
-            output = RPMDatabase.artifactListCache.get(cache_key);
-        } else {
-            const proc = child_process.spawn('rpmspec', ['-q', '--rpms', '--macros', 'digitalis.rpm-macros', what, ...optset]);
-            const stdout: Buffer[] = [];
-            proc.stdout.on('data', (data) => {
-                stdout.push(data);
-            });
-            proc.stderr.on('data', (data) => {
-                Logger.debug(`${what} ${data.toString()}`);
-            });
-            output = await new Promise<string>((resolve, reject) => {
-                proc.on('close', (code, signal) => {
-                    if (signal)
-                        reject(`Process killed by signal ${signal}`);
-                    if (code > 1)
-                        reject(`Process exited with code ${code}`);
-                    if (code)
-                        resolve("");
-                    resolve(Buffer.concat(stdout).toString());
-                });
-            });
-            RPMDatabase.artifactListCache.set(cache_key, output);
-        }
+        const output = await RPMDatabase.memoize_process('rpmspec', ['-q', '--rpms', '--macros', 'digitalis.rpm-macros', what, ...optset], what, true);
         for (const line of output.split('\n').filter(s => s.length > 0)) {
             const parts = line.split('.');
             const arch = parts.pop();

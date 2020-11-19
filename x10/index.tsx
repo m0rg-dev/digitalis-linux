@@ -116,6 +116,8 @@ async function doBuild(tui: TUI, requirements: Map<string, BuiltPackage>) {
         return;
     }
 
+    if(program.dryRun) return;
+
     Logger.info("-----------------");
     // Yes, we're mostly ignoring the ordering from orderPackageSet, but it's still
     // important to the UX and dependency resolution stuff, so it's gonna stick around.
@@ -202,8 +204,13 @@ export async function main(tui: TUI) {
     const requirements = new Map<string, BuiltPackage>();
 
     tui.setState({ buildingDatabase: "working" })
-    await RPMDatabase.rebuild();
-    tui.setState({ buildingDatabase: "complete" });
+    try {
+        await RPMDatabase.rebuild();
+        tui.setState({ buildingDatabase: "complete" });
+    } catch(e) {
+        tui.setState({ buildingDatabase: "failed: " + e.toString() });
+        return;
+    }
 
     while (program.args.length) {
         const command = program.args.shift();
@@ -246,6 +253,11 @@ program.option(
     '-r, --remotes <machine[,machine...]>',
     "List of machines to use for builds. All non-localhost machines need rsync, podman, and buildah installed.",
     "localhost");
+program.option(
+    '--dry-run',
+    "Stop after the planning stage.",
+    false
+);
 
 program.parse();
 
