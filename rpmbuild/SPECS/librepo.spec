@@ -1,3 +1,5 @@
+%define system_python 3.8
+
 # If host == target, we aren't building cross tools.
 # We should install into /usr and package headers.
 %if "%{_host}" == "%{_target}"
@@ -42,7 +44,7 @@ BuildRequires: %{?target_tool_prefix}cmake-toolchain
 %endif
 BuildRequires: %{?target_tool_prefix}gcc
 BuildRequires: %{?target_tool_prefix}glib2-devel %{?target_tool_prefix}libopenssl-devel %{?target_tool_prefix}libxml2-devel
-BuildRequires: %{?target_tool_prefix}libcurl-devel %{?target_tool_prefix}libzchunk-devel %{?target_tool_prefix}libpython-devel
+BuildRequires: %{?target_tool_prefix}libcurl-devel %{?target_tool_prefix}libzchunk-devel %{?target_tool_prefix}libpython%{system_python}-devel
 BuildRequires: %{?target_tool_prefix}libcheck-devel %{?target_tool_prefix}zlib-devel %{?target_tool_prefix}libgpgme-devel
 
 Requires: %{?cross}glib2 %{?cross}libopenssl %{?cross}libxml2 %{?cross}libcurl %{?cross}libzchunk %{?cross}libpython
@@ -80,7 +82,7 @@ cmake --debug-find \
 %if "%{_build}" != "%{_target}"
     -DCMAKE_TOOLCHAIN_FILE=/usr/%{_target}/cmake_toolchain \
 %endif
-    -DCMAKE_INSTALL_PREFIX=%{_prefix} -DPYTHON_DESIRED=3 -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3.8 -DENABLE_TESTS=0 ..
+    -DCMAKE_INSTALL_PREFIX=%{_prefix} -DPYTHON_DESIRED=3 -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python%{system_python} -DENABLE_TESTS=0 ..
 %make_build
 
 %install
@@ -92,7 +94,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %files
 %license COPYING
 %{_prefix}/lib/*.so.*
-%{_prefix}/lib*/python3.8/site-packages/librepo
+%{_prefix}/lib*/python%{system_python}/site-packages/librepo
 
 %files devel
 %{_prefix}/include/librepo

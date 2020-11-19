@@ -45,7 +45,9 @@ echo "%SHA256SUM1  %SOURCE1" | sha256sum -c -
 %files
 %license LICENCE
 %{_bindir}/*
+%if "%{_build}" == "%{_host}"
 %{_prefix}/lib/zsh/%{version}
+%endif
 %{_datadir}/zsh/%{version}
 %{_datadir}/zsh/site-functions
 %doc %{_mandir}/man1/*

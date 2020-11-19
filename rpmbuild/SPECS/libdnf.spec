@@ -1,3 +1,5 @@
+%define system_python 3.8
+
 # If host == target, we aren't building cross tools.
 # We should install into /usr and package headers.
 %if "%{_host}" == "%{_target}"
@@ -46,7 +48,7 @@ BuildRequires: %{?target_tool_prefix}gcc
 BuildRequires: %{?target_tool_prefix}g++
 BuildRequires: %{?target_tool_prefix}zlib-devel %{?target_tool_prefix}glib2-devel %{?target_tool_prefix}libsmartcols-devel
 BuildRequires: %{?target_tool_prefix}libsolv-devel %{?target_tool_prefix}libcheck-devel %{?target_tool_prefix}librepo-devel
-BuildRequires: %{?target_tool_prefix}libmodulemd-devel %{?target_tool_prefix}libpython-devel %{?target_tool_prefix}libcppunit-devel
+BuildRequires: %{?target_tool_prefix}libmodulemd-devel %{?target_tool_prefix}libpython%{system_python}-devel %{?target_tool_prefix}libcppunit-devel
 BuildRequires: %{?target_tool_prefix}gtk-doc %{?target_tool_prefix}libjson-c-devel
 BuildRequires: %{?target_tool_prefix}libgpgme-devel
 BuildRequires: %{?target_tool_prefix}libzchunk-devel
@@ -80,7 +82,7 @@ cmake -Wno-dev \
     -DCMAKE_TOOLCHAIN_FILE=/usr/%{_target}/cmake_toolchain \
 %endif
     -DGTKDOC_SCANGOBJ_WRAPPER=/usr/bin/gtkdoc-scangobj \
-    -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3.8 \
+    -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python%{system_python} \
     -DCMAKE_INSTALL_PREFIX=%{_prefix} -DPYTHON_DESIRED=3 -DWITH_MAN=0 ..
 
 %make_build
@@ -96,8 +98,8 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %license COPYING
 %{_prefix}/lib/*.so.*
 %{_prefix}/lib/libdnf
-%{_prefix}/lib*/python3.8/site-packages/hawkey
-%{_prefix}/lib*/python3.8/site-packages/libdnf
+%{_prefix}/lib*/python%{system_python}/site-packages/hawkey
+%{_prefix}/lib*/python%{system_python}/site-packages/libdnf
 %{_datadir}/locale/*/LC_MESSAGES/libdnf.mo
 
 %files devel

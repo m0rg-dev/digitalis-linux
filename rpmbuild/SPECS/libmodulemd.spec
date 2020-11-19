@@ -1,3 +1,5 @@
+%define system_python 3.8
+
 # If host == target, we aren't building cross tools.
 # We should install into /usr and package headers.
 %if "%{_host}" == "%{_target}"
@@ -52,7 +54,7 @@ BuildRequires: docbook-style-xsl
 BuildRequires: pkgconfig(gobject-introspection-1.0)
 BuildRequires: help2man
 BuildRequires: libmodulemd-devel
-BuildRequires: python3.8
+BuildRequires: python%{system_python}
 
 Requires:      %{?cross}libmagic
 
@@ -88,7 +90,7 @@ touch /usr/share/gtk-doc/html/{glib,gobject}/index.html
 
 meson -Dbuildtype=release -Dnative=true \
     -Dwith_docs=false -Ddeveloper_build=false -Dskip_introspection=true \
-    -Dgobject_overrides_dir_py3='/usr/lib/python3.8/site-packages/gi/overrides' \
+    -Dgobject_overrides_dir_py3='/usr/lib/python%{system_python}/site-packages/gi/overrides' \
     --prefix=%{_prefix} \
 %if "%{_build}" != "%{_target}"
     --cross-file %{_target} \
@@ -104,7 +106,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %files
 %license COPYING
 %{_prefix}/lib/*.so.*
-%exclude /usr/lib/python3.8/site-packages/gi/overrides/*
+%exclude /usr/lib/python%{system_python}/site-packages/gi/overrides/*
 
 %files devel
 %{_includedir}/*

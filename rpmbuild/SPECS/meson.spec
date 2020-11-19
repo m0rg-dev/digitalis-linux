@@ -1,3 +1,5 @@
+%define system_python 3.8
+
 Name:           meson
 Version:        0.56.0
 Release:        1%{?dist}
@@ -20,7 +22,7 @@ BuildArch:      noarch
 
 BuildRequires:  make
 BuildRequires:  python
-BuildRequires:  python3.8
+BuildRequires:  python%{system_python}
 BuildRequires:  python-setuptools
 
 Requires:       python-setuptools
@@ -41,15 +43,17 @@ python3 setup.py build
 python3 setup.py install --skip-build --root %{buildroot}
 
 # danger: terrible hack
+%if "%{system_python}" != "3.9"
 if [ -e %{buildroot}%{_prefix}/lib/python3.9 ]; then
-    mv %{buildroot}%{_prefix}/lib/python{3.9,3.8}
+    mv %{buildroot}%{_prefix}/lib/python{3.9,%{system_python}}
 fi
+%endif
 
 %files
 %license COPYING
 %{_bindir}/meson
 %{_datadir}/polkit-1/actions/*
-%{_prefix}/lib/python3.8/site-packages/*
+%{_prefix}/lib/python%{system_python}/site-packages/*
 %doc %{_mandir}/man1/meson*
 
 %changelog

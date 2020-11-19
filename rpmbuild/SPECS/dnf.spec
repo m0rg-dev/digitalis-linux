@@ -1,3 +1,5 @@
+%define system_python 3.8
+
 Name:           dnf
 Version:        4.4.2
 Release:        1%{?dist}
@@ -26,6 +28,7 @@ BuildRequires:  %{?host_tool_prefix}libdnf-devel
 BuildRequires:  %{?host_tool_prefix}libcomps-devel
 BuildRequires:  make
 BuildRequires:  cmake
+BuildRequires:  python%{system_python}
 
 Requires:       libdnf
 Requires:       libcomps
@@ -47,7 +50,7 @@ cmake \
 %if "%{_build}" != "%{_target}"
     -DCMAKE_TOOLCHAIN_FILE=/usr/%{_target}/cmake_toolchain \
 %endif
-    -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3.8 \
+    -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python%{system_python} \
     -DCMAKE_INSTALL_PREFIX=%{_prefix} -DPYTHON_DESIRED=3 -DWITH_MAN=0 ..
 %make_build
 
@@ -63,7 +66,7 @@ cp %SOURCE1 %{buildroot}%{_sysconfdir}/dnf/dnf.conf
 %files
 %license COPYING
 %{_bindir}/*
-%{_prefix}/lib/python3.8/site-packages/dnf
+%{_prefix}/lib/python%{system_python}/site-packages/dnf
 %{_prefix}/lib/tmpfiles.d
 %exclude %{_prefix}/lib/systemd
 %config %{_sysconfdir}/libreport

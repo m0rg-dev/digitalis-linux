@@ -16,7 +16,7 @@
 
 Name:           %{?cross}%{?libname}
 Version:        %{general_version}
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        The Python programming language
 
 License:        Python-2.0
@@ -59,6 +59,7 @@ Provides:       %{?cross}python%{pybasever} = %{version}-%{release}
 Summary:        A library for embedding Python into other applications.
 License:        Python-2.0
 URL:            https://www.python.org/
+Provides:       %{?cross}libpython%{pybasever} = %{version}-%{release}
 
 %description -n %{?cross}libpython
 
@@ -66,6 +67,7 @@ URL:            https://www.python.org/
 Summary:        Development files for libpython
 Requires:       %{?cross}libpython%{?_isa} = %{version}-%{release}
 Requires:       python%{pybasever}
+Provides:       %{?cross}libpython%{pybasever}-devel = %{version}-%{release}
 
 %description -n %{?cross}libpython-devel
 The libpython-devel package contains libraries and header files for
@@ -91,13 +93,13 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 ln -s python3 %{buildroot}/%{_bindir}/python
 
 # cgi.py has a #! /usr/local/bin/python in it and it makes rpm (and therefore me) sad
-rm %{buildroot}/%{_prefix}/lib/python3.8/cgi.py
+rm %{buildroot}/%{_prefix}/lib/python%{pybasever}/cgi.py
 
 %files
 %license LICENSE
 %{_bindir}/*
 %doc %{_mandir}/man1/*
-%{_prefix}/lib/python3.8
+%{_prefix}/lib/python%{pybasever}
 
 %files -n %{?cross}libpython
 # TODO break this all out
@@ -109,6 +111,9 @@ rm %{buildroot}/%{_prefix}/lib/python3.8/cgi.py
 %{_prefix}/lib/*.so
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 3.8.3 release 4
+  Explicitly provide libpython%%{pybasever}-devel.
 
 - 2020-11-15 Morgan Thomas <m@m0rg.dev> 3.8.3 release 3
   Compile in bzip2 support.

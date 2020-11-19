@@ -1,3 +1,5 @@
+%define system_python 3.8
+
 # If host == target, we aren't building cross tools.
 # We should install into /usr and package headers.
 %if "%{_host}" == "%{_target}"
@@ -44,7 +46,7 @@ BuildRequires:  make
 BuildRequires: %{?target_tool_prefix}gcc
 BuildRequires: %{?target_tool_prefix}zlib-devel
 BuildRequires: %{?target_tool_prefix}liblzma-devel
-BuildRequires: %{?target_tool_prefix}libpython-devel
+BuildRequires: %{?target_tool_prefix}libpython%{system_python}-devel
 BuildRequires: %{?target_tool_prefix}pkg-config
 
 %undefine _annotated_build
@@ -91,7 +93,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %license COPYING
 %{_prefix}/lib/*.so.*
 %if "%{_build}" == "%{_target}"
-%{_prefix}/lib/python3.8/site-packages/*
+%{_prefix}/lib/python%{system_python}/site-packages/*
 %doc %{_datadir}/doc/libxml2-python-%{version}
 %endif
 %doc %{_datadir}/gtk-doc/html/libxml2

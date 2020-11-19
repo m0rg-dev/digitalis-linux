@@ -1,3 +1,5 @@
+%define system_python 3.8
+
 # If host == target, we aren't building cross tools.
 # We should install into /usr and package headers.
 %global _oldprefix %{_prefix}
@@ -28,7 +30,7 @@ Source0:        https://www.gnupg.org/ftp/gcrypt/%{libname}/%{libname}-%{version
 
 BuildRequires:  make gcc /usr/bin/gpgsm
 BuildRequires:  swig
-BuildRequires:  python
+BuildRequires:  python%{system_python}
 BuildRequires:  libgpg-error-devel
 
 %if "%{_build}" != "%{_host}"
@@ -42,7 +44,7 @@ BuildRequires:  libgpg-error-devel
 %endif
 BuildRequires: %{?target_tool_prefix}gcc %{?target_tool_prefix}libgpg-error-devel
 BuildRequires: %{?target_tool_prefix}pkg-config %{?target_tool_prefix}libassuan-devel
-BuildRequires: %{?target_tool_prefix}libpython-devel
+BuildRequires: %{?target_tool_prefix}libpython%{system_python}-devel
 
 %undefine _annotated_build
 %global debug_package %{nil}
@@ -74,7 +76,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 mkdir build
 cd build
 %define _configure ../configure
-export PYTHON=python3.8
+export PYTHON=python%{system_python}
 export SYSROOT=%(%{?target_tool_prefix}gcc -print-sysroot)/usr # needed for libgpg-error config??? someday I'll figure that out
 %configure --host=%{_target} --libdir=%{_prefix}/lib \
 %if "%{_build}" != "%{_target}"
@@ -84,7 +86,7 @@ export SYSROOT=%(%{?target_tool_prefix}gcc -print-sysroot)/usr # needed for libg
     --bindir=%{_oldprefix}/bin \
     --enable-languages=python \
     LDFLAGS="-L/usr/%{_target}/usr/lib" \
-    CFLAGS="%{optflags} -I/usr/%{_target}/usr/include/python3.8"
+    CFLAGS="%{optflags} -I/usr/%{_target}/usr/include/python%{system_python}"
 
 %make_build
 
@@ -103,7 +105,7 @@ rm -f %{buildroot}%{_infodir}/dir
 %files
 %license COPYING COPYING.LESSER
 %{_prefix}/lib/*.so.*
-%{_prefix}/lib*/python3.8/site-packages/gpg*
+%{_prefix}/lib*/python%{system_python}/site-packages/gpg*
 %doc %{_infodir}/*.info*
 
 %files devel

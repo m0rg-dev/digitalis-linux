@@ -16,7 +16,7 @@
 
 Name:           %{?cross}%{libname}
 Version:        0.7.16
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        libsolv is a free package dependency solver using a satisfiability algorithm.
 
 License:        BSD-3-Clause
@@ -56,6 +56,7 @@ BuildRequires: %{?target_tool_prefix}zlib-devel %{?target_tool_prefix}librpm-dev
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       %{?cross}libexpat-devel
+Requires:       cmake%{system_cmake}
 
 %description    devel
 The %{name}-devel package contains libraries and header files for
@@ -90,6 +91,8 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 # the wrong place...
 %if ! %{isnative}
 install -dm755 %{buildroot}/usr/share/cmake/Modules
+install -dm755 %{buildroot}/usr/share/cmake-%{system_cmake}/Modules
+cp -v %{buildroot}/%{_datadir}/cmake/Modules/*.cmake %{buildroot}/usr/share/cmake-%{system_cmake}/Modules
 mv -v %{buildroot}/%{_datadir}/cmake/Modules/*.cmake %{buildroot}/usr/share/cmake/Modules/
 %else
 # TODO this might be even worse
@@ -115,6 +118,9 @@ mv -v %{buildroot}%{_datadir}/cmake %{buildroot}%{_datadir}/cmake-%{system_cmake
 %doc %{_mandir}/man3/*
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 0.7.16 release 3
+  -devel should explicitly depend on the CMake version.
 
 - 2020-11-18 Morgan Thomas <m@m0rg.dev> 0.7.16 release 2
   Rebuild for CMake 3.19.

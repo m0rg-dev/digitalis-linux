@@ -1,3 +1,5 @@
+%define system_python 3.8
+
 Name:           nftables
 Version:        0.9.7
 Release:        1%{?dist}
@@ -21,6 +23,9 @@ BuildRequires:  %{?host_tool_prefix}libnftnl-devel
 BuildRequires:  %{?host_tool_prefix}libgmp-devel
 BuildRequires:  %{?host_tool_prefix}libreadline-devel
 BuildRequires:  make
+
+BuildRequires:  python%{system_python}
+Requires:       python%{system_python}
 
 %undefine _annotated_build
 
@@ -47,7 +52,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_includedir}/*
 %{_prefix}/lib/libnftables.so*
 %{_prefix}/lib/pkgconfig/libnftables.pc
-%{_prefix}/lib/python3.8/site-packages/nftables*
+%{_prefix}/lib/python%{system_python}/site-packages/nftables*
 
 %doc %{_mandir}/man{3,5,8}/*
 %doc %{_docdir}/nftables

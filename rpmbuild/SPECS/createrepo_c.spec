@@ -1,3 +1,5 @@
+%define system_python 3.8
+
 Name:           createrepo_c
 Version:        0.16.2
 Release:        1%{?dist}
@@ -25,7 +27,7 @@ BuildRequires:  %{?host_tool_prefix}glib2-devel
 BuildRequires:  %{?host_tool_prefix}libcurl-devel
 BuildRequires:  %{?host_tool_prefix}libmodulemd-devel
 BuildRequires:  %{?host_tool_prefix}libxml2-devel
-BuildRequires:  %{?host_tool_prefix}libpython-devel
+BuildRequires:  %{?host_tool_prefix}libpython%{system_python}-devel
 BuildRequires:  %{?host_tool_prefix}librpm-devel
 BuildRequires:  %{?host_tool_prefix}libopenssl-devel
 BuildRequires:  %{?host_tool_prefix}libsqlite-devel
@@ -70,7 +72,7 @@ cmake -Wno-dev \
     -DCMAKE_TOOLCHAIN_FILE=/usr/%{_target}/cmake_toolchain \
 %endif
     -DPYTHON_DESIRED=3 \
-    -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3.8 \
+    -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python%{system_python} \
     -DCMAKE_INSTALL_PREFIX=%{_prefix} -DENABLE_DRPM=OFF ..
 
 %make_build
@@ -82,7 +84,7 @@ cd build
 %files
 %license COPYING
 %{_bindir}/*
-%{_prefix}/lib*/python3.8/site-packages/*
+%{_prefix}/lib*/python%{system_python}/site-packages/*
 %doc %{_mandir}/man8/*
 
 %files -n libcreaterepo_c

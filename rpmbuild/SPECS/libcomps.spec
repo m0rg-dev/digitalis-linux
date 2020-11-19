@@ -1,3 +1,5 @@
+%define system_python 3.8
+
 # If host == target, we aren't building cross tools.
 # We should install into /usr and package headers.
 %if "%{_host}" == "%{_target}"
@@ -47,7 +49,7 @@ BuildRequires: %{?target_tool_prefix}zlib-devel
 BuildRequires: %{?target_tool_prefix}libxml2-devel
 BuildRequires: %{?target_tool_prefix}libexpat-devel
 BuildRequires: %{?target_tool_prefix}libcheck-devel
-BuildRequires: %{?target_tool_prefix}libpython-devel
+BuildRequires: %{?target_tool_prefix}libpython%{system_python}-devel
 
 %undefine _annotated_build
 %global debug_package %{nil}
@@ -77,7 +79,7 @@ cmake \
 %if "%{_build}" != "%{_target}"
     -DCMAKE_TOOLCHAIN_FILE=/usr/%{_target}/cmake_toolchain \
 %endif
-    -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3.8 \
+    -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python%{system_python} \
     -DCMAKE_INSTALL_PREFIX=%{_prefix} -DPYTHON_DESIRED=3 ../libcomps
 
 %make_build
@@ -92,9 +94,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %license COPYING
 %{_prefix}/lib/*.so.*
 %if %{isnative}
-/usr/lib*/python3.8/site-packages/libcomps*
+/usr/lib*/python%{system_python}/site-packages/libcomps*
 %else
-%exclude /usr/lib*/python3.8/site-packages/libcomps*
+%exclude /usr/lib*/python%{system_python}/site-packages/libcomps*
 %endif
 
 %files devel

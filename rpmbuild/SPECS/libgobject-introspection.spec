@@ -1,3 +1,5 @@
+%define system_python 3.8
+
 # If host == target, we aren't building cross tools.
 # We should install into /usr and package headers.
 %global _oldprefix %{_prefix}
@@ -52,7 +54,7 @@ BuildRequires: %{?target_tool_prefix}meson-toolchain
 %endif
 BuildRequires: %{?target_tool_prefix}gcc
 BuildRequires: %{?target_tool_prefix}glib2-devel
-BuildRequires: %{?target_tool_prefix}libpython-devel
+BuildRequires: %{?target_tool_prefix}libpython%{system_python}-devel
 
 # hack until I figure out what's *supposed* to generate these
 Provides:      pkgconfig(gobject-introspection-1.0) = %{version}-%{release}
@@ -87,7 +89,7 @@ sed -i "s/    subdir('tests')//" meson.build
 
 mkdir build
 
-meson -Dpython=python3.8 -Dbuildtype=release -Dgi_cross_use_prebuilt_gi=true -Dbuild_introspection_data=false --prefix=%{_prefix} \
+meson -Dpython=python%{system_python} -Dbuildtype=release -Dgi_cross_use_prebuilt_gi=true -Dbuild_introspection_data=false --prefix=%{_prefix} \
 %if "%{_build}" != "%{_target}"
     --cross-file %{_target} \
 %endif

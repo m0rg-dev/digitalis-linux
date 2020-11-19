@@ -213,5 +213,8 @@
  "cmake3.19 fedora-with-rpm": false,
  "libncurses-devel fedora-with-rpm": false,
  "openssl-devel fedora-with-rpm": true,
- "ncurses-devel fedora-with-rpm": true
+ "ncurses-devel fedora-with-rpm": true,
+ "x86_64-pc-linux-gnu-libpython3.8-devel fedora-with-rpm": false,
+ "/usr/bin/nroff fedora-with-rpm": true,
+ "man-db fedora-with-rpm": true
 }

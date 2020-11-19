@@ -1,3 +1,5 @@
+%define system_python 3.8
+
 # If host == target, we aren't building cross tools.
 # We should install into /usr and package headers.
 %if "%{_host}" == "%{_target}"
@@ -40,7 +42,7 @@ BuildRequires:  %{?target_tool_prefix}gcc %{?target_tool_prefix}zlib-devel
 BuildRequires:  %{?target_tool_prefix}libgcrypt-devel %{?target_tool_prefix}libmagic-devel %{?target_tool_prefix}libpopt-devel
 BuildRequires:  %{?target_tool_prefix}libarchive-devel %{?target_tool_prefix}libsqlite-devel %{?target_tool_prefix}pkg-config
 BuildRequires:  %{?target_tool_prefix}liblua-devel
-BuildRequires:  %{?target_tool_prefix}libpython-devel
+BuildRequires:  %{?target_tool_prefix}libpython%{system_python}-devel
 BuildRequires:  %{?target_tool_prefix}libzstd-devel
 BuildRequires:  %{?target_tool_prefix}libelf-devel
 
@@ -86,7 +88,7 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 sed -i '1s/python/python3/' scripts/pythondistdeps.py
 
 %build
-export PYTHON=python3.8
+export PYTHON=python%{system_python}
 %configure --libdir=%{_prefix}/lib --host=%{_target} --enable-bdb=no --enable-sqlite=yes --disable-openmp --enable-python
 %make_build
 
@@ -110,7 +112,7 @@ rm %{buildroot}%{_prefix}/lib/rpm/fileattrs/perl*.attr
 %{_prefix}/lib/*.so.*
 %{_prefix}/lib/rpm-plugins
 %{_prefix}/lib/rpm
-%{_prefix}/lib*/python3.8/site-packages/rpm
+%{_prefix}/lib*/python%{system_python}/site-packages/rpm
 
 %files -n %{?cross}librpm-devel
 %{_prefix}/lib/*.so

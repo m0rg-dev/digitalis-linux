@@ -3,7 +3,7 @@
 
 Name:           cmake
 Version:        %{major_version}.%{patch_version}
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The cmake build system
 
 License:        BSD-3-Clause
@@ -87,6 +87,9 @@ mv %{buildroot}%{_prefix}/doc/cmake-%(echo %{version} | sed 's/\.[0-9]\+$//')/* 
 %{_datadir}/vim/vimfiles/{indent,syntax}/cmake.vim
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 3.19.0 release 2
+  Provide the cmake%%{major_version} package as well.
 
 - 2020-11-18 Morgan Thomas <m@m0rg.dev> 3.19.0 release 1
   Updated to version 3.19.0.

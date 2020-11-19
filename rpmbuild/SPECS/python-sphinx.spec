@@ -1,3 +1,5 @@
+%define system_python 3.8
+
 Name:           python-sphinx
 Version:        3.3.1
 Release:        1%{?dist}
@@ -20,7 +22,7 @@ BuildArch:      noarch
 
 BuildRequires:  make
 BuildRequires:  python
-BuildRequires:  python3.8
+BuildRequires:  python%{system_python}
 BuildRequires:  python-setuptools
 
 Requires:       python-setuptools
@@ -40,14 +42,16 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %{__python3} setup.py install --skip-build --root %{buildroot}
 
 # danger: terrible hack
+%if "%{system_python}" != "3.9"
 if [ -e %{buildroot}%{_prefix}/lib/python3.9 ]; then
-    mv %{buildroot}%{_prefix}/lib/python{3.9,3.8}
+    mv %{buildroot}%{_prefix}/lib/python{3.9,%{system_python}}
 fi
+%endif
 
 %files
 %license LICENSE
 %{_bindir}/*
-%{_prefix}/lib/python3.8/site-packages/*
+%{_prefix}/lib/python%{system_python}/site-packages/*
 
 %changelog
 

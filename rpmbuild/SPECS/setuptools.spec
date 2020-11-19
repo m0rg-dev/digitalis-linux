@@ -1,3 +1,5 @@
+%define system_python 3.8
+
 Name:           setuptools
 Version:        50.3.2
 Release:        1%{?dist}
@@ -21,7 +23,7 @@ Provides:       python-setuptools = %{version}-%{release}
 %endif
 
 BuildRequires:  make
-BuildRequires:  python3.8
+BuildRequires:  python%{system_python}
 
 %undefine _annotated_build
 
@@ -32,15 +34,15 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 %autosetup
 
 %build
-python3.8 ./bootstrap.py
-python3.8 setup.py build
+python%{system_python} ./bootstrap.py
+python%{system_python} setup.py build
 
 %install
-python3.8 setup.py install --skip-build --root %{buildroot}
+python%{system_python} setup.py install --skip-build --root %{buildroot}
 
 %files
 %license LICENSE
 %{_bindir}/*
-%{_prefix}/lib/python3.8/site-packages/*
+%{_prefix}/lib/python%{system_python}/site-packages/*
 
 %changelog
