@@ -3,14 +3,17 @@ import program from 'commander';
 import * as ink from 'ink';
 import * as React from "react";
 import * as uuid from 'uuid';
+import * as readline from 'readline';
+import * as fs from 'fs';
 import { Config } from "./Config";
 import { Container, image_name } from "./Container";
-import { Logger } from "./Logger";
+import { Logger, LogLine } from "./Logger";
 import { BuiltPackage, FailureType, Package } from "./Package";
 import { PlanProgress } from "./PlanSpinner";
 import { package_name, RPMDatabase } from "./RPMDatabase";
 import { TUI } from "./TUI";
 import { Updater } from "./Updater";
+import { LogLines } from "./LogInfo";
 
 function filterDuplicateBuilds(list: BuiltPackage[]): BuiltPackage[] {
     const r: BuiltPackage[] = [];
@@ -36,7 +39,7 @@ function allBuiltPackages(list: Package[]): list is BuiltPackage[] {
 }
 
 async function prepareImage(image: image_name): Promise<BuiltPackage[]> {
-    if (await (new Container(image)).imagePresent()) return [];
+    if (await (new Container(image, undefined)).imagePresent()) return [];
     const pkgs: Package[] = await Promise.all(Config.get().build_images[image].install_packages
         .map((name: package_name) => Package.resolve(name, image))
     );
@@ -48,6 +51,7 @@ async function orderPackageSet(packages: Package[], statusCallback: ((status: Pl
     const dispatched = new Map<string, Package>();
     const ordered: Package[] = [];
     const pending = new Map<string, Package>();
+    const log_context = Logger.enterContext('orderPackageSet');
 
     packages.forEach(pkg => pending.set(pkg.hash(), pkg));
 
@@ -69,9 +73,8 @@ async function orderPackageSet(packages: Package[], statusCallback: ((status: Pl
                         pending.set(corequisite.hash(), corequisite);
                     }
                 }
-                Logger.debug(`Dispatched: ${pkg.name}:${pkg.installed_on} (${pending.size} remaining)`);
+                Logger.log(log_context, `Dispatched: ${pkg.name}:${pkg.installed_on} (${pending.size} remaining)`);
                 statusCallback({ resolved: ordered.length, remaining: pending.size, currently_working_on: `${pkg.name}:${pkg.installed_on}`, done: false });
-                Logger.setStatus(`Planning... ${pending.size} remaining (${pkg.name}:${pkg.installed_on})`);
             }
         }
     }
@@ -85,13 +88,13 @@ async function orderPackageSet(packages: Package[], statusCallback: ((status: Pl
 function combine(map: Map<string, BuiltPackage>, list: BuiltPackage[]) { list.forEach(x => map.set(x.hash(), x)) }
 
 async function doBuild(tui: TUI, requirements: Map<string, BuiltPackage>) {
+    const log_context = Logger.enterContext('doBuild');
     const images_involved = new Set<image_name>();
     for (const pkg of requirements.values()) {
         images_involved.add(pkg.buildImage());
     }
 
     var ordered: BuiltPackage[] = [];
-    Logger.setStatus(`Planning... `);
 
     try {
         for (const image of images_involved) {
@@ -101,9 +104,9 @@ async function doBuild(tui: TUI, requirements: Map<string, BuiltPackage>) {
 
         ordered.push(...await orderPackageSet(Array.from(requirements.values()), (status) => tui.setState({ planStatus: status })));
         ordered = await filterExistingBuilds(ordered);
-        Logger.info("----- Plan: -----");
+        Logger.log(log_context, "----- Plan: -----");
         for (const build of ordered) {
-            Logger.info(build._prettyPrint());
+            Logger.log(log_context, build._prettyPrint());
         }
     } catch (e) {
         if (e instanceof Error) {
@@ -118,7 +121,7 @@ async function doBuild(tui: TUI, requirements: Map<string, BuiltPackage>) {
 
     if(program.dryRun) return;
 
-    Logger.info("-----------------");
+    Logger.log(log_context, "-----------------");
     // Yes, we're mostly ignoring the ordering from orderPackageSet, but it's still
     // important to the UX and dependency resolution stuff, so it's gonna stick around.
     const targets: string[] = program.remotes.split(",");
@@ -137,7 +140,7 @@ async function doBuild(tui: TUI, requirements: Map<string, BuiltPackage>) {
             const prerequisites = Array.from((await candidate.buildDependencies()).values()).filter(x => x instanceof BuiltPackage);
             if (!allBuiltPackages(prerequisites)) throw new Error("huh?");
             if (prerequisites.some(x => x.failed())) {
-                Logger.warn(`Not building ${candidate._prettyPrint()} as some of its dependencies have failed`);
+                Logger.log(log_context, `Not building ${candidate._prettyPrint()} as some of its dependencies have failed`);
                 pending.delete(candidate);
                 candidate.markFailed(FailureType.not_built);
                 completions.push(candidate);
@@ -145,7 +148,7 @@ async function doBuild(tui: TUI, requirements: Map<string, BuiltPackage>) {
             } else {
                 const results: boolean[] = await Promise.all(prerequisites.map(x => x.alreadyDone()));
                 if (results.every(x => x)) {
-                    Logger.debug(`[controller] Runnable: ${candidate._prettyPrint()}`);
+                    Logger.log(log_context, `[controller] Runnable: ${candidate._prettyPrint()}`);
                     runnable.push(candidate);
                 }
             }
@@ -176,14 +179,14 @@ async function doBuild(tui: TUI, requirements: Map<string, BuiltPackage>) {
                 }
             });
             const target = await Promise.race(promises);
-            Logger.info(`[controller] \x1b[1mRunning: ${candidate._prettyPrint()} on ${target.target}\x1b[0m`);
+            Logger.log(log_context, `[controller] \x1b[1mRunning: ${candidate._prettyPrint()} on ${target.target}\x1b[0m`);
             currently_running.set(target.target, candidate);
             tui.updateBuildState(completions, currently_running, pending, runnable, ordered.length);
             candidate.run(target.target == 'localhost' ? undefined : target.target)
                 .then(() => {
-                    Logger.info(`[controller] \x1b[1mCompleted: ${candidate._prettyPrint()} on ${target.target}\x1b[0m`);
+                    Logger.log(log_context, `[controller] \x1b[1mCompleted: ${candidate._prettyPrint()} on ${target.target}\x1b[0m`);
                 }).catch((e) => {
-                    Logger.error(`[controller] \x1b[1mFailed: ${candidate._prettyPrint()} on ${target.target} (${e})\x1b[0m`);
+                    Logger.log(log_context, `[controller] \x1b[1mFailed: ${candidate._prettyPrint()} on ${target.target} (${e})\x1b[0m`);
                     process.exitCode = 1;
                     candidate.markFailed(FailureType.failed);
                 }).then(() => {
@@ -196,21 +199,68 @@ async function doBuild(tui: TUI, requirements: Map<string, BuiltPackage>) {
         // wait a bit to not thrash the disk by way of BuiltPackage.alreadyDone()
         await new Promise((resolve, reject) => setTimeout(resolve, 10000));
     }
-    Logger.info('[controller] All build tasks dispatched.');
+    Logger.log(log_context, '[controller] All build tasks dispatched.');
 }
 
-export async function main(tui: TUI) {
-    var mode = "build";
-    const requirements = new Map<string, BuiltPackage>();
+function child_of(log_tree: Map<string, string>, parent: string, child: string): boolean {
+    var current = child;
+    while(current) {
+        if(current == parent) return true;
+        current = log_tree.get(current);
+    }
+    return false;
+}
 
+async function findLogs(tui: TUI, parent_id: string) {
+    const log_tree = new Map<string, string>();
+    const lines: LogLines = {
+        rels: log_tree,
+        lines: []
+    };
+    var current_root: string;
+
+    const reader = readline.createInterface({
+        input: fs.createReadStream(Logger.detailed_log),
+        output: process.stdout,
+        terminal: false
+    });
+
+    reader.on('line', function(s) {
+        const line: LogLine = JSON.parse(s);
+        if(line.type == 'startup') {
+            log_tree.clear();
+            log_tree.set(line.context.uuid, undefined);
+            current_root = line.context.uuid;
+        } else if(line.type == 'enter_context') {
+            log_tree.set(line.context.uuid, line.context.parent || current_root);
+        } else if(child_of(log_tree, parent_id, line.context.uuid)) {
+            lines.lines.push(line);
+            tui.updateLogState(lines);
+        }
+    });
+}
+
+var db_built = false;
+async function build_db(tui: TUI): Promise<boolean> {
+    if(db_built) return true;
+
+    var rc = true;
     tui.setState({ buildingDatabase: "working" })
     try {
         await RPMDatabase.rebuild();
         tui.setState({ buildingDatabase: "complete" });
     } catch(e) {
         tui.setState({ buildingDatabase: "failed: " + e.toString() });
-        return;
+        rc = false;
     }
+
+    db_built = true;
+    return rc;
+}
+
+export async function main(tui: TUI) {
+    var mode = "build";
+    const requirements = new Map<string, BuiltPackage>();
 
     while (program.args.length) {
         const command = program.args.shift();
@@ -220,10 +270,12 @@ export async function main(tui: TUI) {
             combine(requirements, await prepareImage(image));
         } else if (command == 'rebuild-package' || command == 'build-package') {
             const [pkg, image = Config.get().default_image] = program.args.shift().split(":");
+            if(!await build_db(tui)) return;
             const action = new BuiltPackage(pkg, image);
             if (command == 'rebuild-package') Config.ignoredExistingPackages.add(`${action.spec.spec}:${action.spec.profile}`);
             requirements.set(action.hash(), action);
         } else if (command == 'rebuild-packages') {
+            if(!await build_db(tui)) return;
             for (const arg of program.args) {
                 const [pkg, image = Config.get().default_image] = arg.split(":");
                 const action = new BuiltPackage(pkg, image);
@@ -231,6 +283,7 @@ export async function main(tui: TUI) {
                 requirements.set(action.hash(), action);
             }
         } else if (command == 'build-all') {
+            if(!await build_db(tui)) return;
             const image = program.args.shift() || Config.get().default_image;
             const dist = Config.get().build_images[image].installs_from;
             const names = Array.from(RPMDatabase.dist_name_to_version.get(dist).keys());
@@ -239,11 +292,16 @@ export async function main(tui: TUI) {
         } else if (command == 'check-updates') {
             mode = "update";
             break;
+        } else if (command == 'show-log') {
+            mode = "log";
+            break;
         }
     }
-
+    
     if (mode == "build") {
         await doBuild(tui, requirements);
+    } else if(mode == "log") {
+        await findLogs(tui, program.args.shift());
     } else {
         await Updater.run(tui, program.args);
     }

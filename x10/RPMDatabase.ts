@@ -29,16 +29,18 @@ export class RPMDatabase {
     static dist_name_to_version: Map<dist_name, Map<package_name, evr>> = new Map();
     static dist_file_to_spec: Map<dist_name, Map<file_name, spec_with_options>> = new Map();
 
+    static log_context = Logger.enterContext('RPMDatabase');
+
     static async rebuild() {
-        Logger.info('Loading RPM database...');
+        Logger.log(RPMDatabase.log_context, 'Loading RPM database...');
         child_process.execSync(`cat digitalis.rpm-macros.base ../rpmbuild/SOURCES/rpm-01-digitalis-macros >digitalis.rpm-macros`);
         const specs = await util.promisify(glob)('../rpmbuild/SPECS/*.spec');
         await Promise.all(specs.map(async spec => {
-            if (debug_rpmdb_build) Logger.debug(`Processing: ${spec}`);
+            if (debug_rpmdb_build) Logger.log(RPMDatabase.log_context, `Processing: ${spec}`);
             for (const profile in Config.get().rpm_profiles) {
                 const optset = Config.get().rpm_profiles[profile].options;
                 const output = await RPMDatabase.getSpecProvides(spec, optset);
-                if (debug_rpmdb_build) Logger.debug(output);
+                if (debug_rpmdb_build) Logger.log(RPMDatabase.log_context, output);
                 let found_dist: string;
                 const file_like_provides: string[] = [];
                 for (const line of output.split("\n")) {
@@ -75,11 +77,11 @@ export class RPMDatabase {
                         });
                     }
                 } else if (output.length) { // crappy bodge to avoid warning when we fail to parse entirely
-                    Logger.warn(`Couldn't detect dist for ${spec} ${profile}, not building explicit file list`);
+                    Logger.log(RPMDatabase.log_context, `Couldn't detect dist for ${spec} ${profile}, not building explicit file list`);
                 }
             }
         }));
-        Logger.info('RPM database loaded.');
+        Logger.log(RPMDatabase.log_context, 'RPM database loaded.');
     }
 
     static process_cache = new Map<string, string>();
@@ -95,7 +97,7 @@ export class RPMDatabase {
                 stdout.push(data);
             });
             proc.stderr.on('data', (data) => {
-                Logger.debug(`${identifier} ${data.toString()}`);
+                Logger.log(RPMDatabase.log_context, `${identifier} ${data.toString()}`);
             });
             return new Promise<string>((resolve, reject) => {
                 proc.on('close', (code, signal) => {
@@ -141,7 +143,7 @@ export class RPMDatabase {
     static async getSpecRequires(spec: spec_file_name, optset: string[], type = 'requires'): Promise<string[]> {
         const output = await RPMDatabase.memoize_process('rpmspec', ['-q', '--' + type, '--macros', 'digitalis.rpm-macros', spec, ...optset], spec, true);
         const ret = output.split("\n").filter(s => s.length > 0);
-        if (debug_rpmdb_build) Logger.debug(`${type} of ${spec}: ${ret.join("\n")}`);
+        if (debug_rpmdb_build) Logger.log(RPMDatabase.log_context, `${type} of ${spec}: ${ret.join("\n")}`);
         return ret;
     }
 
@@ -161,7 +163,7 @@ export class RPMDatabase {
                 }
             }
         }
-        if (debug_rpmdb_build) Logger.debug(`Couldn't find ${what} in ${spec.spec}!`);
+        if (debug_rpmdb_build) Logger.log(RPMDatabase.log_context, `Couldn't find ${what} in ${spec.spec}!`);
         return await RPMDatabase.getSpecRequires(spec.spec, optset);
     }
 

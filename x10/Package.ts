@@ -1,6 +1,6 @@
 import { Config } from "./Config";
 import { Container, image_name } from "./Container";
-import { Logger } from "./Logger";
+import { LogContext, Logger } from "./Logger";
 import { dist_name, PackageNotFoundError, package_name, RPMDatabase, spec_with_options } from "./RPMDatabase";
 import fs = require('fs');
 import util = require('util');
@@ -61,6 +61,7 @@ export enum FailureType {
 export class BuiltPackage extends Package {
     spec: spec_with_options;
     unusable = false;
+    log_context: LogContext;
 
     hash(): string {
         return `BuiltPackage[${this.spec.spec},${this.spec.profile},${this.name},${this.installed_on}]`;
@@ -78,7 +79,10 @@ export class BuiltPackage extends Package {
         } catch (e) {
             this.unusable = true;
         }
+        this.log_context = Logger.enterContext(`${name}: ${installed_on}`);
     }
+
+    log(message: string) { Logger.log(this.log_context, message); }
 
     static failedPackages = new Map<string, FailureType>();
     markFailed(type: FailureType) { BuiltPackage.failedPackages.set(`${this.spec.spec},${this.spec.profile}`, type) }
@@ -129,10 +133,10 @@ export class BuiltPackage extends Package {
 
     async run(target?: string) {
         if (await this.alreadyDone()) {
-            Logger.debug(`Already have artifacts for ${this._prettyPrint()}.`)
+            this.log(`Already have artifacts for ${this._prettyPrint()}.`)
         } else {
-            Logger.debug(`Running: ${this._prettyPrint()}`);
-            const build_container = new Container(this.buildImage(), target);
+            this.log(`Running: ${this._prettyPrint()}`);
+            const build_container = new Container(this.buildImage(), this.log_context, target);
             await build_container.run_in_container(['true']);
             const deps = await this.buildDependencies();
             const repos = new Set<dist_name>();
@@ -161,78 +165,78 @@ export class BuiltPackage extends Package {
                     if (target) {
                         // Rsync the repository to the remote machine. Should probably lock around this eventually based on target / dist
                         const proc_rsync = child_process.spawn("rsync", ['-av', '../rpmbuild/RPMS', `--include=*.${dist}.*.rpm`, '--include=*/', '--exclude=*', `${target}:/tmp/x10_repo_${dist}`]);
-                        Logger.logProcessOutput(`${dist} rsync ${target}`, proc_rsync);
+                        Logger.logProcessOutput(this.log_context, `${dist} rsync ${target}`, proc_rsync);
                         await Util.waitForProcess(proc_rsync);
 
                         // Copy it out so we don't have to wory about multiple instances of createrepo_c colliding.
                         const proc_copyrepo = child_process.spawn("ssh", [target, 'cp', '-r', `/tmp/x10_repo_${dist}`, `/tmp/repo-${build_container.uuid}`]);
-                        Logger.logProcessOutput(`${dist} copyrepo`, proc_copyrepo);
+                        Logger.logProcessOutput(this.log_context, `${dist} copyrepo`, proc_copyrepo);
                         await Util.waitForProcess(proc_copyrepo);
                     } else {
                         const files = await util.promisify(glob)(`../rpmbuild/RPMS/**/*.${dist}.*.rpm`);
                         await Promise.all(files.map(f => fs.promises.copyFile(f, path.join(`/tmp/repo-${build_container.uuid}`, path.basename(f)))))
                     }
                     // Run the actual createrepo_c job.
-                    Logger.debug(`Rebuilding repo ${dist} for ${build_container.uuid}`);
+                    this.log(`Rebuilding repo ${dist} for ${build_container.uuid}`);
                     const proc_createrepo = await build_container.run_in_container(["createrepo_c", "/repo"], { stdio: 'pipe' }, [`--volume=/tmp/repo-${build_container.uuid}:/repo`]);
-                    Logger.logProcessOutput(`${dist} repo`, proc_createrepo);
+                    Logger.logProcessOutput(this.log_context, `${dist} repo`, proc_createrepo);
                     await Util.waitForProcess(proc_createrepo);
 
                     // Refresh the dnf cache.
                     // TODO is this actually required / can we make it not be
                     const proc_makecache = await build_container.run_in_container(["dnf", "makecache", "--repo", Config.get().build_images[build_container.image].repository], { stdio: 'pipe' }, [`--volume=/tmp/repo-${build_container.uuid}:/repo`]);
-                    Logger.logProcessOutput(`${dist} cache`, proc_makecache);
+                    Logger.logProcessOutput(this.log_context, `${dist} cache`, proc_makecache);
                     await Util.waitForProcess(proc_makecache);
                 }
                 // Build a srpm locally.
-                Logger.debug(`Building srpm for ${this._prettyPrint()}`);
+                this.log(`Building srpm for ${this._prettyPrint()}`);
                 // TODO we probably don't need to lock here
                 const proc_srpm = await build_container.run_in_image(["rpmbuild", "-bs", "--verbose", ...Config.get().rpm_profiles[this.spec.profile].options, '/rpmbuild/SPECS/' + path.basename(this.spec.spec)], undefined, true, ['--volume', (await fs.promises.realpath("../rpmbuild")) + ':/rpmbuild']);
-                Logger.logProcessOutput(`${this.spec.spec}:${this.spec.profile} srpm`, proc_srpm);
+                Logger.logProcessOutput(this.log_context, `${path.basename(this.spec.spec)}:${this.spec.profile} srpm`, proc_srpm);
                 await Util.waitForProcess(proc_srpm);
 
                 // Install the build-time dependencies.
                 if (packages.size) {
-                    Logger.debug(`Installing build-time dependencies of ${this._prettyPrint()}`);
+                    this.log(`Installing build-time dependencies of ${this._prettyPrint()}`);
                     const proc_install = await build_container.run_in_container(["dnf", "install", "-y", ...Array.from(packages.values())], { stdio: 'pipe' }, [`--volume=/tmp/repo-${build_container.uuid}:/repo`]);
-                    Logger.logProcessOutput(`${this.spec.spec}:${this.spec.profile} depend_install`, proc_install);
+                    Logger.logProcessOutput(this.log_context, `${path.basename(this.spec.spec)}:${this.spec.profile} depend_install`, proc_install);
                     await Util.waitForProcess(proc_install);
                 }
-                
+
                 // Copy the srpm over.
                 const srpm_name = await RPMDatabase.getSrpmFile(this.spec);
                 const srpm = await fs.promises.readFile(`../rpmbuild/SRPMS/${srpm_name}.src.rpm`);
                 const proc_setup_dirs = await build_container.run_in_container(["mkdir", "-p", "/rpmbuild/SRPMS"], { stdio: 'pipe' });
-                Logger.logProcessOutput(`${this.spec.spec}:${this.spec.profile} setup_dirs`, proc_setup_dirs);
+                Logger.logProcessOutput(this.log_context, `${path.basename(this.spec.spec)}:${this.spec.profile} setup_dirs`, proc_setup_dirs);
                 await Util.waitForProcess(proc_setup_dirs);
 
                 const proc_copy_srpm = await build_container.run_in_container(['sh', '-xc', `cat >/rpmbuild/SRPMS/${srpm_name}.src.rpm`], { stdio: 'pipe' });
                 proc_copy_srpm.stdin.write(srpm);
                 proc_copy_srpm.stdin.end();
-                Logger.logProcessOutput(`${this.spec.spec}:${this.spec.profile} copy_srpm`, proc_copy_srpm);
+                Logger.logProcessOutput(this.log_context, `${path.basename(this.spec.spec)}:${this.spec.profile} copy_srpm`, proc_copy_srpm);
                 await Util.waitForProcess(proc_copy_srpm);
 
                 // Perform the build.
-                Logger.debug(`Running rpmbuild for ${this._prettyPrint()}`)
+                this.log(`Running rpmbuild for ${this._prettyPrint()}`)
                 const proc_build = await build_container.run_in_container(["rpmbuild", "-rb", "--verbose", ...Config.get().rpm_profiles[this.spec.profile].options, `/rpmbuild/SRPMS/${srpm_name}.src.rpm`]);
-                Logger.logProcessOutput(`${this.spec.spec}:${this.spec.profile}`, proc_build);
+                Logger.logProcessOutput(this.log_context, `${path.basename(this.spec.spec)}:${this.spec.profile}`, proc_build);
                 await Util.waitForProcess(proc_build);
 
                 // Get our artifacts back.
                 const proc_gather = await build_container.run_in_container(["tar", "cv", "-C", "/rpmbuild/RPMS", "."], { stdio: 'pipe' });
                 // TODO should we try to lock around this extract and the repo rsync?
                 const proc_extract = child_process.spawn("tar", ["xv", "-C", "../rpmbuild/RPMS"], { stdio: 'pipe' });
-                Logger.logProcessOutput(`${this.spec.spec}:${this.spec.profile} gather`, proc_gather, true);
-                Logger.logProcessOutput(`${this.spec.spec}:${this.spec.profile} extract`, proc_extract, true);
+                Logger.logProcessOutput(this.log_context, `${path.basename(this.spec.spec)}:${this.spec.profile} gather`, proc_gather, true);
+                Logger.logProcessOutput(this.log_context, `${path.basename(this.spec.spec)}:${this.spec.profile} extract`, proc_extract, true);
                 proc_gather.stdout.pipe(proc_extract.stdin);
                 await Promise.all([Util.waitForProcess(proc_gather), Util.waitForProcess(proc_extract)]);
             } catch (e) {
-                Logger.error(`Got error from build: ${e}`);
+                this.log(`Got error from build: ${e}`);
                 const proc_find = await build_container.run_in_container(["find", "/rpmbuild/BUILDROOT/"], { stdio: 'pipe' });
-                Logger.logProcessOutput(`${this.spec.spec}:${this.spec.profile} find`, proc_find);
+                Logger.logProcessOutput(this.log_context, `${path.basename(this.spec.spec)}:${this.spec.profile} find`, proc_find);
                 await Util.waitForProcess(proc_find);
                 const proc_ls = await build_container.run_in_container(["sh", "-c", "ls -l /rpmbuild/BUILD/*"], { stdio: 'pipe' });
-                Logger.logProcessOutput(`${this.spec.spec}:${this.spec.profile} ls`, proc_ls);
+                Logger.logProcessOutput(this.log_context, `${path.basename(this.spec.spec)}:${this.spec.profile} ls`, proc_ls);
                 await Util.waitForProcess(proc_ls);
                 throw e;
             } finally {
@@ -277,7 +281,7 @@ export class AxiomPackage extends Package {
                 AxiomPackage.installabilityCache.set(key, json[key]);
             }
         } catch (e) {
-            Logger.warn(`Couldn't read installability cache: ${e}`);
+            Logger.log(undefined, `Couldn't read installability cache: ${e}`);
         }
     }
 
@@ -296,9 +300,9 @@ export class AxiomPackage extends Package {
             if (AxiomPackage.installabilityCache.has(cache_key)) {
                 return AxiomPackage.installabilityCache.get(cache_key);
             } else {
-                const proc = await (new Container(this.installed_on))
+                const proc = await (new Container(this.installed_on, undefined))
                     .run_in_image(["dnf", "--disablerepo=local-bootstrap", "provides", this.name], { stdio: 'pipe' });
-                Logger.logProcessOutput(`${this.name}`, proc);
+                Logger.logProcessOutput(undefined, `${this.name}`, proc);
                 return new Promise<boolean>((resolve, reject) => {
                     proc.on('close', (code, signal) => {
                         if (signal) reject(`Subprocess killed by signal ${signal}`);

@@ -6,12 +6,14 @@ import { PlanProgress, PlanSpinner } from "./PlanSpinner";
 import { BuildProgress, BuildInfo } from "./BuildInfo";
 import { UpdateInfo, UpdateProgress } from "./UpdateInfo";
 import { UpdateResult } from "./Updater";
+import { LogInfo, LogLines } from "./LogInfo";
 
 type TUIState = {
     buildingDatabase: string | null;
     planStatus: PlanProgress | null;
     buildStatus: BuildProgress | null;
     updateStatus: UpdateProgress | null;
+    logInfo: LogLines | null;
 };
 export class TUI extends React.Component<{}, TUIState> {
     constructor(props: {} | Readonly<{}>) {
@@ -20,7 +22,8 @@ export class TUI extends React.Component<{}, TUIState> {
             buildingDatabase: undefined,
             planStatus: undefined,
             buildStatus: undefined,
-            updateStatus: undefined
+            updateStatus: undefined,
+            logInfo: undefined
         };
     }
 
@@ -52,12 +55,22 @@ export class TUI extends React.Component<{}, TUIState> {
         });
     }
 
+    updateLogState(lines: LogLines) {
+        this.setState({
+            logInfo: {
+                rels: lines.rels,
+                lines: [...lines.lines]
+            }
+        });
+    }
+
     render() {
         return <>
             {this.state.buildingDatabase && <DBBuildSpinner state={this.state.buildingDatabase} />}
             {this.state.planStatus && <PlanSpinner progress={this.state.planStatus} />}
             {this.state.buildStatus && <BuildInfo progress={this.state.buildStatus} />}
             {this.state.updateStatus && <UpdateInfo progress={this.state.updateStatus} />}
+            {this.state.logInfo && <LogInfo lines={this.state.logInfo} />}
         </>;
     }
 }
