@@ -9,7 +9,9 @@ fi
 
 spec=$1
 
-sh find_checksums.sh $spec
+if [[ -z $2 ]]; then
+    sh find_checksums.sh $spec
+fi
 
 specbase=$(basename -s .spec $spec)
 version=$(rpmspec -q --qf '%{version}\n' --define '_build %{_target}' --define '_host %{_build}' ../rpmbuild/SPECS/${spec} 2>/dev/null | head -n1)
@@ -17,7 +19,11 @@ release=$(rpmspec -q --qf '%{release}\n' --define '_build %{_target}' --define '
 
 echo ""                                                                     > /tmp/bump_changelog.${specbase}
 echo "- $(date +%Y-%m-%d) $(cat .changelog_uid) $version release $release" >> /tmp/bump_changelog.${specbase}
-echo "  Updated to version $version."                                      >> /tmp/bump_changelog.${specbase}
+if [[ -n $2 ]]; then
+    echo "  $2"                                                            >> /tmp/bump_changelog.${specbase}
+else
+    echo "  Updated to version $version."                                  >> /tmp/bump_changelog.${specbase}
+fi
 
 sed -i "/%changelog/ r /tmp/bump_changelog.$specbase" ../rpmbuild/SPECS/${spec}
 

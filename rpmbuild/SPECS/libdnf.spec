@@ -1,4 +1,4 @@
-%define system_python 3.8
+%define system_python 3.9
 
 # If host == target, we aren't building cross tools.
 # We should install into /usr and package headers.
@@ -18,7 +18,7 @@
 
 Name:           %{?cross}%{libname}
 Version:        0.55.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        This library provides a high level package-manager.
 
 License:        LGPLv2+
@@ -109,6 +109,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_datadir}/gtk-doc/html/libdnf
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 0.55.0 release 2
+  Updated to Python 3.9
 
 - 2020-11-18 Morgan Thomas <m@m0rg.dev> 0.55.0 release 1
   Updated to version 0.55.0.

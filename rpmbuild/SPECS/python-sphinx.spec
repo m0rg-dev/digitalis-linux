@@ -1,8 +1,8 @@
-%define system_python 3.8
+%define system_python 3.9
 
 Name:           python-sphinx
 Version:        3.3.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A documentation tool
 
 License:        MIT
@@ -54,6 +54,9 @@ fi
 %{_prefix}/lib/python%{system_python}/site-packages/*
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 3.3.1 release 2
+  Updated to Python 3.9
 
 - 2020-11-18 Morgan Thomas <m@m0rg.dev> 3.3.1 release 1
   Updated to version 3.3.1.

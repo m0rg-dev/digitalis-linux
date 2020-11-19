@@ -1,4 +1,4 @@
-%define system_python 3.8
+%define system_python 3.9
 
 # If host == target, we aren't building cross tools.
 # We should install into /usr and package headers.
@@ -18,7 +18,7 @@
 
 Name:           %{?cross}%{libname}
 Version:        2.9.10
-Release:        1%{?dist}
+Release:        3%{?dist}
 Summary:        Libxml2 is the XML C parser and toolkit developed for the Gnome project 
 
 License:        MIT
@@ -27,6 +27,8 @@ URL:            http://xmlsoft.org/
 Source0:        ftp://xmlsoft.org/%{libname}/%{libname}-%{version}.tar.gz
 %define         SHA256SUM0 aafee193ffb8fe0c82d4afef6ef91972cbaf5feea100edc2f262750611b4be1f
 
+# upstream commit e4fb36841800038c289997432ca547c9bfef9db1, not yet released
+Patch0:         libxml2-0001-python-parentheses.spec
 
 # X10-Update-Spec: { "type": "git-tags", 
 # X10-Update-Spec:   "repo": "https://gitlab.gnome.org/GNOME/libxml2.git", 
@@ -67,7 +69,7 @@ developing applications that use %{name}.
 
 %prep
 echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
-%autosetup -n %{libname}-%{version}
+%autosetup -n %{libname}-%{version} -p 1
 
 %package        utils
 Summary:        Command-line utilities for %{name}
@@ -117,4 +119,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/man1/*
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 2.9.10 release 3
+  Updated to Python 3.9
 

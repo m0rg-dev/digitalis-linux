@@ -1,4 +1,4 @@
-%define system_python 3.8
+%define system_python 3.9
 
 # If host == target, we aren't building cross tools.
 # We should install into /usr and package headers.
@@ -16,7 +16,7 @@
 
 Name:           %{?cross}%{libname}
 Version:        1.12.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A library providing C and Python (libcURL like) API for downloading linux repository metadata and packages
 
 License:        LGPLv2
@@ -102,6 +102,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_prefix}/lib/pkgconfig/*.pc
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 1.12.1 release 3
+  Updated to Python 3.9
 
 - 2020-11-07 Morgan Thomas <m@m0rg.dev> 1.12.1 release 2
   Explicitly target Python 3.8.

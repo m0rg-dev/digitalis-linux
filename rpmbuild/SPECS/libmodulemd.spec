@@ -1,4 +1,4 @@
-%define system_python 3.8
+%define system_python 3.9
 
 # If host == target, we aren't building cross tools.
 # We should install into /usr and package headers.
@@ -16,7 +16,7 @@
 
 Name:           %{?cross}%{libname}
 Version:        2.9.4
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        C Library for manipulating module metadata files
 
 License:        MIT
@@ -121,6 +121,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %endif
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 2.9.4 release 3
+  Updated to Python 3.9
 
 - 2020-11-07 Morgan Thomas <m@m0rg.dev> 2.9.4 release 2
   Explicitly depend on a Python version to not break brp-python-bytecompile

@@ -1,4 +1,4 @@
-%define system_python 3.8
+%define system_python 3.9
 
 # If host == target, we aren't building cross tools.
 # We should install into /usr and package headers.
@@ -16,7 +16,7 @@
 
 Name:           %{?cross}%{libname}
 Version:        0.1.15
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Libcomps is alternative for yum.comps library
 
 License:        GPLv2
@@ -105,6 +105,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_prefix}/lib/pkgconfig/*.pc
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 0.1.15 release 3
+  Updated to Python 3.9
 
 - 2020-11-07 Morgan Thomas <m@m0rg.dev> 0.1.15 release 2
   Explicitly target Python 3.8.

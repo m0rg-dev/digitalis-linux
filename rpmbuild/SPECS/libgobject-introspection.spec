@@ -1,4 +1,4 @@
-%define system_python 3.8
+%define system_python 3.9
 
 # If host == target, we aren't building cross tools.
 # We should install into /usr and package headers.
@@ -20,7 +20,7 @@
 
 Name:           %{?cross}lib%{libname}
 Version:        %{major_version}.%{patch_version}
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        C Library for manipulating module metadata files
 
 License:        LGPLv2+, GPLv2+, MIT
@@ -126,6 +126,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_mandir}/man1/g-ir-scanner.*
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 1.66.1 release 2
+  Updated to Python 3.9
 
 - 2020-11-18 Morgan Thomas <m@m0rg.dev> 1.66.1 release 1
   Updated to version 1.66.1.

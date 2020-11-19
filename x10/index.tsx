@@ -106,9 +106,13 @@ async function doBuild(tui: TUI, requirements: Map<string, BuiltPackage>) {
             Logger.info(build._prettyPrint());
         }
     } catch (e) {
-        tui.setState({ planStatus: {
-            resolved: 0, remaining: 0, currently_working_on: "", done: true, failed: e.toString()
-        }});
+        if (e instanceof Error) {
+            tui.setState({
+                planStatus: {
+                    resolved: 0, remaining: 0, currently_working_on: "", done: true, failed: e.toString() + e.stack
+                }
+            });
+        }
         return;
     }
 
@@ -231,7 +235,7 @@ export async function main(tui: TUI) {
         }
     }
 
-    if(mode == "build") {
+    if (mode == "build") {
         await doBuild(tui, requirements);
     } else {
         await Updater.run(tui, program.args);

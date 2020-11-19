@@ -11,19 +11,19 @@
 %endif
 
 %define libname python
-%define pybasever 3.8
-%define general_version %{pybasever}.3
+%define pybasever 3.9
+%define general_version %{pybasever}.0
 
 Name:           %{?cross}%{?libname}
 Version:        %{general_version}
-Release:        4%{?dist}
+Release:        1%{?dist}
 Summary:        The Python programming language
 
 License:        Python-2.0
 URL:            https://www.python.org/
 %undefine       _disable_source_fetch
 Source0:        https://www.python.org/ftp/python/%{version}/Python-%{version}.tar.xz
-%define         SHA256SUM0 dfab5ec723c218082fe3d5d7ae17ecbdebffa9a1aea4d64aa3a2ecdd2e795864
+%define         SHA256SUM0 9c73e63c99855709b9be0b3cc9e5b072cb60f37311e8c4e50f15576a0bf82854
 
 # no python updates until we figure out how we're doing python updates
 
@@ -111,6 +111,9 @@ rm %{buildroot}/%{_prefix}/lib/python%{pybasever}/cgi.py
 %{_prefix}/lib/*.so
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 3.9.0 release 1
+  Update to version 3.9.0.
 
 - 2020-11-18 Morgan Thomas <m@m0rg.dev> 3.8.3 release 4
   Explicitly provide libpython%%{pybasever}-devel.

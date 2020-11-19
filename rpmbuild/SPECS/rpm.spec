@@ -1,4 +1,4 @@
-%define system_python 3.8
+%define system_python 3.9
 
 # If host == target, we aren't building cross tools.
 # We should install into /usr and package headers.
@@ -14,7 +14,7 @@
 
 Name:           %{?cross}rpm
 Version:        4.16.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        The RPM Package Manager (RPM) is a powerful package management system.
 
 License:        GPLv2
@@ -120,6 +120,9 @@ rm %{buildroot}%{_prefix}/lib/rpm/fileattrs/perl*.attr
 %{_includedir}/rpm
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 4.16.0 release 3
+  Updated to Python 3.9
 
 - 2020-11-18 Morgan Thomas <m@m0rg.dev> 4.16.0 release 2
   Split the distro-specific RPM macros out to their own package.

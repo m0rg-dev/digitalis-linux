@@ -1,8 +1,8 @@
-%define system_python 3.8
+%define system_python 3.9
 
 Name:           nftables
 Version:        0.9.7
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Network filter and firewall tools
 
 License:        GPLv2
@@ -58,3 +58,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %doc %{_docdir}/nftables
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 0.9.7 release 2
+  Updated to Python 3.9

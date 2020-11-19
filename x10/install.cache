@@ -216,5 +216,7 @@
  "ncurses-devel fedora-with-rpm": true,
  "x86_64-pc-linux-gnu-libpython3.8-devel fedora-with-rpm": false,
  "/usr/bin/nroff fedora-with-rpm": true,
- "man-db fedora-with-rpm": true
+ "man-db fedora-with-rpm": true,
+ "python3.9 fedora-with-rpm": true,
+ "x86_64-pc-linux-gnu-libpython3.9-devel fedora-with-rpm": false
 }

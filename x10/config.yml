@@ -88,6 +88,7 @@ build_images:
     additional_podman_args: [ "--volume", "/tmp/dnfcache:/var/cache/dnf" ]
     has_axioms: true
     profile: fc33
+    install_packages: []
     repository: local-bootstrap
   digitalis-stage1:
     # TODO this suffers from bad
@@ -104,6 +105,8 @@ build_images:
         buildah run --net host $VOLUMES "$ctr" -- dnf install -y \
             --verbose --repo=local-bootstrap --installroot=/new_root --releasever=digi1 \
             digitalis-bootstrap-repository base-system
+
+        rm -rf /tmp/$ctr-new_root
 
         buildah unshare sh -c 'cp -rp $(buildah mount '$ctr')/new_root /tmp/'$ctr'-new_root'
         buildah umount "$ctr"
@@ -141,6 +144,9 @@ build_images:
         buildah run --net host $VOLUMES "$ctr" -- dnf install -y \
             --verbose --repo=digitalis --installroot=/new_root --releasever=digi2 \
             digitalis-bootstrap-repository base-system
+
+        chmod -R 755 /tmp/$ctr-new_root/new_root/etc/ssl/certs
+        rm -rf /tmp/$ctr-new_root
 
         buildah unshare sh -c 'cp -rp $(buildah mount '$ctr')/new_root /tmp/'$ctr'-new_root'
         buildah umount "$ctr"

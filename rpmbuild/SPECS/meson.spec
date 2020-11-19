@@ -1,8 +1,8 @@
-%define system_python 3.8
+%define system_python 3.9
 
 Name:           meson
 Version:        0.56.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        An efficient build system
 
 License:        Apache-2.0
@@ -57,3 +57,6 @@ fi
 %doc %{_mandir}/man1/meson*
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 0.56.0 release 2
+  Updated to Python 3.9

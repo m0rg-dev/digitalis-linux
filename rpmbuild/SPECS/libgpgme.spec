@@ -1,4 +1,4 @@
-%define system_python 3.8
+%define system_python 3.9
 
 # If host == target, we aren't building cross tools.
 # We should install into /usr and package headers.
@@ -17,7 +17,7 @@
 
 Name:           %{?cross}lib%{libname}
 Version:        1.15.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        GPGME is the standard library to access GnuPG functions from programming languages. 
 
 License:        LGPLv2+, GPLv2+
@@ -123,6 +123,9 @@ rm -f %{buildroot}%{_infodir}/dir
 %{_oldprefix}/bin/%{?cross}gpgme-json
 
 %changelog
+
+- 2020-11-18 Morgan Thomas <m@m0rg.dev> 1.15.0 release 2
+  Updated to Python 3.9
 
 - 2020-11-18 Morgan Thomas <m@m0rg.dev> 1.15.0 release 1
   Updated to version 1.15.0.

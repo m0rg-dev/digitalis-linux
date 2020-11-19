@@ -24,8 +24,8 @@ export class Container {
     }
 
     private async ensure() {
-        if (Container.ensured_containers.has(this.uuid)) return;
         await this.ensure_image(this.remote_target);
+        if (Container.ensured_containers.has(this.uuid)) return;
         const proc = this.spawn('buildah', ['inspect', '-t', 'container', this.uuid]);
         return new Promise(async (resolve, reject) => {
             proc.on('exit', (code, signal) => {
@@ -53,20 +53,22 @@ export class Container {
 
     async imagePresent(): Promise<boolean> {
         const proc = child_process.spawn('podman', ['image', 'exists', this.image]);
-        return (!Config.ignoredExistingImages.has(this.image))
-            && await new Promise((resolve, reject) => {
-                proc.on('close', (code, signal) => {
-                    if (signal) reject(`Process killed by signal ${signal}`);
-                    if (code > 1) reject(`Process exited with code ${code}`);
-                    if (code == 1) resolve(false);
+        return new Promise((resolve, reject) => {
+            proc.on('close', (code, signal) => {
+                if (signal) reject(`Process killed by signal ${signal}`);
+                if (code > 1) reject(`Process exited with code ${code}`);
+                if (code == 1) resolve(false);
+                else {
+                    Logger.debug(`Ensured (b): ${this.image} ${code} ${typeof code}`);
                     Container.ensured_images.add(this.image);
                     resolve(true);
-                })
-            });
+                }
+            })
+        });
     }
 
     private spawn(proc: string, args: string[], options?: child_process.SpawnOptions) {
-        if(this.remote_target) {
+        if (this.remote_target) {
             return child_process.spawn('ssh', [this.remote_target, proc, ...args.map(x => `'${x.replace(/'/g, "\\'")}'`)], options);
         } else {
             return child_process.spawn(proc, args, options);
@@ -75,7 +77,7 @@ export class Container {
 
     async ensure_image(target?: string | null) {
         if (target) {
-            this.ensure_image(undefined);
+            await this.ensure_image(undefined);
             Logger.debug(`Checking for ${this.image} on ${target}`);
             const image_spec = Config.get().build_images[this.image];
             if (image_spec.dirs) {
@@ -106,6 +108,7 @@ export class Container {
                 });
             }
         } else {
+            Logger.debug(`Checking for ${this.image} ${JSON.stringify([...Container.ensured_images.values()])}`);
             const image_spec = Config.get().build_images[this.image];
             if (image_spec.dirs) {
                 for (const dir of image_spec.dirs) {
@@ -131,6 +134,7 @@ export class Container {
                         proc2.on('close', (code, signal) => {
                             if (signal) reject(`Process killed by signal ${signal}`);
                             if (code) reject(`Process exited with code ${code}`);
+                            Logger.debug(`Ensured (a): ${this.image}`);
                             Container.ensured_images.add(this.image);
                             resolve();
                         })
@@ -166,7 +170,7 @@ export class Container {
 
     async acquire_image_lock(force_local?: boolean): Promise<MutexInterface.Releaser> {
         const target = (!force_local && this.remote_target) || 'local';
-        if(!Container.command_mutices.has(target)) Container.command_mutices.set(target, new Mutex());
+        if (!Container.command_mutices.has(target)) Container.command_mutices.set(target, new Mutex());
         return Container.command_mutices.get(target).acquire();
     }
 
