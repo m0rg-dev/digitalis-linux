@@ -12,7 +12,7 @@ export class LogStatic extends React.Component<{ progress: LogLines }> {
     render() {
         return <ink.Static items={this.props.progress.lines.filter(line => line.type == "message")}>
             {line => {
-                return <ink.Box key={line.uuid} width={Math.min(process.stdout.getWindowSize()[0], 250)}>
+                return <ink.Box key={line.uuid} width={process.stdout.getWindowSize()[0]}>
                     <ink.Box minWidth={line.context.name.length} height={1}><ink.Text color="gray">{line.context.name}</ink.Text></ink.Box>
                     <ink.Box paddingLeft={1}><ink.Text>{line.message}</ink.Text></ink.Box>
                 </ink.Box>
