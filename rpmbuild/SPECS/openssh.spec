@@ -1,6 +1,6 @@
 Name:           openssh
 Version:        8.4p1
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        SSH client and server
 
 License:        3-clause BSD
@@ -34,10 +34,6 @@ echo "%SHA256SUM0  %SOURCE0" | sha256sum -c -
 
 %install
 %make_install
-
-mv %{buildroot}%{_mandir}/{cat,man}1
-mv %{buildroot}%{_mandir}/{cat,man}5
-mv %{buildroot}%{_mandir}/{cat,man}8
 
 %{__install} -dm755 %{buildroot}%{_sysconfdir}/init.d/
 cat > %{buildroot}%{_sysconfdir}/init.d/sshd <<EOF
@@ -97,6 +93,10 @@ fi
 %doc %{_mandir}/man{1,5,8}/*
 
 %changelog
+
+* Mon Nov 23 2020 Morgan Thomas <m@m0rg.dev> 8.4p1-6
+  Don't do the cat man shuffle now that we have man-db on the build machine
+  and it just does the right thing.
 
 * Thu Nov 05 2020 Morgan Thomas <m@m0rg.dev> 8.4p1-5
   Enable UsePAM in sshd_config.
