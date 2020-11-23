@@ -113,7 +113,7 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_prefix}/lib/pkgconfig/*.pc
 %{_prefix}/lib/*.so
 # TODO
-# %doc %{_datadir}/gtk-doc/html/modulemd-2.0
+# %doc %%{_datadir}/gtk-doc/html/modulemd-2.0
 
 %if "%{_build}" == "%{_target}"
 %{_bindir}/modulemd-validator

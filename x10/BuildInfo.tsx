@@ -19,15 +19,15 @@ export class BuildStatic extends React.Component<{ progress: BuildProgress }, {}
         return <ink.Static items={this.props.progress.built}>
             {completion => {
                 if (completion.failed() == FailureType.not_built) {
-                    return <ink.Box key={completion.hash()}>
+                    return <ink.Box key={completion.log_context.uuid}>
                         <ink.Text><ink.Text color="yellow">?</ink.Text> Not built: {path.basename(completion.spec.spec)} ({completion.name}) for {completion.installed_on} ({completion.log_context.uuid})</ink.Text>
                     </ink.Box>;
                 } else if (completion.failed() == FailureType.failed) {
-                    return <ink.Box key={completion.hash()}>
+                    return <ink.Box key={completion.log_context.uuid}>
                         <ink.Text><ink.Text color="red">✘</ink.Text> Failed: {path.basename(completion.spec.spec)} ({completion.name}) for {completion.installed_on} ({completion.log_context.uuid})</ink.Text>
                     </ink.Box>;
                 } else {
-                    return <ink.Box key={completion.hash()}>
+                    return <ink.Box key={completion.log_context.uuid}>
                         <ink.Text><ink.Text color="green">✔</ink.Text> Built: {path.basename(completion.spec.spec)} ({completion.name}) for {completion.installed_on} ({completion.log_context.uuid})</ink.Text>
                     </ink.Box>;
                 }

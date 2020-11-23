@@ -108,7 +108,19 @@ export class BuiltPackage extends Package {
         const build_image = Config.get().rpm_profiles[this.spec.profile].image;
         const breqs = await RPMDatabase.getSpecRequires(this.spec.spec, Config.get().rpm_profiles[profile].options, 'buildrequires');
         const breq_packages = await Promise.all(breqs.map(breq => Package.resolve(breq, build_image)));
-        return new Set(breq_packages);
+
+        function allBuiltPackages(list: unknown[]): list is BuiltPackage[] {
+            return list.every(x => x instanceof BuiltPackage);
+        }
+
+        const ireqs = Config.get().build_images[build_image].install_packages;
+        const ireq_packages =
+            (await Promise.all(ireqs.map((ireq: string) => Package.resolve(ireq, build_image))))
+            .filter(x => x instanceof BuiltPackage);
+        if(!allBuiltPackages(ireq_packages)) throw new Error("ireq_packages?");
+        const ireq_depends = (await Promise.all(ireq_packages.map(pkg => pkg.installDependencies()))).filter(x => x instanceof BuiltPackage);
+        if(!allBuiltPackages(ireq_depends)) throw new Error("ireq_depends?");
+        return new Set([...breq_packages, ...ireq_depends, ...ireq_packages]);
     }
 
     async can_install(): Promise<boolean> {

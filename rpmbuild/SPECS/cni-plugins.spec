@@ -14,7 +14,7 @@ Source0:        https://github.com/containernetworking/plugins/archive/v%{versio
 # X10-Update-Spec:   "pattern": "^v(\\d+\\.\\d+\\.\\d+)$" }
 
 %if "%{_build}" != "%{_host}"
-%error This package is not set up for cross-compilation.
+%{error: This package is not set up for cross-compilation.}
 %endif
 
 BuildRequires:  git

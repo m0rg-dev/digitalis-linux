@@ -123,27 +123,33 @@ export class Container {
             }
             if (Container.ensured_images.has(this.image)) return;
             this.log(`ensuring ${this.image}`);
+            const release = await this.acquire_image_lock(true);
             const present = await this.imagePresent();
-            if (!present) {
+            if (present) {
+                release();
+                this.log(`Ensured (c): ${this.image}`);
+                Container.ensured_images.add(this.image);
+            } else {
                 // We always want to run this one locally.
                 if (image_spec.script) {
                     const proc2 = child_process.spawn('sh', ['-exc', image_spec.script], { stdio: 'pipe' });
-                    proc2.stderr.on('data', (data) => {
-                        this.log(`[${this.image} stderr] ${data}`);
-                    });
-                    proc2.stdout.on('data', (data) => {
-                        this.log(`[${this.image}] ${data}`);
-                    });
+                    Logger.logProcessOutput(this.log_context, `image_build ${this.image}`, proc2);
                     await new Promise((resolve, reject) => {
                         proc2.on('close', (code, signal) => {
-                            if (signal) reject(`Process killed by signal ${signal}`);
-                            if (code) reject(`Process exited with code ${code}`);
-                            this.log(`Ensured (a): ${this.image}`);
-                            Container.ensured_images.add(this.image);
-                            resolve();
+                            release();
+                            if (signal) {
+                                reject(`Process killed by signal ${signal}`);
+                            } else if (code) {
+                                reject(`Process exited with code ${code}`);
+                            } else {
+                                this.log(`Ensured (a): ${this.image}`);
+                                Container.ensured_images.add(this.image);
+                                resolve();
+                            }
                         })
                     });
                 } else {
+                    release();
                     throw new Error('nyi lmao');
                 }
             }

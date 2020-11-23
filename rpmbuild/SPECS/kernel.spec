@@ -42,7 +42,7 @@ Requires(post): mkinitcpio
 
 %if "%{_build}" != "%{_target}"
 # someday...
-%error "This package is not set up for cross-compilation"
+%{error: This package is not set up for cross-compilation}
 %endif
 
 %description

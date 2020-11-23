@@ -126,6 +126,7 @@ build_images:
       - digitalis-bootstrap-repository
       - base-system
       - createrepo_c
+      - dnf
     profile: digi1
     repository: digitalis
   digitalis-stage2:
@@ -166,6 +167,7 @@ build_images:
       - digitalis-bootstrap-repository
       - base-system
       - createrepo_c
+      - dnf
     profile: digi2
     repository: digitalis
 default_image: digitalis-stage2

@@ -14,7 +14,8 @@ export type LoggerCallback = (level: LogLevel, message: string) => void;
 export type LogContext = {
     name: string,
     uuid: string,
-    parent?: string
+    parent?: string,
+    used: boolean
 };
 
 export type LogLine = {
@@ -34,13 +35,13 @@ export class Logger {
         const ctx: LogContext = {
             name: name,
             uuid: uuid.v4(),
-            parent: parent
+            parent: parent,
+            used: false
         };
-        Logger.log_raw({ uuid: uuid.v4(), type: "enter_context", context: ctx });
         return ctx;
     }
 
-    static fallback_context: LogContext = { name: "[no context]", uuid: uuid.v4() };
+    static fallback_context: LogContext = { name: "[no context]", uuid: uuid.v4(), used: false };
 
     static startup() {
         Logger.log_raw({ uuid: uuid.v4(), type: "startup", context: Logger.fallback_context });
@@ -49,6 +50,10 @@ export class Logger {
     static log(context: LogContext | null, message: string) {
         if (!context) {
             context = Logger.fallback_context;
+        }
+        if (!context.used) {
+            Logger.log_raw({ uuid: uuid.v4(), type: "enter_context", context: context });
+            context.used = true;
         }
         message = message.trimEnd();
         let s = "";
@@ -64,7 +69,7 @@ export class Logger {
     }
 
     static logProcessOutput(context: LogContext, id: string, proc: ChildProcess, stderr_only = false, level = LogLevel.DEBUG) {
-        const child_context = Logger.enterContext(id, context.uuid);
+        const child_context = Logger.enterContext(id, context?.uuid);
         Logger.log(child_context, `spawned: ${proc.spawnargs.map(x => JSON.stringify(x)).join(" ")}`);
         if (!stderr_only) {
             proc.stdout.on('data', (data) => {

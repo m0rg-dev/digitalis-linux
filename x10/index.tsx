@@ -5,6 +5,7 @@ import * as React from "react";
 import * as uuid from 'uuid';
 import * as readline from 'readline';
 import * as fs from 'fs';
+import * as tail from 'tail';
 import { Config } from "./Config";
 import { Container, image_name } from "./Container";
 import { Logger, LogLine } from "./Logger";
@@ -104,6 +105,7 @@ async function doBuild(tui: TUI, requirements: Map<string, BuiltPackage>) {
 
         ordered.push(...await orderPackageSet(Array.from(requirements.values()), (status) => tui.setState({ planStatus: status })));
         ordered = await filterExistingBuilds(ordered);
+        ordered = await filterDuplicateBuilds(ordered);
         Logger.log(log_context, "----- Plan: -----");
         for (const build of ordered) {
             Logger.log(log_context, build._prettyPrint());
@@ -240,6 +242,33 @@ async function findLogs(tui: TUI, parent_id: string) {
     });
 }
 
+async function watchLogs(tui: TUI) {
+    const log_tree = new Map<string, string>();
+    const lines: LogLines = {
+        rels: log_tree,
+        lines: []
+    };
+    var current_root: string;
+    await fs.promises.appendFile(Logger.detailed_log, "");
+
+    const reader = new tail.Tail(Logger.detailed_log, {
+        follow: true
+    });
+    reader.on('line', function(s) {
+        const line: LogLine = JSON.parse(s);
+        if(line.type == 'startup') {
+            log_tree.clear();
+            log_tree.set(line.context.uuid, undefined);
+            current_root = line.context.uuid;
+        } else if(line.type == 'enter_context') {
+            log_tree.set(line.context.uuid, line.context.parent || current_root);
+        } else if(current_root && child_of(log_tree, current_root, line.context.uuid)) {
+            lines.lines.push(line);
+            tui.updateLogState(lines);
+        }
+    })
+}
+
 var db_built = false;
 async function build_db(tui: TUI): Promise<boolean> {
     if(db_built) return true;
@@ -295,6 +324,9 @@ export async function main(tui: TUI) {
         } else if (command == 'show-log') {
             mode = "log";
             break;
+        } else if(command == 'watch-logs') {
+            mode = "tail";
+            break;
         }
     }
     
@@ -302,6 +334,8 @@ export async function main(tui: TUI) {
         await doBuild(tui, requirements);
     } else if(mode == "log") {
         await findLogs(tui, program.args.shift());
+    } else if(mode == "tail") {
+        await watchLogs(tui);
     } else {
         await Updater.run(tui, program.args);
     }

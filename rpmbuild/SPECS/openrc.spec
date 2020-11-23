@@ -14,7 +14,7 @@ Source0:        https://github.com/OpenRC/openrc/archive/%{version}.tar.gz#/%{na
 # X10-Update-Spec:   "pattern": "^((?:\\d+\\.?)+)$" }
 
 %if "%{_build}" != "%{_target}"
-%error "This package does not currently cross-compile"
+%{error: This package does not currently cross-compile}
 %endif
 
 BuildRequires:  gcc

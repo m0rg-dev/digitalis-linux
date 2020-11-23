@@ -1,5 +1,5 @@
 Name:           iana-etc
-Version:        20201019
+Version:        20201120
 Release:        1%{?dist}
 Summary:        /etc/services and /etc/protocols files
 
@@ -9,7 +9,7 @@ URL:            https://www.iana.org/protocols
 Source0:        https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xml
 %define         SHA256SUM0 7de8f70197974b5238edd5a5a318392d7c262147c7495b7fb64f66b9966d4ec8
 Source1:        https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xml
-%define         SHA256SUM1 c93aacc4dd6d5f447837c059693f8d89ea86b1cf03cd406f753fdc72f8b7f02e
+%define         SHA256SUM1 147a3bca5da10ae049cef3b9c11b3ef5533961ef0f41ea4510af7ab1f035951a
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
@@ -55,3 +55,6 @@ install -dm755 %{buildroot}%{_sysconfdir}
 %{_sysconfdir}/services
 
 %changelog
+
+* Sun Nov 22 2020 Morgan Thomas <m@m0rg.dev> 20201120
+  Updated to version 2020-11-20.
