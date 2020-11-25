@@ -1,5 +1,5 @@
 Name:           automake
-Version:        1.16.2
+Version:        1.16.3
 Release:        1%{?dist}
 Summary:        another giant pile of m4
 
@@ -7,7 +7,7 @@ License:        GPLv3+
 URL:            https://gnu.org/software/automake
 %undefine       _disable_source_fetch
 Source0:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
-%define         SHA256SUM0 ccc459de3d710e066ab9e12d2f119bd164a08c9341ca24ba22c9adaa179eedd0
+%define         SHA256SUM0 ff2bf7656c4d1c6fdda3b8bebb21f09153a736bcba169aaf65eab25fa113bf3a
 BuildArch:      noarch
 
 # X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/automake/"}
@@ -50,3 +50,6 @@ rm -f %{buildroot}%{_infodir}/dir
 %doc %{_mandir}/man1/*
 
 %changelog
+
+* Tue Nov 24 2020 Morgan Thomas <m@m0rg.dev> 1.16.3-1
+  Updated to version 1.16.3.

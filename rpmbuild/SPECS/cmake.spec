@@ -1,5 +1,5 @@
 %define major_version 3.19
-%define patch_version 0
+%define patch_version 1
 
 Name:           cmake
 Version:        %{major_version}.%{patch_version}
@@ -10,7 +10,7 @@ License:        BSD-3-Clause
 URL:            https://cmake.org
 %undefine       _disable_source_fetch
 Source0:        https://github.com/Kitware/CMake/releases/download/v%{version}/%{name}-%{version}.tar.gz
-%define         SHA256SUM0 fdda688155aa7e72b7c63ef6f559fca4b6c07382ea6dca0beb5f45aececaf493
+%define         SHA256SUM0 1d266ea3a76ef650cdcf16c782a317cb4a7aa461617ee941e389cb48738a3aba
 
 # X10-Update-Spec: { "type": "git-tags", 
 # X10-Update-Spec:   "repo": "https://github.com/Kitware/CMake.git", 
@@ -87,6 +87,9 @@ mv %{buildroot}%{_prefix}/doc/cmake-%(echo %{version} | sed 's/\.[0-9]\+$//')/* 
 %{_datadir}/vim/vimfiles/{indent,syntax}/cmake.vim
 
 %changelog
+
+* Tue Nov 24 2020 Morgan Thomas <m@m0rg.dev> 3.19.1-2
+  Updated to version 3.19.1.
 
 * Wed Nov 18 2020 Morgan Thomas <m@m0rg.dev> 3.19.0-2
   Provide the cmake%%{major_version} package as well.

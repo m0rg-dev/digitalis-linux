@@ -1,5 +1,5 @@
 Name:           kernel
-Version:        5.9.9
+Version:        5.9.11
 Release:        1%{?dist}
 Summary:        The Linux kernel
 
@@ -7,7 +7,7 @@ License:        GPLv2 with exceptions
 URL:            https://www.kernel.org
 %undefine       _disable_source_fetch
 Source0:        https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-%{version}.tar.xz
-%define         SHA256SUM0 a302d386af1278e7a8c0c2cd9a3b2119a18620eccc1f069b0f23e405bcf61fad
+%define         SHA256SUM0 5eb20a65a410669928f94b3975872e493fa6d0fe441c6a78b7564affa2a5d260
 
 # X10-Update-Spec: { "type": "webscrape", 
 # X10-Update-Spec:   "url": "https://www.kernel.org",

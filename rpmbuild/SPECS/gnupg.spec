@@ -1,5 +1,5 @@
 Name:           gnupg
-Version:        2.2.24
+Version:        2.2.25
 Release:        1%{?dist}
 Summary:        The GNU Privacy Guard
 
@@ -7,7 +7,7 @@ License:        GPLv2+
 URL:            https://www.gnupg.org/
 %undefine       _disable_source_fetch
 Source0:        https://www.gnupg.org/ftp/gcrypt/%{name}/%{name}-%{version}.tar.bz2
-%define         SHA256SUM0 9090b400faae34f08469d78000cfec1cee5b9c553ce11347cc96ef16eab98c46
+%define         SHA256SUM0 c55307b247af4b6f44d2916a25ffd1fb64ce2e509c3c3d028dbe7fbf309dc30a
 
 # X10-Update-Spec: { "type": "webscrape", "url": "https://www.gnupg.org/ftp/gcrypt/gnupg"}
 
@@ -80,6 +80,9 @@ rm -f %{buildroot}%{_infodir}/dir
 %doc %{_datadir}/doc/gnupg
 
 %changelog
+
+* Tue Nov 24 2020 Morgan Thomas <m@m0rg.dev> 2.2.25-1
+  Updated to version 2.2.25.
 
 * Wed Nov 18 2020 Morgan Thomas <m@m0rg.dev> 2.2.24-1
   Updated to version 2.2.24.

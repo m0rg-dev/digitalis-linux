@@ -1,5 +1,5 @@
 Name:           dhcpcd
-Version:        9.3.2
+Version:        9.3.3
 Release:        3%{?dist}
 Summary:        DHCP client and connection manager
 
@@ -99,6 +99,9 @@ fi
 %doc %{_mandir}/man{5,8}/*
 
 %changelog
+
+* Tue Nov 24 2020 Morgan Thomas <m@m0rg.dev> 9.3.3-3
+  Updated to version 9.3.3.
 * Sun Nov 08 2020 Morgan Thomas <m@m0rg.dev> 9.3.2-3
   Don't break the init script on reinstalls.
 
