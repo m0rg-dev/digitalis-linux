@@ -1,6 +1,6 @@
 --- a/modulemd/meson.build	2020-10-27 11:07:27.237201906 -0700
 +++ b/modulemd/meson.build	2020-10-27 11:07:56.770536307 -0700
-@@ -217,17 +217,19 @@
+@@ -222,19 +222,21 @@
      )
  endif
 
@@ -10,6 +10,8 @@
 -    include_directories : include_dirs,
 -    dependencies : [
 -        gobject,
+-        magic,
+-        rpm,
 -        yaml,
 -        modulemd_dep
 -    ],
@@ -22,6 +24,8 @@
 +        include_directories : include_dirs,
 +        dependencies : [
 +            gobject,
++            magic,
++            rpm,
 +            yaml,
 +            modulemd_dep
 +        ],
@@ -31,7 +35,7 @@
 
  header_path = 'modulemd-2.0'
 
-@@ -501,15 +503,17 @@
+@@ -517,15 +519,17 @@
      )
  endif
 

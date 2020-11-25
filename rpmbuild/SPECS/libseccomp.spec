@@ -28,6 +28,7 @@ Source0:        https://github.com/seccomp/libseccomp/releases/download/v%{versi
 # X10-Update-Spec:   "pattern": "^v((?:\\d+\\.?)+)$" }
 
 BuildRequires:  make
+BuildRequires:  gperf
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-

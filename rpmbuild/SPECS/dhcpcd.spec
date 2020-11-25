@@ -7,7 +7,7 @@ License:        2-clause BSD
 URL:            https://roy.marples.name/projects/dhcpcd/
 %undefine       _disable_source_fetch
 Source0:        https://roy.marples.name/downloads/dhcpcd/dhcpcd-%{version}.tar.xz
-%define         SHA256SUM0 6d49af5e766a2515e6366e4f669663df04ecdf90a1a60ddb1d7a2feb4b5d2566
+%define         SHA256SUM0 2d49f00b233832e12b6cb0b033be0c6fdff20e019dfae5bda2b87d7551e2c4c1
 
 # X10-Update-Spec: { "type": "webscrape", "url": "https://roy.marples.name/downloads/dhcpcd/"}
 
