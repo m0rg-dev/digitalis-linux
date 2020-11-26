@@ -9,7 +9,7 @@ URL:            https://www.iana.org/protocols
 Source0:        https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xml
 %define         SHA256SUM0 7de8f70197974b5238edd5a5a318392d7c262147c7495b7fb64f66b9966d4ec8
 Source1:        https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xml
-%define         SHA256SUM1 147a3bca5da10ae049cef3b9c11b3ef5533961ef0f41ea4510af7ab1f035951a
+%define         SHA256SUM1 fdb7cc8d00f68fd773ba60768b86838a6f2f713cf56de86ea5f4421a171abb62
 
 %if "%{_build}" != "%{_host}"
 %define host_tool_prefix %{_host}-
