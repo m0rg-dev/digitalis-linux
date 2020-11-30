@@ -1,5 +1,5 @@
 Name:           dhcpcd
-Version:        9.3.3
+Version:        9.3.4
 Release:        3%{?dist}
 Summary:        DHCP client and connection manager
 
@@ -7,7 +7,7 @@ License:        2-clause BSD
 URL:            https://roy.marples.name/projects/dhcpcd/
 %undefine       _disable_source_fetch
 Source0:        https://roy.marples.name/downloads/dhcpcd/dhcpcd-%{version}.tar.xz
-%define         SHA256SUM0 2d49f00b233832e12b6cb0b033be0c6fdff20e019dfae5bda2b87d7551e2c4c1
+%define         SHA256SUM0 5c823a0b981b52e7e0fd3183ae220422d6fcc3aa511af31dcb1a7ee6cb0f1c39
 
 # X10-Update-Spec: { "type": "webscrape", "url": "https://roy.marples.name/downloads/dhcpcd/"}
 
@@ -100,8 +100,12 @@ fi
 
 %changelog
 
+* Mon Nov 30 2020 Morgan Thomas <m@m0rg.dev> 9.3.4-3
+  Updated to version 9.3.4.
+
 * Tue Nov 24 2020 Morgan Thomas <m@m0rg.dev> 9.3.3-3
   Updated to version 9.3.3.
+
 * Sun Nov 08 2020 Morgan Thomas <m@m0rg.dev> 9.3.2-3
   Don't break the init script on reinstalls.
 

@@ -1,5 +1,5 @@
 Name:           ninja-build
-Version:        1.10.1
+Version:        1.10.2
 Release:        1%{?dist}
 Summary:        A small build system with a focus on speed
 
@@ -7,7 +7,7 @@ License:        Apache-2.0
 URL:            https://ninja-build.org/
 %undefine       _disable_source_fetch
 Source0:        https://github.com/ninja-build/ninja/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
-%define         SHA256SUM0 a6b6f7ac360d4aabd54e299cc1d8fa7b234cd81b9401693da21221c62569a23e
+%define         SHA256SUM0 ce35865411f0490368a8fc383f29071de6690cbadc27704734978221f25e2bed
 
 # X10-Update-Spec: { "type": "git-tags", 
 # X10-Update-Spec:   "repo": "https://github.com/ninja-build/ninja.git", 
@@ -44,3 +44,6 @@ CC=%{?host_tool_prefix}gcc CXX=%{?host_tool_prefix}g++ AR=%{?host_tool_prefix}ar
 %doc doc/manual.html
 
 %changelog
+
+* Mon Nov 30 2020 Morgan Thomas <m@m0rg.dev> 1.10.2-1
+  Updated to version 1.10.2.
