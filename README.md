@@ -1,3 +1,5 @@
+(package updates are on hold because I need to rebuild my build servers)
+
 An operating system.
 
 If you have a dnf / yum-based distro available, you should be able to use this
