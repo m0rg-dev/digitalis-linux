@@ -1,12 +1,12 @@
 import * as pkg from "../../package";
-import BasePackage from "../x10_meta/base";
+import { BootstrapBuildroot } from "../x10/buildroot";
 
-export default class KernelHeaders extends BasePackage {
+export default class KernelHeaders extends pkg.Package {
     meta = (): pkg.pkgmeta => ({
         name: "kernel-headers",
         url: "https://www.kernel.org",
         version: "5.11.2",
-        release: 1,
+        release: 2,
         summary: "Development files for the Linux kernel",
         license: "GPLv2 with exceptions"
     });
@@ -18,17 +18,25 @@ export default class KernelHeaders extends BasePackage {
         }
     ];
 
-    static install_script = `
+    build_import = () => [
+        new BootstrapBuildroot()
+    ];
+
+    on_import = (importer: pkg.Package) => {
+        importer.data.setup.system_include_paths.push(this.treepath('include'));
+    };
+
+    install_script = () => `
 find usr/include -name '.*' -delete
 rm usr/include/Makefile
-install -dm755 ../usr/
-cp -rv usr/include ../usr/
+cp -rv usr/include ${this.treepath()}/include
     `;
+
 
     steps = (): { [key: string]: pkg.step.BuildStep } => ({
         "unpack": new pkg.step.UnpackStep(1, `linux-${this.meta().version}`),
         "configure": new pkg.step.GenericCommandStep("make", ["mrproper"]),
         "make": new pkg.step.GenericCommandStep("make", ["headers"]),
-        "install": new pkg.step.GenericCommandStep("sh", ["-c", KernelHeaders.install_script])
+        "install": new pkg.step.GenericCommandStep("sh", ["-c", this.install_script()])
     });
 };

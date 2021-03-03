@@ -10,16 +10,13 @@ class ImpureLinkStep extends pkg.step.BuildStep {
     }
 
     async run(pkg: pkg.Package) {
-        const links: Map<string, string> = pkg._int_data["links"] || new Map<string, string>();
         this.src_files.forEach((file) => {
             if(file.match(/\/bin\/\w+$/)) {
-                links.set(path.join('/bin', path.basename(file)), file);
+                pkg.data.links.set(path.join('/bin', path.basename(file)), file);
             } else {
                 throw new Error(`Don't know where to put ${file}.`);
             }
         });
-
-        pkg._int_data["links"] = links;
     }
 }
 
@@ -50,7 +47,7 @@ export class ImpureDependency extends pkg.Package {
         "install": undefined
     });
 
-    post_hooks = (): { [key: string]: pkg.step.BuildStep[] } => ({
+    pre_hooks = (): { [key: string]: pkg.step.BuildStep[] } => ({
         "cleanup": [new ImpureLinkStep(this.src_files)]
     });
 }

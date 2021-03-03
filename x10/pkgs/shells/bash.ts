@@ -1,4 +1,7 @@
 import * as pkg from "../../package";
+import Glibc from "../lib/glibc";
+import Ncurses from "../lib/ncurses";
+import { BootstrapBuildroot } from "../x10/buildroot";
 
 export default class Bash extends pkg.Package {
     meta = (): pkg.pkgmeta => ({
@@ -17,9 +20,20 @@ export default class Bash extends pkg.Package {
         }
     ];
 
+    libc = new Glibc();
+    ncurses = new Ncurses();
+    
+    build_import = () => [
+        new BootstrapBuildroot(),
+        this.libc,
+        this.ncurses
+    ]
+
     steps = (): { [key: string]: pkg.step.BuildStep } => ({
         "configure": new pkg.step.AutoconfStep({
             "--without-bash-malloc": undefined,
-            "bash_cv_getcwd_malloc": "yes"})
+            "--with-curses": undefined,
+            "bash_cv_getcwd_malloc": "yes"
+        })
     });
 };

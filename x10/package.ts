@@ -54,10 +54,23 @@ export abstract class Package {
     _post_hooks: { [key: string]: step.BuildStep[] } = {
         "install": [
             new step.FindLinksStep()
+        ],
+        "cleanup": [
+            new step.MarkCompleteStep()
         ]
     };
 
-    _int_data: { [key: string]: any } = {};
+    imported: Package[] = [];
+    // _int_data: { [key: string]: any } = {};
+    data = {
+        setup: {
+            system_include_paths: [],
+            library_paths: [],
+            dynamic_linker: undefined
+        },
+        links: new Map<string, string>(),
+        cwd: process.cwd()
+    };
 
     abstract meta(): pkgmeta;
     abstract srcs(): pkgsrc[];
@@ -75,6 +88,15 @@ export abstract class Package {
 
     build_import(): Package[] {
         return [];
+    }
+
+    on_import(importer: Package) { }
+    _import(importer: Package) {
+        this.on_import(importer);
+        importer.imported.push(this);
+        // TODO this could be more generic
+        importer.data.setup.system_include_paths.push(...this.data.setup.system_include_paths);
+        importer.data.setup.library_paths.push(...this.data.setup.library_paths);
     }
 
     link_import(): Package[] {
@@ -100,8 +122,6 @@ export abstract class Package {
             if (!this._post_hooks[name]) this._post_hooks[name] = [];
             this._post_hooks[name].push(...this.post_hooks()[name]);
         }
-
-        this._int_data["env"] = process.env;
     }
 
     fqn(): string {
@@ -187,7 +207,7 @@ export abstract class Package {
 
     async haveBuild(): Promise<boolean> {
         try {
-            await fs.access(this.treepath());
+            await fs.access(this.treepath('link_cache'));
             return true;
         } catch (e) {
             if (e.code == 'ENOENT') return false;
@@ -196,18 +216,30 @@ export abstract class Package {
     }
 
     async link(target_root: string) {
-        await this.build();
-        const links: Map<string, string> = this._int_data["links"] || new Map<string, string>();
-
-        for (const [key, value] of links.entries()) {
+        if(await this.haveBuild()) {
+            console.error(`using existing ${this.meta().name} installation`);
+            const link_cache = JSON.parse((await fs.readFile(this.treepath('link_cache'))).toString());
+            for(const key in link_cache) {
+                this.data.links.set(key, link_cache[key]);
+            }
+        } else {
+            await this.build();
+        }
+        for (const [key, value] of this.data.links.entries()) {
             console.error(`linking: ${path.join(target_root, key)} -> ${value}`);
-            await fs.mkdir(path.basename(path.join(target_root, key)), { recursive: true });
+            await fs.mkdir(path.dirname(path.join(target_root, key)), { recursive: true });
+            try {
+                await fs.unlink(path.join(target_root, key));
+            } catch (e) {
+                if (e.code != 'ENOENT') throw e;
+            }
             await fs.symlink(value, path.join(target_root, key));
         }
 
         for (const imp of this._link_import) {
             imp._init();
             await imp.link(target_root);
+            imp._import(this);
         }
     }
 };

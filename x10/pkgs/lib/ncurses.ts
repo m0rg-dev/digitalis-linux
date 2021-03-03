@@ -1,12 +1,13 @@
 import * as pkg from "../../package";
-import BasePackage from "../x10_meta/base";
+import { BootstrapBuildroot } from "../x10/buildroot";
+import Glibc from "./glibc";
 
-export default class Ncurses extends BasePackage {
+export default class Ncurses extends pkg.Package {
     meta = (): pkg.pkgmeta => ({
         name: "ncurses",
         url: "https://invisible-island.net/ncurses/",
         version: "6.2",
-        release: 1,
+        release: 2,
         summary: "Terminal UI library",
         license: "MIT"
     });
@@ -18,16 +19,27 @@ export default class Ncurses extends BasePackage {
         }
     ];
 
+    libc = new Glibc();
+
+    build_import = () => [
+        new BootstrapBuildroot(),
+        this.libc
+    ]
+
+    on_import = (importer: pkg.Package) => {
+        importer.data.setup.library_paths.push(this.treepath('lib'));
+        importer.data.setup.system_include_paths.push(this.treepath('include'));
+        importer.data.setup.system_include_paths.push(this.treepath('include/ncursesw'));
+    }
+
     steps = (): { [key: string]: pkg.step.BuildStep } => ({
         "configure": new pkg.step.AutoconfStep({
             "--with-manpage-format": "normal",
             "--with-shared": undefined,
             "--without-debug": undefined,
             "--without-ada": undefined,
-            "--without-normal": undefined,
             "--enable-pc-files": undefined,
-            "--with-pkg-config-libdir": (pkg: pkg.Package) => pkg.treepath("lib/pkgconfig"),
-            "--enable-widec": undefined
+            "--with-pkg-config-libdir": (pkg: pkg.Package) => pkg.treepath("lib/pkgconfig")
         })
     });
 };

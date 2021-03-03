@@ -7,14 +7,13 @@ import { Package } from "./package";
 export class FindLinksStep extends BuildStep {
     async run(pkg: Package) {
         console.error(`[${pkg.meta().name}] finding symlinks`);
-        const links = new Map<string, string>();
 
         // binaries
         for (const binpath of ["bin", "sbin"]) {
             try {
                 const dir = await fs.readdir(pkg.treepath(binpath));
                 dir.forEach((ent) => {
-                    links.set(path.join('/', binpath, ent), path.join(pkg.treepath(binpath), ent));
+                    pkg.data.links.set(path.join('/', binpath, ent), path.join(pkg.treepath(binpath), ent));
                 });
             } catch (e) {
                 if(e.code != 'ENOENT') throw e;
@@ -26,7 +25,7 @@ export class FindLinksStep extends BuildStep {
             const dir = await fs.readdir(pkg.treepath("lib"));
             dir.forEach((ent) => {
                 if(ent.match(/\.so(?:\.\d+)*/)) {
-                    links.set(path.join('/lib', ent), path.join(pkg.treepath('lib'), ent));
+                    pkg.data.links.set(path.join('/lib', ent), path.join(pkg.treepath('lib'), ent));
                 }
             });
         } catch(e) {
@@ -36,11 +35,11 @@ export class FindLinksStep extends BuildStep {
         // configuration files
         try {
             await fs.access(pkg.treepath("etc"));
-            links.set(path.join('/etc', pkg.meta().name),pkg.treepath("etc"));
+            pkg.data.links.set(path.join('/etc', pkg.meta().name),pkg.treepath("etc"));
         } catch(e) {
             if(e.code != 'ENOENT') throw e;
         }
 
-        pkg._int_data["links"] = links;
+        console.error(`[${pkg.meta().name}] ${pkg.data.links.size} symlinks generated.`);
     }
 }

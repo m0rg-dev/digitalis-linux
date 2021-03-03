@@ -6,7 +6,6 @@ async function instantiate<T extends Package>(path: string): Promise<T> {
     const clazz = await import(`./${path}`);
     const pkg = new clazz.default;
     pkg._init();
-    console.log(pkg);
     return pkg;
 }
 
@@ -19,6 +18,9 @@ async function main() {
     } else if(cmd == 'build') {
         const pkg = await instantiate(args.shift());
         await pkg.build();
+    } else if(cmd == 'link') {
+        const pkg = await instantiate(args.shift());
+        await pkg.link(args.shift());
     }
 }
 

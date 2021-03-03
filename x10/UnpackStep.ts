@@ -27,9 +27,9 @@ export class UnpackStep extends BuildStep {
             }
         }));
         if (this.unpack_dir) {
-            pkg._int_data["dir"] = path.join(pkg.treepath("src"), this.unpack_dir);
+            pkg.data.cwd = path.join(pkg.treepath("src"), this.unpack_dir);
         } else {
-            pkg._int_data["dir"] = path.join(pkg.treepath("src"), `${pkg.meta().name}-${pkg.meta().version}`);
+            pkg.data.cwd = path.join(pkg.treepath("src"), `${pkg.meta().name}-${pkg.meta().version}`);
         }
     }
 

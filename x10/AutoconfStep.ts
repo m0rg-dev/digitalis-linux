@@ -1,11 +1,14 @@
 import * as child_process from 'child_process';
+import * as fs from 'fs/promises';
+import * as path from 'path';
 import { Package } from './package';
 import { ConfigureStep } from './BuildStep';
 
 export class AutoconfStep extends ConfigureStep {
     args: { [key: string]: string | ((pkg: Package) => string); } = {};
+    out_of_tree: boolean;
 
-    constructor(args: { [key: string]: string | ((pkg: Package) => string); } = {}) {
+    constructor(args: { [key: string]: string | ((pkg: Package) => string); } = {}, out_of_tree = false) {
         super();
 
         this.args["--prefix"] = (pkg: Package) => pkg.treepath();
@@ -13,9 +16,16 @@ export class AutoconfStep extends ConfigureStep {
         for (const key in args) {
             this.args[key] = args[key];
         }
+
+        this.out_of_tree = out_of_tree;
     }
 
     async run(pkg: Package) {
+        if(this.out_of_tree) {
+            pkg.data.cwd = path.join(pkg.data.cwd, 'build');
+            await fs.mkdir(pkg.data.cwd);
+        }
+
         const args: string[] = [];
         for (const key in this.args) {
             if (this.args[key] === undefined) {
@@ -29,8 +39,8 @@ export class AutoconfStep extends ConfigureStep {
             }
         }
         console.error(`[${pkg.meta().name}] autoconf: ./configure ${args.join(" ")}`);
-        const proc = child_process.spawn("./configure", args, {
-            cwd: pkg._int_data['dir'],
+        const proc = child_process.spawn((this.out_of_tree ? "." : "") + "./configure", args, {
+            cwd: pkg.data.cwd,
             stdio: "inherit"
         });
         await new Promise<void>((resolve, reject) => {

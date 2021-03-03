@@ -28,8 +28,8 @@ export class MakeStep extends BuildStep {
     async run(pkg: Package) {
         console.error(`[${pkg.meta().name}] make`);
         const proc = child_process.spawn("make",
-            [this.parallel ? `-j${os.cpus().length}` : ''],
-            { cwd: pkg._int_data['dir'], stdio: "inherit" });
+            [this.parallel ? `-j${os.cpus().length}` : '-j1'],
+            { cwd: pkg.data.cwd, stdio: "inherit" });
         await new Promise<void>((resolve, reject) => {
             proc.on('exit', (code, signal) => {
                 if (signal)
@@ -47,7 +47,7 @@ export class MakeInstallStep extends BuildStep {
         console.error(`[${pkg.meta().name}] make install`);
         const proc = child_process.spawn("make",
             ['install'],
-            { cwd: pkg._int_data['dir'], stdio: "inherit" });
+            { cwd: pkg.data.cwd, stdio: "inherit" });
         await new Promise<void>((resolve, reject) => {
             proc.on('exit', (code, signal) => {
                 if (signal)
@@ -60,6 +60,15 @@ export class MakeInstallStep extends BuildStep {
     }
 }
 
+
+export class MarkCompleteStep extends BuildStep {
+    async run(pkg: Package) {
+        console.error(`[${pkg.meta().name}] marking done`);
+        const json = {};
+        pkg.data.links.forEach((value, key) => json[key] = value);
+        await fs.writeFile(pkg.treepath('link_cache'), JSON.stringify(json));
+    }
+}
 
 import { UnpackStep } from './UnpackStep';
 import { AutoconfStep } from './AutoconfStep';
