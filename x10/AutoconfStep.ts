@@ -38,7 +38,7 @@ export class AutoconfStep extends ConfigureStep {
                 }
             }
         }
-        console.error(`[${pkg.meta().name}] autoconf: ./configure ${args.join(" ")}`);
+        console.error(`[${pkg.get_meta().name}] autoconf: ./configure ${args.join(" ")}`);
         const proc = child_process.spawn((this.out_of_tree ? "." : "") + "./configure", args, {
             cwd: pkg.data.cwd,
             stdio: "inherit"

@@ -1,5 +1,5 @@
-import * as pkg from "../../package";
-import Buildroot from "../x10/buildroot";
+import * as pkg from "../package";
+import Buildroot from "./Buildroot";
 
 export default abstract class BasePackage extends pkg.Package {
     _init() {

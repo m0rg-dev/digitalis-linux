@@ -5,7 +5,7 @@ import * as fs from 'fs/promises';
 
 export class SetupStep extends BuildStep {
     async run(pkg: Package) {
-        console.error(`[${pkg.meta().name}] set up build-import`);
+        console.error(`[${pkg.get_meta().name}] set up build-import`);
 
         // TODO this should probably be stored in the fs
         await fs.mkdir(pkg.treepath('build-import'));
@@ -16,7 +16,7 @@ export class SetupStep extends BuildStep {
         const rpath: string[] = [];
         const pkgconfpath: string[] = [];
         for (const imp of pkg._build_import) {
-            console.error(`[${pkg.meta().name}] importing dependency: ${imp.meta().name}`);
+            console.error(`[${pkg.get_meta().name}] importing dependency: ${imp.get_meta().name}`);
             imp._init();
             await imp.link(pkg.treepath('build-import'));
             imp._import(pkg);
@@ -45,7 +45,7 @@ export class SetupStep extends BuildStep {
             + (pkg.data.setup.dynamic_linker ? ` -Wl,-I${pkg.data.setup.dynamic_linker}` : "");
         process.env["PKG_CONFIG_LIBDIR"] = pkgconfpath.join(":");
 
-        for (const env of ["LD_RUN_PATH", "CFLAGS", "LDFLAGS"]) {
+        for (const env of ["PATH", "CFLAGS", "LDFLAGS"]) {
             console.error(`   env: ${env} = ${process.env[env]}`);
         }
 

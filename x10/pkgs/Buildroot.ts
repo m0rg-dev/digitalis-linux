@@ -1,12 +1,12 @@
-import * as pkg from "../../package";
-import Glibc from "../lib/glibc";
-import Bash from "../shells/bash";
-import Coreutils from "../sys/coreutils";
-import { ImpureDependency } from "../x10_meta/impure";
+import * as pkg from "../package";
+import Bash from "./Bash";
+import Coreutils from "./Coreutils";
+import Findutils from "./Findutils";
+import Glibc from "./Glibc";
+import { ImpureDependency } from "./impure";
 
 export class BootstrapBuildroot extends pkg.Package {
     meta = (): pkg.pkgmeta => ({
-        name: "bootstrap-buildroot",
         url: "",
         version: "0.1",
         release: 1,
@@ -31,6 +31,7 @@ export class BootstrapBuildroot extends pkg.Package {
         new ImpureDependency('sed', ['/usr/bin/sed']),
         new ImpureDependency('gawk', ['/usr/bin/awk', '/usr/bin/gawk']),
         new ImpureDependency('bison', ['/usr/bin/bison']),
+        new ImpureDependency('curl', ['/usr/bin/curl']),
         new ImpureDependency('python3', ['/usr/bin/python3']),
         new ImpureDependency('bash', ['/bin/bash', '/bin/sh']),
         new ImpureDependency('binutils', ['/usr/bin/ar', '/usr/bin/objdump', '/usr/bin/strip', '/usr/bin/as', '/usr/bin/ld']),
@@ -48,7 +49,6 @@ export class BootstrapBuildroot extends pkg.Package {
 
 export default class Buildroot extends pkg.Package {
     meta = (): pkg.pkgmeta => ({
-        name: "buildroot",
         url: "",
         version: "0.1",
         release: 1,
@@ -89,6 +89,7 @@ export default class Buildroot extends pkg.Package {
         */
        new Glibc(),
        new Bash(),
-       new Coreutils()
+       new Coreutils(),
+       new Findutils()
     ];
 }

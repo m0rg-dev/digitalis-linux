@@ -14,7 +14,7 @@ export class GenericCommandStep extends BuildStep {
     }
 
     async run(pkg: Package) {
-        console.error(`[${pkg.meta().name}] ${this.command} ${this.args.join(" ")}`);
+        console.error(`[${pkg.get_meta().name}] ${this.command} ${this.args.join(" ")}`);
         const proc = child_process.spawn(this.command, this.args,
             { cwd: pkg.data.cwd, stdio: "inherit" });
         await new Promise<void>((resolve, reject) => {

@@ -9,7 +9,7 @@ export abstract class BuildStep {
 
 export class PreCleanStep extends BuildStep {
     async run(pkg: Package) {
-        console.error(`[${pkg.meta().name}] cleaning (pre)`);
+        console.error(`[${pkg.get_meta().name}] cleaning (pre)`);
         await fs.rmdir(pkg.treepath(), { recursive: true });
         await pkg.ensureTree();
     }
@@ -26,7 +26,7 @@ export class MakeStep extends BuildStep {
     }
 
     async run(pkg: Package) {
-        console.error(`[${pkg.meta().name}] make`);
+        console.error(`[${pkg.get_meta().name}] make`);
         const proc = child_process.spawn("make",
             [this.parallel ? `-j${os.cpus().length}` : '-j1'],
             { cwd: pkg.data.cwd, stdio: "inherit" });
@@ -44,7 +44,7 @@ export class MakeStep extends BuildStep {
 
 export class MakeInstallStep extends BuildStep {
     async run(pkg: Package) {
-        console.error(`[${pkg.meta().name}] make install`);
+        console.error(`[${pkg.get_meta().name}] make install`);
         const proc = child_process.spawn("make",
             ['install'],
             { cwd: pkg.data.cwd, stdio: "inherit" });
@@ -63,7 +63,7 @@ export class MakeInstallStep extends BuildStep {
 
 export class MarkCompleteStep extends BuildStep {
     async run(pkg: Package) {
-        console.error(`[${pkg.meta().name}] marking done`);
+        console.error(`[${pkg.get_meta().name}] marking done`);
         const json = {};
         pkg.data.links.forEach((value, key) => json[key] = value);
         await fs.writeFile(pkg.treepath('link_cache'), JSON.stringify(json));

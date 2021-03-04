@@ -16,7 +16,7 @@ export class UnpackStep extends BuildStep {
     async run(pkg: Package) {
         await Promise.all(pkg._srcs.slice(0, this.depth).map(async (src) => {
             const file = pkg.getLocalFile(src);
-            console.error(`[${pkg.meta().name}] unpacking: ${file}`);
+            console.error(`[${pkg.get_meta().name}] unpacking: ${file}`);
             const basename = path.basename(file);
             if (basename.endsWith(".tar.gz")) {
                 await this.untar("xfz", file, pkg);
@@ -29,7 +29,7 @@ export class UnpackStep extends BuildStep {
         if (this.unpack_dir) {
             pkg.data.cwd = path.join(pkg.treepath("src"), this.unpack_dir);
         } else {
-            pkg.data.cwd = path.join(pkg.treepath("src"), `${pkg.meta().name}-${pkg.meta().version}`);
+            pkg.data.cwd = path.join(pkg.treepath("src"), `${pkg.get_meta().name.toLowerCase()}-${pkg.meta().version}`);
         }
     }
 

@@ -1,10 +1,9 @@
-import * as pkg from "../../package";
-import KernelHeaders from "../kernel/kernel_headers";
-import { BootstrapBuildroot } from "../x10/buildroot";
+import * as pkg from "../package";
+import { BootstrapBuildroot } from "./Buildroot";
+import KernelHeaders from "./KernelHeaders";
 
 export default class Glibc extends pkg.Package {
     meta = (): pkg.pkgmeta => ({
-        name: "glibc",
         url: "https://www.gnu.org/software/libc/",
         version: "2.33",
         release: 1,
@@ -37,7 +36,10 @@ export default class Glibc extends pkg.Package {
     };
 
     post_hooks = (): { [key: string]: pkg.step.BuildStep[] } => ({
-        "unpack": [new pkg.step.GenericCommandStep("sed", ["-e", "s/\\& \\~DF_1_NOW/\\& \\~(DF_1_NOW | DF_1_NODEFLIB)/", "-i", this.treepath(`src/glibc-${this.meta().version}/elf/get-dynamic-info.h`)])],
+        "unpack": [
+            new pkg.step.GenericCommandStep("sed", ["-e", "s/\\& \\~DF_1_NOW/\\& \\~(DF_1_NOW | DF_1_NODEFLIB)/", "-i", this.treepath(`src/glibc-${this.meta().version}/elf/get-dynamic-info.h`)]),
+            //new pkg.step.GenericCommandStep("/usr/bin/which", ["sed"]),
+        ],
         "install": [new pkg.step.GenericCommandStep("ln", ["-s", this.treepath('lib'), this.treepath('lib64')])]
     });
 

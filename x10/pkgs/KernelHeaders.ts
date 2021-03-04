@@ -1,5 +1,5 @@
-import * as pkg from "../../package";
-import { BootstrapBuildroot } from "../x10/buildroot";
+import * as pkg from "../package";
+import { BootstrapBuildroot } from "./Buildroot";
 
 export default class KernelHeaders extends pkg.Package {
     meta = (): pkg.pkgmeta => ({

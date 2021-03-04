@@ -8,7 +8,7 @@ import * as step from './BuildStep';
 export { step };
 
 export type pkgmeta = {
-    name: string,
+    name?: string,
     version: string,
     release: number,
     summary: string,
@@ -103,8 +103,14 @@ export abstract class Package {
         return [];
     }
 
+    get_meta(): pkgmeta {
+        const rc = this.meta();
+        if(!rc.name) rc.name = this.constructor.name;
+        return rc;
+    }
+
     _init() {
-        this._meta = this.meta();
+        this._meta = this.get_meta();
         this._srcs = this.srcs();
         this._build_import = this.build_import();
         this._link_import = this.link_import();
@@ -125,7 +131,7 @@ export abstract class Package {
     }
 
     fqn(): string {
-        return `${this.meta().name}-${this.meta().version}-${this.meta().release}`;
+        return `${this.get_meta().name}-${this.get_meta().version}-${this.get_meta().release}`;
     }
 
     getLocalFile(src: pkgsrc) {
@@ -142,14 +148,14 @@ export abstract class Package {
                 const hash = crypto.createHash('sha256');
                 hash.update(contents);
                 if (base32.encode(hash.digest()) == src.sha256) {
-                    console.error(`[${this.meta().name}: ${file}] local copy is good`);
+                    console.error(`[${this.get_meta().name}: ${file}] local copy is good`);
                     local_good = true;
                 } else {
-                    console.error(`[${this.meta().name}: ${file}] local copy is bad, re-downloading.`);
+                    console.error(`[${this.get_meta().name}: ${file}] local copy is bad, re-downloading.`);
                     await fs.unlink(file);
                 }
             }, () => {
-                console.error(`[${this.meta().name}: ${file}] downloading.`);
+                console.error(`[${this.get_meta().name}: ${file}] downloading.`);
             });
             if (local_good) return;
             await fs.mkdir(path.dirname(file), { recursive: true });
@@ -169,7 +175,7 @@ export abstract class Package {
             const contents = await fs.readFile(file);
             const hash = crypto.createHash('sha256');
             hash.update(contents);
-            console.error(`[${this.meta().name}: ${file}] hash: ${base32.encode(hash.digest())}`);
+            console.error(`[${this.get_meta().name}: ${file}] hash: ${base32.encode(hash.digest())}`);
         }));
     }
 
@@ -217,7 +223,7 @@ export abstract class Package {
 
     async link(target_root: string) {
         if(await this.haveBuild()) {
-            console.error(`using existing ${this.meta().name} installation`);
+            console.error(`using existing ${this.get_meta().name} installation`);
             const link_cache = JSON.parse((await fs.readFile(this.treepath('link_cache'))).toString());
             for(const key in link_cache) {
                 this.data.links.set(key, link_cache[key]);

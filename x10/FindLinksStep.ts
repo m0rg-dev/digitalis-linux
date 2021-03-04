@@ -6,7 +6,7 @@ import { Package } from "./package";
 
 export class FindLinksStep extends BuildStep {
     async run(pkg: Package) {
-        console.error(`[${pkg.meta().name}] finding symlinks`);
+        console.error(`[${pkg.get_meta().name}] finding symlinks`);
 
         // binaries
         for (const binpath of ["bin", "sbin"]) {
@@ -35,11 +35,11 @@ export class FindLinksStep extends BuildStep {
         // configuration files
         try {
             await fs.access(pkg.treepath("etc"));
-            pkg.data.links.set(path.join('/etc', pkg.meta().name),pkg.treepath("etc"));
+            pkg.data.links.set(path.join('/etc', pkg.get_meta().name),pkg.treepath("etc"));
         } catch(e) {
             if(e.code != 'ENOENT') throw e;
         }
 
-        console.error(`[${pkg.meta().name}] ${pkg.data.links.size} symlinks generated.`);
+        console.error(`[${pkg.get_meta().name}] ${pkg.data.links.size} symlinks generated.`);
     }
 }

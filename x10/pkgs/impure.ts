@@ -1,6 +1,6 @@
 import * as path from 'path';
 
-import * as pkg from "../../package";
+import * as pkg from "../package";
 
 class ImpureLinkStep extends pkg.step.BuildStep {
     src_files: string[];
@@ -31,7 +31,7 @@ export class ImpureDependency extends pkg.Package {
     }
 
     meta = (): pkg.pkgmeta => ({
-        name: `__impure_${this.name}`,
+        name: `Impure.${this.name}`,
         url: "",
         version: "0.1",
         release: 1,

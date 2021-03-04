@@ -1,10 +1,9 @@
-import * as pkg from "../../package";
-import { BootstrapBuildroot } from "../x10/buildroot";
-import Glibc from "./glibc";
+import * as pkg from "../package";
+import { BootstrapBuildroot } from "./Buildroot";
+import Glibc from "./Glibc";
 
 export default class Ncurses extends pkg.Package {
     meta = (): pkg.pkgmeta => ({
-        name: "ncurses",
         url: "https://invisible-island.net/ncurses/",
         version: "6.2",
         release: 2,

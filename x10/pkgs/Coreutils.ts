@@ -1,10 +1,9 @@
-import * as pkg from "../../package";
-import Glibc from "../lib/glibc";
-import { BootstrapBuildroot } from "../x10/buildroot";
+import * as pkg from "../package";
+import { BootstrapBuildroot } from "./Buildroot";
+import Glibc from "./Glibc";
 
 export default class Coreutils extends pkg.Package {
     meta = (): pkg.pkgmeta => ({
-        name: "coreutils",
         url: "https://www.gnu.org/software/coreutils/",
         version: "8.32",
         release: 1,

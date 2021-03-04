@@ -1,11 +1,10 @@
-import * as pkg from "../../package";
-import Glibc from "../lib/glibc";
-import Ncurses from "../lib/ncurses";
-import { BootstrapBuildroot } from "../x10/buildroot";
+import * as pkg from "../package";
+import { BootstrapBuildroot } from "./Buildroot";
+import Glibc from "./Glibc";
+import Ncurses from "./Ncurses";
 
 export default class Bash extends pkg.Package {
     meta = (): pkg.pkgmeta => ({
-        name: "bash",
         url: "https://www.gnu.org/software/bash/",
         version: "5.0",
         release: 1,
