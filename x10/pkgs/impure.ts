@@ -36,7 +36,8 @@ export class ImpureDependency extends pkg.Package {
         version: "0.1",
         release: 1,
         summary: "",
-        license: "0BSD"
+        license: "0BSD",
+        nocache: true
     });
 
     srcs = (): pkg.pkgsrc[] => [];
@@ -50,4 +51,8 @@ export class ImpureDependency extends pkg.Package {
     pre_hooks = (): { [key: string]: pkg.step.BuildStep[] } => ({
         "cleanup": [new ImpureLinkStep(this.src_files)]
     });
+
+    async link_filter(): Promise<boolean> {
+        return false;
+    }
 }

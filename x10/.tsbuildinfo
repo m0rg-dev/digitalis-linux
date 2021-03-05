@@ -172,7 +172,7 @@
         "affectsGlobalScope": false
       },
       "./SetupStep.ts": {
-        "version": "f4f8125f00db91a31754b6423117acb35bbf7183caf78099759c0c253b971ea4",
+        "version": "4672fdf8d86e0a66758b3b48e91b52b6f7b0e05e2bf20863245c33dab42b9169",
         "signature": "39118b291c7f55839e1bd9ade7f9e3476bf40d1e7c50d7c748ed549794c2a086",
         "affectsGlobalScope": false
       },
@@ -182,13 +182,18 @@
         "affectsGlobalScope": false
       },
       "./BuildStep.ts": {
-        "version": "4ded2182d12d135c9695d0d8deadeb64f8b2425e86fc9cea066a91c6c517e4d9",
-        "signature": "ff86ffca20049186a360de44a95bf5ca47b8bff4f14868a0a0cbdde09e27cebe",
+        "version": "f522ce2409e65c871e50f441de0d694f6a7e12a7fef94899c346372fda64e185",
+        "signature": "970a80293c22d75183f2472d7f7d4e4b0e35c6170ab77c3ca1af9eec532811d3",
+        "affectsGlobalScope": false
+      },
+      "./Config.ts": {
+        "version": "90a045b30e3290d7cc228aae28f5bc5dd74f2e11427b188fbd44e4bee9a56007",
+        "signature": "27d3b68340d9eba0561f8799ccd7ee4742abbf0914a27b30e06b35770c887683",
         "affectsGlobalScope": false
       },
       "./package.ts": {
-        "version": "409f449e28ad2ec5668c2efc8d9796afcfe0fe6e981f88ef405574ae12da1741",
-        "signature": "a33a1b158d865218ebefd677f71679287fda0bc519e6c1586c2655cf3cbd659f",
+        "version": "f524c03d2da0c7aea882f016e6994d9f1e76f00305fa4011d48cadcc1d9d9c5a",
+        "signature": "788cbe4ce6fe553fcd3279fb6bcaf042dd1e6169e5a44023b9df97e1a8537edd",
         "affectsGlobalScope": false
       },
       "./AutoconfStep.ts": {
@@ -197,53 +202,8 @@
         "affectsGlobalScope": false
       },
       "./index.ts": {
-        "version": "671dbe054865568f9256edfab04edb0046428adac042ce4dd6d88c48d470de2a",
+        "version": "c22b3d296d28f0274a2e68c2c955a11369af752f297f70d15433e6a9a789ce1a",
         "signature": "56d175a186f63a2b930b5355482b04520c24893fde6aa7e45742b55b0a38eea1",
-        "affectsGlobalScope": false
-      },
-      "./pkgs/KernelHeaders.ts": {
-        "version": "40ec9712ea81710b16bbe8fad5e151f26d73d87f8ab5e57e6ffcb50c8c93a6f5",
-        "signature": "f9e4392db814238bc4e87c5954ae3e4abec047cbed87911dc52a35fdb59375ff",
-        "affectsGlobalScope": false
-      },
-      "./pkgs/Glibc.ts": {
-        "version": "e0c496173d3a6ef5512f06fcde879ad471412c7aadc842950aed4a93ed65e70c",
-        "signature": "4f232a9f9a3676a864eba77e07b178cdf89bcf088ac4bbd37695da548275fe9b",
-        "affectsGlobalScope": false
-      },
-      "./pkgs/Coreutils.ts": {
-        "version": "34901895d49ecb8d4860d7a8514b8324b9038f78ada349152ffa7d7436ef3854",
-        "signature": "4cee45c0391ecdefb672f5e6077978fe96cc4519e4a67f4baef77df244163ecd",
-        "affectsGlobalScope": false
-      },
-      "./pkgs/Findutils.ts": {
-        "version": "3e520ad8fc44b586282b46e7488d1480f1670f64e72ea8ed8bd23f608f11af0f",
-        "signature": "706327a15e532c837d71d3a0801473af47dd47b98764aee0f40774ee646a8723",
-        "affectsGlobalScope": false
-      },
-      "./pkgs/impure.ts": {
-        "version": "f5c64e254efc55d0ee34d13a35ef372669cb3277700a1ddd8df8d627938bf928",
-        "signature": "a72a4c246a78c6cca80bfc890bf173df91982691e0f214ceaa8a4be860307342",
-        "affectsGlobalScope": false
-      },
-      "./pkgs/buildroot.ts": {
-        "version": "41f99c604f1d5d158fa25313a71c0acb7c256aab739f4accf7cdcb4671432b14",
-        "signature": "df538895224052971d8301707948c0869b851f4b2fe52d4818261d2de38ed111",
-        "affectsGlobalScope": false
-      },
-      "./pkgs/Ncurses.ts": {
-        "version": "1374650b6923f4c38cb29042b9f20168acee03ea4822a3d3c951b10a079f958e",
-        "signature": "913f07631fec7be3492f983470a4554afe4a7467e0ca75ee3db4c6663f28858a",
-        "affectsGlobalScope": false
-      },
-      "./pkgs/Bash.ts": {
-        "version": "0db69f3633dcaaf315df339b666b3055268d98cfeb6e6b65a02d9f9e377e4bc7",
-        "signature": "2b229d95c75369c9721e90c1418c525ee1032fdbb816ab8f5f941ef79d26fe04",
-        "affectsGlobalScope": false
-      },
-      "./pkgs/base.ts": {
-        "version": "30166e7e408449a7fe555df5656475473b0885f2a9de09ba8a0630c2ca266adc",
-        "signature": "c9f1b10b5c6c0eb1c89ad24ec008f016bae445ed7512fb20f6b63424d4353e7d",
         "affectsGlobalScope": false
       },
       "./node_modules/@types/node/globals.d.ts": {
@@ -539,6 +499,7 @@
         "./package.ts"
       ],
       "./index.ts": [
+        "./Config.ts",
         "./package.ts"
       ],
       "./node_modules/@types/node/assert.d.ts": [
@@ -774,56 +735,11 @@
       ],
       "./package.ts": [
         "./BuildStep.ts",
+        "./Config.ts",
         "./node_modules/@types/node/child_process.d.ts",
         "./node_modules/@types/node/crypto.d.ts",
         "./node_modules/@types/node/fs/promises.d.ts",
         "./node_modules/@types/node/path.d.ts"
-      ],
-      "./pkgs/Bash.ts": [
-        "./package.ts",
-        "./pkgs/Glibc.ts",
-        "./pkgs/Ncurses.ts",
-        "./pkgs/buildroot.ts"
-      ],
-      "./pkgs/Coreutils.ts": [
-        "./package.ts",
-        "./pkgs/Glibc.ts",
-        "./pkgs/buildroot.ts"
-      ],
-      "./pkgs/Findutils.ts": [
-        "./package.ts",
-        "./pkgs/Glibc.ts",
-        "./pkgs/buildroot.ts"
-      ],
-      "./pkgs/Glibc.ts": [
-        "./package.ts",
-        "./pkgs/KernelHeaders.ts",
-        "./pkgs/buildroot.ts"
-      ],
-      "./pkgs/KernelHeaders.ts": [
-        "./package.ts",
-        "./pkgs/buildroot.ts"
-      ],
-      "./pkgs/Ncurses.ts": [
-        "./package.ts",
-        "./pkgs/Glibc.ts",
-        "./pkgs/buildroot.ts"
-      ],
-      "./pkgs/base.ts": [
-        "./package.ts",
-        "./pkgs/buildroot.ts"
-      ],
-      "./pkgs/buildroot.ts": [
-        "./package.ts",
-        "./pkgs/Bash.ts",
-        "./pkgs/Coreutils.ts",
-        "./pkgs/Findutils.ts",
-        "./pkgs/Glibc.ts",
-        "./pkgs/impure.ts"
-      ],
-      "./pkgs/impure.ts": [
-        "./node_modules/@types/node/path.d.ts",
-        "./package.ts"
       ]
     },
     "exportedModulesMap": {
@@ -1087,51 +1003,15 @@
         "./node_modules/@types/node/zlib.d.ts"
       ],
       "./package.ts": [
-        "./BuildStep.ts"
-      ],
-      "./pkgs/Bash.ts": [
-        "./package.ts",
-        "./pkgs/Glibc.ts",
-        "./pkgs/Ncurses.ts",
-        "./pkgs/buildroot.ts"
-      ],
-      "./pkgs/Coreutils.ts": [
-        "./package.ts",
-        "./pkgs/Glibc.ts",
-        "./pkgs/buildroot.ts"
-      ],
-      "./pkgs/Findutils.ts": [
-        "./package.ts",
-        "./pkgs/Glibc.ts",
-        "./pkgs/buildroot.ts"
-      ],
-      "./pkgs/Glibc.ts": [
-        "./package.ts",
-        "./pkgs/KernelHeaders.ts",
-        "./pkgs/buildroot.ts"
-      ],
-      "./pkgs/KernelHeaders.ts": [
-        "./package.ts",
-        "./pkgs/buildroot.ts"
-      ],
-      "./pkgs/Ncurses.ts": [
-        "./package.ts",
-        "./pkgs/Glibc.ts",
-        "./pkgs/buildroot.ts"
-      ],
-      "./pkgs/base.ts": [
-        "./package.ts"
-      ],
-      "./pkgs/buildroot.ts": [
-        "./package.ts"
-      ],
-      "./pkgs/impure.ts": [
-        "./package.ts"
+        "./BuildStep.ts",
+        "./Config.ts",
+        "./node_modules/@types/node/child_process.d.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
       "./AutoconfStep.ts",
       "./BuildStep.ts",
+      "./Config.ts",
       "./FindLinksStep.ts",
       "./GenericCommandStep.ts",
       "./SetupStep.ts",
@@ -1216,16 +1096,7 @@
       "./node_modules/typescript/lib/lib.es2020.bigint.d.ts",
       "./node_modules/typescript/lib/lib.es5.d.ts",
       "./node_modules/typescript/lib/lib.esnext.intl.d.ts",
-      "./package.ts",
-      "./pkgs/Bash.ts",
-      "./pkgs/Coreutils.ts",
-      "./pkgs/Findutils.ts",
-      "./pkgs/Glibc.ts",
-      "./pkgs/KernelHeaders.ts",
-      "./pkgs/Ncurses.ts",
-      "./pkgs/base.ts",
-      "./pkgs/buildroot.ts",
-      "./pkgs/impure.ts"
+      "./package.ts"
     ]
   },
   "version": "4.2.2"

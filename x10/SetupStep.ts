@@ -17,7 +17,7 @@ export class SetupStep extends BuildStep {
         const pkgconfpath: string[] = [];
         for (const imp of pkg._build_import) {
             console.error(`[${pkg.get_meta().name}] importing dependency: ${imp.get_meta().name}`);
-            imp._init();
+            await imp._init();
             await imp.link(pkg.treepath('build-import'));
             imp._import(pkg);
             try {

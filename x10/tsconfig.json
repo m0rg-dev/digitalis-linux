@@ -9,6 +9,7 @@
         "lib": ["ES2019"],
         "esModuleInterop": true,
         "incremental": true,
-        "tsBuildInfoFile": ".tsbuildinfo"
+        "tsBuildInfoFile": ".tsbuildinfo",
     },
+    "exclude": ["pkgs/"]
 }

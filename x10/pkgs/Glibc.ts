@@ -51,7 +51,7 @@ export default class Glibc extends pkg.Package {
             "--enable-shared": undefined,
             "libc_cv_slibdir": this.treepath('lib')
         }, true),
-        //"make": new pkg.step.MakeStep(false)
+        // "make": new pkg.step.MakeStep(false)
     });
 
 };

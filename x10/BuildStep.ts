@@ -70,6 +70,13 @@ export class MarkCompleteStep extends BuildStep {
     }
 }
 
+export class LinkFilterStep extends BuildStep {
+    async run(pkg: Package) {
+        const links = await Promise.all(pkg.imported.filter((p) => p.link_filter(pkg)));
+        pkg._link_import.push(...links);
+    }
+}
+
 import { UnpackStep } from './UnpackStep';
 import { AutoconfStep } from './AutoconfStep';
 import { FindLinksStep } from './FindLinksStep';

@@ -22,6 +22,11 @@ export class BootstrapBuildroot extends pkg.Package {
         "install": undefined
     });
 
+    build_import = (): pkg.Package[] => [
+        new ImpureDependency('tar', ['/usr/bin/tar']),
+        new ImpureDependency('gzip', ['/usr/bin/gzip'])
+    ];
+
     link_import = (): pkg.Package[] => [
         new ImpureDependency('gcc', ['/usr/bin/gcc']),
         new ImpureDependency('make', ['/usr/bin/make']),
@@ -41,10 +46,17 @@ export class BootstrapBuildroot extends pkg.Package {
             'tr', 'install', 'ls', 'cmp', 'touch', 'ln', 'tty', 'uniq', 'test', 
             'wc', 'sleep'
         ].map((p) => `/usr/bin/${p}`)),
+        new ImpureDependency('grep', [
+            '/usr/bin/grep',  '/usr/bin/fgrep', '/usr/bin/egrep'
+        ]),
         new ImpureDependency('findutils', [
-            '/usr/bin/grep', '/usr/bin/find', '/usr/bin/xargs', '/usr/bin/fgrep', '/usr/bin/egrep'
+            '/usr/bin/find', '/usr/bin/xargs'
         ])
     ];
+
+    async link_filter(): Promise<boolean> {
+        return false;
+    }
 }
 
 export default class Buildroot extends pkg.Package {
@@ -92,4 +104,8 @@ export default class Buildroot extends pkg.Package {
        new Coreutils(),
        new Findutils()
     ];
+
+    async link_filter(): Promise<boolean> {
+        return false;
+    }
 }
