@@ -1,2 +1,0 @@
-#!/usr/bin/node --unhandled-rejections=strict
-require('./index.js');
