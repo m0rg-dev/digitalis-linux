@@ -2,8 +2,9 @@
   "name": "x10",
   "version": "2.0.0",
   "description": "",
-  "main": "x10.js",
+  "main": "build/x10.js",
   "scripts": {
+    "build_all": "tsc --build . pkgs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
