@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE package SYSTEM "package.dtd">
+
+<package>
+    <meta>
+        <name>glibc</name>
+        <url>https://www.gnu.org/software/libc/</url>
+        <version>2.33</version>
+        <summary>The GNU C Library</summary>
+        <license>LGPLv2+ and LGPLv2+ with exceptions and GPLv2+ and GPLv2+ with exceptions and BSD and Inner-Net and ISC and Public Domain and GFDL</license>
+    </meta>
+    <source id="tarball"
+        url="https://ftp.gnu.org/gnu/${meta_name}/${meta_name}-${meta_version}.tar.gz"
+        sha256="ad7dbed6b0cde9ddc90e84856da7e2c1f976a5e791cdee947d8dbb0392fc76cf"/>
+    <build-template href="template_autoconf.xml"/>
+</package>

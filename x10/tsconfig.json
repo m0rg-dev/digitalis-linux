@@ -11,6 +11,5 @@
         "incremental": true,
         "tsBuildInfoFile": ".tsbuildinfo",
         "outDir": "build"
-    },
-    "exclude": ["pkgs/"]
+    }
 }

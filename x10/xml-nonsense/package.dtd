@@ -1,0 +1,14 @@
+<!ELEMENT package (meta, source*)>
+<!ELEMENT meta EMPTY>
+<!ATTLIST meta
+    name CDATA #REQUIRED
+    url CDATA #REQUIRED
+    version CDATA #REQUIRED
+    summary CDATA #REQUIRED
+    license CDATA #REQUIRED
+>
+<!ELEMENT source EMPTY>
+<!ATTLIST source
+    id ID #REQUIRED
+    url CDATA #REQUIRED
+    sha256 CDATA #IMPLIED>

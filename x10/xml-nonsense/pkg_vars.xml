@@ -1,0 +1,5 @@
+<?xml version="1.0" ?>
+<substitutions>
+    <sub name="meta_name" source="//meta/name"/>
+    <sub name="meta_version" source="//meta/version"/>
+</substitutions>
