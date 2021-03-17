@@ -1,4 +1,0 @@
-<?xml version="1.0"?>
-<build-script>
-    <step name="prepare" href="steps/prepare.xml"/>
-</build-script>
