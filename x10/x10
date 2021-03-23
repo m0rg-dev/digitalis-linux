@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+set -e
+
+# cd $(dirname $1)
+# bash -ec "source $(basename $1); x10-run \$@" "$@"
+
+export X10=$(realpath $0)
+export X10_TARGET=x86_64-x10-linux-gnu
+export X10_SRC=$(realpath $1)
+shift
+
+cd $(dirname $X10_SRC)
+if [ "$1" = "generate" ]; then
+    for src in "$X10_SRC" $($X10 $X10_SRC _recurse_srcs | sort | uniq); do
+        bash -ec "source $src; _generate" >/x10/buildscripts/$($X10 $src hash).sh
+        echo /x10/buildscripts/$($X10 $src hash).sh
+    done
+elif [ "$1" = "build" ]; then
+    $X10 $X10_SRC generate
+    sh -ex /x10/buildscripts/$($X10 $X10_SRC hash).sh
+elif [ "$1" = "hash" ]; then
+    echo $(source $X10_SRC; _generate | sha256sum | head -c7)-$(source $X10_SRC; echo $PACKAGE-$VERSION)
+elif [ "$1" = "_get_srcs" ]; then
+    bash -ec "source $X10_SRC; _generate >/dev/null; echo \$X10_IMPORTED"
+elif [ "$1" = "_recurse_srcs" ]; then
+    export X10_ALREADY_IMPORTED="$X10_SRC $X10_ALREADY_IMPORTED"
+    for depend_src in $($X10 $X10_SRC _get_srcs); do
+        if [[ ! $X10_ALREADY_IMPORTED == *"$depend_src"* ]]; then
+            echo "${depend_src}"
+            export X10_ALREADY_IMPORTED="$depend_src $X10_ALREADY_IMPORTED"
+            $X10 $depend_src _recurse_srcs
+        fi
+    done
+fi
