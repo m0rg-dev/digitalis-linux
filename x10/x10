@@ -20,7 +20,7 @@ echo "$1 $X10_SRC" >&2
 cd $(dirname $X10_SRC)
 if [ "$1" = "generate" ]; then
     for src in "$X10_SRC" $($X10 $X10_SRC _recurse_srcs | sort | uniq); do
-        bash -ec "source $src; _generate" >/x10/buildscripts/$($X10 $src hash).sh
+        bash -ec "source $src; X10_CURRENT_SRC=$src _generate" >/x10/buildscripts/$($X10 $src hash).sh
         echo /x10/buildscripts/$($X10 $src hash).sh
     done
 elif [ "$1" = "build" ]; then
@@ -31,13 +31,13 @@ elif [ "$1" = "hash" ]; then
         cat /tmp/x10_cache/hash-$(basename $X10_SRC)
     else
         echo "  => cache miss: hash $(basename $X10_SRC)" >&2
-        echo $(source $X10_SRC; _generate | sha256sum | head -c7)-$(source $X10_SRC; echo $PACKAGE-$VERSION) >/tmp/x10_cache/hash-$(basename $X10_SRC)
+        echo $(source $X10_SRC; X10_CURRENT_SRC=$X10_SRC _generate | sha256sum | head -c7)-$(source $X10_SRC; echo $PACKAGE-$VERSION) >/tmp/x10_cache/hash-$(basename $X10_SRC)
         cat /tmp/x10_cache/hash-$(basename $X10_SRC)
     fi
 elif [ "$1" = "_get_srcs" ]; then
     if [ ! -e /tmp/x10_cache/srcs-$(basename $X10_SRC) ]; then
         echo "  => cache miss: srcs $(basename $X10_SRC)" >&2
-        bash -ec "source $X10_SRC; _generate >/dev/null; echo \$X10_IMPORTED" >/tmp/x10_cache/srcs-$(basename $X10_SRC)
+        bash -ec "source $X10_SRC; X10_CURRENT_SRC=$X10_SRC _generate >/dev/null; echo \$X10_IMPORTED" >/tmp/x10_cache/srcs-$(basename $X10_SRC)
     fi
     cat /tmp/x10_cache/srcs-$(basename $X10_SRC)
 elif [ "$1" = "_recurse_srcs" ]; then

@@ -12,5 +12,5 @@ x10-generate() {
         "https://ftpmirror.gnu.org/gnu/grep/grep-${VERSION}.tar.gz" \
         "https://ftp.gnu.org/gnu/grep/grep-${VERSION}.tar.gz"
     setup-build-dirs "grep-${VERSION}"
-    build-autoconf "grep-${VERSION}" --host=$X10_TARGET --build='$(../build-aux/config.guess)'
+    build-autoconf "grep-${VERSION}" --host=$X10_TARGET --build='$(../build-aux/config.guess)' --without-pcre
 }

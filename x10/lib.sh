@@ -318,7 +318,7 @@ _generate() {
     # some reproducible-builds housekeeping.
     build-command export LC_ALL=C
     build-command export TZ=UTC
-    build-command export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
+    build-command export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct $X10_CURRENT_SRC)
     echo ""
 
     # debug time
