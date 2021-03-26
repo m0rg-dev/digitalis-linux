@@ -89,7 +89,7 @@ _set_compiler_flags() {
     if [ -n "$X10_LIBRARY_PATH" ]; then
         for dir in $(echo "$X10_LIBRARY_PATH" | tr ':' ' '); do
             # only add to rpath if there are actually libraries there...
-            if ls $dir | grep "\.so$"; then
+            if ls $dir | grep -q "\.so$"; then
                 LDFLAGS="-Wl,-rpath,$dir -L$dir $LDFLAGS"
             fi
         done
@@ -205,7 +205,7 @@ setup() {
     # some reproducible-builds housekeeping.
     build-command export LC_ALL=C
     build-command export TZ=UTC
-    build-command export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
+    build-command export SOURCE_DATE_EPOCH=$(date +%s)
 }
 
 x10-tree() {
@@ -213,9 +213,28 @@ x10-tree() {
 }
 
 x10-import() {
+    _copy_definition _deduplicate_search_path
+    _copy_definition _import_recurse
     _defer _do_import $($X10 $(realpath $1) hash)
     X10_IMPORTED="$(realpath $1) $X10_IMPORTED"
     build-command "# MAGIC-COMMENT import:$($X10 $1 hash)"
+}
+
+_deduplicate_search_path() {
+    _x10_use_any perl -pe 'chomp;$_=join ":", grep { length($_) && !$s{$_}++ } split /:/'
+}
+
+_import_recurse() {
+    if _x10_use_any fgrep -q "$1" /tmp/x10-import-$X10_PKGID; then
+        # we already did this.
+        return
+    fi
+
+    for dep in $(_x10_use_any grep 'MAGIC-COM''MENT import' /x10/buildscripts/$1.sh | _x10_use_any cut -d':' -f2); do
+        _import_recurse $dep
+    done
+
+    echo "$1" >> /tmp/x10-import-$X10_PKGID
 }
 
 _do_import() {
@@ -228,17 +247,31 @@ _do_import() {
             false
         fi
     fi
-    set +e
-    test -e /x10/tree/$1/bin && export PATH=/x10/tree/$1/bin:$PATH
-    test -e /x10/tree/$1/lib && export X10_LIBRARY_PATH=/x10/tree/$1/lib:$X10_LIBRARY_PATH
-    # test -e /x10/tree/$1/lib64 && export X10_LIBRARY_PATH=/x10/tree/$1/lib64:$X10_LIBRARY_PATH
-    test -e /x10/tree/$1/include && export X10_HEADER_PATH=/x10/tree/$1/include:$X10_HEADER_PATH
-    test -e /x10/tree/$1/include/$X10_TARGET && export X10_HEADER_PATH=/x10/tree/$1/include/$X10_TARGET:$X10_HEADER_PATH
-    test -e /x10/tree/$1/lib64/ld-linux-x86-64.so.2 && export X10_DYNAMIC_LINKER=/x10/tree/$1/lib64/ld-linux-x86-64.so.2
-    set -e
-    for dep in $(_x10_use_any grep 'MAGIC-COM''MENT import' /x10/buildscripts/$1.sh | _x10_use_any cut -d':' -f2); do
-        _do_import $dep
+
+    echo "Importing: $1"
+    _x10_use_any touch /tmp/x10-import-$X10_PKGID
+
+    _import_recurse "$1"
+    _x10_use_any cat /tmp/x10-import-$X10_PKGID
+
+    for dep in $(_x10_use_any cat /tmp/x10-import-$X10_PKGID); do
+        set +e
+        test -e /x10/tree/$dep/bin && export X10_BINARY_PATH=/x10/tree/$dep/bin:$X10_BINARY_PATH
+        test -e /x10/tree/$dep/lib && export X10_LIBRARY_PATH=/x10/tree/$dep/lib:$X10_LIBRARY_PATH
+        # test -e /x10/tree/$dep/lib64 && export X10_LIBRARY_PATH=/x10/tree/$dep/lib64:$X10_LIBRARY_PATH
+        test -e /x10/tree/$dep/include && export X10_HEADER_PATH=/x10/tree/$dep/include:$X10_HEADER_PATH
+        test -e /x10/tree/$dep/include/$X10_TARGET && export X10_HEADER_PATH=/x10/tree/$dep/include/$X10_TARGET:$X10_HEADER_PATH
+        test -e /x10/tree/$dep/lib64/ld-linux-x86-64.so.2 && export X10_DYNAMIC_LINKER=/x10/tree/$dep/lib64/ld-linux-x86-64.so.2
+        set -e
     done
+
+    # clean up duplicates
+    export X10_LIBRARY_PATH=$(echo "$X10_LIBRARY_PATH" | _deduplicate_search_path)
+    export X10_HEADER_PATH=$(echo "$X10_HEADER_PATH" | _deduplicate_search_path)
+    export PATH=$(echo "$X10_BINARY_PATH:$PATH" | _deduplicate_search_path)
+
+    echo "PATH is now $PATH."
+    _x10_use_any rm /tmp/x10-import-$X10_PKGID
 }
 
 # x10-pkgid() {
@@ -248,7 +281,7 @@ _do_import() {
 _bailout() {
     if [[ "$-" == *"e"* ]]; then
         echo "Something bad happened. Dropping you to a shell..."
-        bash
+        _x10_use_any bash
         false
     fi
 }
@@ -269,13 +302,14 @@ _generate() {
     echo -e "set -x\n"
     if [[ -z $INHERIT_ENVIRONMENT ]]; then
         build-command '[ "$(env | /bin/sed  -r -e '\''/^(PWD|SHLVL|_)=/d'\'')" ] && exec -c sh -ex $0'
-        build-command 'PATH='
+        build-command 'export PATH='
     else
         # get our environment back, if necessary
         build-command source /tmp/x10_env
     fi
     _copy_definition _x10_use_any
     echo -e "export X10_PKGID=\$(_x10_use_any sha256sum \$BASH_SOURCE | _x10_use_any head -c7)-$PACKAGE-$VERSION"
+    build-command unset X10_IMPORTED
     # TODO we should only have to do this once
     export X10_TARGET=x86_64-x10-linux-gnu
     build-command export X10_TARGET=x86_64-x10-linux-gnu
@@ -286,6 +320,9 @@ _generate() {
     build-command export TZ=UTC
     build-command export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
     echo ""
+
+    # debug time
+    build-command /usr/bin/env
 
     x10-generate
 }

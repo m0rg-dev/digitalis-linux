@@ -48,5 +48,5 @@ elif [ "$1" = "_recurse_srcs" ]; then
             export X10_ALREADY_IMPORTED="$depend_src $X10_ALREADY_IMPORTED"
             $X10 $depend_src _recurse_srcs
         fi
-    done
+    done | sort -u
 fi
