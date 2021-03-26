@@ -5,7 +5,7 @@ export VERSION=2.33
 export INHERIT_ENVIRONMENT=1
 
 x10-generate() {
-    x10-import ./host-binutils.sh
+    x10-import ./host-xbinutils.sh
     x10-import ./host-xgcc.sh
     x10-import ./host-kernel-headers.sh
 

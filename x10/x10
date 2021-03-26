@@ -5,10 +5,17 @@ set -e
 # cd $(dirname $1)
 # bash -ec "source $(basename $1); x10-run \$@" "$@"
 
+if [ -z "$X10" ]; then
+    rm -rf /tmp/x10_cache
+    mkdir -p /tmp/x10_cache
+    export -p > /tmp/x10_env
+fi
+
 export X10=$(realpath $0)
-export X10_TARGET=x86_64-x10-linux-gnu
 export X10_SRC=$(realpath $1)
 shift
+
+echo "$1 $X10_SRC" >&2
 
 cd $(dirname $X10_SRC)
 if [ "$1" = "generate" ]; then
@@ -20,9 +27,19 @@ elif [ "$1" = "build" ]; then
     $X10 $X10_SRC generate
     sh -ex /x10/buildscripts/$($X10 $X10_SRC hash).sh
 elif [ "$1" = "hash" ]; then
-    echo $(source $X10_SRC; _generate | sha256sum | head -c7)-$(source $X10_SRC; echo $PACKAGE-$VERSION)
+    if [ -e /tmp/x10_cache/hash-$(basename $X10_SRC) ]; then
+        cat /tmp/x10_cache/hash-$(basename $X10_SRC)
+    else
+        echo "  => cache miss: hash $(basename $X10_SRC)" >&2
+        echo $(source $X10_SRC; _generate | sha256sum | head -c7)-$(source $X10_SRC; echo $PACKAGE-$VERSION) >/tmp/x10_cache/hash-$(basename $X10_SRC)
+        cat /tmp/x10_cache/hash-$(basename $X10_SRC)
+    fi
 elif [ "$1" = "_get_srcs" ]; then
-    bash -ec "source $X10_SRC; _generate >/dev/null; echo \$X10_IMPORTED"
+    if [ ! -e /tmp/x10_cache/srcs-$(basename $X10_SRC) ]; then
+        echo "  => cache miss: srcs $(basename $X10_SRC)" >&2
+        bash -ec "source $X10_SRC; _generate >/dev/null; echo \$X10_IMPORTED" >/tmp/x10_cache/srcs-$(basename $X10_SRC)
+    fi
+    cat /tmp/x10_cache/srcs-$(basename $X10_SRC)
 elif [ "$1" = "_recurse_srcs" ]; then
     export X10_ALREADY_IMPORTED="$X10_SRC $X10_ALREADY_IMPORTED"
     for depend_src in $($X10 $X10_SRC _get_srcs); do

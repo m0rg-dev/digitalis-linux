@@ -9,7 +9,7 @@ MPFR=4.1.0
 GMP=6.2.1
 
 x10-generate() {
-    x10-import ./host-binutils.sh
+    x10-import ./host-xbinutils.sh
 
     fetch-source "gcc-${VERSION}" "b8dd4368bb9c7f0b98188317ee0254dd8cc99d1e3a18d0ff146c855fe16c1d8c" \
         "https://ftpmirror.gnu.org/gnu/gcc/gcc-${VERSION}/gcc-${VERSION}.tar.xz" \
@@ -32,6 +32,10 @@ x10-generate() {
     build-command mv mpfr-${MPFR} mpfr
     build-command mv gmp-${GMP} gmp
     build-command sed -e '/m64=/s/lib64/lib/' -i.orig gcc/config/i386/t-linux64
+    # if you don't do this, libstdc++ will reference hidden symbols within libgcc
+    # this isn't a problem if you build them at the same time, but we don't
+    build-command export target_configargs=libgcc_cv_hidden_visibility_attribute=no
+
     build-autoconf --target=$X10_TARGET --with-glibc-version=2.11 --with-sysroot=$(x10-tree) --with-newlib --without-headers \
         --enable-initfini-array --disable-nls --disable-shared --disable-multilib --disable-decimal-float --disable-threads \
         --disable-libatomic --disable-libgomp --disable-libquadmath --disable-libssp --disable-libvtv --disable-libstdcxx \

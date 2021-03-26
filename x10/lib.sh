@@ -77,6 +77,7 @@ unpack-source() {
 
 setup-build-dirs() {
     build-command rm -rf "/x10/build/\$X10_PKGID"
+    build-command rm -rf "/x10/tree/\$X10_PKGID"
     build-command mkdir -pv "/x10/build/\$X10_PKGID"
     build-command cd "/x10/build/\$X10_PKGID"
                   unpack-source ${SOURCES[$1]}
@@ -94,29 +95,34 @@ _set_compiler_flags() {
         done
     fi
 
-    OPTFLAGS="-O2 -pipe"
-    HEADERS=""
+    OPTFLAGS_FILE=$(realpath optflags.txt)
+    echo "-O2 -pipe" >$OPTFLAGS_FILE
     HAVE_GLIBC_HEADER=""
     if [ -n "$X10_HEADER_PATH" ]; then
         for dir in $(echo "$X10_HEADER_PATH" | tr ':' ' '); do
             if [[ "$dir" == *"glibc"* ]]; then
-                HAVE_GLIBC_HEADER="-isystem$dir"
+                HAVE_GLIBC_HEADER="-isystem $dir"
             else
-                HEADERS="-isystem$dir $HEADERS"
+                echo "-isystem $dir" >>$OPTFLAGS_FILE
             fi
         done
     fi
-    HEADERS="$(echo "$HEADERS" | tr "\n" " " | sort -u) $HAVE_GLIBC_HEADER"
+    sort -u -o $OPTFLAGS_FILE $OPTFLAGS_FILE
+    if [ -n "$HAVE_GLIBC_HEADER" ]; then
+        echo "$HAVE_GLIBC_HEADER" >>$OPTFLAGS_FILE
+    fi
+
+    echo "$OPTFLAGS" >>$OPTFLAGS_FILE
 
     if [ -n "$X10_DYNAMIC_LINKER" ]; then
-        LDFLAGS="-Wl,-z,nodeflib -Wl,-I,$X10_DYNAMIC_LINKER $LDFLAGS"
+        LDFLAGS="-Wl,-z,nodefaultlib -Wl,-I,$X10_DYNAMIC_LINKER $LDFLAGS"
         # so that crtX.o can be found
-        OPTFLAGS="-B $(dirname $X10_DYNAMIC_LINKER | sed -e 's/lib64/lib/') $OPTFLAGS"
+        LDFLAGS="-B$(dirname $X10_DYNAMIC_LINKER | sed -e 's/lib64/lib/') $LDFLAGS"
     fi
 
     export LDFLAGS
-    export CFLAGS="$OPTFLAGS $HEADERS"
-    export CXXFLAGS="$OPTFLAGS $HEADERS"
+    export CFLAGS="@$OPTFLAGS_FILE"
+    export CXXFLAGS="@$OPTFLAGS_FILE"
 }
 
 build-autoconf() {
@@ -150,6 +156,23 @@ build-autoconf() {
         build-command make install
     fi
 }
+
+# TODO these could be the same thing
+use-libtool-gcc-wrapper() {
+    _defer _set_compiler_flags
+    build-command echo -e '"#!/bin/sh\n$X10_TARGET-gcc "$LDFLAGS" \"\$@\""' '>' gccwrap
+    build-command chmod +x gccwrap
+    build-command export CC='$(realpath gccwrap)'
+    build-command echo -e '"#!/bin/sh\n$X10_TARGET-g++ "$LDFLAGS" \"\$@\""' '>' g++wrap
+    build-command chmod +x g++wrap
+    build-command export CXX='$(realpath g++wrap)'
+}
+
+use-libtool-g++-wrapper() {
+    # TODO "emit-warning"
+    true;
+}
+
 
 # do-package() {
 #     mkdir -pv /x10/logs/
@@ -198,7 +221,7 @@ x10-import() {
 _do_import() {
     if [ ! -e /x10/tree/$1 ]; then
         if [ -e /x10/buildscripts/$1.sh ]; then
-            sh -ex /x10/buildscripts/$1.sh
+            _x10_use_any sh -ex /x10/buildscripts/$1.sh
         else
             # this shouldn't happen
             echo "Need /x10/buildscripts/$1.sh but not provided"
@@ -213,7 +236,7 @@ _do_import() {
     test -e /x10/tree/$1/include/$X10_TARGET && export X10_HEADER_PATH=/x10/tree/$1/include/$X10_TARGET:$X10_HEADER_PATH
     test -e /x10/tree/$1/lib64/ld-linux-x86-64.so.2 && export X10_DYNAMIC_LINKER=/x10/tree/$1/lib64/ld-linux-x86-64.so.2
     set -e
-    for dep in $(grep 'MAGIC-COM''MENT import' /x10/buildscripts/$1.sh | cut -d':' -f2); do
+    for dep in $(_x10_use_any grep 'MAGIC-COM''MENT import' /x10/buildscripts/$1.sh | _x10_use_any cut -d':' -f2); do
         _do_import $dep
     done
 }
@@ -230,15 +253,32 @@ _bailout() {
     fi
 }
 
+_x10_use_any() {
+    local COMMAND="$1"
+    shift
+    if command -v $COMMAND >/dev/null; then
+        $COMMAND "$@"
+    else
+        $($BASH -c "source /tmp/x10_env; which $COMMAND") "$@"
+    fi
+}
+
 _generate() {
     echo -e "# This script generates $PACKAGE-$VERSION.\n"
     echo -e "set -e"
     echo -e "set -x\n"
     if [[ -z $INHERIT_ENVIRONMENT ]]; then
-        build-command '[ "$(env | /bin/sed  -r -e '\''/^(PWD|SHLVL|_)=/d'\'')" ] && exec -c bash -ex $0'
+        build-command '[ "$(env | /bin/sed  -r -e '\''/^(PWD|SHLVL|_)=/d'\'')" ] && exec -c sh -ex $0'
         build-command 'PATH='
+    else
+        # get our environment back, if necessary
+        build-command source /tmp/x10_env
     fi
-    echo -e "export X10_PKGID=\$(sha256sum \$BASH_SOURCE | head -c7)-$PACKAGE-$VERSION"
+    _copy_definition _x10_use_any
+    echo -e "export X10_PKGID=\$(_x10_use_any sha256sum \$BASH_SOURCE | _x10_use_any head -c7)-$PACKAGE-$VERSION"
+    # TODO we should only have to do this once
+    export X10_TARGET=x86_64-x10-linux-gnu
+    build-command export X10_TARGET=x86_64-x10-linux-gnu
     _copy_definition _bailout
     build-command trap '_bailout' ERR
     # some reproducible-builds housekeeping.
