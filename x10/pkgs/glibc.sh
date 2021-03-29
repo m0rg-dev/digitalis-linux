@@ -2,7 +2,6 @@ source ../lib.sh
 
 export PACKAGE=glibc
 export VERSION=2.33
-# X10_PERMIT_EXTERNAL_LIBS=1
 
 x10-generate() {
     x10-import ../sysroot/crossbuilt-sysroot.sh
@@ -19,7 +18,7 @@ x10-generate() {
     build-command chmod +x g++wrap
     build-command export CXX='$(realpath g++wrap)'
     
-    build-autoconf --enable-kernel=5.0 --without-selinux \
+    build-autoconf --enable-kernel=5.0 --without-selinux --enable-stack-protector=strong \
         --with-headers=/x10/tree/$($X10 ../sysroot/host-kernel-headers.sh hash)/include libc_cv_slibdir=$(x10-tree)/lib
     build-command patchelf --force-rpath --remove-rpath $(x10-tree)/lib/ld-${VERSION}.so
     build-command mkdir -pv $(x10-tree)/lib64/

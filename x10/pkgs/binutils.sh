@@ -12,6 +12,5 @@ x10-generate() {
         "https://ftp.gnu.org/gnu/binutils/binutils-${VERSION}.tar.xz"
     setup-build-dirs "binutils-${VERSION}"
     use-libtool-gcc-wrapper
-    build-command bash
     build-autoconf --enable-shared --disable-werror --enable-deterministic-archives
 }
