@@ -83,7 +83,7 @@ _set_compiler_flags() {
         for dir in $(echo "$X10_LIBRARY_PATH" | tr ':' ' '); do
             # only add to rpath if there are actually libraries there...
             if ls $dir | grep -q "\.so$"; then
-                LDFLAGS="-Wl,-rpath,$dir -L$dir $LDFLAGS"
+                LDFLAGS="$LDFLAGS -Wl,-rpath,$dir -L$dir"
             fi
         done
     fi
@@ -306,7 +306,13 @@ _generate() {
     # some reproducible-builds housekeeping.
     build-command export LC_ALL=C
     build-command export TZ=UTC
-    build-command export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct $X10_CURRENT_SRC)
+    if [ -n "$(git log -1 --pretty=%ct $X10_CURRENT_SRC)" ] && git diff --exit-code "$X10_CURRENT_SRC" >/dev/null; then
+        # git version is latest so its timestamp is OK
+        build-command export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct $X10_CURRENT_SRC)
+    else
+        # file either hasn't been committed or has been modified locally, use its modification time
+        build-command export SOURCE_DATE_EPOCH=$(stat -c%Y $X10_CURRENT_SRC)
+    fi
     echo ""
 
     build-command _x10_use_any mkdir -p $(x10-tree)

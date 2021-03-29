@@ -10,6 +10,7 @@ export VERSION=1
 x10-generate() {
     x10-import-always ./host-bash.sh
     x10-import-always ./host-binutils.sh
+    x10-import-always ./host-bison.sh
     x10-import-always ./host-coreutils.sh
     x10-import-always ./host-diffutils.sh
     x10-import-always ./host-findutils.sh
@@ -23,6 +24,8 @@ x10-generate() {
     x10-import-always ./host-m4.sh
     x10-import-always ./host-make.sh
     x10-import-always ./host-ncurses.sh
+    x10-import-always ./host-patchelf.sh
+    x10-import-always ./host-python.sh
     x10-import-always ./host-sed.sh
     x10-import-always ./host-tar.sh
     x10-import-always ./host-xz.sh
