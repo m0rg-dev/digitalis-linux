@@ -3,13 +3,14 @@ source ../lib.sh
 export PACKAGE=host-xgcc
 export VERSION=10.2.0
 export INHERIT_ENVIRONMENT=1
+X10_PERMIT_EXTERNAL_LIBS=1
 
 MPC=1.2.1
 MPFR=4.1.0
 GMP=6.2.1
 
 x10-generate() {
-    x10-import ./host-xbinutils.sh
+    x10-import-always ./host-xbinutils.sh
 
     fetch-source "gcc-${VERSION}" "b8dd4368bb9c7f0b98188317ee0254dd8cc99d1e3a18d0ff146c855fe16c1d8c" \
         "https://ftpmirror.gnu.org/gnu/gcc/gcc-${VERSION}/gcc-${VERSION}.tar.xz" \

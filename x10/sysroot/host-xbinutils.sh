@@ -3,6 +3,7 @@ source ../lib.sh
 export PACKAGE=host-xbinutils
 export VERSION=2.36
 export INHERIT_ENVIRONMENT=1
+X10_PERMIT_EXTERNAL_LIBS=1
 
 x10-generate() {
     fetch-source "binutils-${VERSION}" "5788292cc5bbcca0848545af05986f6b17058b105be59e99ba7d0f9eb5336fb8" \

@@ -8,22 +8,22 @@ export VERSION=1
 # compilers and such correctly think they were built native.
 
 x10-generate() {
-    x10-import ./host-bash.sh
-    x10-import ./host-binutils.sh
-    x10-import ./host-coreutils.sh
-    x10-import ./host-diffutils.sh
-    x10-import ./host-findutils.sh
-    x10-import ./host-gawk.sh
-    x10-import ./host-gcc.sh
-    x10-import ./host-glibc.sh
-    x10-import ./host-grep.sh
-    x10-import ./host-gzip.sh
-    x10-import ./host-kernel-headers.sh
-    x10-import ./host-libstdc++.sh
-    x10-import ./host-m4.sh
-    x10-import ./host-make.sh
-    x10-import ./host-ncurses.sh
-    x10-import ./host-sed.sh
-    x10-import ./host-tar.sh
-    x10-import ./host-xz.sh
+    x10-import-always ./host-bash.sh
+    x10-import-always ./host-binutils.sh
+    x10-import-always ./host-coreutils.sh
+    x10-import-always ./host-diffutils.sh
+    x10-import-always ./host-findutils.sh
+    x10-import-always ./host-gawk.sh
+    x10-import-always ./host-gcc.sh
+    x10-import-always ./host-glibc.sh
+    x10-import-always ./host-grep.sh
+    x10-import-always ./host-gzip.sh
+    x10-import-always ./host-kernel-headers.sh
+    x10-import-always ./host-libstdc++.sh
+    x10-import-always ./host-m4.sh
+    x10-import-always ./host-make.sh
+    x10-import-always ./host-ncurses.sh
+    x10-import-always ./host-sed.sh
+    x10-import-always ./host-tar.sh
+    x10-import-always ./host-xz.sh
 }
