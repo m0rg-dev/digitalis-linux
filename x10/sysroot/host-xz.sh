@@ -2,7 +2,7 @@ source ../lib.sh
 
 export PACKAGE=host-xz
 export VERSION=5.2.5
-export INHERIT_ENVIRONMENT=1
+INHERIT_ENVIRONMENT=1
 
 x10-generate() {
     x10-import ./host-xgcc.sh

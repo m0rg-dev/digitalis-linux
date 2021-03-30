@@ -2,7 +2,7 @@ source ../lib.sh
 
 export PACKAGE=host-xbinutils
 export VERSION=2.36
-export INHERIT_ENVIRONMENT=1
+INHERIT_ENVIRONMENT=1
 X10_PERMIT_EXTERNAL_LIBS=1
 
 x10-generate() {

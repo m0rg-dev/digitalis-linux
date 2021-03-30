@@ -42,12 +42,15 @@ elif [ "$1" = "_get_srcs" ]; then
     fi
     cat /tmp/x10_cache/srcs-$(basename $X10_SRC)
 elif [ "$1" = "_recurse_srcs" ]; then
-    export X10_ALREADY_IMPORTED="$X10_SRC $X10_ALREADY_IMPORTED"
-    for depend_src in $($X10 $X10_SRC _get_srcs); do
-        if [[ ! $X10_ALREADY_IMPORTED == *"$depend_src"* ]]; then
-            echo "${depend_src}"
-            export X10_ALREADY_IMPORTED="$depend_src $X10_ALREADY_IMPORTED"
-            $X10 $depend_src _recurse_srcs
-        fi
-    done | sort -u
+    if [ ! -e /tmp/x10_cache/allsrcs-$(basename $X10_SRC) ]; then
+        export X10_ALREADY_IMPORTED="$X10_SRC $X10_ALREADY_IMPORTED"
+        for depend_src in $($X10 $X10_SRC _get_srcs); do
+            if [[ ! $X10_ALREADY_IMPORTED == *"$depend_src"* ]]; then
+                echo "${depend_src}"
+                export X10_ALREADY_IMPORTED="$depend_src $X10_ALREADY_IMPORTED"
+                $X10 $depend_src _recurse_srcs
+            fi
+        done | sort -u > /tmp/x10_cache/allsrcs-$(basename $X10_SRC)
+    fi
+    cat /tmp/x10_cache/allsrcs-$(basename $X10_SRC)
 fi

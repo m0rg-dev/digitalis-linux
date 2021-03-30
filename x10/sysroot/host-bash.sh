@@ -1,8 +1,8 @@
 source ../lib.sh
 
-export PACKAGE=host-bash
-export VERSION=5.1
-export INHERIT_ENVIRONMENT=1
+PACKAGE=host-bash
+VERSION=5.1
+INHERIT_ENVIRONMENT=1
 
 x10-generate() {
     x10-import ./host-xgcc.sh

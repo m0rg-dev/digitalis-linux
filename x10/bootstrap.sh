@@ -174,7 +174,7 @@ build-stage1() {
 }
 
 build() {
-    export INHERIT_ENVIRONMENT=1
+    INHERIT_ENVIRONMENT=1
     # stage 1: build host tools - no regard for known inputs at this part
 
     # glibc gets its own subdirectory because of reasons (screws with xz)
@@ -191,7 +191,7 @@ build() {
 
     # stage 2: build the actual bootstrap environment. this should be reproducible.
     export PACKAGE=bootstrap
-    export INHERIT_ENVIRONMENT=
+    INHERIT_ENVIRONMENT=
 
     setup
     x10-import $(x10-pkgid bootstrap-stage1)

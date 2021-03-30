@@ -2,7 +2,7 @@ source ../lib.sh
 
 export PACKAGE=host-bison
 export VERSION=3.7.4
-export INHERIT_ENVIRONMENT=1
+INHERIT_ENVIRONMENT=1
 
 x10-generate() {
     x10-import ./host-xgcc.sh

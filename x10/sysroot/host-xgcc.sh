@@ -2,7 +2,7 @@ source ../lib.sh
 
 export PACKAGE=host-xgcc
 export VERSION=10.2.0
-export INHERIT_ENVIRONMENT=1
+INHERIT_ENVIRONMENT=1
 X10_PERMIT_EXTERNAL_LIBS=1
 
 MPC=1.2.1

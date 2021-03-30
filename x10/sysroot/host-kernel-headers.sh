@@ -2,7 +2,7 @@ source ../lib.sh
 
 export PACKAGE=host-kernel-headers
 export VERSION=5.11.7
-export INHERIT_ENVIRONMENT=1
+INHERIT_ENVIRONMENT=1
 
 x10-generate() {
     fetch-source "linux-${VERSION}" "49b5f12c47e151c98e8dc11a22436940d2d4bf8f5b698ce54d685a24cd3ea8b1" \

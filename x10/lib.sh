@@ -283,6 +283,12 @@ _x10_use_any() {
 }
 
 _generate() {
+    # sanity check....
+    if export -p | grep -q INHERIT_ENVIRONMENT; then
+        echo "$PACKAGE just leaked \$INHERIT_ENVIRONMENT, stopping you from having a bad time" >&2
+        exit 1
+    fi
+
     echo -e "# This script generates $PACKAGE-$VERSION.\n"
     echo -e "set -e\n"
     _copy_definition _x10_use_any
