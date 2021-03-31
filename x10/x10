@@ -28,13 +28,11 @@ elif [ "$1" = "build" ]; then
     $X10 $X10_SRC generate
     sh /x10/buildscripts/$($X10 $X10_SRC hash).sh
 elif [ "$1" = "hash" ]; then
-    if [ -e /tmp/x10_cache/hash-$(basename $X10_SRC) ]; then
-        cat /tmp/x10_cache/hash-$(basename $X10_SRC)
-    else
+    if [ ! -e /tmp/x10_cache/hash-$(basename $X10_SRC) ]; then
         echo "  => cache miss: hash $(basename $X10_SRC)" >&2
-        echo $(bash -ec "source $X10_SRC; X10_CURRENT_SRC=$X10_SRC _generate | tee /tmp/$(basename $X10_SRC) | sha256sum | head -c7")-$(bash -ec 'source $X10_SRC; echo $PACKAGE-$VERSION') >/tmp/x10_cache/hash-$(basename $X10_SRC)
-        cat /tmp/x10_cache/hash-$(basename $X10_SRC)
+        echo $(bash -ec "source $X10_SRC; X10_CURRENT_SRC=$X10_SRC _generate | sha256sum | head -c7")-$(bash -ec 'source $X10_SRC; echo $PACKAGE-$VERSION') >/tmp/x10_cache/hash-$(basename $X10_SRC)
     fi
+    cat /tmp/x10_cache/hash-$(basename $X10_SRC)
 elif [ "$1" = "_get_srcs" ]; then
     if [ ! -e /tmp/x10_cache/srcs-$(basename $X10_SRC) ]; then
         echo "  => cache miss: srcs $(basename $X10_SRC)" >&2
@@ -53,4 +51,19 @@ elif [ "$1" = "_recurse_srcs" ]; then
         done | sort -u > /tmp/x10_cache/allsrcs-$(basename $X10_SRC)
     fi
     cat /tmp/x10_cache/allsrcs-$(basename $X10_SRC)
+elif [ "$1" = "package" ]; then
+    mkdir -p $(dirname $X10)/builtpkgs
+    $X10 $X10_SRC generate
+    if [ ! -e /x10/tree/$($X10 $X10_SRC hash) ]; then
+        $X10 $X10_SRC build
+    fi
+    
+    for src in "$X10_SRC" $($X10 $X10_SRC _recurse_srcs | sort -u); do
+        src_hash=$($X10 $src hash)
+        bash -ec "source $src; X10_CURRENT_SRC=$src _generate" >/x10/buildscripts/${src_hash}.sh
+        echo /x10/buildscripts/${src_hash}.sh
+    done | xargs tar --sort=name --mtime="@0" --owner=0 --group=0 --numeric-owner --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
+        -czf $(dirname $X10)/builtpkgs/$($X10 $X10_SRC hash).scripts.tar.gz
+    tar --sort=name --mtime="@0" --owner=0 --group=0 --numeric-owner --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
+        -czf $(dirname $X10)/builtpkgs/$($X10 $X10_SRC hash).tar.gz /x10/tree/$($X10 $X10_SRC hash)
 fi

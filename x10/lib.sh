@@ -69,7 +69,6 @@ unpack-source() {
 
 setup-build-dirs() {
     build-command rm -rf "/x10/build/\$X10_PKGID"
-    build-command rm -rf "/x10/tree/\$X10_PKGID"
     build-command mkdir -pv "/x10/build/\$X10_PKGID"
     build-command cd "/x10/build/\$X10_PKGID"
                   unpack-source ${SOURCES[$1]}
@@ -163,18 +162,28 @@ x10-tree() {
     echo "/x10/tree/\$X10_PKGID"
 }
 
+_x10_hash_usecache() {
+    if [ -e /tmp/x10_cache/hash-$(basename $1) ]; then
+        cat /tmp/x10_cache/hash-$(basename $1)
+    else
+        $X10 $1 hash
+    fi
+}
+
 x10-import() {
     _copy_definition _deduplicate_search_path
     _copy_definition _import_recurse
-    _defer _do_import $($X10 $(realpath $1) hash)
+    local HASH=$(_x10_hash_usecache $(realpath $1))
+    _defer _do_import $HASH
     X10_IMPORTED="$(realpath $1) $X10_IMPORTED"
-    build-command "# MAGIC-COMMENT import:$($X10 $1 hash)"
+    build-command "# MAGIC-COMMENT import:$HASH"
 }
 
 # for explicit runtime deps
 x10-import-always() {
+    local HASH=$(_x10_hash_usecache $(realpath $1))
     x10-import "$1"
-    build-command echo "$1" '>' $(x10-tree)/import-keep
+    build-command echo "$HASH" '>>' $(x10-tree)/import-keep
 }
 
 _deduplicate_search_path() {
@@ -289,6 +298,8 @@ _generate() {
         exit 1
     fi
 
+    echo "=> generate $PACKAGE" >&2
+
     echo -e "# This script generates $PACKAGE-$VERSION.\n"
     echo -e "set -e\n"
     _copy_definition _x10_use_any
@@ -300,6 +311,7 @@ _generate() {
         build-command source /tmp/x10_env
     fi
     echo -e "export X10_PKGID=\$(_x10_use_any sha256sum \$BASH_SOURCE | _x10_use_any head -c7)-$PACKAGE-$VERSION"
+    build-command _x10_use_any rm -rf "/x10/tree/\$X10_PKGID"
     build-command _x10_use_any touch /tmp/x10-import-\$X10_PKGID
     build-command unset X10_IMPORT_KEEP
     build-command unset X10_IMPORTED

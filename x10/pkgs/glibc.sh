@@ -5,7 +5,7 @@ export VERSION=2.33
 
 x10-generate() {
     x10-import ../sysroot/crossbuilt-sysroot.sh
-    x10-import ../sysroot/host-kernel-headers.sh
+    x10-import-always ./kernel-headers.sh
 
     fetch-source "glibc-${VERSION}" "2e2556000e105dbd57f0b6b2a32ff2cf173bde4f0d85dffccfd8b7e51a0677ff" \
         "https://ftpmirror.gnu.org/gnu/glibc/glibc-${VERSION}.tar.xz" \
