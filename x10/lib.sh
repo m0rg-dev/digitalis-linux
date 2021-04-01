@@ -123,6 +123,7 @@ _set_compiler_flags() {
     export CXXFLAGS="@$OPTFLAGS_FILE"
 }
 
+# TODO fix instances where this was called as build-autoconf "sourceid"
 build-autoconf() {
     if [ -n "$PATCH_CMD" ]; then
         build-command "$PATCH_CMD"
@@ -131,7 +132,9 @@ build-autoconf() {
     build-command mkdir -pv build
     build-command cd build
 
-    _defer _set_compiler_flags
+    if [ -z "$USED_COMPILER_WRAPPER" ]; then
+        _defer _set_compiler_flags
+    fi
 
     build-command ${CONFIGURE:-../configure} --prefix=$(x10-tree) --libdir=$(x10-tree)/lib "$CONFIGURE_FLAGS" "$@"
     build-command make V=1 ${MAKE_JOBS:--j'$(nproc)'}
@@ -142,7 +145,7 @@ build-autoconf() {
     fi
 }
 
-# TODO these could be the same thing
+# TODO deprecated
 use-libtool-gcc-wrapper() {
     _defer _set_compiler_flags
     build-command echo -e '"#!/bin/sh\n$X10_TARGET-gcc "$LDFLAGS" \"\$@\""' '>' gccwrap
@@ -156,6 +159,22 @@ use-libtool-gcc-wrapper() {
 use-libtool-g++-wrapper() {
     # TODO "emit-warning"
     true;
+}
+
+use-compiler-wrapper() {
+    _defer _set_compiler_flags
+    build-command echo -e '"#!/bin/sh\n$X10_TARGET-gcc "$CFLAGS" "$LDFLAGS" \"\$@\""' '>' gccwrap
+    build-command chmod +x gccwrap
+    build-command export CC='$(realpath gccwrap)'
+    build-command echo -e '"#!/bin/sh\n$X10_TARGET-g++ "$CXXFLAGS" "$LDFLAGS" \"\$@\""' '>' g++wrap
+    build-command chmod +x g++wrap
+    build-command export CXX='$(realpath g++wrap)'
+
+    build-command unset CFLAGS
+    build-command unset CXXFLAGS
+    build-command unset LDFLAGS
+
+    USED_COMPILER_WRAPPER=1
 }
 
 x10-tree() {
@@ -204,7 +223,7 @@ _import_recurse() {
 }
 
 _do_import() {
-    if [ ! -e /x10/tree/$1 ]; then
+    if [ ! -e /x10/tree/$1/file-list ]; then
         if [ -e /x10/buildscripts/$1.sh ]; then
             _x10_use_any sh -$- /x10/buildscripts/$1.sh
         else

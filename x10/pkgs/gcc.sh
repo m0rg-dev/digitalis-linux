@@ -5,8 +5,8 @@ export VERSION=10.2.0
 
 x10-generate() {
     x10-import-always ./binutils.sh
+    x10-import-always ./glibc.sh
     x10-import ../sysroot/crossbuilt-sysroot.sh
-    x10-import ./glibc.sh
     x10-import ./gmp.sh
     x10-import ./mpfr.sh
     x10-import ./mpc.sh
@@ -20,6 +20,7 @@ x10-generate() {
 
     build-command sed -e '/m64=/s/lib64/lib/' -i.orig gcc/config/i386/t-linux64
     build-command export OPTFLAGS="-B\$(dirname \$X10_DYNAMIC_LINKER | sed -e 's/lib64/lib/')"
-    build-autoconf --with-system-zlib --enable-languages=c,c++ --disable-multilib --disable-bootstrap --without-zstd --disable-libstdcxx-pch
+    build-command export TARGET_CONFIGARGS=ac_has_fenv_h=no
+    build-autoconf --with-system-zlib --enable-languages=c,c++ --disable-multilib --disable-bootstrap --without-zstd target_configargs='"ac_has_fenv_h=no ac_cv_header_fenv_h=no GLIBCXX_LIBS=-lc_nonshared"'
     build-command ln -svf gcc $(x10-tree)/bin/cc
 }
