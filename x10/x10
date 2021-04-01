@@ -15,7 +15,7 @@ export X10=$(realpath $0)
 export X10_SRC=$(realpath $1)
 shift
 
-echo "$1 $X10_SRC" >&2
+# echo "$1 $X10_SRC" >&2
 
 cd $(dirname $X10_SRC)
 if [ "$1" = "generate" ]; then
@@ -51,6 +51,14 @@ elif [ "$1" = "_recurse_srcs" ]; then
         done | sort -u > /tmp/x10_cache/allsrcs-$(basename $X10_SRC)
     fi
     cat /tmp/x10_cache/allsrcs-$(basename $X10_SRC)
+elif [ "$1" = "_source_date_epoch" ]; then
+    if [ -n "$(git log -1 --pretty=%ct $X10_SRC)" ] && git diff --exit-code "$X10_SRC" >/dev/null; then
+        # git version is latest so its timestamp is OK
+        echo $(git log -1 --pretty=%ct $X10_SRC)
+    else
+        # file either hasn't been committed or has been modified locally, use its modification time
+        echo $(stat -c%Y $X10_SRC)
+    fi
 elif [ "$1" = "package" ]; then
     mkdir -p $(dirname $X10)/builtpkgs
     $X10 $X10_SRC generate
@@ -62,8 +70,9 @@ elif [ "$1" = "package" ]; then
         src_hash=$($X10 $src hash)
         bash -ec "source $src; X10_CURRENT_SRC=$src _generate" >/x10/buildscripts/${src_hash}.sh
         echo /x10/buildscripts/${src_hash}.sh
-    done | xargs tar --sort=name --mtime="@0" --owner=0 --group=0 --numeric-owner --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
+    done | xargs tar --sort=name --mtime="@$($X10 $X10_SRC _source_date_epoch)" --owner=0 --group=0 --numeric-owner --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
         -czf $(dirname $X10)/builtpkgs/$($X10 $X10_SRC hash).scripts.tar.gz
-    tar --sort=name --mtime="@0" --owner=0 --group=0 --numeric-owner --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
+    tar --sort=name --mtime="@$($X10 $X10_SRC _source_date_epoch)" --owner=0 --group=0 --numeric-owner --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
         -czf $(dirname $X10)/builtpkgs/$($X10 $X10_SRC hash).tar.gz /x10/tree/$($X10 $X10_SRC hash)
+    echo $(dirname $X10)/builtpkgs/$($X10 $X10_SRC hash){,.scripts}.tar.gz
 fi

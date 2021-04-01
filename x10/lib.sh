@@ -324,13 +324,7 @@ _generate() {
     # some reproducible-builds housekeeping.
     build-command export LC_ALL=C
     build-command export TZ=UTC
-    if [ -n "$(git log -1 --pretty=%ct $X10_CURRENT_SRC)" ] && git diff --exit-code "$X10_CURRENT_SRC" >/dev/null; then
-        # git version is latest so its timestamp is OK
-        build-command export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct $X10_CURRENT_SRC)
-    else
-        # file either hasn't been committed or has been modified locally, use its modification time
-        build-command export SOURCE_DATE_EPOCH=$(stat -c%Y $X10_CURRENT_SRC)
-    fi
+    build-command export SOURCE_DATE_EPOCH=$($X10 $X10_CURRENT_SRC _source_date_epoch)
     echo ""
 
     build-command _x10_use_any mkdir -p $(x10-tree)
