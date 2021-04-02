@@ -4,7 +4,7 @@ export PACKAGE=gmp
 export VERSION=6.2.1
 
 x10-generate() {
-    x10-import ../sysroot/crossbuilt-sysroot.sh
+    x10-import .//crossbuilt-sysroot.sh
     x10-import ./glibc.sh
 
     fetch-source "gmp-${VERSION}" "fd4829912cddd12f84181c3451cc752be224643e87fac497b69edddadc49b4f2" \

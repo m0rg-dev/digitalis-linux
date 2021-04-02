@@ -4,7 +4,7 @@ export PACKAGE=mpc
 export VERSION=1.2.1
 
 x10-generate() {
-    x10-import ../sysroot/crossbuilt-sysroot.sh
+    x10-import .//crossbuilt-sysroot.sh
     x10-import ./glibc.sh
     x10-import ./gmp.sh
     x10-import ./mpfr.sh

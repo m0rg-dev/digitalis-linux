@@ -310,6 +310,12 @@ _x10_use_any() {
     fi
 }
 
+_set_timestamps() {
+    for f in $(_x10_use_any find /x10/tree/$X10_PKGID); do
+        _x10_use_any touch -d @$SOURCE_DATE_EPOCH $f
+    done
+}
+
 _generate() {
     # sanity check....
     if export -p | grep -q INHERIT_ENVIRONMENT; then
@@ -355,6 +361,8 @@ _generate() {
     build-command _x10_use_any touch $(x10-tree)/import-keep
     _defer _import_filter $(x10-tree) '|' sort -u '>' $(x10-tree)/import-tmp
     build-command _x10_use_any mv $(x10-tree)/import{-tmp,}
+
+    _defer _set_timestamps
 
     build-command _x10_use_any rm -rf /x10/build/\$X10_PKGID
 }

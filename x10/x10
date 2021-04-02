@@ -19,11 +19,14 @@ shift
 
 cd $(dirname $X10_SRC)
 if [ "$1" = "generate" ]; then
-    for src in "$X10_SRC" $($X10 $X10_SRC _recurse_srcs | sort | uniq); do
-        src_hash=$($X10 $src hash)
-        bash -ec "source $src; X10_CURRENT_SRC=$src _generate" >/x10/buildscripts/${src_hash}.sh
-        echo '  => generated:' /x10/buildscripts/${src_hash}.sh
-    done
+    if [ ! -e /x10/buildscripts/$($X10 $X10_SRC hash).sh ]; then
+        for src in $($X10 $X10_SRC _recurse_srcs | sort | uniq) "$X10_SRC"; do
+            src_hash=$($X10 $src hash)
+            bash -ec "source $src; X10_CURRENT_SRC=$src _generate" >/x10/buildscripts/${src_hash}.sh.tmp
+            mv /x10/buildscripts/${src_hash}.sh{.tmp,}
+            echo '  => generated:' /x10/buildscripts/${src_hash}.sh
+        done
+    fi
 elif [ "$1" = "build" ]; then
     $X10 $X10_SRC generate
     sh /x10/buildscripts/$($X10 $X10_SRC hash).sh
@@ -59,22 +62,33 @@ elif [ "$1" = "_source_date_epoch" ]; then
         # file either hasn't been committed or has been modified locally, use its modification time
         echo $(stat -c%Y $X10_SRC)
     fi
-elif [ "$1" = "package" ]; then
+elif [ "$1" = "_int_package" ]; then
     mkdir -p $(dirname $X10)/builtpkgs
     $X10 $X10_SRC generate
     if [ ! -e /x10/tree/$($X10 $X10_SRC hash) ]; then
         $X10 $X10_SRC build
     fi
-    
+
     for src in "$X10_SRC" $($X10 $X10_SRC _recurse_srcs | sort -u); do
         src_hash=$($X10 $src hash)
         bash -ec "source $src; X10_CURRENT_SRC=$src _generate" >/x10/buildscripts/${src_hash}.sh
         echo /x10/buildscripts/${src_hash}.sh
     done | xargs tar --sort=name --mtime="@$($X10 $X10_SRC _source_date_epoch)" --owner=0 --group=0 --numeric-owner --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
-        -czf $(dirname $X10)/builtpkgs/$($X10 $X10_SRC hash).scripts.tar.gz
+        -czf $(dirname $X10)/builtpkgs/$($X10 $X10_SRC hash).scripts.tar.gz.tmp
     tar --sort=name --mtime="@$($X10 $X10_SRC _source_date_epoch)" --owner=0 --group=0 --numeric-owner --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
-        -czf $(dirname $X10)/builtpkgs/$($X10 $X10_SRC hash).tar.gz /x10/tree/$($X10 $X10_SRC hash)
+        -czf $(dirname $X10)/builtpkgs/$($X10 $X10_SRC hash).tar.gz.tmp /x10/tree/$($X10 $X10_SRC hash)
+    mv $(dirname $X10)/builtpkgs/$($X10 $X10_SRC hash).scripts.tar.gz{.tmp,}
+    mv $(dirname $X10)/builtpkgs/$($X10 $X10_SRC hash).tar.gz{.tmp,}
     echo $(dirname $X10)/builtpkgs/$($X10 $X10_SRC hash){,.scripts}.tar.gz
+elif [ "$1" = "package" ]; then
+    for src in $X10_SRC $($X10 $X10_SRC _recurse_srcs | sort -u); do
+        if [ ! -e $(dirname $X10)/builtpkgs/$($X10 $src hash).tar.gz ]; then
+            $X10 $src _int_package
+        fi
+    done
 elif [ "$1" = "get_path" ]; then
     bash -ec "unset PATH; source $(dirname $X10)/lib.sh; _do_import $($X10 $X10_SRC hash); echo PATH=\"\$PATH\""
+elif [ "$1" = "latest" ]; then
+    # find the file-list with the newest timestamp (because it should always be equal to SOURCE_DATE_EPOCH)
+    ls -rt /x10/tree/*/file-list | egrep '[0-9a-f]+-'$(basename $X10_SRC)'-[0-9]([[:alnum:].])+/file-list$' | tail | xargs dirname | xargs basename
 fi

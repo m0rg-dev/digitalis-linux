@@ -5,7 +5,7 @@ VERSION=5.11.7
 INHERIT_ENVIRONMENT=1
 
 x10-generate() {
-    x10-import ../sysroot/crossbuilt-sysroot.sh
+    x10-import .//crossbuilt-sysroot.sh
 
     fetch-source "linux-${VERSION}" "49b5f12c47e151c98e8dc11a22436940d2d4bf8f5b698ce54d685a24cd3ea8b1" \
         "https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-${VERSION}.tar.xz"

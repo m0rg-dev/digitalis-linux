@@ -4,7 +4,7 @@ export PACKAGE=glibc
 export VERSION=2.33
 
 x10-generate() {
-    x10-import ../sysroot/crossbuilt-sysroot.sh
+    x10-import .//crossbuilt-sysroot.sh
     x10-import-always ./kernel-headers.sh
 
     fetch-source "glibc-${VERSION}" "2e2556000e105dbd57f0b6b2a32ff2cf173bde4f0d85dffccfd8b7e51a0677ff" \
@@ -19,8 +19,8 @@ x10-generate() {
     build-command export CXX='$(realpath g++wrap)'
     
     build-autoconf --enable-kernel=5.0 --without-selinux --enable-stack-protector=strong \
-        --with-headers=/x10/tree/$($X10 ../sysroot/host-kernel-headers.sh hash)/include libc_cv_slibdir=$(x10-tree)/lib
+        --with-headers=/x10/tree/$($X10 .//host-kernel-headers.sh hash)/include libc_cv_slibdir=$(x10-tree)/lib
     build-command patchelf --force-rpath --remove-rpath $(x10-tree)/lib/ld-${VERSION}.so
     build-command mkdir -pv $(x10-tree)/lib64/
-    build-command ln -sfv $(x10-tree)/lib/ld-linux-x86-64.so.2 $(x10-tree)/lib64/
+    build-command ln -sfrv $(x10-tree)/lib/ld-linux-x86-64.so.2 $(x10-tree)/lib64/
 }

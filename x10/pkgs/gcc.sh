@@ -6,7 +6,7 @@ export VERSION=10.2.0
 x10-generate() {
     x10-import-always ./binutils.sh
     x10-import-always ./glibc.sh
-    x10-import ../sysroot/crossbuilt-sysroot.sh
+    x10-import .//crossbuilt-sysroot.sh
     x10-import ./gmp.sh
     x10-import ./mpfr.sh
     x10-import ./mpc.sh

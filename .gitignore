@@ -19,3 +19,4 @@ rpmbuild/SOURCES/protocol-numbers.xml
 rpmbuild/SOURCES/service-names-port-numbers.xml
 
 x10/builtpkgs
+x10/sysroot
