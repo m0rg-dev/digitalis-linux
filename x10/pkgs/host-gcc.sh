@@ -3,6 +3,7 @@ source ../lib.sh
 export PACKAGE=host-gcc
 export VERSION=10.2.0
 INHERIT_ENVIRONMENT=1
+X10_PERMIT_EXTERNAL_INTERP=1
 
 MPC=1.2.1
 MPFR=4.1.0

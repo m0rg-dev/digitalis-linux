@@ -3,6 +3,7 @@ source ../lib.sh
 PACKAGE=host-bash
 VERSION=5.1
 INHERIT_ENVIRONMENT=1
+X10_PERMIT_EXTERNAL_INTERP=1
 
 x10-generate() {
     x10-import ./host-xgcc.sh
@@ -16,4 +17,6 @@ x10-generate() {
     # that's right, it's a race condition!
     MAKE_JOBS=-j1 build-autoconf "bash-${VERSION}" --host=$X10_TARGET --build='$(../support/config.guess)' --without-bash-malloc
     build-command ln -svf bash $(x10-tree)/bin/sh
+
+    fix-shebangs \$X10_PKGID
 }

@@ -170,9 +170,11 @@ use-compiler-wrapper() {
     build-command chmod +x g++wrap
     build-command export CXX='$(realpath g++wrap)'
 
-    build-command unset CFLAGS
-    build-command unset CXXFLAGS
-    build-command unset LDFLAGS
+    if [ -z "$KEEP_FLAGS" ]; then
+        build-command unset CFLAGS
+        build-command unset CXXFLAGS
+        build-command unset LDFLAGS
+    fi
 
     USED_COMPILER_WRAPPER=1
 }
@@ -203,6 +205,10 @@ x10-import-always() {
     local HASH=$(_x10_hash_usecache $(realpath $1))
     x10-import "$1"
     build-command echo "$HASH" '>>' $(x10-tree)/import-keep
+}
+
+x10-hash-of() {
+    _x10_hash_usecache $(realpath $1)
 }
 
 _deduplicate_search_path() {
@@ -256,6 +262,25 @@ _do_import() {
     echo "PATH is now $PATH."
 }
 
+fix-shebangs() {
+    _defer _fix_shebangs $(x10-tree) $1
+}
+
+_fix_shebangs() {
+    local TREE=$1; shift
+    local SRCPKG=$1; shift
+    local PATH=$(bash -ce 'source /tmp/x10_env; echo $PATH')
+    find $TREE -type f | file -Nf - >$TREE/file-list
+    for script in $(grep 'ASCII text executable' $TREE/file-list | cut -d: -f1); do
+        head -n1 $script | grep -q '^#!' || continue
+        local ORIG_INTERP=$(head -n1 $script | sed -e 's/#![[:space:]]*\([^[:space:]]*\).*$/\1/')
+        if [ -e /x10/tree/$SRCPKG/$ORIG_INTERP ]; then
+            echo "$script: $ORIG_INTERP => /x10/tree/$SRCPKG/$ORIG_INTERP" >&2
+            sed -e "1s@$ORIG_INTERP@/x10/tree/$SRCPKG/$ORIG_INTERP@" -i $script
+        fi
+    done
+}
+
 _import_filter() {
     TREE=$1
     shift
@@ -271,6 +296,7 @@ _import_filter() {
 
     #### search for shared libraries
     for so in $(grep 'ELF 64-bit LSB \(executable\|shared object\), x86-64, version 1 (SYSV), dynamically linked' $TREE/file-list | cut -d: -f1); do
+        ldd $so | grep -q 'statically linked' && continue
         local PKG=$(ldd $so | grep -v -e 'linux-vdso.so.1' -e 'ld-linux-x86-64' | cut -d'>' -f2 | cut -d' ' -f2 | grep -o '/x10/tree/[^/]*' | xargs -rL1 basename | sort -u)
         if [ -n "$PKG" ]; then
             echo "  => Keeping: $PKG (shlib $so)" >&2
@@ -283,7 +309,23 @@ _import_filter() {
         fi
     done
 
-    [ -z "$IMPORT_FILTER_HAD_ERRORS" ]
+    #### search for shebangs
+    for script in $(grep 'ASCII text executable' $TREE/file-list | cut -d: -f1); do
+        head -n1 $script | grep -q '^#!' || continue
+        head -n1 $script | grep -q '/usr/bin/env' && continue
+        local PKG=$(head -n1 $script | sed -e 's/#![[:space:]]*\([^[:space:]]*\).*$/\1/' | grep -o '/x10/tree/[^/]*' | xargs -rL1 basename)
+        if [ -n "$PKG" ]; then
+            echo "  => Keeping: $PKG (shebang $script)" >&2
+            echo "$PKG" >>$TREE/import-keep
+        else
+            if [ -z "$X10_PERMIT_EXTERNAL_INTERP" ]; then
+                echo "$script references an interpreter outside of /x10!" >&2
+                IMPORT_FILTER_HAD_ERRORS=1
+            fi
+        fi
+    done
+
+    test -z "$IMPORT_FILTER_HAD_ERRORS"
 
     for import in $(sort -u $TREE/import); do
         if grep -F "$import" $TREE/import-keep; then
@@ -296,7 +338,7 @@ _bailout() {
     if [[ "$-" == *"e"* ]]; then
         echo "Something bad happened. Dropping you to a shell..."
         _x10_use_any bash
-        false
+        exit 1
     fi
 }
 
@@ -326,7 +368,7 @@ _generate() {
     echo "=> generate $PACKAGE" >&2
 
     echo -e "# This script generates $PACKAGE-$VERSION.\n"
-    echo -e "set -e\n"
+    echo -e "set -e\nset -o pipefail\n"
     _copy_definition _x10_use_any
     if [[ -z $INHERIT_ENVIRONMENT ]]; then
         build-command '[ "$(_x10_use_any env | _x10_use_any sed -r -e '\''/^(PWD|SHLVL|_)=/d'\'')" ] && exec -c /bin/sh -$- $0'
@@ -344,6 +386,7 @@ _generate() {
     export X10_TARGET=x86_64-x10-linux-gnu
     build-command export X10_TARGET=x86_64-x10-linux-gnu
     build-command export X10_PERMIT_EXTERNAL_LIBS="$X10_PERMIT_EXTERNAL_LIBS"
+    build-command export X10_PERMIT_EXTERNAL_INTERP="$X10_PERMIT_EXTERNAL_INTERP"
     _copy_definition _bailout
     build-command trap '_bailout' ERR
     # some reproducible-builds housekeeping.

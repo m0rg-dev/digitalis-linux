@@ -4,7 +4,7 @@ export PACKAGE=glibc
 export VERSION=2.33
 
 x10-generate() {
-    x10-import .//crossbuilt-sysroot.sh
+    x10-import ./crossbuilt-sysroot.sh
     x10-import-always ./kernel-headers.sh
 
     fetch-source "glibc-${VERSION}" "2e2556000e105dbd57f0b6b2a32ff2cf173bde4f0d85dffccfd8b7e51a0677ff" \
@@ -23,4 +23,6 @@ x10-generate() {
     build-command patchelf --force-rpath --remove-rpath $(x10-tree)/lib/ld-${VERSION}.so
     build-command mkdir -pv $(x10-tree)/lib64/
     build-command ln -sfrv $(x10-tree)/lib/ld-linux-x86-64.so.2 $(x10-tree)/lib64/
+
+    build-command rm -r $(x10-tree)/bin
 }

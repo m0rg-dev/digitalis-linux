@@ -20,6 +20,7 @@ mkdir -p sysroot/{bin,lib64}
 
 for pkg in $(recurse_imports $TOP_PKG | sort -u); do
     tar xf builtpkgs/$pkg.tar.gz -C sysroot
+    tar xf builtpkgs/$pkg.scripts.tar.gz -C sysroot
     if [ -e sysroot/x10/tree/$pkg/bin ]; then
         for f in $(ls sysroot/x10/tree/$pkg/bin); do
             ln -svr sysroot/x10/tree/$pkg/bin/$f sysroot/bin/$f

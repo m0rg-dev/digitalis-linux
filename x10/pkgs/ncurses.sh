@@ -17,4 +17,6 @@ x10-generate() {
     build-autoconf --with-manpage-format=normal --with-shared \
         --without-debug --without-ada --without-normal --enable-widec
     build-command echo 'INPUT\(-lncursesw\)' '>' $(x10-tree)/lib/libncurses.so
+
+    build-command 'sed -e 1s@/bin/sh@/usr/bin/env\ sh@ -i' $(x10-tree)/bin/ncursesw6-config
 }

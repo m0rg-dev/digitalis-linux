@@ -3,6 +3,7 @@ source ../lib.sh
 export PACKAGE=host-findutils
 export VERSION=4.7.0
 INHERIT_ENVIRONMENT=1
+X10_PERMIT_EXTERNAL_INTERP=1
 
 x10-generate() {
     x10-import ./host-xgcc.sh

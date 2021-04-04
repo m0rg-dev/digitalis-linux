@@ -17,4 +17,6 @@ x10-generate() {
     # that's right, it's a race condition!
     MAKE_JOBS=-j1 build-autoconf --without-bash-malloc --with-curses
     build-command ln -svf bash $(x10-tree)/bin/sh
+
+    fix-shebangs \$X10_PKGID
 }
