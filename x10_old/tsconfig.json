@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "jsx": "react",
+        "inlineSourceMap": true,
+        "target": "esnext",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "downlevelIteration": true,
+        "lib": ["ES2019"],
+        "esModuleInterop": true,
+        "incremental": true,
+        "tsBuildInfoFile": ".tsbuildinfo",
+    },
+    "exclude": ["pkgs/"]
+}

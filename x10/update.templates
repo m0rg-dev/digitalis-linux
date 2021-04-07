@@ -1,7 +1,0 @@
-# X10-Update-Spec: { "type": "git-tags", 
-# X10-Update-Spec:   "repo": "https://github.com/foo/bar.git", 
-# X10-Update-Spec:   "pattern": "^v((?:\\d+\\.?)+)$" }
-
-# X10-Update-Spec: { "type": "webscrape", "url": "https://ftp.gnu.org/gnu/foo/"}
-
-# X10-Update-Spec: { "type": "none" }
