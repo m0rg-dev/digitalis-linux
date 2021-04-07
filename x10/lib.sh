@@ -26,11 +26,11 @@ _defer() {
 }
 
 _fetch_url() {
-    mkdir -pv /x10/downloads/tmp
+    _x10_use_any mkdir -pv /x10/downloads/tmp
     echo " => $2"
-    curl -Lo /x10/downloads/tmp/$1 $2
-    sha256sum /x10/downloads/tmp/$1
-    mv /x10/downloads/tmp/$1 /x10/downloads/$(sha256sum /x10/downloads/tmp/$1 | cut -d ' ' -f 1)-$1
+    _x10_use_any curl -Lo /x10/downloads/tmp/$1 $2
+    _x10_use_any sha256sum /x10/downloads/tmp/$1
+    _x10_use_any mv /x10/downloads/tmp/$1 /x10/downloads/$(sha256sum /x10/downloads/tmp/$1 | cut -d ' ' -f 1)-$1
 }
 
 fetch-source() {
@@ -88,7 +88,7 @@ _set_compiler_flags() {
     fi
 
     OPTFLAGS_FILE=$(realpath optflags.txt)
-    echo "-O2 -pipe" >$OPTFLAGS_FILE
+    echo "-g -O2 -pipe" >$OPTFLAGS_FILE
     HAVE_GLIBC_HEADER=""
     if [ -n "$X10_HEADER_PATH" ]; then
         for dir in $(echo "$X10_HEADER_PATH" | tr ':' ' '); do
@@ -163,10 +163,17 @@ use-libtool-g++-wrapper() {
 
 use-compiler-wrapper() {
     _defer _set_compiler_flags
-    build-command echo -e '"#!/bin/sh\n$X10_TARGET-gcc "$CFLAGS" "$LDFLAGS" \"\$@\""' '>' gccwrap
+    if [ -n "$CROSS" ]; then
+        local CC=$X10_TARGET-gcc
+        local CXX=$X10_TARGET-g++
+    else
+        local CC=gcc
+        local CXX=g++
+    fi
+    build-command echo -e '"#!/bin/sh\n'$CC' "$CFLAGS" "$LDFLAGS" \"\$@\""' '>' gccwrap
     build-command chmod +x gccwrap
     build-command export CC='$(realpath gccwrap)'
-    build-command echo -e '"#!/bin/sh\n$X10_TARGET-g++ "$CXXFLAGS" "$LDFLAGS" \"\$@\""' '>' g++wrap
+    build-command echo -e '"#!/bin/sh\n'$CXX' "$CXXFLAGS" "$LDFLAGS" \"\$@\""' '>' g++wrap
     build-command chmod +x g++wrap
     build-command export CXX='$(realpath g++wrap)'
 
@@ -178,6 +185,32 @@ use-compiler-wrapper() {
 
     USED_COMPILER_WRAPPER=1
 }
+
+use-compiler-wrapper-2() {
+    _defer _set_compiler_flags
+    if [ -n "$CROSS" ]; then
+        local CC=$X10_TARGET-gcc
+        local CXX=$X10_TARGET-g++
+    else
+        local CC=gcc
+        local CXX=g++
+    fi
+    build-command echo -e '"#!/bin/sh\n'$CC' \"\$@\" "$CFLAGS" "$LDFLAGS""' '>' gccwrap
+    build-command chmod +x gccwrap
+    build-command export CC='$(realpath gccwrap)'
+    build-command echo -e '"#!/bin/sh\n'$CXX' \"\$@\" "$CXXFLAGS" "$LDFLAGS""' '>' g++wrap
+    build-command chmod +x g++wrap
+    build-command export CXX='$(realpath g++wrap)'
+
+    if [ -z "$KEEP_FLAGS" ]; then
+        build-command unset CFLAGS
+        build-command unset CXXFLAGS
+        build-command unset LDFLAGS
+    fi
+
+    USED_COMPILER_WRAPPER=1
+}
+
 
 x10-tree() {
     echo "/x10/tree/\$X10_PKGID"
@@ -251,12 +284,17 @@ _do_import() {
         test -e /x10/tree/$dep/include && export X10_HEADER_PATH=/x10/tree/$dep/include:$X10_HEADER_PATH
         test -e /x10/tree/$dep/include/$X10_TARGET && export X10_HEADER_PATH=/x10/tree/$dep/include/$X10_TARGET:$X10_HEADER_PATH
         test -e /x10/tree/$dep/lib64/ld-linux-x86-64.so.2 && export X10_DYNAMIC_LINKER=/x10/tree/$dep/lib64/ld-linux-x86-64.so.2
+        test -e /x10/tree/$dep/share/aclocal && export X10_ACLOCAL_PATH=/x10/tree/$dep/share/aclocal:$X10_ACLOCAL_PATH
+        test -e /x10/tree/$dep/lib/pkgconfig && export X10_PKGCONF_PATH=/x10/tree/$dep/lib/pkgconfig:$X10_PKGCONF_PATH
+        
         set -e
     done
 
     # clean up duplicates
     export X10_LIBRARY_PATH=$(echo "$X10_LIBRARY_PATH" | _deduplicate_search_path)
     export X10_HEADER_PATH=$(echo "$X10_HEADER_PATH" | _deduplicate_search_path)
+    export ACLOCAL_PATH=$(echo "$X10_ACLOCAL_PATH" | _deduplicate_search_path)
+    export PKG_CONFIG_PATH=$(echo "$X10_PKGCONF_PATH" | _deduplicate_search_path)
     export PATH=$(echo "$X10_BINARY_PATH:$PATH" | _deduplicate_search_path)
 
     echo "PATH is now $PATH."
@@ -297,6 +335,11 @@ _import_filter() {
     #### search for shared libraries
     for so in $(grep 'ELF 64-bit LSB \(executable\|shared object\), x86-64, version 1 (SYSV), dynamically linked' $TREE/file-list | cut -d: -f1); do
         ldd $so | grep -q 'statically linked' && continue
+        if ldd $so | grep -q 'not found'; then
+            echo "$so has unresolved libraries!" >&2
+            IMPORT_FILTER_HAD_ERROR=1
+        fi
+
         local PKG=$(ldd $so | grep -v -e 'linux-vdso.so.1' -e 'ld-linux-x86-64' | cut -d'>' -f2 | cut -d' ' -f2 | grep -o '/x10/tree/[^/]*' | xargs -rL1 basename | sort -u)
         if [ -n "$PKG" ]; then
             echo "  => Keeping: $PKG (shlib $so)" >&2

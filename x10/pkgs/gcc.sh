@@ -16,7 +16,7 @@ x10-generate() {
         "https://ftpmirror.gnu.org/gnu/gcc/gcc-${VERSION}/gcc-${VERSION}.tar.xz" \
         "https://ftp.gnu.org/gnu/gcc/gcc-${VERSION}/gcc-${VERSION}.tar.xz"
     setup-build-dirs "gcc-${VERSION}"
-    KEEP_FLAGS=1 use-compiler-wrapper
+    KEEP_FLAGS=1 CROSS=1 use-compiler-wrapper
 
     build-command sed -e '/m64=/s/lib64/lib/' -i.orig gcc/config/i386/t-linux64
     build-command echo "-B\$(dirname \$X10_DYNAMIC_LINKER | sed -e 's/lib64/lib/') \$LDFLAGS" '>' libtool-eats-dash-b

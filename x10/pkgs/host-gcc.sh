@@ -40,7 +40,7 @@ x10-generate() {
     build-command mkdir -pv $X10_TARGET/libgcc
     build-command ln -sv ../../../libgcc/gthr-posix.h $X10_TARGET/libgcc/gthr-default.h
     build-autoconf --host=$X10_TARGET --build='$(../config.guess)' \
-        --enable-initfini-array --disable-nls --disable-multilib --disable-decimal-float --disable-libatomic \
+        --disable-initfini-array --disable-nls --disable-multilib --disable-decimal-float --disable-libatomic \
         --disable-libgomp --disable-libquadmath --disable-libssp --disable-libvtv --disable-libstdcxx \
         --enable-languages=c,c++
     build-command ln -svf gcc $(x10-tree)/bin/cc

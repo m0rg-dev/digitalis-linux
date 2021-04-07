@@ -14,11 +14,20 @@ x10-generate() {
     build-command sed -e "'s/\& \~DF_1_NOW/\& \~(DF_1_NOW | DF_1_NODEFLIB)/'" -i elf/get-dynamic-info.h
 
     # configure doesn't pass CXXFLAGS while trying to find some headers
-    build-command echo -e '"#!/bin/sh\n$X10_TARGET-g++ "'@\$\(realpath -m build/optflags.txt\)'" \"\$@\""' '>' g++wrap
+    _defer _set_compiler_flags
+    build-command echo -e '"#!/bin/sh\necho wrap: $X10_TARGET-gcc @ \"\$@\" @ "'@\$\(realpath -m optflags.txt\)'" @ "$LDFLAGS" >&2\n$X10_TARGET-gcc \"\$@\" "'@\$\(realpath -m optflags.txt\)'" "$LDFLAGS""' '>' gccwrap
+    build-command chmod +x gccwrap
+    build-command export CC='$(realpath gccwrap)'
+
+    build-command echo -e '"#!/bin/sh\n$X10_TARGET-g++ "'@\$\(realpath -m optflags.txt\)'" \"\$@\""' '>' g++wrap
     build-command chmod +x g++wrap
     build-command export CXX='$(realpath g++wrap)'
-    
-    build-autoconf --enable-kernel=5.0 --without-selinux --enable-stack-protector=strong \
+
+    build-command unset CFLAGS
+    build-command unset CXXFLAGS
+    build-command unset LDFLAGS
+
+    USED_COMPILER_WRAPPER=1 build-autoconf --enable-kernel=5.0 --without-selinux --enable-stack-protector=strong \
         --with-headers=/x10/tree/$($X10 .//host-kernel-headers.sh hash)/include libc_cv_slibdir=$(x10-tree)/lib
     build-command patchelf --force-rpath --remove-rpath $(x10-tree)/lib/ld-${VERSION}.so
     build-command mkdir -pv $(x10-tree)/lib64/

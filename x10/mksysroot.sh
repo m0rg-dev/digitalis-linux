@@ -1,12 +1,13 @@
 set -e
+set -o pipefail
 
-
-./x10 pkgs/sysroot.sh package
-TOP_PKG=$(./x10 pkgs/sysroot.sh hash)
+./x10 pkgs/buildroot.sh package
+TOP_PKG=$(./x10 pkgs/buildroot.sh hash)
 
 recurse_imports() {
     local hash=$1; shift
     for import in $(tar xf builtpkgs/$hash.tar.gz -O x10/tree/$hash/import); do
+        echo "$hash => $import" >&2
         recurse_imports $import
     done
     echo $hash

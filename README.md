@@ -1,3 +1,16 @@
+```
+cd x10
+bash mksysroot.sh
+# get a coffee. actually get like 10 coffees because this bootstraps the entire userspace
+# this should work (assuming you have a reasonable set of dev packages installed). if it doesn't
+# please file a GH issue because I would like to know why
+buildah from scratch
+buildah add working-container sysroot /
+buildah run working-container /bin/bash
+```
+
+old content is below this line -----
+
 (package updates are on hold because I need to rebuild my build servers)
 
 An operating system.
