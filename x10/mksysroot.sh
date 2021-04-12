@@ -11,7 +11,7 @@ declare -A already_checked
 recurse_imports() {
     local hash=$1; shift
     if [[ -z ${already_checked[$hash]} ]]; then
-        for import in $(tar xf builtpkgs/$hash.tar.gz -O x10/tree/$hash/import); do
+        for import in $(tar xJf builtpkgs/$hash.tar.xz -O x10/tree/$hash/import); do
             echo "$hash => $import" >&2
             recurse_imports $import
         done
@@ -29,8 +29,8 @@ mkdir -p sysroot
 mkdir -p sysroot/{bin,lib64}
 
 for pkg in $(recurse_imports $TOP_PKG | sort -u); do
-    tar xf builtpkgs/$pkg.tar.gz -C sysroot
-    tar xf builtpkgs/$pkg.scripts.tar.gz -C sysroot
+    tar xJf builtpkgs/$pkg.tar.xz -C sysroot
+    tar xJf builtpkgs/$pkg.scripts.tar.xz -C sysroot
     if [ -e sysroot/x10/tree/$pkg/bin ]; then
         for f in $(ls sysroot/x10/tree/$pkg/bin); do
             ln -sv /x10/tree/$pkg/bin/$f sysroot/bin/$f

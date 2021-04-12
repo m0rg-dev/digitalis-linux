@@ -74,15 +74,15 @@ elif [ "$1" = "_int_package" ]; then
         bash -ec "source $src; X10_CURRENT_SRC=$src _generate" >/x10/buildscripts/${src_hash}.sh
         echo /x10/buildscripts/${src_hash}.sh
     done | xargs tar --sort=name --mtime="@$($X10 $X10_SRC _source_date_epoch)" --owner=0 --group=0 --numeric-owner --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
-        -czf $(dirname $X10)/builtpkgs/$($X10 $X10_SRC hash).scripts.tar.gz.tmp
+        -cJf $(dirname $X10)/builtpkgs/$($X10 $X10_SRC hash).scripts.tar.xz.tmp
     tar --sort=name --mtime="@$($X10 $X10_SRC _source_date_epoch)" --owner=0 --group=0 --numeric-owner --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
-        -czf $(dirname $X10)/builtpkgs/$($X10 $X10_SRC hash).tar.gz.tmp /x10/tree/$($X10 $X10_SRC hash)
-    mv $(dirname $X10)/builtpkgs/$($X10 $X10_SRC hash).scripts.tar.gz{.tmp,}
-    mv $(dirname $X10)/builtpkgs/$($X10 $X10_SRC hash).tar.gz{.tmp,}
-    echo $(dirname $X10)/builtpkgs/$($X10 $X10_SRC hash){,.scripts}.tar.gz
+        -cJf $(dirname $X10)/builtpkgs/$($X10 $X10_SRC hash).tar.xz.tmp /x10/tree/$($X10 $X10_SRC hash)
+    mv $(dirname $X10)/builtpkgs/$($X10 $X10_SRC hash).scripts.tar.xz{.tmp,}
+    mv $(dirname $X10)/builtpkgs/$($X10 $X10_SRC hash).tar.xz{.tmp,}
+    echo $(dirname $X10)/builtpkgs/$($X10 $X10_SRC hash){,.scripts}.tar.xz
 elif [ "$1" = "package" ]; then
     for src in $X10_SRC $($X10 $X10_SRC _recurse_srcs | sort -u); do
-        if [ ! -e $(dirname $X10)/builtpkgs/$($X10 $src hash).tar.gz ]; then
+        if [ ! -e $(dirname $X10)/builtpkgs/$($X10 $src hash).tar.xz ]; then
             $X10 $src _int_package
         fi
     done
