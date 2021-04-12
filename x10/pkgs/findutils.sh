@@ -9,8 +9,8 @@ x10-generate() {
     x10-import ./bash.sh
 
     fetch-source "findutils-${VERSION}" "c5fefbdf9858f7e4feb86f036e1247a54c79fc2d8e4b7064d5aaa1f47dfa789a" \
-        "https://ftpmirror.gnu.org/gnu/findutils/findutils-${VERSION}.tar.gz" \
-        "https://ftp.gnu.org/gnu/findutils/findutils-${VERSION}.tar.gz"
+        "https://ftpmirror.gnu.org/gnu/findutils/findutils-${VERSION}.tar.xz" \
+        "https://ftp.gnu.org/gnu/findutils/findutils-${VERSION}.tar.xz"
     setup-build-dirs "findutils-${VERSION}"
     build-autoconf --without-selinux
 

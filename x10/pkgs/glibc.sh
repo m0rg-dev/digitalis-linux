@@ -29,9 +29,9 @@ x10-generate() {
 
     USED_COMPILER_WRAPPER=1 build-autoconf --enable-kernel=5.0 --without-selinux --enable-stack-protector=strong \
         --with-headers=/x10/tree/$($X10 .//host-kernel-headers.sh hash)/include libc_cv_slibdir=$(x10-tree)/lib
-    build-command patchelf --force-rpath --remove-rpath $(x10-tree)/lib/ld-${VERSION}.so
-    build-command mkdir -pv $(x10-tree)/lib64/
-    build-command ln -sfrv $(x10-tree)/lib/ld-linux-x86-64.so.2 $(x10-tree)/lib64/
+    build-command patchelf --force-rpath --remove-rpath /tmp/$(x10-tree)/lib/ld-${VERSION}.so
+    build-command mkdir -pv /tmp/$(x10-tree)/lib64/
+    build-command ln -sfrv /tmp/$(x10-tree)/lib/ld-linux-x86-64.so.2 /tmp/$(x10-tree)/lib64/
 
-    build-command rm -r $(x10-tree)/bin
+    build-command sed -e '"1c#!/usr/bin/env bash"' -i /tmp/$(x10-tree)/bin/{catchsegv,ldd,sotruss,tzselect,xtrace}
 }

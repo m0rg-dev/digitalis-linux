@@ -17,6 +17,6 @@ x10-generate() {
 
     build-command make headers
     build-command find usr/include -name "'.*'" -delete
-    build-command install -dm755 $(x10-tree)/
-    build-command cp -rv usr/include $(x10-tree)/
+    build-command install -dm755 /tmp/$(x10-tree)/
+    build-command cp -rv usr/include /tmp/$(x10-tree)/
 }

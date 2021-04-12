@@ -16,7 +16,7 @@ x10-generate() {
     use-compiler-wrapper
     # that's right, it's a race condition!
     MAKE_JOBS=-j1 build-autoconf --without-bash-malloc --with-curses
-    build-command ln -svf bash $(x10-tree)/bin/sh
+    build-command ln -svf bash /tmp/$(x10-tree)/bin/sh
 
     fix-shebangs \$X10_PKGID
 }

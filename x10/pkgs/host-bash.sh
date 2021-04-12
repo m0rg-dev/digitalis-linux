@@ -16,7 +16,7 @@ x10-generate() {
     setup-build-dirs "bash-${VERSION}"
     # that's right, it's a race condition!
     MAKE_JOBS=-j1 build-autoconf "bash-${VERSION}" --host=$X10_TARGET --build='$(../support/config.guess)' --without-bash-malloc
-    build-command ln -svf bash $(x10-tree)/bin/sh
+    build-command ln -svf bash /tmp/$(x10-tree)/bin/sh
 
     fix-shebangs \$X10_PKGID
 }

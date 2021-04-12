@@ -7,6 +7,7 @@ x10-generate() {
     x10-import ./sysroot.sh
     x10-import ./gcc.sh
     x10-import ./bash.sh
+    x10-import-always ./m4.sh
 
     fetch-source "bison-${VERSION}" "a3b5813f48a11e540ef26f46e4d288c0c25c7907d9879ae50e430ec49f63c010" \
         "https://ftpmirror.gnu.org/gnu/bison/bison-${VERSION}.tar.xz" \

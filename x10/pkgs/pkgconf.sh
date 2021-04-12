@@ -16,5 +16,5 @@ x10-generate() {
     build-command ./autogen.sh
     use-compiler-wrapper
     build-autoconf --disable-static
-    build-command ln -sv pkgconf $(x10-tree)/bin/pkg-config
+    build-command ln -sv pkgconf /tmp/$(x10-tree)/bin/pkg-config
 }

@@ -1,6 +1,6 @@
 source ../lib.sh
 
-PACKAGE=host-m4
+PACKAGE=m4
 VERSION=1.4.18
 
 x10-generate() {

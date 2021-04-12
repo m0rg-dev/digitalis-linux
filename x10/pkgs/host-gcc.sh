@@ -43,5 +43,5 @@ x10-generate() {
         --disable-initfini-array --disable-nls --disable-multilib --disable-decimal-float --disable-libatomic \
         --disable-libgomp --disable-libquadmath --disable-libssp --disable-libvtv --disable-libstdcxx \
         --enable-languages=c,c++
-    build-command ln -svf gcc $(x10-tree)/bin/cc
+    build-command ln -svf gcc /tmp/$(x10-tree)/bin/cc
 }

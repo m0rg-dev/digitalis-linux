@@ -23,5 +23,5 @@ x10-generate() {
     build-command export TIC_PATH='$(pwd)'/build_tic/progs/tic
     build-autoconf "ncurses-${VERSION}" --host=$X10_TARGET --build='$(../config.guess)' --with-manpage-format=normal --with-shared \
         --without-debug --without-ada --without-normal --enable-widec --target=$TARGET
-    build-command echo 'INPUT\(-lncursesw\)' '>' $(x10-tree)/lib/libncurses.so
+    build-command echo 'INPUT\(-lncursesw\)' '>' /tmp/$(x10-tree)/lib/libncurses.so
 }

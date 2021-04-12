@@ -14,7 +14,7 @@ x10-generate() {
         "https://ftp.gnu.org/gnu/gcc/gcc-${VERSION}/gcc-${VERSION}.tar.xz"
     setup-build-dirs "gcc-${VERSION}"
     use-libtool-gcc-wrapper
-    CONFIGURE=../libstdc++-v3/configure build-autoconf "gcc-${VERSION}" --host=$X10_TARGET --target=$X10_TARGET --build='$(../config.guess)' \
+    CONFIGURE=../libstdc++-v3/configure build-autoconf --host=$X10_TARGET --target=$X10_TARGET --build='$(../config.guess)' \
         --disable-multilib --disable-nls --disable-libstdcxx-pch glibcxx_cv_sys_sdt_h=no
-    build-command mv $(x10-tree)/include/c++/${VERSION}/* $(x10-tree)/include/
+    build-command mv /tmp/$(x10-tree)/include/c++/${VERSION}/* /tmp/$(x10-tree)/include/
 }

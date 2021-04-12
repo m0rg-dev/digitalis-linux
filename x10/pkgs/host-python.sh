@@ -16,5 +16,5 @@ x10-generate() {
     build-autoconf "Python-${VERSION}" --host=$X10_TARGET --build='$(../config.guess)' --disable-ipv6 ac_cv_file__dev_ptmx=yes ac_cv_file__dev_ptc=no
 
     fix-shebangs $(x10-hash-of ./host-bash.sh)
-    build-command sed -i 1s@/usr/local/bin/python@$(x10-tree)/bin/python3@ $(x10-tree)/lib/python$BASEVER/cgi.py
+    build-command sed -i 1s@/usr/local/bin/python@$(x10-tree)/bin/python3@ /tmp/$(x10-tree)/lib/python$BASEVER/cgi.py
 }

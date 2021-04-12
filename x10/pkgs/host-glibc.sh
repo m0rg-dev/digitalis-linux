@@ -17,8 +17,9 @@ x10-generate() {
     setup-build-dirs "glibc-${VERSION}"
     # build-command sed -e "'s/\& \~DF_1_NOW/\& \~(DF_1_NOW | DF_1_NODEFLIB)/'" -i elf/get-dynamic-info.h
     build-command INHIBIT_LOCAL_RPATH=1
+    build-command unset X10_LIBRARY_PATH       # we do not need any of this
     build-autoconf --host=$X10_TARGET --build=\$\(../scripts/config.guess\) --enable-kernel=5.0 \
         --with-headers=/x10/tree/$($X10 ./host-kernel-headers.sh hash)/include libc_cv_slibdir=$(x10-tree)/lib
-    build-command mkdir -pv $(x10-tree)/lib64/
-    build-command ln -sfv $(x10-tree)/lib/ld-linux-x86-64.so.2 $(x10-tree)/lib64/
+    build-command mkdir -pv /tmp/$(x10-tree)/lib64/
+    build-command ln -sfv $(x10-tree)/lib/ld-linux-x86-64.so.2 /tmp/$(x10-tree)/lib64/
 }

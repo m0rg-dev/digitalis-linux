@@ -43,8 +43,8 @@ x10-generate() {
         --disable-libatomic --disable-libgomp --disable-libquadmath --disable-libssp --disable-libvtv --disable-libstdcxx \
         --without-zstd --with-native-system-header-dir=/include --enable-languages=c,c++
     build-command cd ..
-    build-command 'cat gcc/limitx.h gcc/glimits.h gcc/limity.h > `dirname $('$(x10-tree)'/bin/'$X10_TARGET'-gcc -print-libgcc-file-name)`/install-tools/include/limits.h'
+    build-command 'cat gcc/limitx.h gcc/glimits.h gcc/limity.h > `dirname $(/tmp/'$(x10-tree)'/bin/'$X10_TARGET'-gcc -print-libgcc-file-name)`/install-tools/include/limits.h'
     # this probably doesn't work all the time but eh....
-    build-command cp \$\(dirname \$\($(x10-tree)/bin/$X10_TARGET-gcc -print-libgcc-file-name\)\)/install-tools/include/limits.h \$\(dirname \$\($(x10-tree)/bin/$X10_TARGET-gcc -print-libgcc-file-name\)\)/include-fixed/limits.h
-    build-command cp \$\(dirname \$\($(x10-tree)/bin/$X10_TARGET-gcc -print-libgcc-file-name\)\)/install-tools/gsyslimits.h \$\(dirname \$\($(x10-tree)/bin/$X10_TARGET-gcc -print-libgcc-file-name\)\)/include-fixed/syslimits.h
+    build-command cp \$\(dirname \$\(/tmp/$(x10-tree)/bin/$X10_TARGET-gcc -print-libgcc-file-name\)\)/install-tools/include/limits.h \$\(dirname \$\(/tmp/$(x10-tree)/bin/$X10_TARGET-gcc -print-libgcc-file-name\)\)/include-fixed/limits.h
+    build-command cp \$\(dirname \$\(/tmp/$(x10-tree)/bin/$X10_TARGET-gcc -print-libgcc-file-name\)\)/install-tools/gsyslimits.h \$\(dirname \$\(/tmp/$(x10-tree)/bin/$X10_TARGET-gcc -print-libgcc-file-name\)\)/include-fixed/syslimits.h
 }

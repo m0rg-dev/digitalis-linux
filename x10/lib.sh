@@ -138,11 +138,7 @@ build-autoconf() {
 
     build-command ${CONFIGURE:-../configure} --prefix=$(x10-tree) --libdir=$(x10-tree)/lib "$CONFIGURE_FLAGS" "$@"
     build-command make V=1 ${MAKE_JOBS:--j'$(nproc)'}
-    if [ -n "$DESTDIR" ]; then
-        build-command make DESTDIR="$DESTDIR" install
-    else
-        build-command make install
-    fi
+    build-command make DESTDIR="\$DESTDIR" install
 }
 
 # TODO deprecated
@@ -186,34 +182,8 @@ use-compiler-wrapper() {
     USED_COMPILER_WRAPPER=1
 }
 
-use-compiler-wrapper-2() {
-    _defer _set_compiler_flags
-    if [ -n "$CROSS" ]; then
-        local CC=$X10_TARGET-gcc
-        local CXX=$X10_TARGET-g++
-    else
-        local CC=gcc
-        local CXX=g++
-    fi
-    build-command echo -e '"#!/bin/sh\n'$CC' \"\$@\" "$CFLAGS" "$LDFLAGS""' '>' gccwrap
-    build-command chmod +x gccwrap
-    build-command export CC='$(realpath gccwrap)'
-    build-command echo -e '"#!/bin/sh\n'$CXX' \"\$@\" "$CXXFLAGS" "$LDFLAGS""' '>' g++wrap
-    build-command chmod +x g++wrap
-    build-command export CXX='$(realpath g++wrap)'
-
-    if [ -z "$KEEP_FLAGS" ]; then
-        build-command unset CFLAGS
-        build-command unset CXXFLAGS
-        build-command unset LDFLAGS
-    fi
-
-    USED_COMPILER_WRAPPER=1
-}
-
-
 x10-tree() {
-    echo "/x10/tree/\$X10_PKGID"
+    echo "/x10/tree/\${X10_PKGID}"
 }
 
 _x10_hash_usecache() {
@@ -237,7 +207,7 @@ x10-import() {
 x10-import-always() {
     local HASH=$(_x10_hash_usecache $(realpath $1))
     x10-import "$1"
-    build-command echo "$HASH" '>>' $(x10-tree)/import-keep
+    build-command echo "$HASH" '>>' /tmp/$(x10-tree)/import-keep
 }
 
 x10-hash-of() {
@@ -275,7 +245,6 @@ _do_import() {
     echo "Importing: $1"
 
     _import_recurse "$1"
-    _x10_use_any cat /tmp/x10-import-$X10_PKGID
 
     for dep in $(_x10_use_any cat /tmp/x10-import-$X10_PKGID); do
         set +e
@@ -297,11 +266,15 @@ _do_import() {
     export PKG_CONFIG_PATH=$(echo "$X10_PKGCONF_PATH" | _deduplicate_search_path)
     export PATH=$(echo "$X10_BINARY_PATH:$PATH" | _deduplicate_search_path)
 
-    echo "PATH is now $PATH."
+    echo "\$PATH is now $PATH."
+    echo "Shared libraries are coming from $X10_LIBRARY_PATH."
+    echo "C/C++ header files are coming from $X10_HEADER_PATH."
+    echo "Autoconf .m4 files are coming from $ACLOCAL_PATH."
+    echo "pkg-config definition files are coming from $PKG_CONFIG_PATH."
 }
 
 fix-shebangs() {
-    _defer _fix_shebangs $(x10-tree) $1
+    _defer _fix_shebangs /tmp/$(x10-tree) $1
 }
 
 _fix_shebangs() {
@@ -312,7 +285,7 @@ _fix_shebangs() {
     for script in $(grep 'ASCII text executable' $TREE/file-list | cut -d: -f1); do
         head -n1 $script | grep -q '^#!' || continue
         local ORIG_INTERP=$(head -n1 $script | sed -e 's/#![[:space:]]*\([^[:space:]]*\).*$/\1/')
-        if [ -e /x10/tree/$SRCPKG/$ORIG_INTERP ]; then
+        if [ -e /x10/tree/$SRCPKG/$ORIG_INTERP -o -e /tmp/x10/tree/$SRCPKG/$ORIG_INTERP ]; then
             echo "$script: $ORIG_INTERP => /x10/tree/$SRCPKG/$ORIG_INTERP" >&2
             sed -e "1s@$ORIG_INTERP@/x10/tree/$SRCPKG/$ORIG_INTERP@" -i $script
         fi
@@ -421,7 +394,6 @@ _generate() {
         build-command source /tmp/x10_env
     fi
     echo -e "export X10_PKGID=\$(_x10_use_any sha256sum \$BASH_SOURCE | _x10_use_any head -c7)-$PACKAGE-$VERSION"
-    build-command _x10_use_any rm -rf "/x10/tree/\$X10_PKGID"
     build-command _x10_use_any touch /tmp/x10-import-\$X10_PKGID
     build-command unset X10_IMPORT_KEEP
     build-command unset X10_IMPORTED
@@ -437,10 +409,14 @@ _generate() {
     build-command export TZ=UTC
     build-command export SOURCE_DATE_EPOCH=$($X10 $X10_CURRENT_SRC _source_date_epoch)
     echo ""
-
-    build-command _x10_use_any mkdir -p $(x10-tree)
+    
+    build-command _x10_use_any rm -rf /tmp/$(x10-tree) 
+    build-command _x10_use_any mkdir -p /tmp/$(x10-tree) 
+    build-command export DESTDIR=/tmp
 
     x10-generate
+    build-command mv --backup -T /tmp/$(x10-tree) $(x10-tree)
+    build-command rm -rf $(x10-tree)~
 
     # imports
     build-command _x10_use_any mv /tmp/x10-import-\$X10_PKGID $(x10-tree)/import

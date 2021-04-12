@@ -9,6 +9,17 @@ buildah add working-container sysroot /
 buildah run working-container /bin/bash
 ```
 
+You can't really do much with that yet, but if you run
+
+```
+export LD_LIBRARY_PATH=/lib
+export -p > /tmp/x10_env
+
+sh /x10/buildscripts/<some hash>-<some package>-<some version>.sh
+```
+
+it will (eventually) rebuild that package in place, so that's kinda neat.
+
 old content is below this line -----
 
 (package updates are on hold because I need to rebuild my build servers)
