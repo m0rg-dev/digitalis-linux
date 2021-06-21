@@ -20,3 +20,6 @@ rpmbuild/SOURCES/service-names-port-numbers.xml
 
 x10/builtpkgs
 x10/sysroot
+
+x10/hostdir
+x10/targetdir

@@ -1,0 +1,63 @@
+---
+meta: ~
+depends: ~
+sources: ~
+stages:
+  fetch:
+    prescript:
+      - "mkdir -pv /hostdir/distfiles"
+    script: |
+      cd /hostdir/distfiles
+      for src in "${X10_SOURCES_URLS[@]}"; do
+        test -e $(basename "$src") || curl -LO "$src"
+      done
+  _gensum:
+    script: |
+      cd /hostdir/distfiles
+      for src in "${X10_SOURCES_URLS[@]}"; do
+        shasum -a256 $(basename "$src") >/dev/tty
+      done
+  verify:
+    script: |
+      cd /hostdir/distfiles
+      for i in "${!X10_SOURCES_URLS[@]}"; do
+        echo "${X10_SOURCES_CHECKSUMS[$i]}  $(basename "${X10_SOURCES_URLS[$i]}")" | shasum -a256 -c -
+      done
+  extract:
+    prescript:
+      - "mkdir -pv /targetdir/builddir"
+    script: |
+      cd /targetdir/builddir
+      for src in "${X10_SOURCES_URLS[@]}"; do
+        src=/hostdir/distfiles/$(basename "$src")
+        test -d $(bsdtar tf "$src" | head -n1 | xargs dirname) || {
+          bsdtar xf "$src"
+        }
+      done
+  configure:
+    useworkdir: true
+  build:
+    useworkdir: true
+  test:
+    useworkdir: true
+  install:
+    prescript:
+      - "mkdir -pv /targetdir/destdir"
+    useworkdir: true
+  package:
+    prescript:
+      - "mkdir -pv $(dirname /hostdir/binpkgs/\"$X10_PACKAGE_FQN\")"
+    script: |
+      tar cfJ /hostdir/binpkgs/"$X10_PACKAGE_FQN".tar.xz -C "$DESTDIR" .
+stageorder:
+  - fetch
+  - verify
+  - extract
+  - patch
+  - configure
+  - build
+  - test
+  - install
+  - package
+environment: ~
+workdir: "/targetdir/builddir/$(basename $X10_META_NAME)-$X10_META_VERSION"

@@ -1,0 +1,13 @@
+layers: ["gnu_configure"]
+package:
+  meta:
+    name: "dev-base/binutils"
+    version: "2.36.1"
+    revision: 1
+    maintainer: "Morgan Thomas <m@m0rg.dev>"
+    homepage: "https://www.gnu.org/software/binutils/"
+    license: "GPL-3.0-or-later"
+    description: "GNU binary executable tools"
+  sources:
+    - url: "https://ftpmirror.gnu.org/gnu/binutils/binutils-${X10_META_VERSION}.tar.xz"
+      checksum: "e81d9edf373f193af428a0f256674aea62a9d74dfe93f65192d4eae030b0f3b0"
