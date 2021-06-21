@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/sirupsen/logrus"
+	"m0rg.dev/x10/db"
 	"m0rg.dev/x10/lib"
 )
 
@@ -26,25 +28,37 @@ func main() {
 		pkgsrc := os.Args[2]
 		pkg := lib.LoadPackage(pkgsrc)
 
-		pkg.RunStage("fetch")
-		pkg.RunStage("_gensum")
+		lib.RunStage(pkg, "fetch")
+		lib.RunStage(pkg, "_gensum")
 	case "build":
 		buildCmd.Parse(os.Args[2:])
 		pkgsrc := buildCmd.Arg(0)
 		pkg := lib.LoadPackage(pkgsrc)
 
 		if len(*buildStage) > 0 {
-			err := pkg.RunStage(*buildStage)
+			err := lib.RunStage(pkg, *buildStage)
 			if err != nil {
 				panic(err)
 			}
 		} else {
 			for _, stage := range *pkg.StageOrder {
-				err := pkg.RunStage(stage)
+				err := lib.RunStage(pkg, stage)
 				if err != nil {
 					panic(err)
 				}
 			}
 		}
+	case "show":
+		buildCmd.Parse(os.Args[2:])
+		pkgsrc := buildCmd.Arg(0)
+		pkg := lib.LoadPackage(pkgsrc)
+		spew.Dump(pkg)
+	case "showdb":
+		db := db.PackageDatabase{BackingFile: "etc/pkgdb.yml"}
+		contents, err := db.Read()
+		if err != nil {
+			panic(err)
+		}
+		spew.Dump(contents)
 	}
 }

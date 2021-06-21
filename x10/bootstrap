@@ -1,3 +1,5 @@
 dev-base/binutils
 dev-base/kernel-headers
 sys-libs/glibc
+sys-libs/gmp
+sys-libs/mpfr

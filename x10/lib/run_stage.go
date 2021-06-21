@@ -12,9 +12,11 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
+	"m0rg.dev/x10/db"
+	"m0rg.dev/x10/spec"
 )
 
-func (pkg SpecLayer) RunStage(stage string) error {
+func RunStage(pkg spec.SpecLayer, stage string) error {
 	logrus.Info("Running " + stage + " for " + pkg.GetFQN())
 
 	if pkg.Stages[stage] == nil {
@@ -49,6 +51,7 @@ func (pkg SpecLayer) RunStage(stage string) error {
 	if err != nil {
 		return err
 	}
+	cmd.Start()
 
 	stdout_lines := []string{}
 	stderr_lines := []string{}
@@ -72,8 +75,6 @@ func (pkg SpecLayer) RunStage(stage string) error {
 			stderr_lines = append(stderr_lines, scanner.Text())
 		}
 	}()
-
-	cmd.Start()
 
 	stdin.Write([]byte(pkg.GetEnvironmentSetupScript() + "\n"))
 
@@ -131,6 +132,14 @@ func (pkg SpecLayer) RunStage(stage string) error {
 		err = ioutil.WriteFile(filepath.Join("targetdir", "destdir", pkg.GetFQN(), "depends.yml"), d, fs.ModePerm)
 		if err != nil {
 			logrus.Error("Error while writing package dependencies: ")
+			logrus.Error(err)
+			return err
+		}
+
+		db := db.PackageDatabase{BackingFile: "etc/pkgdb.yml"}
+		err = db.Update(pkg)
+		if err != nil {
+			logrus.Error("Error while updating package database: ")
 			logrus.Error(err)
 			return err
 		}

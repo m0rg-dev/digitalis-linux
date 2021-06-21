@@ -6,10 +6,11 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
+	"m0rg.dev/x10/spec"
 )
 
-func LoadPackage(pkgsrc string) SpecLayer {
-	pkg := Spec{}
+func LoadPackage(pkgsrc string) spec.SpecLayer {
+	pkg := spec.Spec{}
 
 	// Load the package YAML
 	logrus.Info("Loading package: ", pkgsrc)
@@ -24,9 +25,9 @@ func LoadPackage(pkgsrc string) SpecLayer {
 	}
 
 	// Load and apply the layers.
-	composite := SpecLayer{}
+	composite := spec.SpecLayer{}
 
-	layers := make([]SpecLayer, len(pkg.Layers)+1)
+	layers := make([]spec.SpecLayer, len(pkg.Layers)+1)
 	for idx, layer_name := range pkg.Layers {
 		logrus.Debug("Loading layer: ", layer_name)
 		layers[idx] = LoadPackage(fmt.Sprintf("pkgs/layers/%s.yml", layer_name))
@@ -51,13 +52,13 @@ func LoadPackage(pkgsrc string) SpecLayer {
 
 		// Stages: Piece-wise overlay.
 		if composite.Stages == nil {
-			composite.Stages = make(map[string]*SpecStage)
+			composite.Stages = make(map[string]*spec.SpecStage)
 		}
 
 		for name, stage := range layer.Stages {
 			// Make sure we have an object.
 			if _, ok := composite.Stages[name]; !ok {
-				composite.Stages[name] = new(SpecStage)
+				composite.Stages[name] = new(spec.SpecStage)
 				composite.Stages[name].UseWorkdir = new(bool)
 				*composite.Stages[name].UseWorkdir = false
 			}
@@ -100,8 +101,8 @@ func LoadPackage(pkgsrc string) SpecLayer {
 	return composite
 }
 
-func LoadLayer(layersrc string) SpecLayer {
-	layer := SpecLayer{}
+func LoadLayer(layersrc string) spec.SpecLayer {
+	layer := spec.SpecLayer{}
 
 	pkgraw, err := ioutil.ReadFile(layersrc)
 	if err != nil {
