@@ -49,18 +49,18 @@ func (pkg SpecLayer) GetEnvironmentSetupScript() string {
 	lines := []string{}
 
 	for name, val := range vars {
-		lines = append(lines, fmt.Sprintf("%s=%s", name, strconv.Quote(val)))
+		lines = append(lines, fmt.Sprintf("export %s=%s", name, strconv.Quote(val)))
 	}
 
 	// TODO do this for everything so we have a set order
-	lines = append(lines, "X10_WORKDIR="+strconv.Quote(pkg.Workdir))
+	lines = append(lines, "export X10_WORKDIR="+strconv.Quote(pkg.Workdir))
 
 	for name, arr := range arrays {
 		arr_quoted := []string{}
 		for _, val := range arr {
 			arr_quoted = append(arr_quoted, strconv.Quote(val))
 		}
-		lines = append(lines, fmt.Sprintf("%s=(%s)", name, strings.Join(arr_quoted, " ")))
+		lines = append(lines, fmt.Sprintf("export %s=(%s)", name, strings.Join(arr_quoted, " ")))
 	}
 
 	return strings.Join(lines, "\n")

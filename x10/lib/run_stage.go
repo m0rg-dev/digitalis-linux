@@ -2,6 +2,8 @@ package lib
 
 import (
 	"bufio"
+	"io/fs"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -9,6 +11,7 @@ import (
 	"sync"
 
 	"github.com/sirupsen/logrus"
+	"gopkg.in/yaml.v2"
 )
 
 func (pkg SpecLayer) RunStage(stage string) error {
@@ -29,6 +32,7 @@ func (pkg SpecLayer) RunStage(stage string) error {
 		"podman", "run", "--rm", "-i",
 		"-v", basepath+"/hostdir:/hostdir",
 		"-v", basepath+"/targetdir:/targetdir",
+		"-v", basepath+"/etc:/etc/x10:ro",
 		"x10_bootstrap",
 		"bash", "-e", "-x",
 	)
@@ -101,7 +105,36 @@ func (pkg SpecLayer) RunStage(stage string) error {
 		for _, line := range stderr_lines {
 			logrus.Error("  " + line)
 		}
+		return err
 	}
 
-	return err
+	if stage == "package" {
+		d, err := yaml.Marshal(pkg.Meta)
+		if err != nil {
+			logrus.Error("Error while marshalling package metadata: ")
+			logrus.Error(err)
+			return err
+		}
+		err = ioutil.WriteFile(filepath.Join("targetdir", "destdir", pkg.GetFQN(), "meta.yml"), d, fs.ModePerm)
+		if err != nil {
+			logrus.Error("Error while writing package metadata: ")
+			logrus.Error(err)
+			return err
+		}
+
+		d, err = yaml.Marshal(pkg.Depends)
+		if err != nil {
+			logrus.Error("Error while marshalling package dependencies: ")
+			logrus.Error(err)
+			return err
+		}
+		err = ioutil.WriteFile(filepath.Join("targetdir", "destdir", pkg.GetFQN(), "depends.yml"), d, fs.ModePerm)
+		if err != nil {
+			logrus.Error("Error while writing package dependencies: ")
+			logrus.Error(err)
+			return err
+		}
+	}
+
+	return nil
 }

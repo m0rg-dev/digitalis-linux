@@ -6,6 +6,19 @@ package:
       script: |
         test -n "$USE_BUILDDIR" && cd build
         make V=1 -j$X10_MAKE_JOBS
+    test:
+      script: |
+        test -n "$USE_BUILDDIR" && cd build
+        test -n "$SKIP_TESTS" && exit 0
+        if make -q check 2>/dev/null; then
+          :
+        else
+          if [ $? -eq 2 ]; then
+            exit 0
+          fi
+        fi
+
+        make V=1 -j$X10_MAKE_JOBS check
     install:
       script: |
         test -n "$USE_BUILDDIR" && cd build

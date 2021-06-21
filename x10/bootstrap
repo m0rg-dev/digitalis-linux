@@ -1,1 +1,3 @@
 dev-base/binutils
+dev-base/kernel-headers
+sys-libs/glibc

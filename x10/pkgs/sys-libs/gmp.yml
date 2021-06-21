@@ -1,0 +1,20 @@
+layers: ["gnu_configure"]
+package:
+  meta:
+    name: "sys-libs/gmp"
+    version: "6.2.1"
+    revision: 1
+    maintainer: "Morgan Thomas <m@m0rg.dev>"
+    homepage: "https://www.gnu.org/software/gmp"
+    license: "GPL-3.0-or-later"
+    description: "The GNU Multiple Precision Arithmetic Library"
+  sources:
+    - url: "https://ftpmirror.gnu.org/gnu/gmp/gmp-${X10_META_VERSION}.tar.xz"
+      checksum: "fd4829912cddd12f84181c3451cc752be224643e87fac497b69edddadc49b4f2"
+  environment:
+    CONFIGURE_ARGS: "--enable-cxx --disable-static"
+  stages:
+    configure:
+      prescript:
+        - "cp -v config{fsf,}.guess"
+        - "cp -v config{fsf,}.sub"
