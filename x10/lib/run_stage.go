@@ -26,7 +26,7 @@ func (pkg SpecLayer) RunStage(stage string) error {
 	os.MkdirAll(basepath+"/targetdir", os.ModePerm)
 
 	cmd := exec.Command(
-		"docker", "run", "--rm", "-i",
+		"podman", "run", "--rm", "-i",
 		"-v", basepath+"/hostdir:/hostdir",
 		"-v", basepath+"/targetdir:/targetdir",
 		"x10_bootstrap",
