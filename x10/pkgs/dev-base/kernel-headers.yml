@@ -1,0 +1,23 @@
+layers: ["base"]
+package:
+  meta:
+    name: "dev-base/kernel-headers"
+    version: "5.12.12"
+    revision: 1
+    maintainer: "Morgan Thomas <m@m0rg.dev>"
+    homepage: "https://www.kernel.org/"
+    license: "GPL-2.0-only"
+    description: "Linux kernel API headers"
+    unpackdir: linux
+  sources:
+    - url: "https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.12.12.tar.xz"
+      checksum: "212ab2bc3d9616f48069f506196a0d1fa7f54db1593a76dccccfa23bdfaa3ea8"
+  stages:
+    build:
+      script: |
+        make headers
+        find usr/include -name '.*' -delete
+    install:
+      script: |
+        install -dm755 "$DESTDIR"
+        cp -rv usr/include "$DESTDIR"

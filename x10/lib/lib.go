@@ -23,17 +23,13 @@ func LoadPackage(pkgsrc string) SpecLayer {
 		panic(err)
 	}
 
-	// Add the "base" layer so we don't have to specify it every time.
-
-	pkg.Layers = append([]string{"base"}, pkg.Layers...)
-
 	// Load and apply the layers.
 	composite := SpecLayer{}
 
 	layers := make([]SpecLayer, len(pkg.Layers)+1)
 	for idx, layer_name := range pkg.Layers {
 		logrus.Debug("Loading layer: ", layer_name)
-		layers[idx] = LoadLayer(fmt.Sprintf("pkgs/layers/%s.yml", layer_name))
+		layers[idx] = LoadPackage(fmt.Sprintf("pkgs/layers/%s.yml", layer_name))
 	}
 
 	layers = append(layers, *pkg.Package)
@@ -87,6 +83,10 @@ func LoadPackage(pkgsrc string) SpecLayer {
 		}
 
 		// Environment: Overlay map contents.
+		if composite.Environment == nil {
+			composite.Environment = make(map[string]string)
+		}
+
 		for name, value := range layer.Environment {
 			composite.Environment[name] = value
 		}

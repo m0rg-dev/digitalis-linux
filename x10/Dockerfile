@@ -1,4 +1,4 @@
 FROM debian
 
 RUN apt-get update
-RUN apt-get install -y build-essential bsdtar file
+RUN apt-get install -y build-essential bsdtar file curl

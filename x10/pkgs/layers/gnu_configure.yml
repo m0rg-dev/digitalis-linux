@@ -1,16 +1,12 @@
 ---
-stages:
-  configure:
-    script: |
-      test -n "USE_BUILDDIR" && mkdir -pv build
-      test -n "USE_BUILDDIR" && cd build
-      ${CONFIGURE:-../configure} --prefix=/usr --libdir=/usr/lib $CONFIGURE_FLAGS
-  build:
-    script: |
-      test -n "USE_BUILDDIR" && cd build
-      make V=1 -j$X10_MAKE_JOBS
-  install:
-    script: |
-      test -n "USE_BUILDDIR" && cd build
-      make DESTDIR="$DESTDIR" install
-
+layers: ["makefile"]
+package:
+  stages:
+    configure:
+      script: |
+        test -n "$USE_BUILDDIR" && {
+          mkdir -pv build
+          cd build
+          CONFIGURE=../configure
+        }
+        ${CONFIGURE:-./configure} --prefix=/usr --libdir=/usr/lib $CONFIGURE_ARGS

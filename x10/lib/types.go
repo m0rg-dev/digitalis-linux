@@ -10,6 +10,7 @@ type SpecMeta struct {
 	Homepage    string
 	License     string
 	Description string
+	UnpackDir   *string
 }
 
 type SpecSource struct {

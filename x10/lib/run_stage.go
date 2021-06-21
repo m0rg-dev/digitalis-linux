@@ -27,8 +27,8 @@ func (pkg SpecLayer) RunStage(stage string) error {
 
 	cmd := exec.Command(
 		"docker", "run", "--rm", "-i",
-		"-v", basepath+"/hostdir:/hostdir:delegated",
-		"-v", basepath+"/targetdir:/targetdir:delegated",
+		"-v", basepath+"/hostdir:/hostdir",
+		"-v", basepath+"/targetdir:/targetdir",
 		"x10_bootstrap",
 		"bash", "-e", "-x",
 	)

@@ -30,6 +30,11 @@ func (pkg SpecLayer) GetEnvironmentSetupScript() string {
 	vars["X10_META_HOMEPAGE"] = pkg.Meta.Homepage
 	vars["X10_META_LICENSE"] = pkg.Meta.License
 	vars["X10_META_DESCRIPTION"] = pkg.Meta.Description
+	if pkg.Meta.UnpackDir == nil {
+		vars["X10_META_UNPACK_DIR"] = pkg.Meta.Name
+	} else {
+		vars["X10_META_UNPACK_DIR"] = *pkg.Meta.UnpackDir
+	}
 	vars["X10_PACKAGE_FQN"] = pkg.GetFQN()
 
 	// System setup.

@@ -11,3 +11,7 @@ package:
   sources:
     - url: "https://ftpmirror.gnu.org/gnu/binutils/binutils-${X10_META_VERSION}.tar.xz"
       checksum: "e81d9edf373f193af428a0f256674aea62a9d74dfe93f65192d4eae030b0f3b0"
+  environment:
+    CONFIGURE_ARGS: "--enable-shared --disable-werror --enable-deterministic-archives"
+    X10_MAKE_JOBS: "1"
+    USE_BUILDDIR: "1"
