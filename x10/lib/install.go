@@ -39,7 +39,7 @@ func Install(pkgdb db.PackageDatabase, pkg spec.SpecDbData, root string) error {
 
 	logrus.Infof("Installing: %s -> %s", pkg.GetFQN(), root)
 
-	tmp_path := filepath.Join("targetdir", "tmp", "x10", pkg.GetFQN())
+	tmp_path := filepath.Join(root, "tmp", "x10", pkg.GetFQN())
 
 	err = os.MkdirAll(tmp_path, os.ModePerm)
 	if err != nil {
@@ -57,7 +57,7 @@ func Install(pkgdb db.PackageDatabase, pkg spec.SpecDbData, root string) error {
 			logrus.Fatal(err)
 		}
 
-		if !d.IsDir() && !strings.ContainsRune(target_path, '/') {
+		if d.Type().IsRegular() && !strings.ContainsRune(target_path, '/') {
 			// no files under /!
 			return nil
 		}

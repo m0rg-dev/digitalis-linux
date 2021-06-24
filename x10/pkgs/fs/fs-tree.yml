@@ -1,0 +1,25 @@
+layers: ["base"]
+package:
+  meta:
+    name: "fs/fs-tree"
+    version: "1"
+    revision: 1
+    maintainer: "Morgan Thomas <m@m0rg.dev>"
+    homepage: ""
+    license: "0BSD"
+    description: "usrmerge symlinks mostly"
+  stages:
+    configure:
+      useworkdir: false
+    build:
+      useworkdir: false
+    test:
+      useworkdir: false
+    install:
+      script: |
+        mkdir -pv "$DESTDIR"
+        ln -s usr/bin "$DESTDIR"/bin
+        ln -s usr/lib "$DESTDIR"/lib
+        ln -s usr/lib64 "$DESTDIR"/lib64
+        ln -s usr/sbin "$DESTDIR"/sbin
+      useworkdir: false

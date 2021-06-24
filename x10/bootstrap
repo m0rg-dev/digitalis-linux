@@ -11,3 +11,6 @@ sys-libs/acl
 sys-utils/coreutils
 sys-libs/ncurses
 shells/bash
+sys-utils/tar
+fs/fs-tree
+

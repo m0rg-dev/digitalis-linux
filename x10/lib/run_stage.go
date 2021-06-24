@@ -13,6 +13,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
+	"m0rg.dev/x10/conf"
 	"m0rg.dev/x10/db"
 	"m0rg.dev/x10/spec"
 )
@@ -28,17 +29,20 @@ func RunStage(pkg spec.SpecLayer, stage string) error {
 	_, b, _, _ := runtime.Caller(0)
 	basepath, _ := filepath.Abs(filepath.Join(filepath.Dir(b), ".."))
 
-	os.MkdirAll(basepath+"/hostdir", os.ModePerm)
-	os.MkdirAll(basepath+"/targetdir/destdir", os.ModePerm)
-	os.MkdirAll(basepath+"/targetdir/builddir", os.ModePerm)
+	hostdir := filepath.Join(basepath, "hostdir")
+	targetdir := filepath.Join(basepath, conf.TargetDir())
+
+	os.MkdirAll(hostdir, os.ModePerm)
+	os.MkdirAll(targetdir+"/destdir", os.ModePerm)
+	os.MkdirAll(targetdir+"/builddir", os.ModePerm)
 
 	volume_args := []string{}
 	for _, dir := range []string{"bin", "etc", "lib", "lib64", "sbin", "tmp", "usr", "var", "builddir", "destdir"} {
 		volume_args = append(volume_args, "-v")
-		volume_args = append(volume_args, fmt.Sprintf("%s/targetdir/%s:/%s", basepath, dir, dir))
+		volume_args = append(volume_args, fmt.Sprintf("%s/%s:/%s", targetdir, dir, dir))
 	}
 
-	args := []string{"run", "--rm", "-i", "-v", basepath + "/hostdir:/hostdir", "-v", basepath + "/etc:/etc/x10:ro"}
+	args := []string{"run", "--rm", "-i", "-v", hostdir + ":/hostdir", "-v", basepath + "/etc:/etc/x10:ro"}
 	args = append(args, volume_args...)
 	args = append(args, "x10_base", "bash", "-e", "-x")
 	logrus.Debug(args)
@@ -121,7 +125,7 @@ func RunStage(pkg spec.SpecLayer, stage string) error {
 			logrus.Error(err)
 			return err
 		}
-		err = ioutil.WriteFile(filepath.Join("targetdir/destdir", pkg.GetFQN(), "meta.yml"), d, fs.ModePerm)
+		err = ioutil.WriteFile(filepath.Join(targetdir, "destdir", pkg.GetFQN(), "meta.yml"), d, fs.ModePerm)
 		if err != nil {
 			logrus.Error("Error while writing package metadata: ")
 			logrus.Error(err)
@@ -134,14 +138,14 @@ func RunStage(pkg spec.SpecLayer, stage string) error {
 			logrus.Error(err)
 			return err
 		}
-		err = ioutil.WriteFile(filepath.Join("targetdir/destdir", pkg.GetFQN(), "depends.yml"), d, fs.ModePerm)
+		err = ioutil.WriteFile(filepath.Join(targetdir, "destdir", pkg.GetFQN(), "depends.yml"), d, fs.ModePerm)
 		if err != nil {
 			logrus.Error("Error while writing package dependencies: ")
 			logrus.Error(err)
 			return err
 		}
 
-		db := db.PackageDatabase{BackingFile: "etc/pkgdb.yml"}
+		db := db.PackageDatabase{BackingFile: conf.PkgDb()}
 		err = db.Update(pkg)
 		if err != nil {
 			logrus.Error("Error while updating package database: ")

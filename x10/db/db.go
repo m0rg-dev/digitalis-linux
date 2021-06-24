@@ -115,7 +115,7 @@ func (db *PackageDatabase) Update(pkg spec.SpecLayer) error {
 
 	db.unlocked_Write(contents)
 
-	logrus.Info("Updated package database.")
+	logrus.Info("Updated package database in " + db.BackingFile + ".")
 	return err
 }
 
@@ -187,7 +187,7 @@ func (db *PackageDatabase) IndexFromRepo() error {
 	}
 
 	db.unlocked_Write(contents)
-	logrus.Info("Updated package database.")
+	logrus.Info("Updated package database in " + db.BackingFile + ".")
 	return nil
 }
 

@@ -2,6 +2,7 @@ package lib
 
 import (
 	"github.com/sirupsen/logrus"
+	"m0rg.dev/x10/conf"
 	"m0rg.dev/x10/db"
 	"m0rg.dev/x10/spec"
 )
@@ -34,7 +35,7 @@ func Build(pkgdb db.PackageDatabase, pkg spec.SpecLayer) {
 	}
 	if !from_db.GeneratedValid {
 		for _, dep := range deps {
-			err := Install(pkgdb, dep, "targetdir")
+			err := Install(pkgdb, dep, conf.TargetDir())
 			if err != nil {
 				logrus.Fatal(err)
 			}

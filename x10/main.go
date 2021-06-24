@@ -7,6 +7,7 @@ import (
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/sirupsen/logrus"
+	"m0rg.dev/x10/conf"
 	"m0rg.dev/x10/db"
 	"m0rg.dev/x10/lib"
 	"m0rg.dev/x10/spec"
@@ -36,7 +37,7 @@ func main() {
 	case "build":
 		buildCmd.Parse(os.Args[2:])
 		pkgsrc := buildCmd.Arg(0)
-		db := db.PackageDatabase{BackingFile: "etc/pkgdb.yml"}
+		db := db.PackageDatabase{BackingFile: conf.PkgDb()}
 		contents, err := db.Read()
 		if err != nil {
 			logrus.Fatal(err)
@@ -67,20 +68,20 @@ func main() {
 		pkg := spec.LoadPackage(pkgsrc)
 		spew.Dump(pkg)
 	case "showdb":
-		pkgdb := db.PackageDatabase{BackingFile: "etc/pkgdb.yml"}
+		pkgdb := db.PackageDatabase{BackingFile: conf.PkgDb()}
 		contents, err := pkgdb.Read()
 		if err != nil {
 			logrus.Fatal(err)
 		}
 		spew.Dump(contents)
 	case "index":
-		pkgdb := db.PackageDatabase{BackingFile: "etc/pkgdb.yml"}
+		pkgdb := db.PackageDatabase{BackingFile: conf.PkgDb()}
 		err := pkgdb.IndexFromRepo()
 		if err != nil {
 			logrus.Fatal(err)
 		}
 	case "list_install":
-		pkgdb := db.PackageDatabase{BackingFile: "etc/pkgdb.yml"}
+		pkgdb := db.PackageDatabase{BackingFile: conf.PkgDb()}
 		atom := os.Args[2]
 
 		pkgs, _, err := pkgdb.GetInstallDeps(atom, db.DepRun)
@@ -92,7 +93,7 @@ func main() {
 			fmt.Println(pkg.GetFQN())
 		}
 	case "list_build":
-		pkgdb := db.PackageDatabase{BackingFile: "etc/pkgdb.yml"}
+		pkgdb := db.PackageDatabase{BackingFile: conf.PkgDb()}
 		atom := os.Args[2]
 
 		pkgs, complete, err := pkgdb.GetInstallDeps(atom, db.DepBuild)
@@ -107,7 +108,7 @@ func main() {
 			logrus.Warn(" (package list may not be complete)")
 		}
 	case "install":
-		pkgdb := db.PackageDatabase{BackingFile: "etc/pkgdb.yml"}
+		pkgdb := db.PackageDatabase{BackingFile: conf.PkgDb()}
 		atom := os.Args[2]
 		target := os.Args[3]
 
