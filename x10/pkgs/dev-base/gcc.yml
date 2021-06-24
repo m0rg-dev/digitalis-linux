@@ -1,0 +1,22 @@
+layers: ["gnu_configure"]
+package:
+  meta:
+    name: "dev-base/gcc"
+    version: "11.1.0"
+    revision: 1
+    maintainer: "Morgan Thomas <m@m0rg.dev>"
+    homepage: "https://www.gnu.org/software/gcc"
+    license: "GPL-3.0-or-later"
+    description: "The GNU Compiler Collection"
+  depends:
+    build:
+      - sys-libs/gmp
+      - sys-libs/mpfr
+      - sys-libs/mpc
+      - sys-libs/zlib
+  sources:
+    - url: "https://ftpmirror.gnu.org/gnu/gcc/gcc-${X10_META_VERSION}/gcc-${X10_META_VERSION}.tar.xz"
+      checksum: "4c4a6fb8a8396059241c2e674b85b351c26a5d678274007f076957afa1cc9ddf"
+  environment:
+    CONFIGURE_ARGS: "--with-system-zlib --enable-languages=c,c++ --disable-multilib --disable-bootstrap --without-zstd"
+    SKIP_TESTS: 1

@@ -39,7 +39,7 @@ func (pkg SpecLayer) GetEnvironmentSetupScript() string {
 
 	// System setup.
 	vars["X10_MAKE_JOBS"] = strconv.Itoa(runtime.NumCPU())
-	vars["DESTDIR"] = filepath.Join("/targetdir", "destdir", pkg.GetFQN())
+	vars["DESTDIR"] = filepath.Join("/destdir", pkg.GetFQN())
 
 	// Custom environment.
 	for name, value := range pkg.Environment {

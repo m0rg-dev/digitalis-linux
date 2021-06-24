@@ -2,6 +2,7 @@ package lib
 
 import (
 	"bufio"
+	"fmt"
 	"io/fs"
 	"io/ioutil"
 	"os"
@@ -28,16 +29,20 @@ func RunStage(pkg spec.SpecLayer, stage string) error {
 	basepath, _ := filepath.Abs(filepath.Join(filepath.Dir(b), ".."))
 
 	os.MkdirAll(basepath+"/hostdir", os.ModePerm)
-	os.MkdirAll(basepath+"/targetdir", os.ModePerm)
+	os.MkdirAll(basepath+"/targetdir/destdir", os.ModePerm)
+	os.MkdirAll(basepath+"/targetdir/builddir", os.ModePerm)
 
-	cmd := exec.Command(
-		"podman", "run", "--rm", "-i",
-		"-v", basepath+"/hostdir:/hostdir",
-		"-v", basepath+"/targetdir:/targetdir",
-		"-v", basepath+"/etc:/etc/x10:ro",
-		"x10_bootstrap",
-		"bash", "-e", "-x",
-	)
+	volume_args := []string{}
+	for _, dir := range []string{"bin", "etc", "lib", "lib64", "sbin", "tmp", "usr", "var", "builddir", "destdir"} {
+		volume_args = append(volume_args, "-v")
+		volume_args = append(volume_args, fmt.Sprintf("%s/targetdir/%s:/%s", basepath, dir, dir))
+	}
+
+	args := []string{"run", "--rm", "-i", "-v", basepath + "/hostdir:/hostdir", "-v", basepath + "/etc:/etc/x10:ro"}
+	args = append(args, volume_args...)
+	args = append(args, "x10_base", "bash", "-e", "-x")
+	logrus.Debug(args)
+	cmd := exec.Command("podman", args...)
 
 	stdin, err := cmd.StdinPipe()
 	if err != nil {
@@ -116,7 +121,7 @@ func RunStage(pkg spec.SpecLayer, stage string) error {
 			logrus.Error(err)
 			return err
 		}
-		err = ioutil.WriteFile(filepath.Join("targetdir", "destdir", pkg.GetFQN(), "meta.yml"), d, fs.ModePerm)
+		err = ioutil.WriteFile(filepath.Join("targetdir/destdir", pkg.GetFQN(), "meta.yml"), d, fs.ModePerm)
 		if err != nil {
 			logrus.Error("Error while writing package metadata: ")
 			logrus.Error(err)
@@ -129,7 +134,7 @@ func RunStage(pkg spec.SpecLayer, stage string) error {
 			logrus.Error(err)
 			return err
 		}
-		err = ioutil.WriteFile(filepath.Join("targetdir", "destdir", pkg.GetFQN(), "depends.yml"), d, fs.ModePerm)
+		err = ioutil.WriteFile(filepath.Join("targetdir/destdir", pkg.GetFQN(), "depends.yml"), d, fs.ModePerm)
 		if err != nil {
 			logrus.Error("Error while writing package dependencies: ")
 			logrus.Error(err)

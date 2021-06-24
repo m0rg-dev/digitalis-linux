@@ -9,4 +9,4 @@ package:
           cd build
           CONFIGURE=../configure
         }
-        ${CONFIGURE:-./configure} --prefix=/usr --libdir=/usr/lib $CONFIGURE_ARGS
+        ${CONFIGURE:-./configure} --prefix=/usr --libdir=/usr/lib --sysconfdir=/etc $CONFIGURE_ARGS

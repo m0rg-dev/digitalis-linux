@@ -1,0 +1,17 @@
+layers: ["gnu_configure"]
+package:
+  meta:
+    name: "sys-libs/attr"
+    version: "2.4.48"
+    revision: 1
+    maintainer: "Morgan Thomas <m@m0rg.dev>"
+    homepage: "https://savannah.nongnu.org/projects/attr/"
+    license: "GPL-2.0-or-later"
+    description: "Commands for Manipulating Filesystem Extended Attributes"
+  sources:
+    - url: "http://download.savannah.gnu.org/releases/attr/attr-${X10_META_VERSION}.tar.gz"
+      checksum: "5ead72b358ec709ed00bbf7a9eaef1654baad937c001c044fe8b74c57f5324e7"
+  environment:
+    CONFIGURE_ARGS: "--disable-static"
+    # tests don't work in podman container
+    SKIP_TESTS: "1"

@@ -27,10 +27,9 @@ package:
         done
     extract:
       prescript:
-        - "rm -rf /targetdir/builddir/$(basename $X10_META_UNPACK_DIR)-$X10_META_VERSION"
-        - "mkdir -pv /targetdir/builddir"
+        - "rm -rf /builddir/$(basename $X10_META_UNPACK_DIR)-$X10_META_VERSION"
       script: |
-        cd /targetdir/builddir
+        cd /builddir
         for src in "${X10_SOURCES_URLS[@]}"; do
           src=/hostdir/distfiles/$(basename "$src")
           test -d $(basename $X10_META_UNPACK_DIR)-$X10_META_VERSION || {
@@ -45,8 +44,7 @@ package:
       useworkdir: true
     install:
       prescript:
-        - "rm -rf /targetdir/destdir/\"$X10_PACKAGE_FQN\""
-        - "mkdir -pv /targetdir/destdir"
+        - "rm -rf /destdir/\"$X10_PACKAGE_FQN\""
       useworkdir: true
     package:
       prescript:
@@ -68,4 +66,4 @@ package:
     - install
     - package
   environment: ~
-  workdir: "/targetdir/builddir/$(basename $X10_META_UNPACK_DIR)-$X10_META_VERSION"
+  workdir: "/builddir/$(basename $X10_META_UNPACK_DIR)-$X10_META_VERSION"

@@ -1,5 +1,13 @@
+sys-libs/glibc
 dev-base/binutils
 dev-base/kernel-headers
-sys-libs/glibc
 sys-libs/gmp
 sys-libs/mpfr
+sys-libs/mpc
+sys-libs/zlib
+dev-base/gcc
+sys-libs/attr
+sys-libs/acl
+sys-utils/coreutils
+sys-libs/ncurses
+shells/bash
