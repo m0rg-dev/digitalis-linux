@@ -1,0 +1,33 @@
+---
+layers: ["virtual"]
+package:
+  meta:
+    name: "virtual/base-minimal"
+    version: "1"
+    revision: 1
+    maintainer: "Morgan Thomas <m@m0rg.dev>"
+    homepage: ""
+    license: "0BSD"
+    description: "Minimal system with dev tools, suitable for containers and the like. (virtual package)"
+  depends:
+    run:
+      - compress-utils/gzip
+      - compress-utils/tar
+      - compress-utils/xz
+      - dev-base/binutils
+      - dev-base/bison
+      - dev-base/gcc
+      - dev-base/perl
+      - fs/fs-tree
+      - shells/bash
+      - sys-libs/glibc
+      - sys-utils/coreutils
+      - sys-utils/diffutils
+      - sys-utils/file
+      - sys-utils/findutils
+      - sys-utils/gawk
+      - sys-utils/grep
+      - sys-utils/less
+      - sys-utils/sed
+      - virtual/python
+      - net-utils/curl

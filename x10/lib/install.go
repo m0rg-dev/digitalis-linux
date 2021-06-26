@@ -80,9 +80,14 @@ func Install(pkgdb db.PackageDatabase, pkg spec.SpecDbData, root string) error {
 			}
 		} else {
 			copy_cmd := exec.Command("cp", "-a", path, target_path)
-			copy_cmd.Run()
+			out, err := copy_cmd.CombinedOutput()
 			logrus.Debugf(" %s => %s", path, target_path)
+			if err != nil {
+				logrus.Error(string(out))
+				logrus.Fatal(err)
+			}
 			if copy_cmd.ProcessState.ExitCode() != 0 {
+				logrus.Error(string(out))
 				logrus.Fatalf("%+v exited with code %d", copy_cmd.Args, copy_cmd.ProcessState.ExitCode())
 			}
 		}

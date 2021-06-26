@@ -3,19 +3,26 @@
 set -e
 set -x
 
-cid=$(buildah from digitalis_bootstrap)
-function cleanup {
-    buildah rm $cid
-}
-trap cleanup EXIT
+export X10_NO_GENERATED_DEPS=1
+export X10_TARGETDIR=targetdir_boot
 
+# TODO
+go run . index
+
+for pkg in $(cat bootstrap); do
+    go run . build -maybe pkgs/"$pkg".yml
+done
+
+rm -rf targetdir/*
 mkdir -p targetdir
-# do this instead of just rm -rf targetdir/* to avoid permissions issues
-podman run --rm -it -v targetdir:/targetdir digitalis_bootstrap rm -rf 'targetdir/*'
 
-buildah run $cid tar c /bin /etc /lib /lib64 /sbin /tmp /usr /var | tar x -C targetdir
+go run . index
 
-cleanup
+for pkg in $(cat bootstrap); do
+    go run . install "$pkg" targetdir
+done
+
+X10_TARGETDIR=targetdir go run . index
 
 cid=$(buildah from scratch)
 buildah commit $cid x10_base

@@ -21,6 +21,7 @@ func main() {
 	buildCmd := flag.NewFlagSet("build", flag.ExitOnError)
 	//buildStage := buildCmd.String("stage", "", "Run only a specific stage.")
 	buildMaybe := buildCmd.Bool("maybe", false, "Only build if the package is outdated in the database.")
+	buildDeps := buildCmd.Bool("with_deps", false, "Build a package's runtime dependencies after building it.")
 
 	if len(os.Args) < 2 {
 		fmt.Printf("Usage: %s <subcommand> ...\n", os.Args[0])
@@ -37,8 +38,8 @@ func main() {
 	case "build":
 		buildCmd.Parse(os.Args[2:])
 		pkgsrc := buildCmd.Arg(0)
-		db := db.PackageDatabase{BackingFile: conf.PkgDb()}
-		contents, err := db.Read()
+		pkgdb := db.PackageDatabase{BackingFile: conf.PkgDb()}
+		contents, err := pkgdb.Read()
 		if err != nil {
 			logrus.Fatal(err)
 		}
@@ -47,20 +48,29 @@ func main() {
 		if (buildMaybe == nil || !*buildMaybe) ||
 			!contents.CheckUpToDate(pkg) ||
 			!contents.Packages[pkg.GetFQN()].GeneratedValid {
-			// if len(*buildStage) > 0 {
-			// 	err := lib.RunStage(pkg, *buildStage)
-			// 	if err != nil {
-			// 		logrus.Fatal(err)
-			// 	}
-			// } else {
-			// 	for _, stage := range *pkg.StageOrder {
-			// 		err := lib.RunStage(pkg, stage)
-			// 		if err != nil {
-			// 			logrus.Fatal(err)
-			// 		}
-			// 	}
-			// }
-			lib.Build(db, pkg)
+			pkgdb.Update(pkg, true)
+			lib.Build(pkgdb, pkg)
+
+			if buildDeps != nil && *buildDeps {
+				complete := false
+				var deps []spec.SpecDbData
+				for !complete {
+					var err error
+					deps, complete, err = pkgdb.GetInstallDeps(pkg.GetFQN(), db.DepRun)
+					if err != nil {
+						logrus.Fatal(err)
+					}
+
+					for _, dep := range deps {
+						logrus.Infof(" => depends on %s", dep.GetFQN())
+						if dep.GeneratedValid {
+							logrus.Infof("  (already built)")
+						} else {
+							lib.Build(pkgdb, spec.LoadPackage("pkgs/"+dep.Meta.Name+".yml"))
+						}
+					}
+				}
+			}
 		}
 	case "show":
 		buildCmd.Parse(os.Args[2:])

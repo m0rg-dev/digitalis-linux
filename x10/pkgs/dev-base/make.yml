@@ -1,0 +1,15 @@
+layers: ["gnu_configure"]
+package:
+  meta:
+    name: "dev-base/make"
+    version: "4.3"
+    revision: 1
+    maintainer: "Morgan Thomas <m@m0rg.dev>"
+    homepage: "https://gnu.org/software/make"
+    license: "GPL-3.0-or-later"
+    description: ""
+  sources:
+    - url: "https://ftpmirror.gnu.org/gnu/make/make-${X10_META_VERSION}.tar.gz"
+      checksum: "e05fdde47c5f7ca45cb697e973894ff4f5d79e13b750ed57d7b66d8defc78e19"
+  environment:
+    CONFIGURE_ARGS: --without-guile

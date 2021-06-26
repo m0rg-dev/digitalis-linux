@@ -1,0 +1,12 @@
+---
+layers: ["makefile"]
+package:
+  stages:
+    configure:
+      script: |
+        test -n "$USE_BUILDDIR" && {
+          mkdir -pv build
+          cd build
+          CONFIGURE=../configure
+        }
+        ${CONFIGURE:-./configure} $CONFIGURE_ARGS

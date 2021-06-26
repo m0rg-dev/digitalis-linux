@@ -3,7 +3,7 @@ package:
   meta:
     name: "dev-base/kernel-headers"
     version: "5.12.12"
-    revision: 1
+    revision: 2
     maintainer: "Morgan Thomas <m@m0rg.dev>"
     homepage: "https://www.kernel.org/"
     license: "GPL-2.0-only"
@@ -19,5 +19,5 @@ package:
         find usr/include -name '.*' -delete
     install:
       script: |
-        install -dm755 "$DESTDIR"
-        cp -rv usr/include "$DESTDIR"
+        install -dm755 "$DESTDIR"/usr
+        cp -rv usr/include "$DESTDIR"/usr

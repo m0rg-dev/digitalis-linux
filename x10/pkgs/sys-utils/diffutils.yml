@@ -1,0 +1,16 @@
+layers: ["gnu_configure"]
+package:
+  meta:
+    name: "sys-utils/diffutils"
+    version: "3.7"
+    revision: 1
+    maintainer: "Morgan Thomas <m@m0rg.dev>"
+    homepage: "https://gnu.org/software/diffutils"
+    license: "GPL-3.0-or-later"
+    description: "File comparison utilities"
+  sources:
+    - url: "https://ftpmirror.gnu.org/gnu/diffutils/diffutils-${X10_META_VERSION}.tar.xz"
+      checksum: "b3a7a6221c3dc916085f0d205abf6b8e1ba443d4dd965118da364a1dc1cb3a26"
+  environment:
+    # "requires working valgrind??"
+    SKIP_TESTS: "1"

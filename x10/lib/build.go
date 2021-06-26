@@ -14,7 +14,31 @@ func Build(pkgdb db.PackageDatabase, pkg spec.SpecLayer) {
 
 	for !complete {
 		var err error
-		deps, complete, err = pkgdb.GetInstallDeps(pkg.GetFQN(), db.DepBuild)
+		var deps_2 []spec.SpecDbData
+		deps_2, complete, err = pkgdb.GetInstallDeps(pkg.GetFQN(), db.DepBuild)
+		deps = append(deps, deps_2...)
+		if err != nil {
+			logrus.Fatal(err)
+		}
+
+		for _, dep := range deps_2 {
+			logrus.Infof(" => depends on %s", dep.GetFQN())
+			if dep.GeneratedValid {
+				logrus.Infof("  (already built)")
+			} else {
+				Build(pkgdb, spec.LoadPackage("pkgs/"+dep.Meta.Name+".yml"))
+			}
+		}
+	}
+
+	complete = false
+
+	for !complete {
+		var err error
+		var deps_2 []spec.SpecDbData
+		// TODO this should all be per-stage
+		deps_2, complete, err = pkgdb.GetInstallDeps(pkg.GetFQN(), db.DepTest)
+		deps = append(deps, deps_2...)
 		if err != nil {
 			logrus.Fatal(err)
 		}

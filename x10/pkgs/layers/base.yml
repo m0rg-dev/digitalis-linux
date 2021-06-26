@@ -17,13 +17,13 @@ package:
       script: |
         cd /hostdir/distfiles
         for src in "${X10_SOURCES_URLS[@]}"; do
-          shasum -a256 $(basename "$src")
+          sha256sum $(basename "$src")
         done
     verify:
       script: |
         cd /hostdir/distfiles
         for i in "${!X10_SOURCES_URLS[@]}"; do
-          echo "${X10_SOURCES_CHECKSUMS[$i]}  $(basename "${X10_SOURCES_URLS[$i]}")" | shasum -a256 -c -
+          echo "${X10_SOURCES_CHECKSUMS[$i]}  $(basename "${X10_SOURCES_URLS[$i]}")" | sha256sum -c -
         done
     extract:
       prescript:
@@ -33,10 +33,12 @@ package:
         for src in "${X10_SOURCES_URLS[@]}"; do
           src=/hostdir/distfiles/$(basename "$src")
           test -d $(basename $X10_META_UNPACK_DIR)-$X10_META_VERSION || {
-            bsdtar xf "$src"
+            tar xf "$src" --no-same-owner
           }
         done
     configure:
+      prescript:
+        - "ldconfig"
       useworkdir: true
     build:
       useworkdir: true
@@ -44,11 +46,11 @@ package:
       useworkdir: true
     install:
       prescript:
-        - "rm -rf /destdir/\"$X10_PACKAGE_FQN\""
+        - 'rm -rf /destdir/"$X10_PACKAGE_FQN"'
       useworkdir: true
     package:
       prescript:
-        - "mkdir -pv $(dirname /hostdir/binpkgs/\"$X10_PACKAGE_FQN\")"
+        - 'mkdir -pv $(dirname /hostdir/binpkgs/"$X10_PACKAGE_FQN")'
         - |
           for hook in $(ls /etc/x10/hooks.d); do
             test -x /etc/x10/hooks.d/$hook && /etc/x10/hooks.d/$hook

@@ -14,6 +14,7 @@ import (
 	"github.com/gofrs/flock"
 	"github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
+	"m0rg.dev/x10/conf"
 	"m0rg.dev/x10/spec"
 )
 
@@ -73,25 +74,33 @@ func (db *PackageDatabase) unlocked_Write(contents *PackageDatabaseContents) err
 	return ioutil.WriteFile(db.BackingFile, d, os.ModePerm)
 }
 
-func (db *PackageDatabase) Update(pkg spec.SpecLayer) error {
+func (db *PackageDatabase) Update(pkg spec.SpecLayer, force_invalid bool) error {
 	// Attempt to grab generated dependencies
 	dbpkg := pkg.ToDB()
 	dbpkg.GeneratedValid = true
-	gen_depends, err := ioutil.ReadFile(filepath.Join("targetdir", "destdir", pkg.GetFQN(), "generated-depends"))
+	gen_depends, err := ioutil.ReadFile(filepath.Join(conf.TargetDir(), "destdir", pkg.GetFQN(), "generated-depends"))
 	if err == nil {
 		dbpkg.GeneratedDepends = strings.Split(strings.TrimSpace(string(gen_depends)), "\n")
 	} else {
 		if !os.IsNotExist(err) {
 			dbpkg.GeneratedValid = false
+		} else {
+			logrus.Debug(" => no generated depends")
 		}
 	}
-	gen_provides, err := ioutil.ReadFile(filepath.Join("targetdir", "destdir", pkg.GetFQN(), "generated-provides"))
+	gen_provides, err := ioutil.ReadFile(filepath.Join(conf.TargetDir(), "destdir", pkg.GetFQN(), "generated-provides"))
 	if err == nil {
 		dbpkg.GeneratedProvides = strings.Split(strings.TrimSpace(string(gen_provides)), "\n")
 	} else {
 		if !os.IsNotExist(err) {
 			dbpkg.GeneratedValid = false
+		} else {
+			logrus.Debug(" => no generated depends")
 		}
+	}
+
+	if force_invalid {
+		dbpkg.GeneratedValid = false
 	}
 
 	lock := flock.New(db.BackingFile + ".lock")
@@ -149,6 +158,7 @@ func (db *PackageDatabase) IndexFromRepo() error {
 	}
 
 	var wg sync.WaitGroup
+	var updates sync.Map
 
 	filepath.WalkDir("pkgs", func(path string, d fs.DirEntry, err error) error {
 		if d.Name() == "layers" {
@@ -163,7 +173,7 @@ func (db *PackageDatabase) IndexFromRepo() error {
 				if !contents.CheckUpToDate(from_repo) {
 					repo_to_db := from_repo.ToDB()
 					logrus.Info(" => updating database")
-					contents.Packages[from_repo.GetFQN()] = repo_to_db
+					updates.Store(from_repo.GetFQN(), repo_to_db)
 				}
 				wg.Done()
 			}()
@@ -173,22 +183,39 @@ func (db *PackageDatabase) IndexFromRepo() error {
 	})
 
 	wg.Wait()
+	updates.Range(func(key interface{}, value interface{}) bool {
+		fqn := key.(string)
+		dbpkg := value.(spec.SpecDbData)
+		contents.Packages[fqn] = dbpkg
+		return true
+	})
 
 	logrus.Infof("Rebuilding provider cache")
 	contents.ProviderIndex = map[string]string{}
 	for fqn, dbpkg := range contents.Packages {
+		logrus.Debugf(" => " + fqn)
 		if dbpkg.GeneratedValid {
 			for _, prov := range dbpkg.GeneratedProvides {
-				contents.ProviderIndex[prov] = fqn
+				contents.maybeAddProvider(prov, fqn)
 			}
 		}
-		// TODO only do this if package is latest
-		contents.ProviderIndex[dbpkg.Meta.Name] = fqn
+		contents.maybeAddProvider(dbpkg.Meta.Name, fqn)
 	}
 
 	db.unlocked_Write(contents)
 	logrus.Info("Updated package database in " + db.BackingFile + ".")
 	return nil
+}
+
+func (contents *PackageDatabaseContents) maybeAddProvider(atom string, fqn string) {
+	existing, ok := contents.ProviderIndex[atom]
+	if ok {
+		if strings.Compare(existing, atom) > 0 {
+			contents.ProviderIndex[atom] = fqn
+		}
+	} else {
+		contents.ProviderIndex[atom] = fqn
+	}
 }
 
 type DependencyType int
@@ -229,7 +256,7 @@ func (db *PackageDatabase) GetInstallDeps(top_level string, dep_type DependencyT
 
 	switch dep_type {
 	case DepRun:
-		outstanding[top_level] = false
+		outstanding[pkg.Meta.Name] = false
 	case DepTest:
 		for _, atom := range pkg.Depends.Test {
 			outstanding[atom] = false

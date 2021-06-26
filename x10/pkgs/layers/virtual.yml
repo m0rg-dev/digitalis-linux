@@ -1,0 +1,16 @@
+---
+layers: []
+package:
+  meta: ~
+  depends: ~
+  sources: ~
+  stages:
+    package:
+      prescript:
+        - "mkdir -pv \"$DESTDIR\""
+        - "mkdir -pv $(dirname /hostdir/binpkgs/\"$X10_PACKAGE_FQN\")"
+      script: |
+        tar cfJ /hostdir/binpkgs/"$X10_PACKAGE_FQN".tar.xz -C "$DESTDIR" .
+  stageorder:
+    - package
+  environment: ~

@@ -1,0 +1,18 @@
+layers: ["gnu_configure"]
+package:
+  meta:
+    name: "dev-base/bison"
+    version: "3.7.6"
+    revision: 1
+    maintainer: "Morgan Thomas <m@m0rg.dev>"
+    homepage: "https://gnu.org/software/bison"
+    license: "GPL-3.0-or-later"
+    description: "LALR parser generator"
+  sources:
+    - url: "https://ftpmirror.gnu.org/gnu/bison/bison-${X10_META_VERSION}.tar.xz"
+      checksum: "67d68ce1e22192050525643fc0a7a22297576682bef6a5c51446903f5aeef3cf"
+  depends:
+    run:
+      - dev-base/m4
+  environment:
+    SKIP_TESTS: "1"

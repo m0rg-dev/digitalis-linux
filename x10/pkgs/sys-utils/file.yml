@@ -1,0 +1,19 @@
+layers: ["gnu_configure"]
+package:
+  meta:
+    name: "sys-utils/file"
+    version: "5.40"
+    revision: 1
+    maintainer: "Morgan Thomas <m@m0rg.dev>"
+    homepage: "http://darwinsys.com/file/"
+    license: "TODO"
+    description: "Directory search utilities"
+  sources:
+    - url: "ftp://ftp.astron.com/pub/file/file-${X10_META_VERSION}.tar.gz"
+      checksum: "167321f43c148a553f68a0ea7f579821ef3b11c27b8cbe158e4df897e4a5dd57"
+  depends:
+    build:
+      - compress-utils/xz
+      - sys-libs/zlib
+  environment:
+    CONFIGURE_ARGS: "--disable-bzlib --disable-libseccomp"

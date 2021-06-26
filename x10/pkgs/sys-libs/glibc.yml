@@ -3,13 +3,15 @@ package:
   meta:
     name: "sys-libs/glibc"
     version: "2.33"
-    revision: 1
+    revision: 2
     maintainer: "Morgan Thomas <m@m0rg.dev>"
     homepage: "https://www.gnu.org/software/glibc/"
     license: "GPL-3.0-or-later"
     description: "The GNU C Library"
   depends:
     build:
+      - dev-base/kernel-headers
+    run:
       - dev-base/kernel-headers
   sources:
     - url: "https://ftpmirror.gnu.org/gnu/libc/glibc-${X10_META_VERSION}.tar.xz"

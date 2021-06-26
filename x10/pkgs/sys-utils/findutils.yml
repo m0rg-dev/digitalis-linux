@@ -1,0 +1,13 @@
+layers: ["gnu_configure"]
+package:
+  meta:
+    name: "sys-utils/findutils"
+    version: "4.8.0"
+    revision: 1
+    maintainer: "Morgan Thomas <m@m0rg.dev>"
+    homepage: "https://gnu.org/software/findutils"
+    license: "GPL-3.0-or-later"
+    description: "Directory search utilities"
+  sources:
+    - url: "https://ftpmirror.gnu.org/gnu/findutils/findutils-${X10_META_VERSION}.tar.xz"
+      checksum: "57127b7e97d91282c6ace556378d5455a9509898297e46e10443016ea1387164"

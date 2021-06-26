@@ -146,7 +146,7 @@ func RunStage(pkg spec.SpecLayer, stage string) error {
 		}
 
 		db := db.PackageDatabase{BackingFile: conf.PkgDb()}
-		err = db.Update(pkg)
+		err = db.Update(pkg, false)
 		if err != nil {
 			logrus.Error("Error while updating package database: ")
 			logrus.Error(err)
