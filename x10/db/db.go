@@ -184,28 +184,27 @@ func (db *PackageDatabase) IndexFromRepo() error {
 				doupdate := false
 
 				if !contents.CheckUpToDate(from_repo) {
-					local_logger.Debugf(" => updating because outdated")
+					local_logger.Infof("Updating database (outdated)")
 					doupdate = true
 				}
 
 				if !contents.Packages[from_repo.GetFQN()].GeneratedValid {
-					local_logger.Debugf(" => updating because repo invalid")
+					local_logger.Infof("Updating database (not built)")
 					doupdate = true
 				}
 
 				if err != nil {
-					local_logger.Debugf(" => updating because stat error on " + filepath.Join(conf.HostDir(), "binpkgs", from_repo.GetFQN()+".tar.xz"))
+					local_logger.Infof("Updating database (stat error on binpkg)")
 					doupdate = true
 				}
 
 				if srcstat != nil && pkgstat != nil && srcstat.ModTime().Unix() > pkgstat.ModTime().Unix() {
-					local_logger.Debugf(" => updating because source is newer than binpkg")
+					local_logger.Infof("Updating database (source is newer)")
 					doupdate = true
 				}
 
 				if doupdate {
 					repo_to_db := from_repo.ToDB()
-					local_logger.Infof("Updating database")
 					updates.Store(from_repo.GetFQN(), repo_to_db)
 				}
 				wg.Done()
@@ -333,7 +332,7 @@ func (db *PackageDatabase) GetInstallDeps(top_level string, dep_type DependencyT
 			pkg := contents.Packages[fqn]
 			all_depends := pkg.Depends.Run
 
-			if _, no_gen := os.LookupEnv("X10_NO_GENERATED_DEPS"); !no_gen {
+			if conf.UseGeneratedDependencies() {
 				if !pkg.GeneratedValid {
 					logger.Warnf("Need to evaluate %s but no generated depends", fqn)
 					complete = false
@@ -360,36 +359,6 @@ func (db *PackageDatabase) GetInstallDeps(top_level string, dep_type DependencyT
 				delete(outstanding, fqn)
 				logger.Debugf(" => RESOLVED: %s", fqn)
 			}
-
-			/*
-				depend_pkg := contents.Packages[fqn]
-
-				for _, sub_depend := range depend_pkg.Depends.Run {
-					_, already_resolved := resolved[sub_depend]
-					if !already_resolved {
-						outstanding[sub_depend] = false
-					}
-				}
-
-				if _, no_gen := os.LookupEnv("X10_NO_GENERATED_DEPS"); !no_gen {
-					if !depend_pkg.GeneratedValid {
-						logger.Warnf("Need to evaluate %s but no generated depends", fqn)
-						complete = false
-					}
-					for _, sub_depend := range depend_pkg.GeneratedDepends {
-						_, already_resolved := resolved[sub_depend]
-						if !already_resolved {
-							outstanding[sub_depend] = false
-						}
-					}
-				}
-				_, ok := resolved[depend]
-				if !ok {
-					resolved_order = append(resolved_order, fqn)
-				}
-				resolved[depend] = fqn
-				delete(outstanding, depend)
-			*/
 		}
 	}
 

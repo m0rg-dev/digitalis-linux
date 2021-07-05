@@ -3,7 +3,7 @@ module m0rg.dev/x10
 go 1.16
 
 require (
-	github.com/antonfisher/nested-logrus-formatter v1.3.1 // indirect
+	github.com/antonfisher/nested-logrus-formatter v1.3.1
 	github.com/davecgh/go-spew v1.1.1
 	github.com/gofrs/flock v0.8.0
 	github.com/sirupsen/logrus v1.8.1

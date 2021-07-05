@@ -24,12 +24,20 @@ func main() {
 	installPlanCmd := flag.NewFlagSet("install_plan", flag.ExitOnError)
 	installPlanDot := installPlanCmd.Bool("dot", false, "Print .dot of dependency graph to stdout")
 
+	config_path := flag.String("config", "/etc/x10.conf:./etc/x10.conf", "Colon-separated list of configuration files")
+
+	flag.Parse()
+
+	conf.ReadConfig(*config_path)
+
 	if len(os.Args) < 2 {
 		fmt.Printf("Usage: %s <subcommand> ...\n", os.Args[0])
 		os.Exit(1)
 	}
 
 	logger := x10_log.Get("main")
+	// TODO silly hack
+	os.Args = append([]string{os.Args[0]}, flag.Args()...)
 
 	switch os.Args[1] {
 	case "gensum":
