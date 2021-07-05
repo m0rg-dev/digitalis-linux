@@ -1,0 +1,24 @@
+# auto-generated from void-packages/python3-BeautifulSoup4
+layers:
+  - python3-module
+package:
+  meta:
+    name: python/beautifulsoup4
+    version: 4.9.3
+    revision: 1
+    maintainer: Morgan Thomas <m@m0rg.dev>
+    homepage: https://www.crummy.com/software/BeautifulSoup
+    license: MIT
+    description: Python3 HTML/XML parser
+  sources:
+    - url: https://files.pythonhosted.org/packages/source/b/beautifulsoup4/beautifulsoup4-${X10_META_VERSION}.tar.gz
+      checksum: 84729e322ad1d5b4d25f805bfa05b902dd96450f43842c4e99067d5e1369eb25
+  depends:
+    build:
+      - python/setuptools
+    run:
+      - python/soupsieve
+  stages:
+    test:
+      script: |
+        :

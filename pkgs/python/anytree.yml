@@ -1,0 +1,31 @@
+# auto-generated from void-packages/python3-anytree
+layers:
+  - python3-module
+package:
+  meta:
+    name: python/anytree
+    version: 2.8.0
+    revision: 1
+    maintainer: Morgan Thomas <m@m0rg.dev>
+    homepage: https://github.com/c0fec0de/anytree
+    license: Apache-2.0
+    description: Powerful and lightweight Python tree data structure
+  sources:
+    - url: https://files.pythonhosted.org/packages/source/a/anytree/anytree-${X10_META_VERSION}.tar.gz
+      checksum: 3f0f93f355a91bc3e6245319bf4c1d50e3416cc7a35cc1133c1ff38306bbccab
+  depends:
+    hostbuild:
+      - python/setuptools_scm
+    # test:
+    #   - xbps/python3-six
+    #   - xbps/python3-coverage
+    #   - xbps/python3-nose
+    #   - xbps/graphviz
+    run:
+      - python/six
+  stages:
+    install:
+      postscript:
+        - rm ${DESTDIR}/usr/LICENSE
+  environment:
+    SKIP_TESTS: "1"

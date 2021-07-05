@@ -2,23 +2,25 @@ package lib
 
 import (
 	"errors"
-	"fmt"
 	"io/fs"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
 
-	"github.com/sirupsen/logrus"
+	"m0rg.dev/x10/conf"
 	"m0rg.dev/x10/db"
 	"m0rg.dev/x10/spec"
+	"m0rg.dev/x10/trigger"
+	"m0rg.dev/x10/x10_log"
 )
 
 func Install(pkgdb db.PackageDatabase, pkg spec.SpecDbData, root string) error {
+	logger := x10_log.Get("install").WithField("pkg", pkg.GetFQN())
 	installed, err := os.ReadFile(filepath.Join(root, "var", "db", "x10", "installed"))
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
-			logrus.Warn("(created installed list)")
+			logger.Warn("(created installed list)")
 			os.MkdirAll(filepath.Join(root, "var", "db", "x10"), os.ModePerm)
 		} else {
 			return err
@@ -33,11 +35,11 @@ func Install(pkgdb db.PackageDatabase, pkg spec.SpecDbData, root string) error {
 	}
 
 	if _, ok := installed_map[pkg.GetFQN()]; ok {
-		logrus.Infof("Already installed: %s", pkg.GetFQN())
+		logger.Infof("Already installed: %s", pkg.GetFQN())
 		return nil
 	}
 
-	logrus.Infof("Installing: %s -> %s", pkg.GetFQN(), root)
+	logger.Infof("Installing: %s -> %s", pkg.GetFQN(), root)
 
 	tmp_path := filepath.Join(root, "tmp", "x10", pkg.GetFQN())
 
@@ -45,16 +47,20 @@ func Install(pkgdb db.PackageDatabase, pkg spec.SpecDbData, root string) error {
 	if err != nil {
 		return err
 	}
-	extract_cmd := exec.Command("tar", "xvf", fmt.Sprintf("hostdir/binpkgs/%s.tar.xz", pkg.GetFQN()), "-C", tmp_path)
-	extract_cmd.Run()
+	extract_cmd := exec.Command("tar", "xvf", filepath.Join(conf.HostDir(), "binpkgs", pkg.GetFQN()+".tar.xz"), "-C", tmp_path)
+	out, err := extract_cmd.CombinedOutput()
+	if err != nil {
+		logger.Error(string(out))
+		return err
+	}
 
 	filepath.WalkDir(tmp_path, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
-			logrus.Fatal(err)
+			logger.Fatal(err)
 		}
 		target_path, err := filepath.Rel(tmp_path, path)
 		if err != nil {
-			logrus.Fatal(err)
+			logger.Fatal(err)
 		}
 
 		if d.Type().IsRegular() && !strings.ContainsRune(target_path, '/') {
@@ -64,35 +70,37 @@ func Install(pkgdb db.PackageDatabase, pkg spec.SpecDbData, root string) error {
 
 		target_path, err = filepath.Abs(filepath.Join(root, target_path))
 		if err != nil {
-			logrus.Fatal(err)
+			logger.Fatal(err)
 		}
 
 		if d.IsDir() {
 			err := os.Mkdir(target_path, os.ModePerm)
 			if err != nil {
 				if errors.Is(err, os.ErrExist) {
-					logrus.Debugf(" -- %s", target_path)
+					logger.Debugf(" -- %s", target_path)
 				} else {
-					logrus.Fatal(err)
+					logger.Fatal(err)
 				}
 			} else {
-				logrus.Debugf(" => %s", target_path)
+				logger.Debugf(" => %s", target_path)
 			}
 		} else {
-			copy_cmd := exec.Command("cp", "-a", path, target_path)
+			copy_cmd := exec.Command("cp", "-af", path, target_path)
 			out, err := copy_cmd.CombinedOutput()
-			logrus.Debugf(" %s => %s", path, target_path)
+			logger.Debugf(" %s => %s", path, target_path)
 			if err != nil {
-				logrus.Error(string(out))
-				logrus.Fatal(err)
+				logger.Error(string(out))
+				logger.Fatal(err)
 			}
 			if copy_cmd.ProcessState.ExitCode() != 0 {
-				logrus.Error(string(out))
-				logrus.Fatalf("%+v exited with code %d", copy_cmd.Args, copy_cmd.ProcessState.ExitCode())
+				logger.Error(string(out))
+				logger.Fatalf("%+v exited with code %d", copy_cmd.Args, copy_cmd.ProcessState.ExitCode())
 			}
 		}
 		return nil
 	})
+
+	trigger.RunTriggers(pkg.ToLayer())
 
 	f, err := os.OpenFile(filepath.Join(root, "var", "db", "x10", "installed"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, os.ModePerm)
 	if err != nil {

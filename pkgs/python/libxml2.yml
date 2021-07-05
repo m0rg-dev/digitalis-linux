@@ -1,0 +1,23 @@
+# auto-generated from void-packages/libxml2-python
+layers:
+  - python3-module
+package:
+  meta:
+    name: python/libxml2
+    version: 2.9.10
+    revision: 1
+    maintainer: Morgan Thomas <m@m0rg.dev>
+    homepage: http://www.xmlsoft.org/
+    license: MIT
+    description: Library providing XML and HTML support - Python bindings
+  sources:
+    - url: http://xmlsoft.org/sources/libxml2-${X10_META_VERSION}.tar.gz
+      checksum: aafee193ffb8fe0c82d4afef6ef91972cbaf5feea100edc2f262750611b4be1f
+  depends:
+    build:
+      - sys-libs/libxml2
+  workdir: /builddir/libxml2-${X10_META_VERSION}/python
+  patches:
+    - py39compat.patch
+  environment:
+    SKIP_TESTS: "1"

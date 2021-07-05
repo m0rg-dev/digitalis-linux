@@ -1,0 +1,38 @@
+# auto-generated from void-packages/python3-lxml
+layers:
+  - python3-module
+package:
+  meta:
+    name: python/lxml
+    version: 4.6.3
+    revision: 1
+    maintainer: Morgan Thomas <m@m0rg.dev>
+    homepage: https://lxml.de/
+    license: BSD-3-Clause, custom:ElementTree
+    description: Python binding for the libxml2 and libxslt libraries
+    unpackdir: lxml-lxml
+  sources:
+    - url: https://github.com/lxml/lxml/archive/lxml-${X10_META_VERSION}.tar.gz
+      checksum: 5955ed615b7be9407d9eab83edde8f1818c94224d762d1d6355bf0371f220bd6
+  depends:
+    build:
+      - python/cython
+      - python/setuptools
+      - sys-libs/libxslt
+    run:
+      - python/cssselect
+      - python/beautifulsoup4
+      - python/html5lib
+  # stages:
+  #   test:
+  #     script: |
+  #       cp -f build-3.*/lib.linux-*/lxml/*.so src/lxml;
+  #       python3 test.py -vv --all-levels -p
+  #   install:
+  #     postscript:
+  #       - |
+  #         vlicense LICENSES.txt;
+  #         vlicense doc/licenses/BSD.txt;
+  #         vlicense doc/licenses/elementtree.txt
+  environment:
+    SKIP_TESTS: "1"

@@ -1,0 +1,18 @@
+layers: ["gnu_configure"]
+package:
+  meta:
+    name: "dev-base/python39"
+    version: "3.9.5"
+    revision: 1
+    maintainer: "Morgan Thomas <m@m0rg.dev>"
+    homepage: "https://python.org"
+    license: "TODO"
+    description: "The Python programming language"
+    unpackdir: Python
+  sources:
+    - url: "https://www.python.org/ftp/python/${X10_META_VERSION}/Python-${X10_META_VERSION}.tar.xz"
+      checksum: "0c5a140665436ec3dbfbb79e2dfb6d192655f26ef4a29aeffcb6d1820d716d83"
+  depends:
+    build:
+      - sys-libs/libffi
+      - sys-libs/zlib

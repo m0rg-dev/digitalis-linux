@@ -1,0 +1,49 @@
+# auto-generated from void-packages/glib
+layers:
+  - meson
+package:
+  meta:
+    name: sys-libs/glib
+    version: 2.68.2
+    revision: 1
+    maintainer: Morgan Thomas <m@m0rg.dev>
+    homepage: https://wiki.gnome.org/Projects/GLib
+    license: LGPL-2.1-or-later
+    description: GNU library of C routines
+  sources:
+    - url: https://download.gnome.org/sources/glib/2.68/glib-${X10_META_VERSION}.tar.xz
+      checksum: ecc7798a9cc034eabdfd7f246e6dd461cdbf1175fcc2e9867cc7da7b7309e0fb
+  environment:
+    CONFIGURE_ARGS:
+      -Dfam=false -Dman=true -Dselinux=disabled -Dgtk_doc=true --default-library=both
+      -Db_lto=false
+    SKIP_TESTS: "1"
+  depends:
+    build:
+      - sys-libs/zlib
+      - sys-libs/libxslt
+      - sys-utils/gtk-doc
+      - dev-base/pkg-config
+  #   hostbuild:
+  #     - xbps/gettext
+  #     - xbps/pkg-config
+  #     - xbps/libxslt
+  #     - xbps/docbook-xsl
+  #     - xbps/gtk-doc
+  #   build:
+  #     - xbps/zlib-devel
+  #     - xbps/pcre-devel
+  #     - xbps/libffi-devel
+  #     - xbps/dbus-devel
+  #     - xbps/elfutils-devel
+  #     - xbps/libmount-devel
+  #   test:
+  #     - xbps/desktop-file-utils
+  #     - xbps/shared-mime-info
+  #     - xbps/tzdata
+  #     - xbps/dbus
+  #     - xbps/python3-pytest
+  # stages:
+  #   test:
+  #     script: |
+  #       dbus-run-session ninja -C build test

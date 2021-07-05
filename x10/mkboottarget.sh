@@ -11,11 +11,12 @@ function cleanup {
 }
 trap cleanup EXIT
 
-mkdir -p targetdir_boot
+mkdir -p ../targetdir_0
+rm -rf ../targetdir_0/*
 # do this instead of just rm -rf targetdir/* to avoid permissions issues
-podman run --rm -it -v targetdir_boot:/targetdir docker.io/debian:sid rm -rf 'targetdir/*'
+# podman run --rm -it -v targetdir_boot:/targetdir docker.io/debian:sid rm -rf 'targetdir/*'
 
-buildah run $cid tar c /bin /etc /lib /lib64 /sbin /tmp /usr /var | tar x -C targetdir_boot
+buildah run $cid tar c /bin /etc /lib /lib64 /sbin /tmp /usr /var | tar x -C ../targetdir_0
 
 cleanup
 

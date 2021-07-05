@@ -1,0 +1,67 @@
+# auto-generated from void-packages/docbook-xml
+layers:
+  - base
+package:
+  meta:
+    name: fs/docbook-xml
+    version: "4.5"
+    revision: 1
+    maintainer: Morgan Thomas <m@m0rg.dev>
+    homepage: http://www.oasis-open.org/docbook/
+    license: MIT
+    description: XML DTD designed for computer documentation
+  sources:
+    - url: http://www.oasis-open.org/docbook/xml/${X10_META_VERSION}/docbook-xml-${X10_META_VERSION}.zip
+      checksum: 4e4e037a2b83c98c6c94818390d4bdd3f6e10f6ec62dd79188594e26190dc7b4
+    - url: http://www.oasis-open.org/docbook/xml/4.4/docbook-xml-4.4.zip
+      checksum: 02f159eb88c4254d95e831c51c144b1863b216d909b5ff45743a1ce6f5273090
+    - url: http://www.oasis-open.org/docbook/xml/4.3/docbook-xml-4.3.zip
+      checksum: 23068a94ea6fd484b004c5a73ec36a66aa47ea8f0d6b62cc1695931f5c143464
+    - url: http://www.oasis-open.org/docbook/xml/4.2/docbook-xml-4.2.zip
+      checksum: acc4601e4f97a196076b7e64b368d9248b07c7abf26b34a02cca40eeebe60fa2
+  depends:
+    build:
+      - sys-utils/xmlcatmgr
+      - compress-utils/libarchive
+    run:
+      - sys-utils/xmlcatmgr
+  stages:
+    extract:
+      script: |
+        :
+    patch:
+      useworkdir: false
+    configure:
+      useworkdir: false
+    build:
+      useworkdir: false
+    test:
+      useworkdir: false
+    install:
+      script: |
+        versions="4.2 4.3 4.4 4.5";
+        for ver in ${versions};
+        do
+            dir=${DESTDIR}/usr/share/xml/docbook/${ver};
+            install -d -m755 ${dir};
+            bsdtar xf /hostdir/distfiles/docbook-xml-${ver}.zip -C ${dir} && mv ${dir}/catalog.xml ${dir}/catalog;
+        done;
+        dir=${DESTDIR}/usr/share/xml/docbook/4.2;
+        sed -e 's|V4.2|V4.1.2|g' < ${dir}/catalog > ${dir}/catalog-4.1.2;
+        chmod 644 ${dir}/catalog-4.1.2;
+        sed -n '/Copyright/,/maintenance/p' ${DESTDIR}/usr/share/xml/docbook/${X10_META_VERSION}/dbhierx.mod > LICENSE;
+        # vlicense LICENSE
+      useworkdir: false
+  triggerdata:
+    xmlcatalog:
+      xmlentries:
+        - rewriteSystem http://www.oasis-open.org/docbook/xml/4.2 /usr/share/xml/docbook/4.2
+        - rewriteSystem http://www.oasis-open.org/docbook/xml/4.3 /usr/share/xml/docbook/4.3
+        - rewriteSystem http://www.oasis-open.org/docbook/xml/4.4 /usr/share/xml/docbook/4.4
+        - rewriteSystem http://www.oasis-open.org/docbook/xml/4.5 /usr/share/xml/docbook/4.5
+        - rewriteSystem http://www.oasis-open.org/docbook/xml/4.1.2 /usr/share/xml/docbook/4.2
+        - nextCatalog /usr/share/xml/docbook/4.2/catalog --
+        - nextCatalog /usr/share/xml/docbook/4.3/catalog --
+        - nextCatalog /usr/share/xml/docbook/4.4/catalog --
+        - nextCatalog /usr/share/xml/docbook/4.5/catalog --
+        - nextCatalog /usr/share/xml/docbook/4.2/catalog-4.1.2 --

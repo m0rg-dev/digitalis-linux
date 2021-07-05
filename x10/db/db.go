@@ -7,15 +7,16 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"sort"
 	"strings"
 	"sync"
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/gofrs/flock"
-	"github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
 	"m0rg.dev/x10/conf"
 	"m0rg.dev/x10/spec"
+	"m0rg.dev/x10/x10_log"
 )
 
 type PackageDatabaseContents struct {
@@ -75,6 +76,7 @@ func (db *PackageDatabase) unlocked_Write(contents *PackageDatabaseContents) err
 }
 
 func (db *PackageDatabase) Update(pkg spec.SpecLayer, force_invalid bool) error {
+	logger := x10_log.Get("update").WithField("pkg", pkg.GetFQN())
 	// Attempt to grab generated dependencies
 	dbpkg := pkg.ToDB()
 	dbpkg.GeneratedValid = true
@@ -85,7 +87,7 @@ func (db *PackageDatabase) Update(pkg spec.SpecLayer, force_invalid bool) error 
 		if !os.IsNotExist(err) {
 			dbpkg.GeneratedValid = false
 		} else {
-			logrus.Debug(" => no generated depends")
+			logger.Debug(" => no generated depends")
 		}
 	}
 	gen_provides, err := ioutil.ReadFile(filepath.Join(conf.TargetDir(), "destdir", pkg.GetFQN(), "generated-provides"))
@@ -95,7 +97,7 @@ func (db *PackageDatabase) Update(pkg spec.SpecLayer, force_invalid bool) error 
 		if !os.IsNotExist(err) {
 			dbpkg.GeneratedValid = false
 		} else {
-			logrus.Debug(" => no generated depends")
+			logger.Debug(" => no generated depends")
 		}
 	}
 
@@ -124,21 +126,23 @@ func (db *PackageDatabase) Update(pkg spec.SpecLayer, force_invalid bool) error 
 
 	db.unlocked_Write(contents)
 
-	logrus.Info("Updated package database in " + db.BackingFile + ".")
+	logger.Info("Updated package database in " + db.BackingFile + ".")
 	return err
 }
 
 func (contents *PackageDatabaseContents) CheckUpToDate(from_repo spec.SpecLayer) bool {
+	logger := x10_log.Get("check").WithField("pkg", from_repo.GetFQN())
+
 	repo_to_db := from_repo.ToDB()
 	from_db, ok := contents.Packages[from_repo.GetFQN()]
 	if ok {
-		logrus.Debugf(" => already in DB")
+		logger.Debugf(" => already in DB")
 		if reflect.DeepEqual(repo_to_db.Meta, from_db.Meta) {
-			logrus.Debugf("  => meta match")
+			logger.Debugf("  => meta match")
 		} else {
-			logrus.Warnf(" => meta for %s doesn't match repo,", from_repo.GetFQN())
-			logrus.Debug(spew.Sdump(repo_to_db))
-			logrus.Debug(spew.Sdump(from_db))
+			logger.Warnf(" => meta for %s doesn't match repo,", from_repo.GetFQN())
+			logger.Debug(spew.Sdump(repo_to_db))
+			logger.Debug(spew.Sdump(from_db))
 			return false
 		}
 	} else {
@@ -148,6 +152,7 @@ func (contents *PackageDatabaseContents) CheckUpToDate(from_repo spec.SpecLayer)
 }
 
 func (db *PackageDatabase) IndexFromRepo() error {
+	logger := x10_log.Get("index").WithField("db", db.BackingFile)
 	lock := flock.New(db.BackingFile + ".lock")
 	lock.Lock()
 	defer lock.Close()
@@ -160,19 +165,47 @@ func (db *PackageDatabase) IndexFromRepo() error {
 	var wg sync.WaitGroup
 	var updates sync.Map
 
-	filepath.WalkDir("pkgs", func(path string, d fs.DirEntry, err error) error {
+	filepath.WalkDir(conf.PackageDir(), func(path string, d fs.DirEntry, err error) error {
 		if d.Name() == "layers" {
 			return fs.SkipDir
 		}
 		if d.Type().IsRegular() {
 			wg.Add(1)
 			go func() {
-				logrus.Infof("Indexing: %s", path)
+				local_logger := logger.WithField("pkgsrc", path)
+				local_logger.Infof("Indexing")
 
 				from_repo := spec.LoadPackage(path)
+				srcstat, err := os.Stat(path)
+				if err != nil {
+					panic(err)
+				}
+				pkgstat, err := os.Stat(filepath.Join(conf.HostDir(), "binpkgs", from_repo.GetFQN()+".tar.xz"))
+				doupdate := false
+
 				if !contents.CheckUpToDate(from_repo) {
+					local_logger.Debugf(" => updating because outdated")
+					doupdate = true
+				}
+
+				if !contents.Packages[from_repo.GetFQN()].GeneratedValid {
+					local_logger.Debugf(" => updating because repo invalid")
+					doupdate = true
+				}
+
+				if err != nil {
+					local_logger.Debugf(" => updating because stat error on " + filepath.Join(conf.HostDir(), "binpkgs", from_repo.GetFQN()+".tar.xz"))
+					doupdate = true
+				}
+
+				if srcstat != nil && pkgstat != nil && srcstat.ModTime().Unix() > pkgstat.ModTime().Unix() {
+					local_logger.Debugf(" => updating because source is newer than binpkg")
+					doupdate = true
+				}
+
+				if doupdate {
 					repo_to_db := from_repo.ToDB()
-					logrus.Info(" => updating database")
+					local_logger.Infof("Updating database")
 					updates.Store(from_repo.GetFQN(), repo_to_db)
 				}
 				wg.Done()
@@ -190,10 +223,10 @@ func (db *PackageDatabase) IndexFromRepo() error {
 		return true
 	})
 
-	logrus.Infof("Rebuilding provider cache")
+	logger.Infof("Rebuilding provider cache")
 	contents.ProviderIndex = map[string]string{}
 	for fqn, dbpkg := range contents.Packages {
-		logrus.Debugf(" => " + fqn)
+		logger.Debugf(" => " + fqn)
 		if dbpkg.GeneratedValid {
 			for _, prov := range dbpkg.GeneratedProvides {
 				contents.maybeAddProvider(prov, fqn)
@@ -203,7 +236,7 @@ func (db *PackageDatabase) IndexFromRepo() error {
 	}
 
 	db.unlocked_Write(contents)
-	logrus.Info("Updated package database in " + db.BackingFile + ".")
+	logger.Info("Updated package database in " + db.BackingFile + ".")
 	return nil
 }
 
@@ -240,42 +273,95 @@ func (contents *PackageDatabaseContents) FindFQN(atom string) (*string, error) {
 }
 
 func (db *PackageDatabase) GetInstallDeps(top_level string, dep_type DependencyType) (pkgs []spec.SpecDbData, complete bool, err error) {
+	logger := x10_log.Get("index").WithField("toplevel", top_level)
+
 	contents, err := db.Read()
 	if err != nil {
 		return nil, false, err
 	}
 	outstanding := map[string]bool{}
-	resolved := map[string]string{}
+	resolved := map[string]bool{}
+	resolved_order := []string{}
 	complete = true
 
-	pkg_fqn, err := contents.FindFQN(top_level)
+	top_level_fqn, err := contents.FindFQN(top_level)
 	if err != nil {
 		return nil, false, err
 	}
-	pkg := contents.Packages[*pkg_fqn]
+	top_level_pkg := contents.Packages[*top_level_fqn]
 
 	switch dep_type {
 	case DepRun:
-		outstanding[pkg.Meta.Name] = false
+		outstanding[*top_level_fqn] = true
 	case DepTest:
-		for _, atom := range pkg.Depends.Test {
-			outstanding[atom] = false
+		for _, atom := range top_level_pkg.Depends.Test {
+			fqn, err := contents.FindFQN(atom)
+			if err != nil {
+				return nil, false, err
+			}
+			outstanding[*fqn] = true
 		}
 	case DepBuild:
-		for _, atom := range pkg.Depends.Build {
-			outstanding[atom] = false
+		for _, atom := range top_level_pkg.Depends.Build {
+			fqn, err := contents.FindFQN(atom)
+			if err != nil {
+				return nil, false, err
+			}
+			outstanding[*fqn] = true
 		}
 	case DepHostBuild:
-		for _, atom := range pkg.Depends.HostBuild {
-			outstanding[atom] = false
+		for _, atom := range top_level_pkg.Depends.HostBuild {
+			fqn, err := contents.FindFQN(atom)
+			if err != nil {
+				return nil, false, err
+			}
+			outstanding[*fqn] = true
 		}
 	}
 
 	for len(outstanding) > 0 {
+		logger.Debugf("(iteration; %d left)", len(outstanding))
+		depends := []string{}
 		for depend := range outstanding {
-			logrus.Debugf("Evaluating: %s", depend)
-			fqn, have_provider := contents.ProviderIndex[depend]
-			if have_provider {
+			depends = append(depends, depend)
+		}
+
+		sort.Strings(depends)
+
+		for _, fqn := range depends {
+			logger.Debugf("Evaluating: %s", fqn)
+			pkg := contents.Packages[fqn]
+			all_depends := pkg.Depends.Run
+
+			if _, no_gen := os.LookupEnv("X10_NO_GENERATED_DEPS"); !no_gen {
+				if !pkg.GeneratedValid {
+					logger.Warnf("Need to evaluate %s but no generated depends", fqn)
+					complete = false
+				}
+				all_depends = append(all_depends, pkg.GeneratedDepends...)
+			}
+
+			all_resolved := true
+			for _, sub_depend := range all_depends {
+				depend_fqn, err := contents.FindFQN(sub_depend)
+				if err != nil {
+					return nil, false, err
+				}
+				if fqn != *depend_fqn && !resolved[*depend_fqn] {
+					logger.Debugf(" => outstanding dependency: %s", *depend_fqn)
+					outstanding[*depend_fqn] = true
+					all_resolved = false
+				}
+			}
+
+			if all_resolved {
+				resolved_order = append(resolved_order, fqn)
+				resolved[fqn] = true
+				delete(outstanding, fqn)
+				logger.Debugf(" => RESOLVED: %s", fqn)
+			}
+
+			/*
 				depend_pkg := contents.Packages[fqn]
 
 				for _, sub_depend := range depend_pkg.Depends.Run {
@@ -287,7 +373,7 @@ func (db *PackageDatabase) GetInstallDeps(top_level string, dep_type DependencyT
 
 				if _, no_gen := os.LookupEnv("X10_NO_GENERATED_DEPS"); !no_gen {
 					if !depend_pkg.GeneratedValid {
-						logrus.Warnf("Need to evaluate %s but no generated depends", fqn)
+						logger.Warnf("Need to evaluate %s but no generated depends", fqn)
 						complete = false
 					}
 					for _, sub_depend := range depend_pkg.GeneratedDepends {
@@ -297,22 +383,23 @@ func (db *PackageDatabase) GetInstallDeps(top_level string, dep_type DependencyT
 						}
 					}
 				}
+				_, ok := resolved[depend]
+				if !ok {
+					resolved_order = append(resolved_order, fqn)
+				}
 				resolved[depend] = fqn
 				delete(outstanding, depend)
-				logrus.Debugf(" => provided by %s", fqn)
-			} else {
-				logrus.Fatalf("Can't find dependency %s for %s", depend, top_level)
-			}
+			*/
 		}
 	}
 
-	uniquefqns := map[string]bool{}
-	for _, v := range resolved {
-		uniquefqns[v] = true
-	}
+	seen := map[string]bool{}
 
-	for k := range uniquefqns {
-		pkgs = append(pkgs, contents.Packages[k])
+	for _, fqn := range resolved_order {
+		if !seen[fqn] {
+			pkgs = append(pkgs, contents.Packages[fqn])
+		}
+		seen[fqn] = true
 	}
 
 	return pkgs, complete, nil

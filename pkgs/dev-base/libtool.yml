@@ -1,0 +1,34 @@
+# auto-generated from void-packages/libtool
+layers:
+  - gnu_configure
+package:
+  meta:
+    name: dev-base/libtool
+    version: 2.4.6
+    revision: 1
+    maintainer: Morgan Thomas <m@m0rg.dev>
+    homepage: http://www.gnu.org/software/libtool
+    license: GPL-2.0-or-later
+    description: Generic library support script
+  sources:
+    - url: https://ftp.gnu.org/gnu/libtool/libtool-2.4.6.tar.xz
+      checksum: 7c87a8c2c8c0fc9cd5019e402bed4292462d00a718a7cd5f11218153bf28b26f
+  depends:
+    build:
+      - dev-base/texinfo
+      - dev-base/perl
+      - dev-base/automake
+      - dev-base/help2man
+      - compress-utils/xz
+      - dev-base/patch
+    run:
+      - compress-utils/tar
+      - sys-utils/sed
+  stages:
+    configure:
+      prescript:
+        - |
+          touch aclocal.m4 libltdl/aclocal.m4 Makefile.am libltdl/Makefile.am Makefile.in libltdl/Makefile.in
+          ./bootstrap --force
+  environment:
+    SKIP_TESTS: "1"

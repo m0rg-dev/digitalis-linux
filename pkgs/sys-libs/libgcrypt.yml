@@ -1,0 +1,20 @@
+# auto-generated from void-packages/libgcrypt
+layers:
+  - gnu_configure
+package:
+  meta:
+    name: sys-libs/libgcrypt
+    version: 1.9.3
+    revision: 1
+    maintainer: Morgan Thomas <m@m0rg.dev>
+    homepage: https://www.gnupg.org
+    license: LGPL-2.1-or-later
+    description: GNU cryptographic library
+  sources:
+    - url: https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-${X10_META_VERSION}.tar.bz2
+      checksum: 97ebe4f94e2f7e35b752194ce15a0f3c66324e0ff6af26659bbfb5ff2ec328fd
+  environment:
+    CONFIGURE_ARGS: --enable-static --without-capabilities
+  depends:
+    build:
+      - sys-libs/libgpg-error

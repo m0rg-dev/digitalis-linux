@@ -1,32 +1,36 @@
 package lib
 
 import (
-	"github.com/sirupsen/logrus"
+	"path/filepath"
+
 	"m0rg.dev/x10/conf"
 	"m0rg.dev/x10/db"
 	"m0rg.dev/x10/spec"
+	"m0rg.dev/x10/x10_log"
 )
 
 func Build(pkgdb db.PackageDatabase, pkg spec.SpecLayer) {
-	logrus.Infof("Finding dependencies: %s", pkg.GetFQN())
+	logger := x10_log.Get("build").WithField("pkg", pkg.GetFQN())
+	logger.Info("Finding dependencies")
 	complete := false
 	var deps []spec.SpecDbData
 
 	for !complete {
+		local_logger := logger.WithField("type", "build")
 		var err error
 		var deps_2 []spec.SpecDbData
 		deps_2, complete, err = pkgdb.GetInstallDeps(pkg.GetFQN(), db.DepBuild)
 		deps = append(deps, deps_2...)
 		if err != nil {
-			logrus.Fatal(err)
+			local_logger.Fatal(err)
 		}
 
 		for _, dep := range deps_2 {
-			logrus.Infof(" => depends on %s", dep.GetFQN())
+			local_logger.Infof(" => depends on %s", dep.GetFQN())
 			if dep.GeneratedValid {
-				logrus.Infof("  (already built)")
+				local_logger.Infof("  (already built)")
 			} else {
-				Build(pkgdb, spec.LoadPackage("pkgs/"+dep.Meta.Name+".yml"))
+				Build(pkgdb, spec.LoadPackage(filepath.Join(conf.PackageDir(), dep.Meta.Name+".yml")))
 			}
 		}
 	}
@@ -34,41 +38,42 @@ func Build(pkgdb db.PackageDatabase, pkg spec.SpecLayer) {
 	complete = false
 
 	for !complete {
+		local_logger := logger.WithField("type", "test")
 		var err error
 		var deps_2 []spec.SpecDbData
 		// TODO this should all be per-stage
 		deps_2, complete, err = pkgdb.GetInstallDeps(pkg.GetFQN(), db.DepTest)
 		deps = append(deps, deps_2...)
 		if err != nil {
-			logrus.Fatal(err)
+			local_logger.Fatal(err)
 		}
 
 		for _, dep := range deps {
-			logrus.Infof(" => depends on %s", dep.GetFQN())
+			local_logger.Infof(" => depends on %s", dep.GetFQN())
 			if dep.GeneratedValid {
-				logrus.Infof("  (already built)")
+				local_logger.Infof("  (already built)")
 			} else {
-				Build(pkgdb, spec.LoadPackage("pkgs/"+dep.Meta.Name+".yml"))
+				Build(pkgdb, spec.LoadPackage(filepath.Join(conf.PackageDir(), dep.Meta.Name+".yml")))
 			}
 		}
 	}
 
 	from_db, err := pkgdb.Get(pkg.GetFQN())
 	if err != nil {
-		logrus.Fatal(err)
+		logger.Fatal(err)
 	}
 	if !from_db.GeneratedValid {
 		for _, dep := range deps {
 			err := Install(pkgdb, dep, conf.TargetDir())
 			if err != nil {
-				logrus.Fatal(err)
+				logger.Fatal(err)
 			}
 		}
-		logrus.Infof("Building: %s", pkg.GetFQN())
+		logger.Infof("Building: %s", pkg.GetFQN())
 		for _, stage := range *pkg.StageOrder {
 			err := RunStage(pkg, stage)
 			if err != nil {
-				logrus.Fatal(err)
+				logger.Fatal(err)
 			}
 		}
 	}

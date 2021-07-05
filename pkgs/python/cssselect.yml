@@ -1,0 +1,22 @@
+# auto-generated from void-packages/python3-cssselect
+layers:
+  - python3-module
+package:
+  meta:
+    name: python/cssselect
+    version: 1.1.0
+    revision: 1
+    maintainer: Morgan Thomas <m@m0rg.dev>
+    homepage: https://cssselect.readthedocs.io/
+    license: BSD-3-Clause
+    description: CSS selectors for Python3
+  sources:
+    - url: https://files.pythonhosted.org/packages/source/c/cssselect/cssselect-${X10_META_VERSION}.tar.gz
+      checksum: f95f8dedd925fd8f54edb3d2dfb44c190d9d18512377d3c1e2388d16126879bc
+  depends:
+    build:
+      - python/setuptools
+  stages:
+    test:
+      script: |
+        :

@@ -1,0 +1,17 @@
+# auto-generated from void-packages/python3-setuptools
+layers:
+  - python3-module
+package:
+  meta:
+    name: python/setuptools
+    version: 57.0.0
+    revision: 1
+    maintainer: Morgan Thomas <m@m0rg.dev>
+    homepage: https://github.com/pypa/setuptools
+    license: MIT
+    description: Easily build and distribute Python3 packages
+  sources:
+    - url: https://files.pythonhosted.org/packages/source/s/setuptools/setuptools-${X10_META_VERSION}.tar.gz
+      checksum: 401cbf33a7bf817d08014d51560fc003b895c4cdc1a5b521ad2969e928a07535
+  environment:
+    SKIP_TESTS: "1"

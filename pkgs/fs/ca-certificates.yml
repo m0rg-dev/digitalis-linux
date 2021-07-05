@@ -1,0 +1,60 @@
+# auto-generated from void-packages/ca-certificates
+layers: ["base"]
+package:
+  meta:
+    name: fs/ca-certificates
+    version: "20210119"
+    revision: 1
+    maintainer: Morgan Thomas <m@m0rg.dev>
+    homepage: https://tracker.debian.org/pkg/ca-certificates
+    license: GPL-2.0-or-later, MPL-2.0
+    description: Common CA certificates for SSL/TLS
+  sources:
+    - url: http://ftp.debian.org/debian/pool/main/c/ca-certificates/ca-certificates_${X10_META_VERSION}.tar.xz
+      checksum: daa3afae563711c30a0586ddae4336e8e3974c2b627faaca404c4e0141b64665
+  depends:
+    build:
+      - net-libs/openssl
+    run:
+      # - xbps/openssl<=2.0_1
+      # - xbps/run-parts
+      - net-libs/openssl
+      # TODO these are basically dependencies of the "command" trigger
+      - sys-utils/coreutils
+      - shells/bash
+      - fs/fs-tree
+  stages:
+    extract:
+      #   post_script:
+      #     - |
+      #       $BUILD_CC $BUILD_CFLAGS ${FILESDIR}/certdata2pem.c -o ${wrksrc}/mozilla/certdata2pem;
+      #       cp ${FILESDIR}/remove-expired-certs.sh ${wrksrc}/mozilla;
+      #       vsed -i ${wrksrc}/mozilla/Makefile -e 's,python3 certdata2pem.py,./certdata2pem,g';
+      #       vsed -i ${wrksrc}/mozilla/Makefile -e "s;\(.*\)\(certdata2pem.*\);\1\2\n\1./remove-expired-certs.sh;"
+      script: |
+        cd /builddir
+        for src in "${X10_SOURCES_URLS[@]}"; do
+          src=/hostdir/distfiles/$(basename "$src")
+          test -d $(basename $X10_META_UNPACK_DIR) || {
+            tar xf "$src" --no-same-owner
+          }
+        done
+    build:
+      script: |
+        make -j$X10_MAKE_JOBS
+    install:
+      script: |
+        mkdir -pv ${DESTDIR}/usr/share/ca-certificates
+        mkdir -pv ${DESTDIR}/usr/bin
+        mkdir -pv ${DESTDIR}/usr/sbin
+        mkdir -pv ${DESTDIR}/etc/ssl/certs
+        make install DESTDIR=${DESTDIR}
+        install -Dm644 sbin/update-ca-certificates.8 ${DESTDIR}/usr/share/man/man8/update-ca-certificates.8
+        cd ${DESTDIR}/usr/share/ca-certificates
+        find . -name '*.crt' | sort | cut -b3- > ${DESTDIR}/etc/ca-certificates.conf
+        mv ${DESTDIR}/usr/sbin/* ${DESTDIR}/usr/bin
+        ln -s /etc/ssl/certs/ca-certificates.crt ${DESTDIR}/etc/ssl/certs.pem
+  workdir: /builddir/work
+  triggerdata:
+    command:
+      script: "/usr/bin/update-ca-certificates"

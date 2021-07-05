@@ -3,6 +3,7 @@ package conf
 import (
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 )
 
@@ -15,11 +16,25 @@ func get(key string, def string) string {
 }
 
 func TargetDir() string {
-	return get("targetdir", "targetdir")
+	return get("targetdir", "../targetdir")
+}
+
+func HostDir() string {
+	return get("hostdir", "../hostdir")
 }
 
 func PkgDb() string {
-	rc := filepath.Join(TargetDir(), "etc", "x10", "pkgdb.yml")
-	os.MkdirAll(filepath.Join(TargetDir(), "etc", "x10"), os.ModePerm)
+	rc := filepath.Join(HostDir(), "binpkgs", "pkgdb.yml")
+	os.MkdirAll(filepath.Join(HostDir(), "binpkgs"), os.ModePerm)
 	return rc
+}
+
+func PackageDir() string {
+	return get("packagedir", "../pkgs")
+}
+
+func BaseDir() string {
+	_, b, _, _ := runtime.Caller(0)
+	basepath, _ := filepath.Abs(filepath.Join(filepath.Dir(b), "../.."))
+	return basepath
 }

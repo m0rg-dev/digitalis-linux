@@ -1,12 +1,13 @@
 package spec
 
 import (
-	"fmt"
 	"io/ioutil"
+	"path/filepath"
 	"strconv"
 
-	"github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
+	"m0rg.dev/x10/conf"
+	"m0rg.dev/x10/x10_log"
 )
 
 type SpecMeta struct {
@@ -55,6 +56,8 @@ type SpecLayer struct {
 	StageOrder  *[]string
 	Environment map[string]string
 	Workdir     string
+	Patches     *[]string
+	TriggerData map[string]interface{}
 }
 
 type Spec struct {
@@ -80,19 +83,25 @@ func (pkg SpecLayer) ToDB() SpecDbData {
 	}
 }
 
+func (pkg SpecDbData) ToLayer() SpecLayer {
+	return LoadPackage(filepath.Join(conf.PackageDir(), pkg.Meta.Name+".yml"))
+}
+
 func LoadPackage(pkgsrc string) SpecLayer {
 	pkg := Spec{}
 
+	logger := x10_log.Get("load").WithField("pkgsrc", pkgsrc)
+
 	// Load the package YAML
-	logrus.Debug("Loading package: ", pkgsrc)
+	logger.Debug("Loading package")
 	pkgraw, err := ioutil.ReadFile(pkgsrc)
 	if err != nil {
-		logrus.Fatal(err)
+		logger.Fatal(err)
 	}
 
 	err = yaml.UnmarshalStrict(pkgraw, &pkg)
 	if err != nil {
-		logrus.Fatal(err)
+		logger.Fatalf("%s: %+v", pkgsrc, err)
 	}
 
 	// Load and apply the layers.
@@ -100,8 +109,12 @@ func LoadPackage(pkgsrc string) SpecLayer {
 
 	layers := make([]SpecLayer, len(pkg.Layers)+1)
 	for idx, layer_name := range pkg.Layers {
-		logrus.Debug("Loading layer: ", layer_name)
-		layers[idx] = LoadPackage(fmt.Sprintf("pkgs/layers/%s.yml", layer_name))
+		logger.Debug("Loading layer: ", layer_name)
+		layers[idx] = LoadPackage(filepath.Join(conf.PackageDir(), "layers", layer_name+".yml"))
+	}
+
+	if pkg.Package == nil {
+		logger.Fatal("no package object?")
 	}
 
 	layers = append(layers, *pkg.Package)
@@ -166,6 +179,23 @@ func LoadPackage(pkgsrc string) SpecLayer {
 		// Workdir: Take last.
 		if len(layer.Workdir) > 0 {
 			composite.Workdir = layer.Workdir
+		}
+
+		// Patches: Concatenate.
+		if layer.Patches != nil {
+			if composite.Patches == nil {
+				composite.Patches = &[]string{}
+			}
+			*composite.Patches = append(*composite.Patches, *layer.Patches...)
+		}
+
+		// TriggerData: Overlay map contents.
+		if composite.TriggerData == nil {
+			composite.TriggerData = make(map[string]interface{})
+		}
+
+		for name, value := range layer.TriggerData {
+			composite.TriggerData[name] = value
 		}
 	}
 

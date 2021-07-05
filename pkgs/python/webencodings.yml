@@ -1,0 +1,22 @@
+# auto-generated from void-packages/python3-webencodings
+layers:
+  - python3-module
+package:
+  meta:
+    name: python/webencodings
+    version: 0.5.1
+    revision: 1
+    maintainer: Morgan Thomas <m@m0rg.dev>
+    homepage: https://github.com/gsnedders/python-webencodings
+    license: BSD-3-Clause
+    description: Python3 implementation of the WHATWG Encoding standard
+  sources:
+    - url: https://files.pythonhosted.org/packages/source/w/webencodings/webencodings-${X10_META_VERSION}.tar.gz
+      checksum: b36a1c245f2d304965eb4e0a82848379241dc04b865afcc4aab16748587e1923
+    # - url: https://raw.githubusercontent.com/gsnedders/python-webencodings/v0.5.1/LICENSE
+    #   checksum: f23bae6ada76095610a77137fb92aec7342723900211c5826d54b4c57907ca56
+  depends:
+    build:
+      - python/setuptools
+  environment:
+    SKIP_TESTS: "1"

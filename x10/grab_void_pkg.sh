@@ -34,6 +34,10 @@ declare -A stagemap=(
     [check]=test
 )
 
+if [[ -z $build_style ]]; then
+    build_style=base
+fi
+
 if [[ -n ${layermap[$build_style]} ]]; then
     build_style=${layermap[$build_style]}
 fi
@@ -108,9 +112,9 @@ for f in $(typeset -F); do
             export body=$(declare -f "$f" | sed '1,2d;$d')
             body=$(echo "$body" | sed -e 's/^    //g')
             if [ $(echo "$body" | wc -l) -gt 2 ]; then
-                yq -Yi '.package.stages[env.stage].pre_script = [env.body + "\n", "__yq_style_0_|__"]' $tmp
+                yq -Yi '.package.stages[env.stage].prescript = [env.body + "\n", "__yq_style_0_|__"]' $tmp
             else
-                yq -Yi '.package.stages[env.stage].pre_script = [env.body]' $tmp
+                yq -Yi '.package.stages[env.stage].prescript = [env.body]' $tmp
             fi
             ;;
         post_*)
@@ -121,11 +125,21 @@ for f in $(typeset -F); do
             export body=$(declare -f "$f" | sed '1,2d;$d')
             body=$(echo "$body" | sed -e 's/^    //g')
             if [ $(echo "$body" | wc -l) -gt 2 ]; then
-                yq -Yi '.package.stages[env.stage].post_script = [env.body + "\n", "__yq_style_0_|__"]' $tmp
+                yq -Yi '.package.stages[env.stage].postscript = [env.body + "\n", "__yq_style_0_|__"]' $tmp
             else
-                yq -Yi '.package.stages[env.stage].post_script = [env.body]' $tmp
+                yq -Yi '.package.stages[env.stage].postscript = [env.body]' $tmp
             fi
             ;;
+        do_*)
+            export stage="${f#do_}"
+            if [[ -n ${stagemap[$stage]} ]]; then
+                stage=${stagemap[$stage]}
+            fi
+            export body=$(declare -f "$f" | sed '1,2d;$d')
+            body=$(echo "$body" | sed -e 's/^    //g')
+            yq -Yi '.package.stages[env.stage].script = env.body + "\n"' $tmp
+            # echo -n 'script' | shasum -a224 | cut -d' ' -f1 | xxd -r -p | base64
+            yq -Yi '.package.stages[env.stage]["__yq_style_rYT6kwx+fJKY5CSNbWrNIFpj9Y7o/GDWOEzOVw==__"] = "|"' $tmp
     esac
 done
 

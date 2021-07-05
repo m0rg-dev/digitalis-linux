@@ -11,7 +11,7 @@ OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
 TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
 THIS SOFTWARE.
 
-Portions of the package definitions under x10/pkgs may be adapted from
+Portions of the package definitions under ./pkgs may be adapted from
 https://github.com/void-linux/void-packages, available under the
 following terms:
 

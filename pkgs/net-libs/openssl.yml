@@ -1,0 +1,20 @@
+layers: ["other_configure"]
+package:
+  meta:
+    name: "net-libs/openssl"
+    version: "1.1.1k"
+    revision: 1
+    maintainer: "Morgan Thomas <m@m0rg.dev>"
+    homepage: "https://www.openssl.org"
+    license: "OpenSSL"
+    description: ""
+  sources:
+    - url: "https://www.openssl.org/source/openssl-${X10_META_VERSION}.tar.gz"
+      checksum: "892a0875b9872acd04a9fde79b1f943075d5ea162415de3047c327df33fbaee5"
+  depends:
+    build:
+      - dev-base/perl
+  environment:
+    CONFIGURE: ./Configure
+    CONFIGURE_ARGS: --prefix=/usr --libdir=lib --openssldir=/etc/ssl shared linux-x86_64
+    CHECK_TARGET: test

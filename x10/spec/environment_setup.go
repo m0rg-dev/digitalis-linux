@@ -21,6 +21,9 @@ func (pkg SpecLayer) GetEnvironmentSetupScript() string {
 	arrays["X10_DEPENDS_BUILDS"] = pkg.Depends.Build
 	arrays["X10_DEPENDS_TESTS"] = pkg.Depends.Test
 	arrays["X10_DEPENDS_RUNS"] = pkg.Depends.Run
+	if pkg.Patches != nil {
+		arrays["X10_PATCHES"] = *pkg.Patches
+	}
 
 	// Package metadata.
 	vars["X10_META_NAME"] = pkg.Meta.Name

@@ -27,5 +27,6 @@ sys-utils/less
 compress-utils/gzip
 sys-utils/diffutils
 sys-utils/file
+compress-utils/bzip2
 net-libs/openssl
-net-utils/curl
+net-utils/curl_nossl

@@ -1,0 +1,27 @@
+# auto-generated from void-packages/python3-six
+layers:
+  - python3-module
+package:
+  meta:
+    name: python/six
+    version: 1.16.0
+    revision: 1
+    maintainer: Morgan Thomas <m@m0rg.dev>
+    homepage: https://github.com/benjaminp/six
+    license: MIT
+    description: Python 2 and 3 compatibility utilities
+  sources:
+    - url: https://files.pythonhosted.org/packages/source/s/six/six-${X10_META_VERSION}.tar.gz
+      checksum: 1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926
+  depends:
+    build:
+      - python/setuptools
+    # test:
+    #   - xbps/python-pytest
+    #   - xbps/python3-pytest
+  stages:
+    test:
+      # script: |
+      #   python -m pytest;
+      #   python3 -m pytest
+      script: ":"

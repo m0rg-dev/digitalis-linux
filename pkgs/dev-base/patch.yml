@@ -1,0 +1,18 @@
+# auto-generated from void-packages/patch
+layers:
+  - gnu_configure
+package:
+  meta:
+    name: dev-base/patch
+    version: 2.7.6
+    revision: 1
+    maintainer: Morgan Thomas <m@m0rg.dev>
+    homepage: http://www.gnu.org/software/patch/patch.html
+    license: GPL-3.0-or-later
+    description: Patch files using diff output
+  sources:
+    - url: https://ftp.gnu.org/gnu/patch/patch-${X10_META_VERSION}.tar.xz
+      checksum: ac610bda97abe0d9f6b7c963255a11dcb196c25e337c61f94e4778d632f1d8fd
+  depends:
+    build:
+      - sys-libs/attr

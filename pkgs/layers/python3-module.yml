@@ -1,0 +1,18 @@
+---
+# adapted from https://raw.githubusercontent.com/void-linux/void-packages/master/common/build-style/python3-module.sh
+layers: ["base"]
+package:
+  stages:
+    build:
+      script: |
+        python3 setup.py build
+    test: 
+      script: |
+        test -n "$SKIP_TESTS" && exit 0
+        python3 setup.py test
+    install:
+      script: |
+        python3 setup.py install --prefix=/usr --root=${DESTDIR}
+  depends:
+    build:
+      - virtual/python

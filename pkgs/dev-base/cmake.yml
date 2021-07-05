@@ -1,0 +1,44 @@
+# auto-generated from void-packages/cmake
+layers:
+  - other_configure
+package:
+  meta:
+    name: dev-base/cmake
+    version: 3.20.3
+    revision: 1
+    maintainer: Morgan Thomas <m@m0rg.dev>
+    homepage: https://www.cmake.org
+    license: BSD-3-Clause, ICU
+    description: Cross-platform, open-source build system
+  sources:
+    - url: https://www.cmake.org/files/v3.20/cmake-${X10_META_VERSION}.tar.gz
+      checksum: 4d008ac3461e271fcfac26a05936f77fc7ab64402156fb371d41284851a651b8
+  environment:
+    CONFIGURE_ARGS: --prefix=/usr --mandir=/share/man --docdir=/share/doc/cmake
+  depends:
+    build:
+      - net-libs/openssl
+  # depends:
+  #   hostbuild:
+  #     - xbps/gcc-fortran
+  #   build:
+  #     - xbps/expat-devel
+  #     - xbps/libarchive-devel
+  #     - xbps/libcurl-devel
+  #     - xbps/libuv-devel
+  #     - xbps/ncurses-devel
+  #     - xbps/rhash-devel
+  #     - xbps/jsoncpp-devel
+  #   test:
+  #     - xbps/pax
+  #     - xbps/pkg-config
+  #     - xbps/git
+  # stages:
+  #   install:
+  #     postscript:
+  #       - |
+  #         rm -rf ${DESTDIR}/usr/share/doc/cmake;
+  #         sed -n -e '/Copyright/,/authorization[.]/p' Source/CursesDialog/form/fld_arg.c > fld.LICENSE;
+  #         vlicense fld.LICENSE;
+  #         vlicense Copyright.txt;
+  #         vlicense Utilities/KWIML/Copyright.txt KWIML-Copyright.txt
