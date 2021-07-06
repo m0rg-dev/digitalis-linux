@@ -48,11 +48,11 @@ func get(key string, def string) string {
 }
 
 func TargetDir() string {
-	return get("targetdir", "../targetdir")
+	return get("targetdir", "./targetdir")
 }
 
 func HostDir() string {
-	return get("hostdir", "../hostdir")
+	return get("hostdir", "./hostdir")
 }
 
 func PkgDb() string {
