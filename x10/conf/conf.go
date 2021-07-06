@@ -47,6 +47,10 @@ func get(key string, def string) string {
 	return from_env
 }
 
+func Set(key string, val string) {
+	config[key] = val
+}
+
 func TargetDir() string {
 	return get("targetdir", "./targetdir")
 }

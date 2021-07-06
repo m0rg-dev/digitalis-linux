@@ -24,10 +24,13 @@ func main() {
 	buildDeps := buildCmd.Bool("with_deps", false, "Build a package's runtime dependencies after building it.")
 
 	config_path := flag.String("config", "/etc/x10.conf:./etc/x10.conf", "Colon-separated list of configuration files")
-
+	no_reset_packages := flag.Bool("no_reset_packages", false, "")
 	flag.Parse()
 
 	conf.ReadConfig(*config_path)
+	if *no_reset_packages {
+		conf.Set("reset_packages", "false")
+	}
 
 	if len(os.Args) < 2 {
 		fmt.Printf("Usage: %s <subcommand> ...\n", os.Args[0])
@@ -58,7 +61,6 @@ func main() {
 		if (buildMaybe == nil || !*buildMaybe) ||
 			!contents.CheckUpToDate(pkg) ||
 			!contents.Packages[pkg.GetFQN()].GeneratedValid {
-			pkgdb.Update(pkg, true)
 			plumbing.Build(pkgdb, pkg)
 
 			if buildDeps != nil && *buildDeps {
@@ -81,6 +83,11 @@ func main() {
 					}
 				}
 			}
+		}
+
+		if conf.ResetPackages() {
+			logger.Info("Removing autodeps")
+			plumbing.Reset(logger, conf.TargetDir())
 		}
 	case "show":
 		buildCmd.Parse(os.Args[2:])

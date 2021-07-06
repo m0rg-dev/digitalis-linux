@@ -17,8 +17,10 @@ package:
       - dev-base/binutils
       - dev-base/bison
       - dev-base/gcc
+      - dev-base/make
       - dev-base/perl
       - fs/fs-tree
+      - net-utils/curl
       - shells/bash
       - sys-libs/glibc
       - sys-utils/coreutils
@@ -30,4 +32,3 @@ package:
       - sys-utils/less
       - sys-utils/sed
       - virtual/python
-      - net-utils/curl

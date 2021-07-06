@@ -12,14 +12,10 @@ import (
 
 func Build(pkgdb db.PackageDatabase, pkg spec.SpecLayer) {
 	logger := x10_log.Get("build").WithField("pkg", pkg.GetFQN())
-	logger.Info("Finding dependencies")
 	complete := false
 	var deps []spec.SpecDbData
 
-	if conf.ResetPackages() {
-		Reset(logger, conf.TargetDir())
-	}
-
+	logger.Info("Finding dependencies")
 	for !complete {
 		local_logger := logger.WithField("type", "build")
 		var err error
@@ -32,6 +28,11 @@ func Build(pkgdb db.PackageDatabase, pkg spec.SpecLayer) {
 
 		for _, dep := range deps_2 {
 			local_logger.Infof(" => depends on %s", dep.GetFQN())
+			dep, err = pkgdb.Get(dep.GetFQN())
+			if err != nil {
+				local_logger.Fatal(err)
+			}
+
 			if dep.GeneratedValid {
 				local_logger.Infof("  (already built)")
 			} else {
@@ -55,6 +56,11 @@ func Build(pkgdb db.PackageDatabase, pkg spec.SpecLayer) {
 
 		for _, dep := range deps {
 			local_logger.Infof(" => depends on %s", dep.GetFQN())
+			dep, err = pkgdb.Get(dep.GetFQN())
+			if err != nil {
+				local_logger.Fatal(err)
+			}
+
 			if dep.GeneratedValid {
 				local_logger.Infof("  (already built)")
 			} else {
@@ -63,23 +69,22 @@ func Build(pkgdb db.PackageDatabase, pkg spec.SpecLayer) {
 		}
 	}
 
-	from_db, err := pkgdb.Get(pkg.GetFQN())
-	if err != nil {
-		logger.Fatal(err)
+	if conf.ResetPackages() {
+		logger.Info("Removing autodeps")
+		Reset(logger, conf.TargetDir())
 	}
-	if !from_db.GeneratedValid {
-		for _, dep := range deps {
-			err := lib.Install(pkgdb, dep, conf.TargetDir())
-			if err != nil {
-				logger.Fatal(err)
-			}
+
+	for _, dep := range deps {
+		err := lib.Install(pkgdb, dep, conf.TargetDir())
+		if err != nil {
+			logger.Fatal(err)
 		}
-		logger.Infof("Building: %s", pkg.GetFQN())
-		for _, stage := range *pkg.StageOrder {
-			err := lib.RunStage(pkg, stage)
-			if err != nil {
-				logger.Fatal(err)
-			}
+	}
+	logger.Infof("Building: %s", pkg.GetFQN())
+	for _, stage := range *pkg.StageOrder {
+		err := lib.RunStage(pkg, stage)
+		if err != nil {
+			logger.Fatal(err)
 		}
 	}
 }

@@ -171,5 +171,7 @@ func Remove(pkgdb db.PackageDatabase, pkg spec.SpecDbData, root string) error {
 	installed.Unmark(pkg.GetFQN())
 	installed.Write()
 
+	logger.Info("Removed: " + pkg.GetFQN())
+
 	return nil
 }
