@@ -3,7 +3,9 @@ package db
 import (
 	"io/fs"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"strings"
 	"sync"
 
 	"github.com/gofrs/flock"
@@ -41,7 +43,8 @@ func (db *PackageDatabase) IndexFromRepo() error {
 				if err != nil {
 					panic(err)
 				}
-				pkgstat, err := os.Stat(filepath.Join(conf.HostDir(), "binpkgs", from_repo.GetFQN()+".tar.xz"))
+				binpkg_path := filepath.Join(conf.HostDir(), "binpkgs", from_repo.GetFQN()+".tar.xz")
+				pkgstat, err := os.Stat(binpkg_path)
 				doupdate := false
 
 				if !contents.CheckUpToDate(from_repo) {
@@ -49,12 +52,16 @@ func (db *PackageDatabase) IndexFromRepo() error {
 					doupdate = true
 				}
 
-				if !contents.Packages[from_repo.GetFQN()].GeneratedValid {
-					local_logger.Infof("Updating database (not built)")
-					doupdate = true
+				if !doupdate && !contents.Packages[from_repo.GetFQN()].GeneratedValid {
+					if err == nil {
+
+					} else {
+						local_logger.Infof("Updating database (not built)")
+						doupdate = true
+					}
 				}
 
-				if err != nil {
+				if !doupdate && err != nil {
 					local_logger.Infof("Updating database (stat error on binpkg)")
 					doupdate = true
 				}
@@ -87,6 +94,44 @@ func (db *PackageDatabase) IndexFromRepo() error {
 	contents.ProviderIndex = map[string]string{}
 	for fqn, dbpkg := range contents.Packages {
 		logger.Debugf(" => " + fqn)
+
+		local_logger := logger.WithField("fqn", fqn)
+
+		if !dbpkg.GeneratedValid {
+			ok := true
+			binpkg_path := filepath.Join(conf.HostDir(), "binpkgs", dbpkg.GetFQN()+".tar.xz")
+			_, err := os.Stat(binpkg_path)
+			if err == nil {
+				local_logger.Info("Pulling generated info from binpkg")
+				generated_depends, err := getFileFromBinpkg(binpkg_path, "./generated-depends")
+				if err == nil {
+					dbpkg.GeneratedDepends = strings.Split(strings.TrimSpace(string(generated_depends)), "\n")
+				} else {
+					if !strings.Contains(generated_depends, "Not found in archive") {
+						local_logger.Warn(err)
+						local_logger.Warn(generated_depends)
+						ok = false
+					}
+				}
+
+				generated_provides, err := getFileFromBinpkg(binpkg_path, "./generated-provides")
+				if err == nil {
+					dbpkg.GeneratedProvides = strings.Split(strings.TrimSpace(string(generated_provides)), "\n")
+				} else {
+					if !strings.Contains(generated_provides, "Not found in archive") {
+						local_logger.Warn(err)
+						local_logger.Warn(generated_provides)
+						ok = false
+					}
+				}
+
+				if ok {
+					dbpkg.GeneratedValid = true
+					contents.Packages[dbpkg.GetFQN()] = dbpkg
+				}
+			}
+		}
+
 		if dbpkg.GeneratedValid {
 			for _, prov := range dbpkg.GeneratedProvides {
 				contents.maybeAddProvider(prov, fqn)
@@ -98,4 +143,10 @@ func (db *PackageDatabase) IndexFromRepo() error {
 	db.unlocked_Write(contents)
 	logger.Info("Updated package database in " + db.BackingFile + ".")
 	return nil
+}
+
+func getFileFromBinpkg(binpkg_path string, file string) (string, error) {
+	cmd := exec.Command("tar", "xf", binpkg_path, file, "-O")
+	out, err := cmd.CombinedOutput()
+	return string(out), err
 }
