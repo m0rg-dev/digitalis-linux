@@ -3,7 +3,9 @@ package db
 import (
 	"io/fs"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"strings"
 	"sync"
 
 	"github.com/gofrs/flock"
@@ -41,7 +43,8 @@ func (db *PackageDatabase) IndexFromRepo() error {
 				if err != nil {
 					panic(err)
 				}
-				pkgstat, err := os.Stat(filepath.Join(conf.HostDir(), "binpkgs", from_repo.GetFQN()+".tar.xz"))
+				binpkg_path := filepath.Join(conf.HostDir(), "binpkgs", from_repo.GetFQN()+".tar.xz")
+				pkgstat, err := os.Stat(binpkg_path)
 				doupdate := false
 
 				if !contents.CheckUpToDate(from_repo) {
@@ -49,12 +52,41 @@ func (db *PackageDatabase) IndexFromRepo() error {
 					doupdate = true
 				}
 
-				if !contents.Packages[from_repo.GetFQN()].GeneratedValid {
-					local_logger.Infof("Updating database (not built)")
-					doupdate = true
+				if !doupdate && !contents.Packages[from_repo.GetFQN()].GeneratedValid {
+					if err == nil {
+						local_logger.Info("Pulling generated info from binpkg")
+						generated_depends, err := getFileFromBinpkg(binpkg_path, "./generated-depends")
+						if err == nil {
+							pkg := contents.Packages[from_repo.GetFQN()]
+							pkg.GeneratedDepends = strings.Split(strings.TrimSpace(string(generated_depends)), "\n")
+							contents.Packages[from_repo.GetFQN()] = pkg
+						} else {
+							local_logger.Warn(err)
+							doupdate = true
+						}
+
+						generated_provides, err := getFileFromBinpkg(binpkg_path, "./generated-provides")
+						if err == nil {
+							pkg := contents.Packages[from_repo.GetFQN()]
+							pkg.GeneratedProvides = strings.Split(strings.TrimSpace(string(generated_provides)), "\n")
+							contents.Packages[from_repo.GetFQN()] = pkg
+						} else {
+							local_logger.Warn(err)
+							doupdate = true
+						}
+
+						if !doupdate {
+							pkg := contents.Packages[from_repo.GetFQN()]
+							pkg.GeneratedValid = true
+							contents.Packages[from_repo.GetFQN()] = pkg
+						}
+					} else {
+						local_logger.Infof("Updating database (not built)")
+						doupdate = true
+					}
 				}
 
-				if err != nil {
+				if !doupdate && err != nil {
 					local_logger.Infof("Updating database (stat error on binpkg)")
 					doupdate = true
 				}
@@ -98,4 +130,10 @@ func (db *PackageDatabase) IndexFromRepo() error {
 	db.unlocked_Write(contents)
 	logger.Info("Updated package database in " + db.BackingFile + ".")
 	return nil
+}
+
+func getFileFromBinpkg(binpkg_path string, file string) (string, error) {
+	cmd := exec.Command("tar", "xf", binpkg_path, file, "-O")
+	out, err := cmd.CombinedOutput()
+	return string(out), err
 }
