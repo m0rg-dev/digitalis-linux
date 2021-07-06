@@ -1,10 +1,11 @@
-package lib
+package plumbing
 
 import (
 	"path/filepath"
 
 	"m0rg.dev/x10/conf"
 	"m0rg.dev/x10/db"
+	"m0rg.dev/x10/lib"
 	"m0rg.dev/x10/spec"
 	"m0rg.dev/x10/x10_log"
 )
@@ -14,6 +15,10 @@ func Build(pkgdb db.PackageDatabase, pkg spec.SpecLayer) {
 	logger.Info("Finding dependencies")
 	complete := false
 	var deps []spec.SpecDbData
+
+	if conf.ResetPackages() {
+		Reset(logger, conf.TargetDir())
+	}
 
 	for !complete {
 		local_logger := logger.WithField("type", "build")
@@ -64,14 +69,14 @@ func Build(pkgdb db.PackageDatabase, pkg spec.SpecLayer) {
 	}
 	if !from_db.GeneratedValid {
 		for _, dep := range deps {
-			err := Install(pkgdb, dep, conf.TargetDir())
+			err := lib.Install(pkgdb, dep, conf.TargetDir())
 			if err != nil {
 				logger.Fatal(err)
 			}
 		}
 		logger.Infof("Building: %s", pkg.GetFQN())
 		for _, stage := range *pkg.StageOrder {
-			err := RunStage(pkg, stage)
+			err := lib.RunStage(pkg, stage)
 			if err != nil {
 				logger.Fatal(err)
 			}

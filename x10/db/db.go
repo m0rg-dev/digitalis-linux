@@ -13,6 +13,7 @@ import (
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/gofrs/flock"
+	"github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
 	"m0rg.dev/x10/conf"
 	"m0rg.dev/x10/spec"
@@ -271,52 +272,16 @@ func (contents *PackageDatabaseContents) FindFQN(atom string) (*string, error) {
 	return nil, errors.New("Can't find FQN for " + atom)
 }
 
-func (db *PackageDatabase) GetInstallDeps(top_level string, dep_type DependencyType) (pkgs []spec.SpecDbData, complete bool, err error) {
-	logger := x10_log.Get("index").WithField("toplevel", top_level)
+func (db *PackageDatabase) Resolve(logger *logrus.Entry, outstanding map[string]bool) (pkgs []spec.SpecDbData, complete bool, err error) {
+	complete = true
 
 	contents, err := db.Read()
 	if err != nil {
 		return nil, false, err
 	}
-	outstanding := map[string]bool{}
+
 	resolved := map[string]bool{}
 	resolved_order := []string{}
-	complete = true
-
-	top_level_fqn, err := contents.FindFQN(top_level)
-	if err != nil {
-		return nil, false, err
-	}
-	top_level_pkg := contents.Packages[*top_level_fqn]
-
-	switch dep_type {
-	case DepRun:
-		outstanding[*top_level_fqn] = true
-	case DepTest:
-		for _, atom := range top_level_pkg.Depends.Test {
-			fqn, err := contents.FindFQN(atom)
-			if err != nil {
-				return nil, false, err
-			}
-			outstanding[*fqn] = true
-		}
-	case DepBuild:
-		for _, atom := range top_level_pkg.Depends.Build {
-			fqn, err := contents.FindFQN(atom)
-			if err != nil {
-				return nil, false, err
-			}
-			outstanding[*fqn] = true
-		}
-	case DepHostBuild:
-		for _, atom := range top_level_pkg.Depends.HostBuild {
-			fqn, err := contents.FindFQN(atom)
-			if err != nil {
-				return nil, false, err
-			}
-			outstanding[*fqn] = true
-		}
-	}
 
 	for len(outstanding) > 0 {
 		logger.Debugf("(iteration; %d left)", len(outstanding))
@@ -372,6 +337,53 @@ func (db *PackageDatabase) GetInstallDeps(top_level string, dep_type DependencyT
 	}
 
 	return pkgs, complete, nil
+}
+
+func (db *PackageDatabase) GetInstallDeps(top_level string, dep_type DependencyType) (pkgs []spec.SpecDbData, complete bool, err error) {
+	logger := x10_log.Get("index").WithField("toplevel", top_level)
+
+	contents, err := db.Read()
+	if err != nil {
+		return nil, false, err
+	}
+	outstanding := map[string]bool{}
+
+	top_level_fqn, err := contents.FindFQN(top_level)
+	if err != nil {
+		return nil, false, err
+	}
+	top_level_pkg := contents.Packages[*top_level_fqn]
+
+	switch dep_type {
+	case DepRun:
+		outstanding[*top_level_fqn] = true
+	case DepTest:
+		for _, atom := range top_level_pkg.Depends.Test {
+			fqn, err := contents.FindFQN(atom)
+			if err != nil {
+				return nil, false, err
+			}
+			outstanding[*fqn] = true
+		}
+	case DepBuild:
+		for _, atom := range top_level_pkg.Depends.Build {
+			fqn, err := contents.FindFQN(atom)
+			if err != nil {
+				return nil, false, err
+			}
+			outstanding[*fqn] = true
+		}
+	case DepHostBuild:
+		for _, atom := range top_level_pkg.Depends.HostBuild {
+			fqn, err := contents.FindFQN(atom)
+			if err != nil {
+				return nil, false, err
+			}
+			outstanding[*fqn] = true
+		}
+	}
+
+	return db.Resolve(logger, outstanding)
 }
 
 func (db *PackageDatabase) Get(fqn string) (spec.SpecDbData, error) {

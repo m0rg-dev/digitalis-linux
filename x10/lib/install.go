@@ -10,31 +10,22 @@ import (
 
 	"m0rg.dev/x10/conf"
 	"m0rg.dev/x10/db"
+	"m0rg.dev/x10/pkgset"
 	"m0rg.dev/x10/spec"
 	"m0rg.dev/x10/trigger"
 	"m0rg.dev/x10/x10_log"
 )
 
+// TODO error handling
+
 func Install(pkgdb db.PackageDatabase, pkg spec.SpecDbData, root string) error {
 	logger := x10_log.Get("install").WithField("pkg", pkg.GetFQN())
-	installed, err := os.ReadFile(filepath.Join(root, "var", "db", "x10", "installed"))
+	installed, err := pkgset.Set("installed", root)
 	if err != nil {
-		if errors.Is(err, os.ErrNotExist) {
-			logger.Warn("(created installed list)")
-			os.MkdirAll(filepath.Join(root, "var", "db", "x10"), os.ModePerm)
-		} else {
-			return err
-		}
+		return err
 	}
 
-	installed_str := string(installed)
-	installed_map := map[string]bool{}
-
-	for _, line := range strings.Split(installed_str, "\n") {
-		installed_map[strings.TrimSpace(line)] = true
-	}
-
-	if _, ok := installed_map[pkg.GetFQN()]; ok {
+	if installed.Check(pkg.GetFQN()) {
 		logger.Infof("Already installed: %s", pkg.GetFQN())
 		return nil
 	}
@@ -102,15 +93,83 @@ func Install(pkgdb db.PackageDatabase, pkg spec.SpecDbData, root string) error {
 
 	trigger.RunTriggers(pkg.ToLayer())
 
-	f, err := os.OpenFile(filepath.Join(root, "var", "db", "x10", "installed"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, os.ModePerm)
+	installed.Mark(pkg.GetFQN())
+	err = installed.Write()
+	if err != nil {
+		logger.Fatal(err)
+	}
+
+	return nil
+}
+
+func Remove(pkgdb db.PackageDatabase, pkg spec.SpecDbData, root string) error {
+	logger := x10_log.Get("remove").WithField("pkg", pkg.GetFQN())
+
+	extract_cmd := exec.Command("tar", "tf", filepath.Join(conf.HostDir(), "binpkgs", pkg.GetFQN()+".tar.xz"))
+	out, err := extract_cmd.CombinedOutput()
+
 	if err != nil {
 		return err
 	}
-	defer f.Close()
 
-	if _, err := f.WriteString(pkg.GetFQN() + "\n"); err != nil {
+	files := []string{}
+	dirs := []string{}
+
+	for _, line := range strings.Split(string(out), "\n") {
+		abs, err := filepath.Abs(filepath.Join(root, line))
+		if err != nil {
+			return err
+		}
+
+		stats, err := os.Stat(abs)
+		if err != nil {
+			if os.IsNotExist(err) {
+				logger.Warn(err)
+				continue
+			} else {
+				return err
+			}
+		}
+
+		if stats.IsDir() {
+			dirs = append(dirs, abs)
+		} else {
+			files = append(files, abs)
+		}
+	}
+
+	for _, file := range files {
+		err = os.Remove(file)
+		if err != nil {
+			if os.IsNotExist(err) {
+				logger.Warn(err)
+			} else {
+				return err
+			}
+		}
+	}
+
+	for _, dir := range dirs {
+		ents, err := os.ReadDir(dir)
+		if err != nil {
+			if os.IsNotExist(err) {
+				logger.Warn(err)
+			} else {
+				return err
+			}
+		}
+
+		if len(ents) == 0 {
+			os.Remove(dir)
+		}
+	}
+
+	installed, err := pkgset.Set("installed", root)
+	if err != nil {
 		return err
 	}
+	installed.Unmark(pkg.GetFQN())
+	installed.Write()
 
 	return nil
 }

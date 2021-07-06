@@ -79,3 +79,12 @@ func UseGeneratedDependencies() bool {
 		return false
 	}
 }
+
+func ResetPackages() bool {
+	rc := get("reset_packages", "true")
+	if rc == "true" {
+		return true
+	} else {
+		return false
+	}
+}
