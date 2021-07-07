@@ -23,7 +23,10 @@ func Reset(logger *logrus.Entry, root string) error {
 
 	world.Clear()
 	world.Mark(*fqn)
-	plan := CheckPlan(logger, pkgdb, root, world)
+	plan, err := CheckPlan(logger, pkgdb, root, world)
+	if err != nil {
+		return err
+	}
 
 	for _, op := range plan {
 		if op.Op == db.ActionInstall {

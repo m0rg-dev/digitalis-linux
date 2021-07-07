@@ -6,8 +6,11 @@ import (
 	"m0rg.dev/x10/pkgset"
 )
 
-func CheckPlan(logger *logrus.Entry, pkgdb db.PackageDatabase, root string, target *pkgset.PackageSet) []db.PackageOperation {
-	plan := pkgdb.Plan(root, target)
+func CheckPlan(logger *logrus.Entry, pkgdb db.PackageDatabase, root string, target *pkgset.PackageSet) ([]db.PackageOperation, error) {
+	plan, err := pkgdb.Plan(root, target)
+	if err != nil {
+		return nil, err
+	}
 	if len(plan) > 0 {
 		logger.Info("Here's the plan:")
 		logger.Info("")
@@ -22,5 +25,5 @@ func CheckPlan(logger *logrus.Entry, pkgdb db.PackageDatabase, root string, targ
 	} else {
 		logger.Info("(nothing to do)")
 	}
-	return plan
+	return plan, nil
 }

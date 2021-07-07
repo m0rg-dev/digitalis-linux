@@ -1,6 +1,8 @@
 package db
 
 import (
+	"errors"
+
 	"m0rg.dev/x10/pkgset"
 	"m0rg.dev/x10/x10_log"
 )
@@ -16,7 +18,7 @@ const (
 	ActionRemove
 )
 
-func (pkgdb *PackageDatabase) Plan(root string, target *pkgset.PackageSet) []PackageOperation {
+func (pkgdb *PackageDatabase) Plan(root string, target *pkgset.PackageSet) ([]PackageOperation, error) {
 	logger := x10_log.Get("plan")
 
 	outstanding := map[string]bool{}
@@ -27,15 +29,15 @@ func (pkgdb *PackageDatabase) Plan(root string, target *pkgset.PackageSet) []Pac
 
 	pkgs, complete, err := pkgdb.Resolve(logger, outstanding)
 	if err != nil {
-		logger.Fatal(err)
+		return nil, err
 	}
 	if !complete {
-		logger.Fatal("package list is not complete - build first")
+		return nil, errors.New("package list is not complete - build first")
 	}
 
 	installed, err := pkgset.Set("installed", root)
 	if err != nil {
-		logger.Fatal(err)
+		return nil, err
 	}
 
 	target_installed := pkgset.Empty()
@@ -57,5 +59,5 @@ func (pkgdb *PackageDatabase) Plan(root string, target *pkgset.PackageSet) []Pac
 		}
 	}
 
-	return rc
+	return rc, nil
 }
