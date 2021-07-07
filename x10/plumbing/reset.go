@@ -10,7 +10,10 @@ import (
 func Reset(logger *logrus.Entry, root string) error {
 	pkgdb := db.PackageDatabase{BackingFile: conf.PkgDb()}
 
-	world := GetWorld(logger, root)
+	world, err := GetWorld(root)
+	if err != nil {
+		return err
+	}
 
 	contents, err := pkgdb.Read()
 	if err != nil {

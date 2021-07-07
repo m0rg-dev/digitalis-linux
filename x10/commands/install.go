@@ -23,7 +23,11 @@ func (cmd InstallCommand) Run(args []string) error {
 	atom := os.Args[2]
 	target := os.Args[3]
 
-	world := plumbing.AddPackageToLocalWorld(logger, pkgdb, target, atom)
+	world, err := plumbing.AddPackageToLocalWorld(pkgdb, target, atom)
+	if err != nil {
+		return err
+	}
+
 	plan, err := plumbing.CheckPlan(logger, pkgdb, target, world)
 	if err != nil {
 		return err

@@ -27,7 +27,10 @@ func (cmd InstallPlanCommand) Run(args []string) error {
 	target := installPlanCmd.Arg(1)
 
 	pkgdb := db.PackageDatabase{BackingFile: conf.PkgDb()}
-	world := plumbing.AddPackageToLocalWorld(logger, pkgdb, target, atom)
+	world, err := plumbing.AddPackageToLocalWorld(pkgdb, target, atom)
+	if err != nil {
+		return err
+	}
 	plumbing.CheckPlan(logger, pkgdb, target, world)
 
 	/*
