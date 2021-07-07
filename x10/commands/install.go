@@ -16,7 +16,7 @@ func init() {
 	RegisterCommand("install", InstallCommand{})
 }
 
-func (cmd InstallCommand) Run(args []string) {
+func (cmd InstallCommand) Run(args []string) error {
 	logger := x10_log.Get("main")
 
 	pkgdb := db.PackageDatabase{BackingFile: conf.PkgDb()}
@@ -28,19 +28,20 @@ func (cmd InstallCommand) Run(args []string) {
 
 	contents, err := pkgdb.Read()
 	if err != nil {
-		logger.Fatal(err)
+		return err
 	}
 
 	for _, op := range plan {
 		if op.Op == db.ActionInstall {
 			err := lib.Install(pkgdb, contents.Packages[op.Fqn], target)
 			if err != nil {
-				logger.Fatal(err)
+				return err
 			}
 		} else {
+			// TODO
 			logger.Fatal("don't know how to remove packages yet")
 		}
 	}
 
-	world.Write()
+	return world.Write()
 }

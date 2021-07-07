@@ -13,9 +13,9 @@ func init() {
 	RegisterCommand("reset", ResetCommand{})
 }
 
-func (cmd ResetCommand) Run(args []string) {
+func (cmd ResetCommand) Run(args []string) error {
 	logger := x10_log.Get("main")
 
 	target := os.Args[2]
-	plumbing.Reset(logger, target)
+	return plumbing.Reset(logger, target)
 }

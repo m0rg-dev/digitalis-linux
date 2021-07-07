@@ -16,7 +16,7 @@ func init() {
 	RegisterCommand("install_plan", InstallPlanCommand{})
 }
 
-func (cmd InstallPlanCommand) Run(args []string) {
+func (cmd InstallPlanCommand) Run(args []string) error {
 	logger := x10_log.Get("main")
 
 	installPlanCmd := flag.NewFlagSet("install_plan", flag.ExitOnError)
@@ -48,5 +48,5 @@ func (cmd InstallPlanCommand) Run(args []string) {
 			fmt.Println("}")
 		}
 	*/
-
+	return nil
 }
