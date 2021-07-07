@@ -44,10 +44,13 @@ func main() {
 	switch os.Args[1] {
 	case "gensum":
 		pkgsrc := os.Args[2]
-		pkg := spec.LoadPackage(pkgsrc)
+		pkg, err := spec.LoadPackage(pkgsrc)
+		if err != nil {
+			logger.Fatal(err)
+		}
 
-		lib.RunStage(pkg, "fetch")
-		lib.RunStage(pkg, "_gensum")
+		lib.RunStage(*pkg, "fetch")
+		lib.RunStage(*pkg, "_gensum")
 	case "build":
 		buildCmd.Parse(os.Args[2:])
 		pkgsrc := buildCmd.Arg(0)
@@ -56,12 +59,18 @@ func main() {
 		if err != nil {
 			logger.Fatal(err)
 		}
-		pkg := spec.LoadPackage(pkgsrc)
+		pkg, err := spec.LoadPackage(pkgsrc)
+		if err != nil {
+			logger.Fatal(err)
+		}
 
 		if (buildMaybe == nil || !*buildMaybe) ||
-			!contents.CheckUpToDate(pkg) ||
+			!contents.CheckUpToDate(*pkg) ||
 			!contents.Packages[pkg.GetFQN()].GeneratedValid {
-			plumbing.Build(pkgdb, pkg)
+			err = plumbing.Build(pkgdb, *pkg)
+			if err != nil {
+				logger.Fatal(err)
+			}
 
 			if buildDeps != nil && *buildDeps {
 				complete := false
@@ -78,7 +87,12 @@ func main() {
 						if dep.GeneratedValid {
 							logger.Infof("  (already built)")
 						} else {
-							err = plumbing.Build(pkgdb, spec.LoadPackage(filepath.Join(conf.PackageDir(), dep.Meta.Name+".yml")))
+							from_repo, err := spec.LoadPackage(filepath.Join(conf.PackageDir(), dep.Meta.Name+".yml"))
+							if err != nil {
+								logger.Fatal(err)
+							}
+
+							err = plumbing.Build(pkgdb, *from_repo)
 							if err != nil {
 								logger.Fatal(err)
 							}
@@ -95,7 +109,10 @@ func main() {
 	case "show":
 		buildCmd.Parse(os.Args[2:])
 		pkgsrc := buildCmd.Arg(0)
-		pkg := spec.LoadPackage(pkgsrc)
+		pkg, err := spec.LoadPackage(pkgsrc)
+		if err != nil {
+			logger.Fatal(err)
+		}
 		spew.Dump(pkg)
 	case "showdb":
 		pkgdb := db.PackageDatabase{BackingFile: conf.PkgDb()}

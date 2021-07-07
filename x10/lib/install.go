@@ -95,7 +95,12 @@ func Install(pkgdb db.PackageDatabase, pkg spec.SpecDbData, root string) error {
 		return err
 	}
 
-	trigger.RunTriggers(pkg.ToLayer())
+	spec, err := pkg.ToLayer()
+	if err != nil {
+		return err
+	}
+
+	trigger.RunTriggers(*spec)
 
 	installed.Mark(pkg.GetFQN())
 	return installed.Write()

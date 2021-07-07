@@ -39,7 +39,11 @@ func (db *PackageDatabase) IndexFromRepo() error {
 				local_logger := logger.WithField("pkgsrc", path)
 				local_logger.Infof("Indexing")
 
-				from_repo := spec.LoadPackage(path)
+				from_repo, err := spec.LoadPackage(path)
+				if err != nil {
+					return err
+				}
+
 				srcstat, err := os.Stat(path)
 				if err != nil {
 					return err
@@ -48,7 +52,7 @@ func (db *PackageDatabase) IndexFromRepo() error {
 				pkgstat, err := os.Stat(binpkg_path)
 				doupdate := false
 
-				if !contents.CheckUpToDate(from_repo) {
+				if !contents.CheckUpToDate(*from_repo) {
 					local_logger.Infof("Updating database (outdated)")
 					doupdate = true
 				}

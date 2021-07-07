@@ -36,7 +36,12 @@ func Build(pkgdb db.PackageDatabase, pkg spec.SpecLayer) error {
 			if dep.GeneratedValid {
 				local_logger.Infof("  (already built)")
 			} else {
-				err = Build(pkgdb, spec.LoadPackage(filepath.Join(conf.PackageDir(), dep.Meta.Name+".yml")))
+				subpkg, err := spec.LoadPackage(filepath.Join(conf.PackageDir(), dep.Meta.Name+".yml"))
+				if err != nil {
+					return err
+				}
+
+				err = Build(pkgdb, *subpkg)
 				if err != nil {
 					return err
 				}
@@ -67,7 +72,12 @@ func Build(pkgdb db.PackageDatabase, pkg spec.SpecLayer) error {
 			if dep.GeneratedValid {
 				local_logger.Infof("  (already built)")
 			} else {
-				err = Build(pkgdb, spec.LoadPackage(filepath.Join(conf.PackageDir(), dep.Meta.Name+".yml")))
+				subpkg, err := spec.LoadPackage(filepath.Join(conf.PackageDir(), dep.Meta.Name+".yml"))
+				if err != nil {
+					return err
+				}
+
+				err = Build(pkgdb, *subpkg)
 				if err != nil {
 					return err
 				}
