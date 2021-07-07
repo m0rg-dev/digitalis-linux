@@ -3,7 +3,7 @@ layers:
   - python3-module
 package:
   meta:
-    name: python3/setuptools_scm
+    name: python/setuptools_scm
     version: 6.0.1
     revision: 1
     maintainer: Morgan Thomas <m@m0rg.dev>
@@ -15,7 +15,7 @@ package:
       checksum: d1925a69cb07e9b29416a275b9fadb009a23c148ace905b2fb220649a6c18e92
   depends:
     build:
-      - python3/setuptools
+      - python/setuptools
     run:
-      - python3/setuptools
-      - python3/wheel
+      - python/setuptools
+      - python/wheel
