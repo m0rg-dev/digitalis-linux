@@ -54,7 +54,6 @@ func (db *PackageDatabase) IndexFromRepo() error {
 
 				if !doupdate && !contents.Packages[from_repo.GetFQN()].GeneratedValid {
 					if err == nil {
-
 					} else {
 						local_logger.Infof("Updating database (not built)")
 						doupdate = true
