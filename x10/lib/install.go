@@ -100,7 +100,10 @@ func Install(pkgdb db.PackageDatabase, pkg spec.SpecDbData, root string) error {
 		return err
 	}
 
-	trigger.RunTriggers(*spec)
+	err = trigger.RunTriggers(*spec)
+	if err != nil {
+		return err
+	}
 
 	installed.Mark(pkg.GetFQN())
 	return installed.Write()

@@ -16,17 +16,19 @@ func RegisterTrigger(t Trigger, name string) {
 	triggers[name] = t
 }
 
-func RunTriggers(pkg spec.SpecLayer) {
+func RunTriggers(pkg spec.SpecLayer) error {
 	logger := x10_log.Get("trigger").WithField("pkg", pkg.GetFQN())
 	for name, t := range triggers {
 		data, ok := pkg.TriggerData[name]
 		if ok {
 			err := t.RunInstall(logger.WithField("trigger", name), data)
+			// TODO think about error handling in triggers, in general
 			if err != nil {
-				logger.Fatal(err)
+				return err
 			}
 		}
 	}
+	return nil
 }
 
 func iarrayconv(in []interface{}) []string {
