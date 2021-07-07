@@ -9,6 +9,7 @@ import (
 	"sync"
 
 	"github.com/gofrs/flock"
+	"golang.org/x/sync/errgroup"
 	"m0rg.dev/x10/conf"
 	"m0rg.dev/x10/spec"
 	"m0rg.dev/x10/x10_log"
@@ -25,7 +26,8 @@ func (db *PackageDatabase) IndexFromRepo() error {
 		return err
 	}
 
-	var wg sync.WaitGroup
+	group := new(errgroup.Group)
+
 	var updates sync.Map
 
 	filepath.WalkDir(conf.PackageDir(), func(path string, d fs.DirEntry, err error) error {
@@ -33,15 +35,14 @@ func (db *PackageDatabase) IndexFromRepo() error {
 			return fs.SkipDir
 		}
 		if d.Type().IsRegular() {
-			wg.Add(1)
-			go func() {
+			group.Go(func() error {
 				local_logger := logger.WithField("pkgsrc", path)
 				local_logger.Infof("Indexing")
 
 				from_repo := spec.LoadPackage(path)
 				srcstat, err := os.Stat(path)
 				if err != nil {
-					panic(err)
+					return err
 				}
 				binpkg_path := filepath.Join(conf.HostDir(), "binpkgs", from_repo.GetFQN()+".tar.xz")
 				pkgstat, err := os.Stat(binpkg_path)
@@ -54,6 +55,7 @@ func (db *PackageDatabase) IndexFromRepo() error {
 
 				if !doupdate && !contents.Packages[from_repo.GetFQN()].GeneratedValid {
 					if err == nil {
+						// TODO: did I forget to put something here?
 					} else {
 						local_logger.Infof("Updating database (not built)")
 						doupdate = true
@@ -74,14 +76,18 @@ func (db *PackageDatabase) IndexFromRepo() error {
 					repo_to_db := from_repo.ToDB()
 					updates.Store(from_repo.GetFQN(), repo_to_db)
 				}
-				wg.Done()
-			}()
+				return nil
+			})
 		}
 
 		return nil
 	})
 
-	wg.Wait()
+	err = group.Wait()
+	if err != nil {
+		return err
+	}
+
 	updates.Range(func(key interface{}, value interface{}) bool {
 		fqn := key.(string)
 		dbpkg := value.(spec.SpecDbData)
