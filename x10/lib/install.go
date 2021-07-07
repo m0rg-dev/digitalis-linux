@@ -2,6 +2,7 @@ package lib
 
 import (
 	"errors"
+	"fmt"
 	"io/fs"
 	"os"
 	"os/exec"
@@ -16,7 +17,7 @@ import (
 	"m0rg.dev/x10/x10_log"
 )
 
-// TODO error handling
+// TODO: attempt rollback on errors
 
 func Install(pkgdb db.PackageDatabase, pkg spec.SpecDbData, root string) error {
 	logger := x10_log.Get("install").WithField("pkg", pkg.GetFQN())
@@ -45,13 +46,13 @@ func Install(pkgdb db.PackageDatabase, pkg spec.SpecDbData, root string) error {
 		return err
 	}
 
-	filepath.WalkDir(tmp_path, func(path string, d fs.DirEntry, err error) error {
+	err = filepath.WalkDir(tmp_path, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
-			logger.Fatal(err)
+			return err
 		}
 		target_path, err := filepath.Rel(tmp_path, path)
 		if err != nil {
-			logger.Fatal(err)
+			return err
 		}
 
 		if d.Type().IsRegular() && !strings.ContainsRune(target_path, '/') {
@@ -61,7 +62,7 @@ func Install(pkgdb db.PackageDatabase, pkg spec.SpecDbData, root string) error {
 
 		target_path, err = filepath.Abs(filepath.Join(root, target_path))
 		if err != nil {
-			logger.Fatal(err)
+			return err
 		}
 
 		if d.IsDir() {
@@ -70,7 +71,7 @@ func Install(pkgdb db.PackageDatabase, pkg spec.SpecDbData, root string) error {
 				if errors.Is(err, os.ErrExist) {
 					logger.Debugf(" -- %s", target_path)
 				} else {
-					logger.Fatal(err)
+					return err
 				}
 			} else {
 				logger.Debugf(" => %s", target_path)
@@ -81,25 +82,23 @@ func Install(pkgdb db.PackageDatabase, pkg spec.SpecDbData, root string) error {
 			logger.Debugf(" %s => %s", path, target_path)
 			if err != nil {
 				logger.Error(string(out))
-				logger.Fatal(err)
+				return err
 			}
 			if copy_cmd.ProcessState.ExitCode() != 0 {
 				logger.Error(string(out))
-				logger.Fatalf("%+v exited with code %d", copy_cmd.Args, copy_cmd.ProcessState.ExitCode())
+				return fmt.Errorf("%+v exited with code %d", copy_cmd.Args, copy_cmd.ProcessState.ExitCode())
 			}
 		}
 		return nil
 	})
+	if err != nil {
+		return err
+	}
 
 	trigger.RunTriggers(pkg.ToLayer())
 
 	installed.Mark(pkg.GetFQN())
-	err = installed.Write()
-	if err != nil {
-		logger.Fatal(err)
-	}
-
-	return nil
+	return installed.Write()
 }
 
 func Remove(pkgdb db.PackageDatabase, pkg spec.SpecDbData, root string) error {
@@ -169,8 +168,10 @@ func Remove(pkgdb db.PackageDatabase, pkg spec.SpecDbData, root string) error {
 		return err
 	}
 	installed.Unmark(pkg.GetFQN())
-	installed.Write()
-
+	err = installed.Write()
+	if err != nil {
+		return err
+	}
 	logger.Info("Removed: " + pkg.GetFQN())
 
 	return nil
