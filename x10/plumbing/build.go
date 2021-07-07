@@ -10,7 +10,7 @@ import (
 	"m0rg.dev/x10/x10_log"
 )
 
-func Build(pkgdb db.PackageDatabase, pkg spec.SpecLayer) {
+func Build(pkgdb db.PackageDatabase, pkg spec.SpecLayer) error {
 	logger := x10_log.Get("build").WithField("pkg", pkg.GetFQN())
 	complete := false
 	var deps []spec.SpecDbData
@@ -23,20 +23,23 @@ func Build(pkgdb db.PackageDatabase, pkg spec.SpecLayer) {
 		deps_2, complete, err = pkgdb.GetInstallDeps(pkg.GetFQN(), db.DepBuild)
 		deps = append(deps, deps_2...)
 		if err != nil {
-			local_logger.Fatal(err)
+			return err
 		}
 
 		for _, dep := range deps_2 {
 			local_logger.Infof(" => depends on %s", dep.GetFQN())
 			dep, err = pkgdb.Get(dep.GetFQN())
 			if err != nil {
-				local_logger.Fatal(err)
+				return err
 			}
 
 			if dep.GeneratedValid {
 				local_logger.Infof("  (already built)")
 			} else {
-				Build(pkgdb, spec.LoadPackage(filepath.Join(conf.PackageDir(), dep.Meta.Name+".yml")))
+				err = Build(pkgdb, spec.LoadPackage(filepath.Join(conf.PackageDir(), dep.Meta.Name+".yml")))
+				if err != nil {
+					return err
+				}
 			}
 		}
 	}
@@ -51,20 +54,23 @@ func Build(pkgdb db.PackageDatabase, pkg spec.SpecLayer) {
 		deps_2, complete, err = pkgdb.GetInstallDeps(pkg.GetFQN(), db.DepTest)
 		deps = append(deps, deps_2...)
 		if err != nil {
-			local_logger.Fatal(err)
+			return err
 		}
 
 		for _, dep := range deps {
 			local_logger.Infof(" => depends on %s", dep.GetFQN())
 			dep, err = pkgdb.Get(dep.GetFQN())
 			if err != nil {
-				local_logger.Fatal(err)
+				return err
 			}
 
 			if dep.GeneratedValid {
 				local_logger.Infof("  (already built)")
 			} else {
-				Build(pkgdb, spec.LoadPackage(filepath.Join(conf.PackageDir(), dep.Meta.Name+".yml")))
+				err = Build(pkgdb, spec.LoadPackage(filepath.Join(conf.PackageDir(), dep.Meta.Name+".yml")))
+				if err != nil {
+					return err
+				}
 			}
 		}
 	}
@@ -77,14 +83,16 @@ func Build(pkgdb db.PackageDatabase, pkg spec.SpecLayer) {
 	for _, dep := range deps {
 		err := lib.Install(pkgdb, dep, conf.TargetDir())
 		if err != nil {
-			logger.Fatal(err)
+			return err
 		}
 	}
 	logger.Infof("Building: %s", pkg.GetFQN())
 	for _, stage := range *pkg.StageOrder {
 		err := lib.RunStage(pkg, stage)
 		if err != nil {
-			logger.Fatal(err)
+			return err
 		}
 	}
+
+	return nil
 }

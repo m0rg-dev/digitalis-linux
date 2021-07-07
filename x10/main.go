@@ -78,7 +78,10 @@ func main() {
 						if dep.GeneratedValid {
 							logger.Infof("  (already built)")
 						} else {
-							plumbing.Build(pkgdb, spec.LoadPackage(filepath.Join(conf.PackageDir(), dep.Meta.Name+".yml")))
+							err = plumbing.Build(pkgdb, spec.LoadPackage(filepath.Join(conf.PackageDir(), dep.Meta.Name+".yml")))
+							if err != nil {
+								logger.Fatal(err)
+							}
 						}
 					}
 				}
