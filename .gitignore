@@ -1,6 +1,5 @@
 .vscode/
 distfiles/
-Makefile
 stage*.tar
 digitalis_rootfs.*
 repository/Manifest.yml
