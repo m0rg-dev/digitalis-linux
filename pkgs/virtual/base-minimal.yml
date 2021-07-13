@@ -18,6 +18,7 @@ package:
       - dev-base/bison
       - dev-base/gcc
       - dev-base/make
+      - dev-base/patch
       - dev-base/perl
       - fs/fs-tree
       - net-utils/curl

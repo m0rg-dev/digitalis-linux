@@ -22,6 +22,7 @@ sys-utils/findutils
 sys-utils/gawk
 dev-base/m4
 dev-base/bison
+dev-base/python39
 virtual/python
 sys-utils/less
 compress-utils/gzip
@@ -30,3 +31,4 @@ sys-utils/file
 compress-utils/bzip2
 net-libs/openssl
 net-utils/curl_nossl
+dev-base/patch

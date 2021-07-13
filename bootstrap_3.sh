@@ -3,17 +3,22 @@
 set -e
 set -x
 
-mkdir -pv hostdir_1
-cp -ru hostdir_0/distfiles hostdir/
+mkdir -pv repo
+cp -ru bootstrap-repo/distfiles repo/
 
 make
-x10/x10 -config ./etc/x10.bootstrap3.conf index
 
 rm -fv targetdir_1/var/db/x10/installed
 # x10/x10 -config ./etc/x10.bootstrap3.conf:./etc/x10.nodeps.conf build -maybe -with_deps pkgs/sys-libs/glibc.yml
 # x10/x10 -config ./etc/x10.bootstrap3.conf:./etc/x10.nodeps.conf install sys-libs/glibc targetdir_1
 
-x10/x10 -config ./etc/x10.bootstrap3.conf:./etc/x10.nodeps.conf build -with_deps pkgs/virtual/base-minimal.yml
+x10/x10 --repo repo \
+        --packages pkgs \
+        --no-use-generated \
+        build virtual/base-minimal \
+        --target-root targetdir_1 \
+        --no-reset \
+        --force
 
 uuid=$(uuidgen)
 mkdir -p /tmp/x10/targetdir.$uuid
@@ -22,7 +27,10 @@ function cleanup {
 }
 trap cleanup EXIT
 
-echo 'targetdir = ' /tmp/x10/targetdir.$uuid >/tmp/x10/boot.conf
-x10/x10 -config ./etc/x10.bootstrap3.conf:/tmp/x10/boot.conf install virtual/base-minimal /tmp/x10/targetdir.$uuid
+mkdir -p /tmp/x10/targetdir.$uuid/var/db/x10/
+cp targetdir_1/var/db/x10/pkgdb.yml /tmp/x10/targetdir.$uuid/var/db/x10/
+
+x10/x10 --repo repo --packages pkgs install virtual/base-minimal /tmp/x10/targetdir.$uuid
+
 rm -rf targetdir
 mv /tmp/x10/targetdir.$uuid targetdir
