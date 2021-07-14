@@ -21,6 +21,10 @@ package:
       - python/libxml2
       - sys-libs/libxml2
       - sys-libs/libgcrypt
+    test:
+      - dev-base/libtool
+      - sys-libs/libxml2
+      - sys-libs/libgcrypt
   stages:
     configure:
       postscript:
