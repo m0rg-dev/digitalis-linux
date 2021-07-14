@@ -1,0 +1,63 @@
+name: Build the bootstrap Docker image
+
+on:
+  push:
+    tags: '*'
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build-and-push-image:
+    runs-on: [self-hosted, linux]
+    permissions:
+      contents: read
+      packages: write
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        submodules: true
+
+    - name: Get the version
+      id: get_version
+      run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+
+    - name: Install prerequisites
+      run: |
+        sudo apt-get -y install make xz-utils uuid-runtime
+        TEMP=$(mktemp)
+        echo '[engine]' >$TEMP
+        echo 'cgroup_manager="cgroupfs"' >>$TEMP
+        sudo mkdir -pv /etc/containers
+        sudo mv $TEMP /etc/containers/containers.conf
+        echo '[storage]' >$TEMP
+        echo 'driver="vfs"' >>$TEMP
+        sudo mv $TEMP /etc/containers/storage.conf
+
+    - uses: actions/setup-go@v2
+      with:
+        go-version: '^1.16.4'
+
+    - name: Build bootstrap container image (stage 1)
+      run: sudo PATH=$PATH ./bootstrap_1.sh
+
+    - name: Build bootstrap container image (stage 2)
+      run: sudo PATH=$PATH ./bootstrap_2.sh
+
+    - name: Build bootstrap container image (stage 3)
+      run: sudo PATH=$PATH ./bootstrap_3.sh
+
+    - name: Upload GHCR package
+      run: |
+        cid=$(sudo PATH=$PATH buildah from scratch)
+        sudo PATH=$PATH buildah add $cid targetdir /
+        sudo PATH=$PATH buildah commit --creds ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }} working-container-1 docker://${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:boot-${{ steps.get_version.outputs.VERSION }}
+        sudo PATH=$PATH buildah rm $cid
+
+    - name: Clean up directories
+      run: |
+        sudo rm -rf target* *repo*
+      if: always()

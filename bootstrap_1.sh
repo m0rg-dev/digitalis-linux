@@ -3,7 +3,7 @@
 set -e
 set -x
 
-podman build -f Dockerfile.deb_bootstrap -t x10_bootstrap .
+podman --cgroup-manager=cgroupfs build -f Dockerfile.deb_bootstrap -t x10_bootstrap .
 
 cid=$(buildah from x10_bootstrap)
 function cleanup {
