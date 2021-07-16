@@ -1,3 +1,5 @@
+[![bootstrap-container](https://github.com/m0rg-dev/digitalis-linux/actions/workflows/bootstrap.yml/badge.svg)](https://github.com/m0rg-dev/digitalis-linux/actions/workflows/bootstrap.yml)
+
 ```
 make
 ./bootstrap_1.sh
