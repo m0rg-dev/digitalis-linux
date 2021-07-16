@@ -12,6 +12,14 @@ rm -fv targetdir_1/var/db/x10/installed
 # x10/x10 -config ./etc/x10.bootstrap3.conf:./etc/x10.nodeps.conf build -maybe -with_deps pkgs/sys-libs/glibc.yml
 # x10/x10 -config ./etc/x10.bootstrap3.conf:./etc/x10.nodeps.conf install sys-libs/glibc targetdir_1
 
+# X10_DEBUG=1 x10/x10 --repo repo \
+#         --packages pkgs \
+#         --no-use-generated \
+#         build python/libxml2 \
+#         --target-root targetdir_1 \
+#         --no-reset \
+#         --force
+
 x10/x10 --repo repo \
         --packages pkgs \
         --no-use-generated \

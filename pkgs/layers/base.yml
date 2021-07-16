@@ -44,7 +44,7 @@ package:
     patch:
       script: |
         for patch in "${X10_PATCHES[@]}"; do
-          patch -Np1 </pkgfiles/$patch
+          patch -Np1 </pkgfiles/$X10_META_NAME/$patch
         done
       useworkdir: true
     configure:

@@ -21,3 +21,10 @@ package:
     - py39compat.patch
   environment:
     SKIP_TESTS: "1"
+  stages:
+    build:
+      prescript:
+      - |
+        for patch in "${X10_PATCHES[@]}"; do
+          patch -Np1 </pkgfiles/$X10_META_NAME/$patch
+        done
