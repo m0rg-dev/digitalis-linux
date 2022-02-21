@@ -1,6 +1,0 @@
-{
-  "files.exclude": {
-    "targetdir*": true,
-    "x10": true
-  }
-}
